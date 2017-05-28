@@ -9,7 +9,7 @@ public class CellScript : MonoBehaviour {
 	private float regenSpeed;
 	private int maxCount;
 	private Vector2 position;
-
+	Coroutine generation;
 	public bool isSelected = false;
 
 	public TextMesh text;
@@ -21,10 +21,16 @@ public class CellScript : MonoBehaviour {
 		count = startingCount;
 		maxCount = maximum;
 		regenSpeed = regenerationRate;
-		StartCoroutine(Generate());
+		generation = StartCoroutine(Generate());
 	}
 
 	private void Start() {
+		if (generation == null) {
+			count = 10;
+			maxCount = 50;
+			regenSpeed = 2f;
+			generation = StartCoroutine(Generate());
+		}
 		text.text = count.ToString();
 		text.gameObject.GetComponent<MeshRenderer>().sortingOrder = 2;
 	}
@@ -120,8 +126,8 @@ public class CellScript : MonoBehaviour {
 	}
 
 	private void OnMouseDown() {
-		CellSelection.ModifySelection(this);
+		if (Input.GetMouseButtonDown(0)) {
+			CellSelection.ModifySelection(this);
+		}
 	}
-
-
 }
