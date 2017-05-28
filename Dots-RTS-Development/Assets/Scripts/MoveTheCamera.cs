@@ -1,9 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveTheCamera : MonoBehaviour {
-	//This script is used to move the camera with the mouse and WASD keys (Eventually using the accelerometer when mobile)
+	//This script is used to move the camera with the mouse and WASD keys (Eventually using the accelerometer when on mobile)
 	
 	//Scales the movement of the camera
 	float SpeedOfMotion = 1f;

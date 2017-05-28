@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +15,7 @@ public class MainMenuUI : MonoBehaviour {
 		SceneManager.LoadScene("LevelEditor");
 	}
 
-	// Gets you to a screen with ready made levels.
+	// Sends you to a screen with already made levels.
 	public void LaunchCampaignScreen() {
 		SceneManager.LoadScene("CampaignScreen");
 	}
