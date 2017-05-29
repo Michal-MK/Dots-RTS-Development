@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CellSelection : MonoBehaviour {
+public class CellBehaviour : MonoBehaviour {
 
 	public static List<CellScript> cellsInSelection = new List<CellScript>();
 
@@ -20,5 +20,13 @@ public class CellSelection : MonoBehaviour {
 		print(cellsInSelection.Count);
 		cell.SetSelected();
 
+	}
+
+	public static void AttackCell(CellScript target) {
+		if (cellsInSelection.Count != 0) {
+			for (int i = 0; i < cellsInSelection.Count; i++) {
+				cellsInSelection[i].AttackCell(target);
+			}
+		}
 	}
 }

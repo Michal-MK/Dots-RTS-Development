@@ -5,63 +5,112 @@ using UnityEngine;
 
 public class CellScript : MonoBehaviour {
 
-	private int count;
-	private float regenSpeed;
-	private int maxCount;
-	private Vector2 position;
+	private int _count;
+	private float _regenSpeed;
+	private int _maxCount;
+	private Vector2 _position;
+	public team _team;
+	public enum team {
+		NEUTRAL,
+		ALLIED,
+		ENEMY,
+	}
+
+	private Color32 enemy = new Color32(255, 0, 0, 255);
+	private Color32 ally = new Color32(0, 255, 0, 255);
+	private Color32 neutral = new Color32(255, 255, 255, 255);
+
 	Coroutine generation;
+
+
 	public bool isSelected = false;
 
 	public TextMesh text;
+	public SpriteRenderer cellSprite;
 	public GameObject cellObj;
 
 	//Call to set cell attributes
-	public void SetCellData(Vector2 position, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
+	public void SetCellData(Vector2 position, team team, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
 		gameObject.transform.position = position;
-		count = startingCount;
-		maxCount = maximum;
-		regenSpeed = regenerationRate;
-		generation = StartCoroutine(Generate());
-	}
+		_count = startingCount;
+		_maxCount = maximum;
+		_regenSpeed = regenerationRate;
+		_team = team;
 
-	private void Start() {
-		if (generation == null) {
-			count = 10;
-			maxCount = 50;
-			regenSpeed = 2f;
+		if (_team != team.NEUTRAL) {
 			generation = StartCoroutine(Generate());
 		}
-		text.text = count.ToString();
+	}
+
+	//Debug start generation
+	private void Start() {
+		if (generation == null) {
+			_count = 10;
+			_maxCount = 50;
+			_regenSpeed = 2f;
+			generation = StartCoroutine(Generate());
+		}
+		text.text = _count.ToString();
 		text.gameObject.GetComponent<MeshRenderer>().sortingOrder = 2;
-	}
-
-	//Call to alter cell regeneration rate
-	public void AlterRegen(float newRegenSpeed) {
-		if (regenSpeed == newRegenSpeed) {
-			return;
-		}
-		else {
-			StopCoroutine(Generate());
-			regenSpeed = newRegenSpeed;
-			StartCoroutine(Generate());
-		}
-	}
-	//Call to alter cell size
-	public void AlterCellMax(int newMaximum) {
-
-	}
-
-	//Keeps generateing new elements for the cell
-	public IEnumerator Generate() {
-		while (true) {
-			yield return new WaitForSecondsRealtime(regenSpeed);
-			if (count < maxCount) {
-				count++;
-				text.text = count.ToString();
+		switch (_team) {
+			case team.ALLIED: {
+				cellSprite.color = ally;
+				return;
+			}
+			case team.ENEMY: {
+				cellSprite.color = enemy;
+				return;
+			}
+			case team.NEUTRAL: {
+				cellSprite.color = neutral;
+				return;
 			}
 		}
 	}
 
+	#region Cell data altering code
+	//Call to alter cell regeneration rate
+	public void AlterRegen(float newRegenSpeed) {
+		if (_regenSpeed == newRegenSpeed) {
+			print("Already set to " + newRegenSpeed + " speed, returning.");
+			return;
+		}
+		else {
+			_regenSpeed = newRegenSpeed;
+		}
+	}
+
+	//Call to alter cell size
+	public void AlterCellMax(int newMaximum) {
+		if(_maxCount == newMaximum) {
+			print("Already set to " + newMaximum + " capacity, returning.");
+		}
+		else {
+			_maxCount = newMaximum;
+		}
+	}
+
+	public void AlterTeam(team t) {
+		if (t == _team) {
+			print("Already set to " + t + " capacity, returning.");
+		}
+		else {
+			_team = t;
+		}
+	}
+	#endregion
+
+	//Keeps generateing new elements for the cell
+	public IEnumerator Generate() {
+		while (true) {
+			yield return new WaitForSecondsRealtime(_regenSpeed);
+			if (_count < _maxCount) {
+				_count++;
+				text.text = _count.ToString();
+			}
+		}
+	}
+	//Selects or deselects a cell
 	public void SetSelected() {
 		if (isSelected) {
 			isSelected = false;
@@ -71,6 +120,15 @@ public class CellScript : MonoBehaviour {
 			text.color = new Color32(255, 0, 0, 255);
 		}
 	}
+
+	public void AttackCell(CellScript target) {
+		int numElements = _count = _count / 2;
+		target._count = target._count - numElements;
+
+		text.text = _count.ToString();
+		target.text.text = target._count.ToString();
+	}
+
 
 	//Changes colour when howered over
 	private void OnMouseOver() {
@@ -83,37 +141,35 @@ public class CellScript : MonoBehaviour {
 		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed, opposite buttons decrease the values
 		//Adjust max cell size
 		if (Input.GetKeyDown(KeyCode.Keypad8)) {
-			if (maxCount < 100) {
-				maxCount++;
-				print(maxCount);
+			if (_maxCount < 100) {
+				_maxCount++;
+				print(_maxCount);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Keypad2)) {
-			if (maxCount >= 2) {
-				maxCount--;
-				print(maxCount);
+			if (_maxCount >= 2) {
+				_maxCount--;
+				print(_maxCount);
 			}
 		}
 
 		//Adjust cell regeneration rate
 		if (Input.GetKeyDown(KeyCode.Keypad6)) {
-			if (regenSpeed < 10) {
-				regenSpeed += 0.1f;
-				print(regenSpeed);
+			if (_regenSpeed < 10) {
+				_regenSpeed += 0.1f;
+				print(_regenSpeed);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Keypad4)) {
-			if (regenSpeed > 0.5f) {
-				regenSpeed -= 0.1f;
-				print(regenSpeed);
+			if (_regenSpeed > 0.5f) {
+				_regenSpeed -= 0.1f;
+				print(_regenSpeed);
 			}
 		}
 
 
 		#endregion
 	}
-
-
 
 	//Changes the colour back to original
 	private void OnMouseExit() {
@@ -125,9 +181,23 @@ public class CellScript : MonoBehaviour {
 		}
 	}
 
+	//Determine action depending on clicked cell's team.
 	private void OnMouseDown() {
 		if (Input.GetMouseButtonDown(0)) {
-			CellSelection.ModifySelection(this);
+			switch (_team) {
+				case team.ALLIED: {
+					CellBehaviour.ModifySelection(this);
+					return;
+				}
+				case team.ENEMY: {
+					CellBehaviour.AttackCell(this);
+					return;
+				}
+				case team.NEUTRAL: {
+
+					return;
+				}
+			}
 		}
 	}
 }
