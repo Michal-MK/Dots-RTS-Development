@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CellBehaviour : MonoBehaviour {
+public class CellBehaviour : CellScript {
 
 	public static List<CellScript> cellsInSelection = new List<CellScript>();
 
@@ -21,16 +21,23 @@ public class CellBehaviour : MonoBehaviour {
 		cell.SetSelected();
 
 	}
-
-	public static void AttackCell(CellScript target) {
+	//Wrapper for cell atacking
+	public static void AttackCell(CellScript target, enmTeam team) {
 		if (cellsInSelection.Count != 0) {
-			for (int i = 0; i < cellsInSelection.Count; i++) {
-				cellsInSelection[i].AttackCell(target);
+			if (team == enmTeam.ENEMY) {
+				for (int i = 0; i < cellsInSelection.Count; i++) {
+					cellsInSelection[i].AttackCell(target);
+				}
+			}else if (team == enmTeam.ALLIED) {
+				for (int i = 0; i < cellsInSelection.Count; i++) {
+					cellsInSelection[i].EmpowerCell(target);
+				}
 			}
 		}
 		ClearSelection();
 	}
 
+	//Resets Cell colour and clears the selection list
 	public static void ClearSelection() {
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
