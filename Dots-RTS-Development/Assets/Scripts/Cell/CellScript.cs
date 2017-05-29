@@ -25,7 +25,7 @@ public class CellScript : MonoBehaviour {
 
 	public bool isSelected = false;
 
-	public TextMesh text;
+	public TextMesh textMesh;
 	public SpriteRenderer cellSprite;
 	public GameObject cellObj;
 
@@ -48,10 +48,12 @@ public class CellScript : MonoBehaviour {
 			_count = 10;
 			_maxCount = 50;
 			_regenSpeed = 2f;
-			generation = StartCoroutine(Generate());
+			if (this._team != team.NEUTRAL) {
+				generation = StartCoroutine(Generate());
+			}
 		}
-		text.text = _count.ToString();
-		text.gameObject.GetComponent<MeshRenderer>().sortingOrder = 2;
+		textMesh.text = _count.ToString();
+		textMesh.gameObject.GetComponent<MeshRenderer>().sortingOrder = 2;
 		switch (_team) {
 			case team.ALLIED: {
 				cellSprite.color = ally;
@@ -106,7 +108,7 @@ public class CellScript : MonoBehaviour {
 			yield return new WaitForSecondsRealtime(_regenSpeed);
 			if (_count < _maxCount) {
 				_count++;
-				text.text = _count.ToString();
+				textMesh.text = _count.ToString();
 			}
 		}
 	}
@@ -117,26 +119,64 @@ public class CellScript : MonoBehaviour {
 		}
 		else {
 			isSelected = true;
-			text.color = new Color32(255, 0, 0, 255);
+			textMesh.color = new Color32(255, 0, 0, 255);
 		}
 	}
 
 	public void AttackCell(CellScript target) {
 		int numElements = _count = _count / 2;
-		target._count = target._count - numElements;
+		target._count -= numElements;
+		if (target._count < 0) {
+			target._count = -target._count;
+			switch (target._team) {
+				case team.ALLIED: {
+					target._team = team.ENEMY;
+					target.cellSprite.color = enemy;
+					textMesh.text = _count.ToString();
+					target.textMesh.text = target._count.ToString();
+					return;
+				}
+				case team.ENEMY: {
+					target._team = team.ALLIED;
+					target.cellSprite.color = ally;
+					textMesh.text = _count.ToString();
+					target.textMesh.text = target._count.ToString();
+					return;
+				}
+				case team.NEUTRAL: {
+					if (this._team == team.ALLIED) {
+						print(this._team + "  " + target._team);
+						target._team = team.ALLIED;
+						target.cellSprite.color = ally;
+						target.StartCoroutine(target.Generate());
+					}
+					else if (this._team == team.ENEMY) {
+						print(this._team + "  " + target._team);
+						target._team = team.ENEMY;
+						target.cellSprite.color = enemy;
+						target.StartCoroutine(target.Generate());
 
-		text.text = _count.ToString();
-		target.text.text = target._count.ToString();
+					}
+					textMesh.text = _count.ToString();
+					target.textMesh.text = target._count.ToString();
+					return;
+				}
+			}
+		}
+		else {
+			textMesh.text = _count.ToString();
+			target.textMesh.text = target._count.ToString();
+		}
 	}
 
 
 	//Changes colour when howered over
 	private void OnMouseOver() {
 		if (!isSelected) {
-			text.color = new Color32(255, 0, 0, 255);
+			textMesh.color = new Color32(255, 0, 0, 255);
 		}
 		else {
-			text.color = new Color32(0, 255, 255, 255);
+			textMesh.color = new Color32(0, 255, 255, 255);
 		}
 		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed, opposite buttons decrease the values
 		//Adjust max cell size
@@ -174,10 +214,10 @@ public class CellScript : MonoBehaviour {
 	//Changes the colour back to original
 	private void OnMouseExit() {
 		if (!isSelected) {
-			text.color = new Color32(255, 255, 255, 255);
+			textMesh.color = new Color32(255, 255, 255, 255);
 		}
 		else {
-			text.color = new Color32(255, 0, 0, 255);
+			textMesh.color = new Color32(255, 0, 0, 255);
 		}
 	}
 
@@ -194,7 +234,7 @@ public class CellScript : MonoBehaviour {
 					return;
 				}
 				case team.NEUTRAL: {
-
+					CellBehaviour.AttackCell(this);
 					return;
 				}
 			}

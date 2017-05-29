@@ -28,5 +28,14 @@ public class CellBehaviour : MonoBehaviour {
 				cellsInSelection[i].AttackCell(target);
 			}
 		}
+		ClearSelection();
+	}
+
+	public static void ClearSelection() {
+		for (int i = 0; i < cellsInSelection.Count; i++) {
+			cellsInSelection[i].isSelected = false;
+			cellsInSelection[i].textMesh.color = new Color(1, 1, 1);
+		}
+		cellsInSelection.Clear();
 	}
 }
