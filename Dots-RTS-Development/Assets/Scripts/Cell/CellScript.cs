@@ -1,15 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CellScript : MonoBehaviour {
 
-	private int _count;																			//Current amount of elements inside the cell
-	private float _regenSpeed;																	//How fast will the cell regenerate
-	private int _maxCount;																		//How much can the cell hold
-	private Vector2 _position;																	//Cells position
-	public enmTeam team;																		//Cell's team
+	private int _count;                                                                         //Current amount of elements inside the cell
+	private float _regenSpeed;                                                                  //How fast will the cell regenerate
+	public float _radius;
+	private int _maxCount;                                                                      //How much can the cell hold
+	private Vector2 _position;                                                                  //Cells position
+	public enmTeam team;                                                                        //Cell's team
 	public enum enmTeam {
 		NEUTRAL,
 		ALLIED,
@@ -23,11 +25,13 @@ public class CellScript : MonoBehaviour {
 	Coroutine generation;
 
 
-	public bool isSelected = false;																//Is cell selected for attack ?
+	public bool isSelected = false;                                                             //Is cell selected for attack ?
 	public Upgrade_Manager um;
 	public TextMesh textMesh;
+	public MeshRenderer textRendered;
 	public SpriteRenderer cellSprite;
 	public GameObject cellObj;
+	public GameObject elementObj;
 
 	//Call to set cell attributes
 	public void SetCellData(Vector2 position, enmTeam cellTeam, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
@@ -35,39 +39,23 @@ public class CellScript : MonoBehaviour {
 		_count = startingCount;
 		_maxCount = maximum;
 		_regenSpeed = regenerationRate;
-		this.team = cellTeam;
-
-		if (this.team != enmTeam.NEUTRAL) {
+		team = cellTeam;
+		if (team != enmTeam.NEUTRAL) {
 			generation = StartCoroutine(Generate());
 		}
 	}
 
 	//Debug start generation
 	private void Start() {
-		if (generation == null) {
-			_count = 10;
-			_maxCount = 50;
-			_regenSpeed = 2f;
-			if (this.team != enmTeam.NEUTRAL) {
-				generation = StartCoroutine(Generate());
-			}
+
+		_count = 10;
+		_maxCount = 50;
+		_regenSpeed = 2f;
+
+		if (team != enmTeam.NEUTRAL) {
+			generation = StartCoroutine(Generate());
 		}
-		textMesh.text = _count.ToString();
-		textMesh.gameObject.GetComponent<MeshRenderer>().sortingOrder = 2;
-		switch (team) {
-			case enmTeam.ALLIED: {
-				cellSprite.color = ally;
-				return;
-			}
-			case enmTeam.ENEMY: {
-				cellSprite.color = enemy;
-				return;
-			}
-			case enmTeam.NEUTRAL: {
-				cellSprite.color = neutral;
-				return;
-			}
-		}
+		UpdateCellInfo();
 	}
 
 	#region Cell data altering code
@@ -84,7 +72,7 @@ public class CellScript : MonoBehaviour {
 
 	//Call to alter cell size
 	public void AlterCellMax(int newMaximum) {
-		if(_maxCount == newMaximum) {
+		if (_maxCount == newMaximum) {
 			print("Already set to " + newMaximum + " capacity, returning.");
 		}
 		else {
@@ -112,6 +100,7 @@ public class CellScript : MonoBehaviour {
 			}
 		}
 	}
+
 	//Selects or deselects a cell
 	public void SetSelected() {
 		if (isSelected) {
@@ -122,65 +111,108 @@ public class CellScript : MonoBehaviour {
 			textMesh.color = new Color32(255, 0, 0, 255);
 		}
 	}
+
 	//Code to attack selected cell
 	public void AttackCell(CellScript target) {
 		int numElements = _count = _count / 2;
-		target._count -= numElements;
-		if (target._count < 0) {
-			target._count = -target._count;
-			switch (target.team) {
-				case enmTeam.ALLIED: {
-					//Attacking a cell as an enemy + losing all sotored elements causes it to become an enemy
-					target.team = enmTeam.ENEMY;
-					target.cellSprite.color = enemy;
-					textMesh.text = _count.ToString();
-					target.textMesh.text = target._count.ToString();
-					return;
-				}
-				case enmTeam.ENEMY: {
-					//Attacking a cell as an ally + losing all sotored elements causes it to become an ally
-					target.team = enmTeam.ALLIED;
-					target.cellSprite.color = ally;
-					textMesh.text = _count.ToString();
-					target.textMesh.text = target._count.ToString();
-					
-					return;
-				}
-				case enmTeam.NEUTRAL: {
-					//Attacking a cell causes it to join the same team as the attacker / generation begins
-					if (this.team == enmTeam.ALLIED) {
-						print(this.team + "  " + target.team);
-						target.team = enmTeam.ALLIED;
-						target.cellSprite.color = ally;
-						target.StartCoroutine(target.Generate());
-					}
-					else if (this.team == enmTeam.ENEMY) {
-						print(this.team + "  " + target.team);
-						target.team = enmTeam.ENEMY;
-						target.cellSprite.color = enemy;
-						target.StartCoroutine(target.Generate());
-
-					}
-					textMesh.text = _count.ToString();
-					target.textMesh.text = target._count.ToString();
-					return;
-				}
-			}
+		for (int i = 0; i < numElements; i++) {
+			GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
+			e.GetComponent<Element>().target = target;
+			e.GetComponent<Element>().attacker = this;
 		}
-		else {
-			textMesh.text = _count.ToString();
-			target.textMesh.text = target._count.ToString();
-		}
+		UpdateCellInfo();
+		//target._count -= numElements; Deprecated code for attacking -- not functional with elemets logic
+		//if (target._count < 0) {
+		//	//target._count = -target._count;
+		//	switch (target.team) {
+		//		case enmTeam.ALLIED: {
+		//			//Attacking a cell as an enemy + losing all sotored elements causes it to become an enemy
+		//			target.team = enmTeam.ENEMY;
+		//			target.cellSprite.color = enemy;
+		//			textMesh.text = _count.ToString();
+		//			target.textMesh.text = target._count.ToString();
+		//			return;
+		//		}
+		//		case enmTeam.ENEMY: {
+		//			//Attacking a cell as an ally + losing all sotored elements causes it to become an ally
+		//			target.team = enmTeam.ALLIED;
+		//			target.cellSprite.color = ally;
+		//			textMesh.text = _count.ToString();
+		//			target.textMesh.text = target._count.ToString();
+		//			return;
+		//		}
+		//		case enmTeam.NEUTRAL: {
+		//			//Attacking a cell causes it to join the same team as the attacker / generation begins
+		//			if (this.team == enmTeam.ALLIED) {
+		//				print(this.team + "  " + target.team);
+		//				target.team = enmTeam.ALLIED;
+		//				target.cellSprite.color = ally;
+		//				target.StartCoroutine(target.Generate());
+		//			}
+		//			else if (this.team == enmTeam.ENEMY) {
+		//				print(this.team + "  " + target.team);
+		//				target.team = enmTeam.ENEMY;
+		//				target.cellSprite.color = enemy;
+		//				target.StartCoroutine(target.Generate());
+		//			}
+		//			textMesh.text = _count.ToString();
+		//			target.textMesh.text = target._count.ToString();
+		//			return;
+		//		}
+		//	}
+		//}
+		//else {
+		//	textMesh.text = _count.ToString();
+		//	target.textMesh.text = target._count.ToString();
+		//}
 	}
+
 	//Called when "attacking" your own cell
 	public void EmpowerCell(CellScript target) {
-		int numElements = _count = _count / 2;
-		target._count += numElements;
-
+		_count = _count + 2;
 		textMesh.text = _count.ToString();
 		target.textMesh.text = target._count.ToString();
 	}
 
+	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
+	public void DamageCell(enmTeam elementTeam) {
+		_count--;
+		if (team == elementTeam) {
+			EmpowerCell(this);
+			return;
+		}
+		if (_count < 0) {
+			_count = -_count;
+			team = elementTeam;
+		}
+		UpdateCellInfo();
+	}
+
+	//Update Cell info and rendering
+	public void UpdateCellInfo() {
+
+		textMesh.text = _count.ToString();
+		textRendered.sortingOrder = 2;
+		_radius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		if(generation == null && team != enmTeam.NEUTRAL) {
+			generation = StartCoroutine(Generate());
+		}
+		switch (team) {
+			case enmTeam.ALLIED: {
+				cellSprite.color = ally;
+				return;
+			}
+			case enmTeam.ENEMY: {
+				cellSprite.color = enemy;
+
+				return;
+			}
+			case enmTeam.NEUTRAL: {
+				cellSprite.color = neutral;
+				return;
+			}
+		}
+	}
 
 	//Changes colour when howered over
 	private void OnMouseOver() {
