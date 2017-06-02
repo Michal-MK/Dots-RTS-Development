@@ -10,22 +10,22 @@ public class Upgrade_Manager : MonoBehaviour {
 	public CellScript cellScript;
 
 	public enum Slot {
-		First,
-		Second,
-		Third,
-		Fourth,
-		Fifht,
-		Sixth,
-		Seventh,
-		Eigth,
+		FIRST,
+		SECOND,
+		THIRD,
+		FOURTH,
+		FIFTH,
+		SIXTH,
+		SEVENTH,
+		EIGHTH,
 	}
 
 	public enum Upgrade {
-		NoUpgrade,
-		ElementMovementSpeed,
-		RegenerationSpeed,
-		MaxCapacity,
-		DoubleDmgChance,
+		NONE,
+		ELEMENT_MOVE_SPEED,
+		GENERATION_SPEED,
+		MAX_CAPACITY,
+		CRITICAL_CHANCE,
 	}
 
 	//Called when you mouse over the cell

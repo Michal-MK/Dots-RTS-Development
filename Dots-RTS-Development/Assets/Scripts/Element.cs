@@ -27,7 +27,7 @@ public class Element : MonoBehaviour {
 	//Calculates the error between desired and current velocity
 	private Vector3 Seek(CellScript target) {
 		float d = Vector3.Distance(target.transform.position, gameObject.transform.position);
-		print(d + " " + target._radius);
+		//print(d + " " + target._radius);
 		if (d < target._radius) {
 			//Execute this code after collision with target.
 			target.DamageCell(attacker.team);

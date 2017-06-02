@@ -25,13 +25,17 @@ public class CellScript : MonoBehaviour {
 	Coroutine generation;
 
 
-	public bool isSelected = false;                                                             //Is cell selected for attack ?
+	public bool isSelected = false;                                                             //Is cell selected for attack?
 	public Upgrade_Manager um;
 	public TextMesh textMesh;
-	public MeshRenderer textRendered;
+	public MeshRenderer textRenderer;
 	public SpriteRenderer cellSprite;
 	public GameObject cellObj;
 	public GameObject elementObj;
+
+	public delegate void TeamChangeEventHandler();
+
+	public event TeamChangeEventHandler TeamChanged;
 
 	//Call to set cell attributes
 	public void SetCellData(Vector2 position, enmTeam cellTeam, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
@@ -47,7 +51,6 @@ public class CellScript : MonoBehaviour {
 
 	//Debug start generation
 	private void Start() {
-
 		_count = 10;
 		_maxCount = 50;
 		_regenSpeed = 2f;
@@ -55,6 +58,7 @@ public class CellScript : MonoBehaviour {
 		if (team != enmTeam.NEUTRAL) {
 			generation = StartCoroutine(Generate());
 		}
+		GameControll.cells.Add(this);
 		UpdateCellInfo();
 	}
 
@@ -87,6 +91,9 @@ public class CellScript : MonoBehaviour {
 		else {
 			team = t;
 		}
+		if (TeamChanged != null) {
+			TeamChanged();
+		}
 	}
 	#endregion
 
@@ -101,8 +108,19 @@ public class CellScript : MonoBehaviour {
 		}
 	}
 
+	public int GetElements{
+		get{
+			return _count;
+		}
+		set {
+			_count = value;
+		}
+	}
+
+
 	//Selects or deselects a cell
 	public void SetSelected() {
+
 		if (isSelected) {
 			isSelected = false;
 		}
@@ -183,7 +201,7 @@ public class CellScript : MonoBehaviour {
 		}
 		if (_count < 0) {
 			_count = -_count;
-			team = elementTeam;
+			AlterTeam(elementTeam);
 		}
 		UpdateCellInfo();
 	}
@@ -192,7 +210,7 @@ public class CellScript : MonoBehaviour {
 	public void UpdateCellInfo() {
 
 		textMesh.text = _count.ToString();
-		textRendered.sortingOrder = 2;
+		textRenderer.sortingOrder = 2;
 		_radius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 		if(generation == null && team != enmTeam.NEUTRAL) {
 			generation = StartCoroutine(Generate());

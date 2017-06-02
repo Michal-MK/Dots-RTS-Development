@@ -6,7 +6,7 @@ public class UpgradeSlotState : Upgrade_Manager {
 	public Upgrade_Manager cellUpgrades;
 	public bool isUpgraded = false;
 
-	public Upgrade current = Upgrade.NoUpgrade;
+	public Upgrade current = Upgrade.NONE;
 
 	//Returns this UpgradeSlot's installed upgrade
 	public Upgrade GetInstalledUpgrade() {
@@ -24,10 +24,6 @@ public class UpgradeSlotState : Upgrade_Manager {
 			print("Slot ID: " + SlotID(gameObject) + " Installed upgrade: " + GetInstalledUpgrade());
 		}
 	}
-
-	//public void SetUpgradeSlots() {
-	//	gameObject.GetComponent<BoxCollider2D>().enabled = !enabled;
-	//}
 
 	//Returns slots index in Upgrade Manager array as an enum
 	public Slot SlotID(GameObject slotHolder) {
