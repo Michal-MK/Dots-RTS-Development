@@ -33,8 +33,9 @@ public class CellScript : MonoBehaviour {
 	public GameObject cellObj;
 	public GameObject elementObj;
 
+	public delegate void TeamChangeEventHandler();
 
-	public event GameControll.TeamChangeEventHandler TeamChanged;
+	public event TeamChangeEventHandler TeamChanged;
 
 	//Call to set cell attributes
 	public void SetCellData(Vector2 position, enmTeam cellTeam, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {

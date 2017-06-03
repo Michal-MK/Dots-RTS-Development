@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class GameControll : MonoBehaviour {
 
-	public delegate void TeamChangeEventHandler();
-
-
-
-	public bool isSinglePlayer = true;
 	public static List<CellScript> cells = new List<CellScript>();
 
 	public static void GameOver() {
