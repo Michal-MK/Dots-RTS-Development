@@ -36,6 +36,7 @@ public class CellScript : MonoBehaviour {
 
 	public static event GameControll.TeamChangeEventHandler TeamChanged;
 
+
 	//Call to set cell attributes
 	public void SetCellData(Vector2 position, enmTeam cellTeam, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
 		gameObject.transform.position = position;
@@ -50,13 +51,13 @@ public class CellScript : MonoBehaviour {
 
 	//Debug start generation
 	private void Start() {
-		_count = 10;
-		_maxCount = 50;
-		_regenSpeed = 2f;
+		//_count = 10;
+		//_maxCount = 50;
+		//_regenSpeed = 2f;
 
-		if (team != enmTeam.NEUTRAL) {
-			generation = StartCoroutine(Generate());
-		}
+		//if (team != enmTeam.NEUTRAL) {
+		//	generation = StartCoroutine(Generate());
+		//}
 		GameControll.cells.Add(this);
 		UpdateCellInfo();
 	}
