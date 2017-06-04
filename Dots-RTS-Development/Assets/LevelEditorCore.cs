@@ -11,17 +11,10 @@ public class LevelEditorCore : MonoBehaviour {
 	public GameObject CellPrefab;
 
 	public bool CanPlaceCells = false;
-	public bool OverUi;
 	
 	private void Start() {
 		//thisOneCamera = gameObject.GetComponent<Camera>();
 
-	}
-	public void HoveringOverUiEnter() {
-		OverUi = true;
-	}
-	public void HoveringOverUiExit() {
-		OverUi = false;
 	}
 	// Use this for toggling weather to place cells or to change cells
 	public void PlaceCellValueChange() {
@@ -34,19 +27,19 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 	private void Update() {
+#if (UNITY_EDITOR || UNITY_STANDALONE)
 		if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject() && CanPlaceCells) {
 			//Your code here
 			Vector2 pos = thisOneCamera.ScreenToWorldPoint(Input.mousePosition);
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
 		}
-	}
-
-	void OnMouseDown() {
-		if (Input.GetMouseButtonDown(0)) {
-			if (CanPlaceCells && !OverUi) {
-				Vector2 pos = thisOneCamera.ScreenToWorldPoint(Input.mousePosition);
-				GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
-			}
+#endif
+#if UNITY_ANDROID
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && CanPlaceCells) {
+			//Your code here
+			Vector2 pos = thisOneCamera.ScreenToWorldPoint(Input.mousePosition);
+			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
 		}
+#endif
 	}
 }
