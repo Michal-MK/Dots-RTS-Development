@@ -139,6 +139,7 @@ public class CellScript : MonoBehaviour {
 			e.GetComponent<Element>().attacker = this;
 		}
 		UpdateCellInfo();
+
 		//target._count -= numElements; Deprecated code for attacking -- not functional with elemets logic
 		//if (target._count < 0) {
 		//	//target._count = -target._count;
@@ -187,18 +188,23 @@ public class CellScript : MonoBehaviour {
 
 	//Called when "attacking" your own cell
 	public void EmpowerCell(CellScript target) {
-		_count = _count + 2;
-		textMesh.text = _count.ToString();
-		target.textMesh.text = target._count.ToString();
+		int numElements = _count = _count / 2;
+		for (int i = 0; i < numElements; i++) {
+			GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
+			e.GetComponent<Element>().target = target;
+			e.GetComponent<Element>().attacker = this;
+		}
+		UpdateCellInfo();
 	}
 
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
 	public void DamageCell(enmTeam elementTeam) {
-		_count--;
 		if (team == elementTeam) {
-			EmpowerCell(this);
+			_count++;
+			UpdateCellInfo();
 			return;
 		}
+		_count--;
 		if (_count < 0) {
 			_count = -_count;
 			AlterTeam(elementTeam);
@@ -289,20 +295,18 @@ public class CellScript : MonoBehaviour {
 
 	//Determine action depending on clicked cell's team.
 	private void OnMouseDown() {
-		if (Input.GetMouseButtonDown(0)) {
-			switch (team) {
-				case enmTeam.ALLIED: {
-					CellBehaviour.ModifySelection(this);
-					return;
-				}
-				case enmTeam.ENEMY: {
-					CellBehaviour.AttackCell(this, enmTeam.ENEMY);
-					return;
-				}
-				case enmTeam.NEUTRAL: {
-					CellBehaviour.AttackCell(this, enmTeam.ENEMY);
-					return;
-				}
+		switch (team) {
+			case enmTeam.ALLIED: {
+				CellBehaviour.ModifySelection(this);
+				return;
+			}
+			case enmTeam.ENEMY: {
+				CellBehaviour.AttackCell(this, team);
+				return;
+			}
+			case enmTeam.NEUTRAL: {
+				CellBehaviour.AttackCell(this, enmTeam.ENEMY);
+				return;
 			}
 		}
 	}

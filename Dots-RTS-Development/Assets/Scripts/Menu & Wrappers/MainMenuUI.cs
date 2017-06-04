@@ -15,7 +15,7 @@ public class MainMenuUI : MonoBehaviour {
 		SceneManager.LoadScene("LevelEditor");
 	}
 
-	// Sends you to a screen with already made levels.
+	// Sends you to a screen with premade levels.
 	public void LaunchCampaignScreen() {
 		SceneManager.LoadScene("CampaignScreen");
 	}

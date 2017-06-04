@@ -11,7 +11,7 @@ public class Enemy_AI : MonoBehaviour {
 	public List<CellScript> _aiCells = new List<CellScript>();
 	public List<CellScript> _neutrals = new List<CellScript>();
 
-
+	//Event subscribers / unsubscribers
 	private void OnEnable() {
 		CellScript.TeamChanged += Cell_TeamChanged;
 	}
@@ -19,6 +19,7 @@ public class Enemy_AI : MonoBehaviour {
 		CellScript.TeamChanged -= Cell_TeamChanged;
 	}
 
+	//Sort cells on screen to lists by their team
 	void Start() {
 		for (int i = 0; i < GameControll.cells.Count; i++) {
 			if (GameControll.cells[i].team == CellScript.enmTeam.ALLIED) {
@@ -34,6 +35,7 @@ public class Enemy_AI : MonoBehaviour {
 		StartCoroutine(PreformAction());
 	}
 
+	//Triggered when a cell changs team
 	private void Cell_TeamChanged(CellScript sender, CellScript.enmTeam prev, CellScript.enmTeam current) {
 		//Removes the cell from a team list
 		switch (prev) {
@@ -72,7 +74,7 @@ public class Enemy_AI : MonoBehaviour {
 		}
 	}
 
-
+	//This is where the AI magic happens
 	public IEnumerator PreformAction() {
 
 		while (isActive) {
@@ -80,8 +82,8 @@ public class Enemy_AI : MonoBehaviour {
 			yield return new WaitForSecondsRealtime(decisionSpeed);
 			redoAction:
 
-			CellScript selectedAiCell;										//Selected AI cell that will prefrom the action.
-			CellScript selectedTargetCell;									//Selected target that can be attacked
+			CellScript selectedAiCell;                                      //Selected AI cell that will prefrom the action.
+			CellScript selectedTargetCell;                                  //Selected target that can be attacked
 			CellScript selectedNeutralCell;                                 //Selected cell for expansion
 
 			bool isAlone = false;
@@ -127,7 +129,7 @@ public class Enemy_AI : MonoBehaviour {
 			int factor = UnityEngine.Random.Range(0, 3);
 
 			//If these combinations are met the script will fail.. we have to redo the selection
-			if(selectedNeutralCell == null && factor == 0 || isAlone == true && factor == 2) {
+			if (selectedNeutralCell == null && factor == 0 || isAlone == true && factor == 2) {
 				print("Invalid Selection");
 				goto redoAction;
 			}
@@ -145,7 +147,7 @@ public class Enemy_AI : MonoBehaviour {
 			}
 		}
 	}
-
+	//Expand from - to
 	public void Expand(CellScript selectedCell, CellScript toTarget) {
 		if (_neutrals.Count == 0) {
 			Attack(selectedCell, toTarget);
@@ -154,16 +156,13 @@ public class Enemy_AI : MonoBehaviour {
 		print("Expanding as " + selectedCell.gameObject.name + " to " + toTarget.gameObject.name);
 
 	}
-
+	//Attack from - who
 	public void Attack(CellScript selectedCell, CellScript target) {
 
 		print("Attacking as " + selectedCell.gameObject.name + " to " + target.gameObject.name);
 	}
-
+	//Defend from - who
 	public void Defend(CellScript selectedCell, CellScript target) {
-		while (selectedCell != target) {
-			print("Defending as " + selectedCell.gameObject.name + " my " + target.gameObject.name);
-			break;
-		}
+		print("Defending as " + selectedCell.gameObject.name + " my " + target.gameObject.name);
 	}
 }
