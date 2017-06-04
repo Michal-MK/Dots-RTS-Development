@@ -7,25 +7,25 @@ public class Enemy_AI : MonoBehaviour {
 	public bool isActive = true;
 	public float decisionSpeed = 2f;
 
-	public List<CellScript> _targets = new List<CellScript>();
-	public List<CellScript> _aiCells = new List<CellScript>();
-	public List<CellScript> _neutrals = new List<CellScript>();
+	public List<CellBehaviour> _targets = new List<CellBehaviour>();
+	public List<CellBehaviour> _aiCells = new List<CellBehaviour>();
+	public List<CellBehaviour> _neutrals = new List<CellBehaviour>();
 
 	//Event subscribers / unsubscribers
 	private void OnEnable() {
-		CellScript.TeamChanged += Cell_TeamChanged;
+		CellBehaviour.TeamChanged += Cell_TeamChanged;
 	}
 	private void OnDisable() {
-		CellScript.TeamChanged -= Cell_TeamChanged;
+		CellBehaviour.TeamChanged -= Cell_TeamChanged;
 	}
 
 	//Sort cells on screen to lists by their team
 	void Start() {
 		for (int i = 0; i < GameControll.cells.Count; i++) {
-			if (GameControll.cells[i].team == CellScript.enmTeam.ALLIED) {
+			if (GameControll.cells[i].cellTeam == CellBehaviour.enmTeam.ALLIED) {
 				_targets.Add(GameControll.cells[i]);
 			}
-			else if (GameControll.cells[i].team == CellScript.enmTeam.ENEMY) {
+			else if (GameControll.cells[i].cellTeam == CellBehaviour.enmTeam.ENEMY) {
 				_aiCells.Add(GameControll.cells[i]);
 			}
 			else {
@@ -36,18 +36,18 @@ public class Enemy_AI : MonoBehaviour {
 	}
 
 	//Triggered when a cell changs team
-	private void Cell_TeamChanged(CellScript sender, CellScript.enmTeam prev, CellScript.enmTeam current) {
+	private void Cell_TeamChanged(CellBehaviour sender, CellBehaviour.enmTeam prev, CellBehaviour.enmTeam current) {
 		//Removes the cell from a team list
 		switch (prev) {
-			case CellScript.enmTeam.ALLIED: {
+			case CellBehaviour.enmTeam.ALLIED: {
 				_targets.Remove(sender);
 				goto addCell;
 			}
-			case CellScript.enmTeam.ENEMY: {
+			case CellBehaviour.enmTeam.ENEMY: {
 				_aiCells.Remove(sender);
 				goto addCell;
 			}
-			case CellScript.enmTeam.NEUTRAL: {
+			case CellBehaviour.enmTeam.NEUTRAL: {
 				_neutrals.Remove(sender);
 				goto addCell;
 			}
@@ -59,15 +59,15 @@ public class Enemy_AI : MonoBehaviour {
 			GameControll.YouWon();
 		}
 		switch (current) {
-			case CellScript.enmTeam.ALLIED: {
+			case CellBehaviour.enmTeam.ALLIED: {
 				_targets.Add(sender);
 				return;
 			}
-			case CellScript.enmTeam.ENEMY: {
+			case CellBehaviour.enmTeam.ENEMY: {
 				_aiCells.Add(sender);
 				return;
 			}
-			case CellScript.enmTeam.NEUTRAL: {
+			case CellBehaviour.enmTeam.NEUTRAL: {
 				_neutrals.Add(sender);
 				return;
 			}
@@ -82,9 +82,9 @@ public class Enemy_AI : MonoBehaviour {
 			yield return new WaitForSecondsRealtime(decisionSpeed);
 			redoAction:
 
-			CellScript selectedAiCell;                                      //Selected AI cell that will prefrom the action.
-			CellScript selectedTargetCell;                                  //Selected target that can be attacked
-			CellScript selectedNeutralCell;                                 //Selected cell for expansion
+			CellBehaviour selectedAiCell;                                      //Selected AI cell that will prefrom the action.
+			CellBehaviour selectedTargetCell;                                  //Selected target that can be attacked
+			CellBehaviour selectedNeutralCell;                                 //Selected cell for expansion
 
 			bool isAlone = false;
 
@@ -97,7 +97,7 @@ public class Enemy_AI : MonoBehaviour {
 				yield break;
 			}
 
-			CellScript selectedAiCellForAid = selectedAiCell;
+			CellBehaviour selectedAiCellForAid = selectedAiCell;
 
 			while (selectedAiCellForAid == selectedAiCell) {
 				if (_aiCells.Count == 1) {
@@ -148,7 +148,7 @@ public class Enemy_AI : MonoBehaviour {
 		}
 	}
 	//Expand from - to
-	public void Expand(CellScript selectedCell, CellScript toTarget) {
+	public void Expand(CellBehaviour selectedCell, CellBehaviour toTarget) {
 		if (_neutrals.Count == 0) {
 			Attack(selectedCell, toTarget);
 			return;
@@ -157,12 +157,12 @@ public class Enemy_AI : MonoBehaviour {
 
 	}
 	//Attack from - who
-	public void Attack(CellScript selectedCell, CellScript target) {
+	public void Attack(CellBehaviour selectedCell, CellBehaviour target) {
 
 		print("Attacking as " + selectedCell.gameObject.name + " to " + target.gameObject.name);
 	}
 	//Defend from - who
-	public void Defend(CellScript selectedCell, CellScript target) {
+	public void Defend(CellBehaviour selectedCell, CellBehaviour target) {
 		print("Defending as " + selectedCell.gameObject.name + " my " + target.gameObject.name);
 	}
 }

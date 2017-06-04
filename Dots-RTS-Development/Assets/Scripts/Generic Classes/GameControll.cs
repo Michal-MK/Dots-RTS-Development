@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class GameControll : MonoBehaviour {
 
-	public delegate void TeamChangeEventHandler(CellScript sender, CellScript.enmTeam previous, CellScript.enmTeam current);
+	public delegate void TeamChangeEventHandler(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current);
 
 	public bool isSinglePlayer = true;
 
-	public static List<CellScript> cells = new List<CellScript>();
+	public static List<CellBehaviour> cells = new List<CellBehaviour>();
 
 	public static void GameOver() {
 		print("You Lost");

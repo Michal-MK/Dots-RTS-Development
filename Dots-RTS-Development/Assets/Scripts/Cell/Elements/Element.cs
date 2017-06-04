@@ -7,8 +7,8 @@ public class Element : MonoBehaviour {
 	public Vector3 vel;
 	private float maxSpeed = 10;
 
-	public CellScript attacker;
-	public CellScript target;
+	public CellBehaviour attacker;
+	public CellBehaviour target;
 
 	//Calculates steering behaviour for the element 
 	private void Update() {
@@ -25,12 +25,12 @@ public class Element : MonoBehaviour {
 	}
 
 	//Calculates the error between desired and current velocity
-	private Vector3 Seek(CellScript target) {
+	private Vector3 Seek(CellBehaviour target) {
 		float d = Vector3.Distance(target.transform.position, gameObject.transform.position);
 		//print(d + " " + target._radius);
-		if (d < target._radius) {
+		if (d < target.radius) {
 			//Execute this code after collision with target.
-			target.DamageCell(attacker.team);
+			target.DamageCell(attacker.cellTeam);
 			Destroy(gameObject);
 		}
 		Vector3 seekF = target.gameObject.transform.position - gameObject.transform.position;

@@ -14,7 +14,7 @@ public class UpgradeSlotState : Upgrade_Manager {
 	}
 	//Show upgrade slots on enter
 	private void OnMouseEnter() {
-		if (cellScript.team == CellScript.enmTeam.ALLIED) {
+		if (cellScript.cellTeam == CellBehaviour.enmTeam.ALLIED) {
 			upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
 		}
 	}

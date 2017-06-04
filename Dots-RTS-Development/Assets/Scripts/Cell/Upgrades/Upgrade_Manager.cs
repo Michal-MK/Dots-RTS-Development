@@ -7,7 +7,7 @@ public class Upgrade_Manager : MonoBehaviour {
 	public GameObject[] slots = new GameObject[8];
 
 	public SpriteRenderer upgradeSlotsRenderer;
-	public CellScript cellScript;
+	public CellBehaviour cellScript;
 
 	public enum Slot {
 		FIRST,
@@ -30,7 +30,7 @@ public class Upgrade_Manager : MonoBehaviour {
 
 	//Called when you mouse over the cell
 	private void OnMouseEnter() {
-		if (cellScript.team == CellScript.enmTeam.ALLIED) {
+		if (cellScript.cellTeam == CellBehaviour.enmTeam.ALLIED) {
 			for (int i = 0; i < slots.Length; i++) {
 				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
 				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = true;
