@@ -15,7 +15,12 @@ public class ControlsCore : MonoBehaviour {
 	}
 
 	private void Update() {
-		accelerometerDelta = Input.acceleration - DeviceOrientOrigin + accelerometerDelta/2;
+		if (Vector3.Magnitude(Input.acceleration - DeviceOrientOrigin) > accelerometerDeadzone) {
+			accelerometerDelta = Input.acceleration - DeviceOrientOrigin + accelerometerDelta / 1.05f;
+		}
+		else {
+			accelerometerDelta = accelerometerDelta / 1.05f;
+		}
 		if (Input.GetAxis("Horizontal") != 0) {
 			accelerometerDelta.x = Input.GetAxis("Horizontal");
 		}
