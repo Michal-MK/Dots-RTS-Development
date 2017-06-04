@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameControll : MonoBehaviour {
 
-	public delegate void TeamChangeEventHandler();
+	public delegate void TeamChangeEventHandler(CellScript sender, CellScript.enmTeam previous, CellScript.enmTeam current);
 
 
 
@@ -14,6 +14,10 @@ public class GameControll : MonoBehaviour {
 
 	public static void GameOver() {
 		print("You Lost");
+	}
+
+	public static void YouWon() {
+		print("You Won");
 	}
 }
 

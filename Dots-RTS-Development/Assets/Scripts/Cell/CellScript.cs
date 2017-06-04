@@ -34,7 +34,7 @@ public class CellScript : MonoBehaviour {
 	public GameObject elementObj;
 
 
-	public event GameControll.TeamChangeEventHandler TeamChanged;
+	public static event GameControll.TeamChangeEventHandler TeamChanged;
 
 	//Call to set cell attributes
 	public void SetCellData(Vector2 position, enmTeam cellTeam, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
@@ -84,15 +84,16 @@ public class CellScript : MonoBehaviour {
 	}
 
 	public void AlterTeam(enmTeam t) {
+		if (TeamChanged != null) {
+			TeamChanged(this, team, t);
+		}
 		if (t == team) {
 			print("Already set to " + t + " capacity, returning.");
 		}
 		else {
 			team = t;
 		}
-		if (TeamChanged != null) {
-			TeamChanged();
-		}
+
 	}
 	#endregion
 
@@ -107,8 +108,8 @@ public class CellScript : MonoBehaviour {
 		}
 	}
 
-	public int GetElements{
-		get{
+	public int GetElements {
+		get {
 			return _count;
 		}
 		set {
@@ -211,7 +212,7 @@ public class CellScript : MonoBehaviour {
 		textMesh.text = _count.ToString();
 		textRenderer.sortingOrder = 2;
 		_radius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
-		if(generation == null && team != enmTeam.NEUTRAL) {
+		if (generation == null && team != enmTeam.NEUTRAL) {
 			generation = StartCoroutine(Generate());
 		}
 		switch (team) {
@@ -263,18 +264,16 @@ public class CellScript : MonoBehaviour {
 		//Adjust cell regeneration rate
 		if (Input.GetKeyDown(KeyCode.Keypad6)) {
 			if (_regenSpeed < 10) {
-				_regenSpeed += 0.1f;
+				_regenSpeed += 0.5f;
 				print(_regenSpeed);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Keypad4)) {
 			if (_regenSpeed > 0.5f) {
-				_regenSpeed -= 0.1f;
+				_regenSpeed -= 0.5f;
 				print(_regenSpeed);
 			}
 		}
-
-
 		#endregion
 	}
 
