@@ -83,15 +83,25 @@ public class CellScript : MonoBehaviour {
 		}
 	}
 
+	//Chenge cells team
 	public void AlterTeam(enmTeam t) {
 		if (TeamChanged != null) {
 			TeamChanged(this, team, t);
 		}
 		if (t == team) {
-			print("Already set to " + t + " capacity, returning.");
+			print("Already set to team " + t + ", returning.");
 		}
 		else {
 			team = t;
+		}
+	}
+	//Change cells starting count
+	public void AlterStartingElementCount(int elements) {
+		if (elements == _count) {
+			print("Already set to start with " + elements + ", returning.");
+		}
+		else {
+			_count = elements;
 		}
 
 	}
