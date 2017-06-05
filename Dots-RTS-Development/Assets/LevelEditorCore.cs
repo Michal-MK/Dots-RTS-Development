@@ -70,12 +70,12 @@ public class LevelEditorCore : MonoBehaviour {
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && CanPlaceCells) {
 			Vector2 pos = thisOneCamera.ScreenToWorldPoint(Input.mousePosition);
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
-			CellScript newcellscript = newCell.GetComponent<CellScript>();
+			CellBehaviour cBehaviour = newCell.GetComponent<CellBehaviour>();
 
-			newcellscript.AlterTeam((CellScript.enmTeam)nextTeam);
-			newcellscript.AlterCellMax(nextMax);
-			newcellscript.AlterRegen(nextRegen);
-			newcellscript.AlterStartingElementCount(nextStarting);
+			cBehaviour.cellTeam = (Cell.enmTeam)nextTeam;
+			cBehaviour.maxElements = nextMax;
+			cBehaviour.regenFrequency = nextRegen;
+			cBehaviour.elementCount = nextStarting;
 		}
 #endif
 	}

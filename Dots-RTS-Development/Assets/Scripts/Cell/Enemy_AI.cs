@@ -22,10 +22,10 @@ public class Enemy_AI : MonoBehaviour {
 	//Sort cells on screen to lists by their team
 	void Start() {
 		for (int i = 0; i < GameControll.cells.Count; i++) {
-			if (GameControll.cells[i].cellTeam == CellBehaviour.enmTeam.ALLIED) {
+			if (GameControll.cells[i].cellTeam == Cell.enmTeam.ALLIED) {
 				_targets.Add(GameControll.cells[i]);
 			}
-			else if (GameControll.cells[i].cellTeam == CellBehaviour.enmTeam.ENEMY) {
+			else if (GameControll.cells[i].cellTeam == Cell.enmTeam.ENEMY) {
 				_aiCells.Add(GameControll.cells[i]);
 			}
 			else {
@@ -36,7 +36,7 @@ public class Enemy_AI : MonoBehaviour {
 	}
 
 	//Triggered when a cell changs team
-	private void Cell_TeamChanged(CellBehaviour sender, CellBehaviour.enmTeam prev, CellBehaviour.enmTeam current) {
+	private void Cell_TeamChanged(CellBehaviour sender, Cell.enmTeam prev, Cell.enmTeam current) {
 		//Removes the cell from a team list
 		switch (prev) {
 			case CellBehaviour.enmTeam.ALLIED: {
@@ -59,15 +59,15 @@ public class Enemy_AI : MonoBehaviour {
 			GameControll.YouWon();
 		}
 		switch (current) {
-			case CellBehaviour.enmTeam.ALLIED: {
+			case Cell.enmTeam.ALLIED: {
 				_targets.Add(sender);
 				return;
 			}
-			case CellBehaviour.enmTeam.ENEMY: {
+			case Cell.enmTeam.ENEMY: {
 				_aiCells.Add(sender);
 				return;
 			}
-			case CellBehaviour.enmTeam.NEUTRAL: {
+			case Cell.enmTeam.NEUTRAL: {
 				_neutrals.Add(sender);
 				return;
 			}
@@ -147,22 +147,25 @@ public class Enemy_AI : MonoBehaviour {
 			}
 		}
 	}
+
 	//Expand from - to
 	public void Expand(CellBehaviour selectedCell, CellBehaviour toTarget) {
 		if (_neutrals.Count == 0) {
 			Attack(selectedCell, toTarget);
 			return;
 		}
+		selectedCell.AttackCell(toTarget);
 		print("Expanding as " + selectedCell.gameObject.name + " to " + toTarget.gameObject.name);
-
 	}
+
 	//Attack from - who
 	public void Attack(CellBehaviour selectedCell, CellBehaviour target) {
-
+		selectedCell.AttackCell(target);
 		print("Attacking as " + selectedCell.gameObject.name + " to " + target.gameObject.name);
 	}
 	//Defend from - who
 	public void Defend(CellBehaviour selectedCell, CellBehaviour target) {
+		selectedCell.EmpowerCell(target);
 		print("Defending as " + selectedCell.gameObject.name + " my " + target.gameObject.name);
 	}
 }

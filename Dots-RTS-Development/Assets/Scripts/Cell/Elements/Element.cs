@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Element : MonoBehaviour {
-	public Vector3 acc;
-	public Vector3 vel;
+	private Vector3 acc;
+	private Vector3 vel;
 	private float maxSpeed = 10;
 
 	public CellBehaviour attacker;
@@ -28,7 +28,7 @@ public class Element : MonoBehaviour {
 	private Vector3 Seek(CellBehaviour target) {
 		float d = Vector3.Distance(target.transform.position, gameObject.transform.position);
 		//print(d + " " + target._radius);
-		if (d < target.radius) {
+		if (d < target.cellRadius) {
 			//Execute this code after collision with target.
 			target.DamageCell(attacker.cellTeam);
 			Destroy(gameObject);

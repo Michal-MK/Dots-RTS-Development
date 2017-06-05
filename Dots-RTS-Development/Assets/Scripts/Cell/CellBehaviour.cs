@@ -22,7 +22,7 @@ public class CellBehaviour : Cell {
 		maxElements = 50;
 		elementCount = 10;
 		regenFrequency = 2;
-		radius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 		UpdateCellInfo();
 		GameControll.cells.Add(this);
 	}
@@ -102,6 +102,7 @@ public class CellBehaviour : Cell {
 		}
 		elementCount--;
 		if (elementCount < 0) {
+			TeamChanged(this, cellTeam, elementTeam);
 			elementCount = -elementCount;
 			cellTeam = elementTeam;
 		}
@@ -125,6 +126,7 @@ public class CellBehaviour : Cell {
 			if (elementCount < maxElements) {
 				elementCount++;
 				elementNrDisplay.text = elementCount.ToString();
+				UpdateCellInfo();
 			}
 		}
 	}
@@ -141,6 +143,13 @@ public class CellBehaviour : Cell {
 	}
 
 	public void UpdateCellInfo() {
+
+		if (elementCount >= 10 && elementCount <= maxElements) {
+			float mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1, 3);
+
+			transform.localScale = new Vector3(mappedValue, mappedValue, 1);
+			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		}
 
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingOrder = 2;
