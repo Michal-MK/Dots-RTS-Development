@@ -22,7 +22,7 @@ public class CellBehaviour : Cell {
 	private void Start() {
 		maxElements = 50;
 		elementCount = 10;
-		regenFrequency = 1.5f;
+		regenFrequency = 0.5f;
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 		UpdateCellInfo();
 	}
