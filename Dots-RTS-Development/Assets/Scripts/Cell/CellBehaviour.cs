@@ -22,7 +22,7 @@ public class CellBehaviour : Cell {
 	private void Start() {
 		maxElements = 50;
 		elementCount = 10;
-		regenFrequency = 0.5f;
+		regenPeriod = 1.5f;
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 		UpdateCellInfo();
 	}
@@ -116,7 +116,7 @@ public class CellBehaviour : Cell {
 		gameObject.transform.position = position;
 		elementCount = startingCount;
 		maxElements = maximum;
-		regenFrequency = regenerationRate;
+		regenPeriod = regenerationRate;
 		cellTeam = Team;
 	}
 
@@ -163,15 +163,15 @@ public class CellBehaviour : Cell {
 
 		//Adjust cell regeneration rate
 		if (Input.GetKeyDown(KeyCode.Keypad6)) {
-			if (regenFrequency < 10) {
-				regenFrequency += 0.5f;
-				print(regenFrequency);
+			if (regenPeriod < 10) {
+				regenPeriod += 0.5f;
+				print(regenPeriod);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Keypad4)) {
-			if (regenFrequency > 0.5f) {
-				regenFrequency -= 0.5f;
-				print(regenFrequency);
+			if (regenPeriod > 0.5f) {
+				regenPeriod -= 0.5f;
+				print(regenPeriod);
 			}
 		}
 		#endregion

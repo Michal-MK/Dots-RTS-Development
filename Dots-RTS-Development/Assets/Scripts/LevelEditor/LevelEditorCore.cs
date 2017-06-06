@@ -79,7 +79,7 @@ public class LevelEditorCore : MonoBehaviour {
 				clickedCell.cellTeam = (Cell.enmTeam)tempTeam;
 			}
 			if (float.TryParse(regenInput.text, out tempRegen)) {
-				clickedCell.regenFrequency = tempRegen;
+				clickedCell.regenPeriod = tempRegen;
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class LevelEditorCore : MonoBehaviour {
 			teamInput.text = clickedCell.cellTeam.ToString();
 			maxInput.text = clickedCell.maxElements.ToString();
 			startInput.text = clickedCell.elementCount.ToString();
-			regenInput.text = clickedCell.regenFrequency.ToString();
+			regenInput.text = clickedCell.regenPeriod.ToString();
 
 
 		}
@@ -126,10 +126,10 @@ public class LevelEditorCore : MonoBehaviour {
 
 			c.cellTeam = (Cell.enmTeam)nextTeam;
 			c.maxElements = nextMax;
-			c.regenFrequency = nextRegen;;
+			c.regenPeriod = nextRegen;;
 			c.elementCount = nextStarting;
 
-			SavingScript.AddCell(c);
+			SaveAndLoad.AddCell(c);
 		}
 #endif
 #if UNITY_ANDROID

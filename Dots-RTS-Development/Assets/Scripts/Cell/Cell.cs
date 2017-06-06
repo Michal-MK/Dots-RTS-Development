@@ -8,7 +8,7 @@ public class Cell : MonoBehaviour {
 
 
 	private int _elementCount;                                                                  //Current amount of elements inside the cell
-	private float _regenFreq;                                                                   //How fast will the cell regenerate
+	private float _regenP;																		//How fast will the cell regenerate
 	private int _maxElementCount;                                                               //How much can the cell hold
 	private Vector2 _position;                                                                  //Cells position
 	private bool _isRegenerating = false;
@@ -25,6 +25,9 @@ public class Cell : MonoBehaviour {
 	public Color32 enemy = new Color32(255, 0, 0, 255);                                        //Default enemy colour
 	public Color32 ally = new Color32(0, 255, 0, 255);                                         //Default ally colour
 	public Color32 neutral = new Color32(255, 255, 255, 255);                                  //Default neutral colour
+
+	public Upgrade u;
+
 
 	public SpriteRenderer cellSprite;
 	public TextMesh elementNrDisplay;
@@ -73,7 +76,7 @@ public class Cell : MonoBehaviour {
 	public IEnumerator GenerateElements() {
 		_isRegenerating = true;
 		while (true) {
-			yield return new WaitForSecondsRealtime(regenFrequency);
+			yield return new WaitForSecondsRealtime(regenPeriod);
 			if (elementCount < maxElements) {
 				elementCount++;
 				elementNrDisplay.text = elementCount.ToString();
@@ -93,9 +96,9 @@ public class Cell : MonoBehaviour {
 	/// <summary>
 	/// How fast will this cell generate new elements.
 	/// </summary>
-	public float regenFrequency {
-		get { return _regenFreq; }
-		set { _regenFreq = value; UpdateCellInfo(); }
+	public float regenPeriod {
+		get { return _regenP; }
+		set { _regenP = value; UpdateCellInfo(); }
 	}
 	/// <summary>
 	/// The maximum amount of elements this cell can hold.
@@ -118,4 +121,12 @@ public class Cell : MonoBehaviour {
 		get { return _radius; }
 		set { _radius = value; }
 	}
+	/// <summary>
+	/// Cell's position in the world
+	/// </summary>
+	public Vector3 cellPosition {
+		get { return _position; }
+		set { _position = value; }
+	}
+
 }

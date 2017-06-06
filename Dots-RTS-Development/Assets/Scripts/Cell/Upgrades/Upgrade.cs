@@ -11,4 +11,7 @@ public class Upgrade : MonoBehaviour {
 		MAX_CAPACITY,
 		CRITICAL_CHANCE,
 	}
+
+	public int[] slots;
+	public int[] upgrades;
 }

@@ -32,7 +32,7 @@ public class EditCell : MonoBehaviour {
 
 			core.teamInput.text = c._team.ToString();
 			core.startInput.text = c.elementCount.ToString();
-			core.regenInput.text = c.regenFrequency.ToString();
+			core.regenInput.text = c.regenPeriod.ToString();
 			core.maxInput.text = c.maxElements.ToString();
 
 			
