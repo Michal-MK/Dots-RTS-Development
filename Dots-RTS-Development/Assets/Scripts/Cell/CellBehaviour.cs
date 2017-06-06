@@ -15,14 +15,16 @@ public class CellBehaviour : Cell {
 	public GameObject cellObj;
 	public GameObject elementObj;
 
+	private void Awake() {
+		GameControll.cells.Add(this);
+	}
 
 	private void Start() {
 		maxElements = 50;
 		elementCount = 10;
-		regenFrequency = 2;
+		regenFrequency = 1.5f;
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 		UpdateCellInfo();
-		GameControll.cells.Add(this);
 	}
 
 
@@ -49,7 +51,8 @@ public class CellBehaviour : Cell {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
-			}else if (team == enmTeam.ALLIED) {
+			}
+			else if (team == enmTeam.ALLIED) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].EmpowerCell(target);
 				}
@@ -107,7 +110,7 @@ public class CellBehaviour : Cell {
 		UpdateCellInfo();
 	}
 	#endregion
-	
+
 
 	public void SetCellData(Vector2 position, enmTeam Team, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
 		gameObject.transform.position = position;
@@ -140,6 +143,7 @@ public class CellBehaviour : Cell {
 		}
 	}
 
+	//
 
 	private void OnMouseOver() {
 		if (!isSelected) {
