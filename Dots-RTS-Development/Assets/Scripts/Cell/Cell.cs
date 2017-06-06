@@ -28,18 +28,13 @@ public class Cell : MonoBehaviour {
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
 
-	public Coroutine ElementGeneration;
-
 	public void UpdateCellInfo() {
+		print("callded" + elementCount.ToString());
 		if (elementCount >= 10 && elementCount <= maxElements) {
 			float mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1, 3);
 
 			transform.localScale = new Vector3(mappedValue, mappedValue, 1);
 			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
-		}
-
-		if(ElementGeneration == null && _team == enmTeam.ALLIED || _team == enmTeam.ENEMY) {
-			ElementGeneration = StartCoroutine(GenerateElements());
 		}
 
 		elementNrDisplay.text = elementCount.ToString();
@@ -58,18 +53,6 @@ public class Cell : MonoBehaviour {
 			case enmTeam.NEUTRAL: {
 				cellSprite.color = neutral;
 				return;
-			}
-		}
-	}
-
-	//Keeps generateing new elements for the cell
-	public IEnumerator GenerateElements() {
-		while (true) {
-			yield return new WaitForSecondsRealtime(regenFrequency);
-			if (elementCount < maxElements) {
-				elementCount++;
-				elementNrDisplay.text = elementCount.ToString();
-				UpdateCellInfo();
 			}
 		}
 	}
