@@ -10,6 +10,7 @@ public class Cell : MonoBehaviour {
 	private float _regenFreq;                                                                   //How fast will the cell regenerate
 	private int _maxElementCount;                                                               //How much can the cell hold
 	private Vector2 _position;                                                                  //Cells position
+	private bool _isRegenerating = false;
 	public enmTeam _team;                                                                       //Cell's team
 
 	public enum enmTeam {
@@ -28,13 +29,17 @@ public class Cell : MonoBehaviour {
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
 
+
 	public void UpdateCellInfo() {
-		print("callded" + elementCount.ToString());
 		if (elementCount >= 10 && elementCount <= maxElements) {
 			float mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1, 3);
 
 			transform.localScale = new Vector3(mappedValue, mappedValue, 1);
 			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		}
+
+		if(!_isRegenerating && _team == enmTeam.ALLIED || !_isRegenerating && _team == enmTeam.ENEMY) {
+			StartCoroutine(GenerateElements());
 		}
 
 		elementNrDisplay.text = elementCount.ToString();
@@ -53,6 +58,19 @@ public class Cell : MonoBehaviour {
 			case enmTeam.NEUTRAL: {
 				cellSprite.color = neutral;
 				return;
+			}
+		}
+	}
+
+	//Keeps generateing new elements for the cell
+	public IEnumerator GenerateElements() {
+		_isRegenerating = true;
+		while (true) {
+			yield return new WaitForSecondsRealtime(regenFrequency);
+			if (elementCount < maxElements) {
+				elementCount++;
+				elementNrDisplay.text = elementCount.ToString();
+				UpdateCellInfo();
 			}
 		}
 	}

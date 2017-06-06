@@ -120,18 +120,6 @@ public class CellBehaviour : Cell {
 		cellTeam = Team;
 	}
 
-	//Keeps generateing new elements for the cell
-	public IEnumerator GenerateElements() {
-		while (true) {
-			yield return new WaitForSecondsRealtime(regenFrequency);
-			if (elementCount < maxElements) {
-				elementCount++;
-				elementNrDisplay.text = elementCount.ToString();
-				UpdateCellInfo();
-			}
-		}
-	}
-
 	//Selects or deselects a cell
 	public void SetSelected() {
 		if (isSelected) {
