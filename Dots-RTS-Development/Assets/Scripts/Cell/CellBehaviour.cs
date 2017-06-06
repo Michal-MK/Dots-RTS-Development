@@ -11,9 +11,7 @@ public class CellBehaviour : Cell {
 
 	public Coroutine generateCoroutine;
 
-	public TextMesh elementNrDisplay;
-	public MeshRenderer textRenderer;
-	public SpriteRenderer cellSprite;
+	
 	public GameObject cellObj;
 	public GameObject elementObj;
 
@@ -142,37 +140,6 @@ public class CellBehaviour : Cell {
 		}
 	}
 
-	public void UpdateCellInfo() {
-
-		if (elementCount >= 10 && elementCount <= maxElements) {
-			float mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1, 3);
-
-			transform.localScale = new Vector3(mappedValue, mappedValue, 1);
-			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
-		}
-
-		elementNrDisplay.text = elementCount.ToString();
-		textRenderer.sortingOrder = 2;
-
-		if (generateCoroutine == null && cellTeam != enmTeam.NEUTRAL) {
-			generateCoroutine = StartCoroutine(GenerateElements());
-		}
-		switch (cellTeam) {
-			case enmTeam.ALLIED: {
-				cellSprite.color = ally;
-				return;
-			}
-			case enmTeam.ENEMY: {
-				cellSprite.color = enemy;
-
-				return;
-			}
-			case enmTeam.NEUTRAL: {
-				cellSprite.color = neutral;
-				return;
-			}
-		}
-	}
 
 	private void OnMouseOver() {
 		if (!isSelected) {
