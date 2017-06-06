@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameControll : MonoBehaviour {
 
 	public delegate void TeamChangeEventHandler(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current);
+	public delegate void EnteredCellEditMode(EditCell sender);
 
 	public bool isSinglePlayer = true;
 

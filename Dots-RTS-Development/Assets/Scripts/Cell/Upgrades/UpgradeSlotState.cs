@@ -2,38 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeSlotState : Upgrade_Manager {
-	public Upgrade_Manager cellUpgrades;
-	public bool isUpgraded = false;
+public class UpgradeSlotState : Upgrade {
 
-	public Upgrade current = Upgrade.NONE;
+	public bool isUpgraded = false;
+	public BoxCollider2D col;
+
+	public CellBehaviour c;
+	public Upgrade_Manager um;
+	public enmUpgrade current = enmUpgrade.NONE;
+
+	private void Awake() {
+		EditCell.EditModeChanged += EditCell_EditModeChanged;
+	}
+	private void OnDestroy() {
+		EditCell.EditModeChanged -= EditCell_EditModeChanged;
+	}
+
+	private void EditCell_EditModeChanged(EditCell sender) {
+		if (!sender.isEditing) {
+			col.enabled = false;
+		}
+		else {
+			col.enabled = true;
+		}
+	}
+
 
 	//Returns this UpgradeSlot's installed upgrade
-	public Upgrade GetInstalledUpgrade() {
-		return current;
+	public enmUpgrade installedUpgrade {
+		get { return current; }
+		set { current = value; }
 	}
+
 	//Show upgrade slots on enter
 	private void OnMouseEnter() {
-		if (cellScript.cellTeam == CellBehaviour.enmTeam.ALLIED) {
-			upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
-		}
-	}
-	//Hide upgrade slots on leave
-	private void OnMouseOver() {
-		if (Input.GetMouseButtonDown(1)) {
-			print("Slot ID: " + SlotID(gameObject) + " Installed upgrade: " + GetInstalledUpgrade());
-		}
-	}
-
-	//Returns slots index in Upgrade Manager array as an enum
-	public Slot SlotID(GameObject slotHolder) {
-		Slot id = 0;
-
-		for(int i = 0; i < cellUpgrades.slots.Length; i++) {
-			if (slotHolder == cellUpgrades.slots[i]) {
-				return id = (Slot)i;
+		if (c != null) {
+			if (c.cellTeam == Cell.enmTeam.ALLIED) {
+				um.gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
 			}
 		}
-		return id;
 	}
+
+	//Display info about installed upgrades in slots
+	private void OnMouseOver() {
+		if (Input.GetMouseButtonDown(1)) {
+			print("Slot ID: " + um.SlotID(this) + " Installed upgrade: " + installedUpgrade);
+		}
+	}
+
 }

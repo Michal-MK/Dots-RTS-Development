@@ -55,6 +55,7 @@ public class LevelEditorCore : MonoBehaviour {
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 		}
 	}
+
 	private void Update() {
 
 #if (UNITY_EDITOR || UNITY_STANDALONE)

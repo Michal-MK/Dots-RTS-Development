@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Upgrade_Manager : MonoBehaviour {
+public class Upgrade_Manager : Upgrade {
 
-	public GameObject[] slots = new GameObject[8];
+	public UpgradeSlotState[] slots = new UpgradeSlotState[8];
 
 	public SpriteRenderer upgradeSlotsRenderer;
-	public CellBehaviour cellScript;
+	public CellBehaviour bScript;
+	public Cell cScript;
 
-	public enum Slot {
+
+	public enum enmSlot {
+		NULL = -1,
 		FIRST,
 		SECOND,
 		THIRD,
@@ -20,44 +23,72 @@ public class Upgrade_Manager : MonoBehaviour {
 		EIGHTH,
 	}
 
-	public enum Upgrade {
-		NONE,
-		ELEMENT_MOVE_SPEED,
-		GENERATION_SPEED,
-		MAX_CAPACITY,
-		CRITICAL_CHANCE,
+	private void Awake() {
+		EditCell.EditModeChanged += EditCell_EditModeChanged;
+	}
+	private void OnDestroy() {
+		EditCell.EditModeChanged -= EditCell_EditModeChanged;
 	}
 
-	//Called when you mouse over the cell
-	private void OnMouseEnter() {
-		if (cellScript.cellTeam == Cell.enmTeam.ALLIED) {
+	private void EditCell_EditModeChanged(EditCell sender) {
+		if (!sender.isEditing) {
+			for (int i = 0; i < slots.Length; i++) {
+				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
+				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
+			}
+		}
+		else {
 			for (int i = 0; i < slots.Length; i++) {
 				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
 				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = true;
 			}
 		}
-		else {
-			for (int i = 0; i < slots.Length; i++) {
-				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
+	}
+
+	//Shows upgrade slots if the cell is allied
+	private void OnMouseEnter() {
+		if (bScript != null) {
+			if (bScript.cellTeam == Cell.enmTeam.ALLIED) {
+				for (int i = 0; i < slots.Length; i++) {
+					upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
+					slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = true;
+				}
+			}
+			else {
+				for (int i = 0; i < slots.Length; i++) {
+					slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
+				}
 			}
 		}
 	}
 
-
-	//Called when you leave the cell
+	//Makes upgrade slots invisible
 	private void OnMouseExit() {
-		for (int i = 0; i < slots.Length; i++) {
-			upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
+		if (bScript != null) {
+			for (int i = 0; i < slots.Length; i++) {
+				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
+			}
 		}
 	}
 
 	//Installs Upgrade onto specifiad slot
-	public void InstallUpgrade(Upgrade type, Slot number) {
-		slots[(int)number].GetComponent<UpgradeSlotState>().current = type;
+	public void InstallUpgrade(enmUpgrade type, enmSlot number) {
+		slots[(int)number].current = type;
 	}
 
 	//Removes Upgrade from a specified slot
-	public void UninstallUpgrade(Slot number) {
-		slots[(int)number].GetComponent<UpgradeSlotState>().current = 0;
+	public void UninstallUpgrade(enmSlot number) {
+		slots[(int)number].current = 0;
+	}
+
+	//Returns slots index in Upgrade Manager array as an enum
+	public enmSlot SlotID(UpgradeSlotState slotHolder) {
+
+		for (int i = 0; i < slots.Length; i++) {
+			if (slotHolder == slots[i]) {
+				return (enmSlot)i;
+			}
+		}
+		return (enmSlot)(-1);
 	}
 }

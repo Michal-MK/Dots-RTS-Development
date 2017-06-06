@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Cell : MonoBehaviour {
 
@@ -38,8 +39,8 @@ public class Cell : MonoBehaviour {
 			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 		}
 
-		if(!_isRegenerating && _team == enmTeam.ALLIED || !_isRegenerating && _team == enmTeam.ENEMY) {
-			StartCoroutine(GenerateElements());
+		if(SceneManager.GetActiveScene().name == "Game") {
+			StartGeneration();
 		}
 
 		elementNrDisplay.text = elementCount.ToString();
@@ -59,6 +60,12 @@ public class Cell : MonoBehaviour {
 				cellSprite.color = neutral;
 				return;
 			}
+		}
+	}
+
+	public void StartGeneration() {
+		if (!_isRegenerating && _team == enmTeam.ALLIED || !_isRegenerating && _team == enmTeam.ENEMY) {
+			StartCoroutine(GenerateElements());
 		}
 	}
 
