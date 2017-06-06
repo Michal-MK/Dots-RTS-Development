@@ -17,6 +17,6 @@ public class MainMenuUI : MonoBehaviour {
 
 	// Sends you to a screen with premade levels.
 	public void LaunchCampaignScreen() {
-		SceneManager.LoadScene("CampaignScreen");
+		SceneManager.LoadScene("Game");
 	}
 }
