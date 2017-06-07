@@ -98,17 +98,13 @@ public class Enemy_AI : MonoBehaviour {
 			if (_aiCells.Count != 0) {
 				//selectedAiCell = _aiCells[UnityEngine.Random.Range(0, _aiCells.Count)];
 				selectedAiCell = AiCellSelector();
-				if(_aiCells.Count == 1) {
-					isAlone = true;
-				}
 			}
 			else {
 				isActive = false;
 				yield break;
 			}
-			if (!isAlone) {
-				selectedAiCellForAid = AiAidSelector();
-			}
+
+			selectedAiCellForAid = AiAidSelector();
 			//while (selectedAiCellForAid == selectedAiCell) {
 			//	if (_aiCells.Count == 1) {
 			//		print("Can't help anyone... I'm alone.");
@@ -315,7 +311,6 @@ public class Enemy_AI : MonoBehaviour {
 	}
 
 	public CellBehaviour AiAidSelector() {
-
 		CellBehaviour current;
 
 		int elementRecord = 99999;

@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Upgrade_Manager : MonoBehaviour {
+public class Upgrade_Manager : Upgrade {
 
 	public UpgradeSlotState[] slots = new UpgradeSlotState[8];
 
 	public SpriteRenderer upgradeSlotsRenderer;
 	public CellBehaviour bScript;
 	public Cell cScript;
+
 
 	public enum enmSlot {
 		NULL = -1,
@@ -21,31 +22,6 @@ public class Upgrade_Manager : MonoBehaviour {
 		SEVENTH,
 		EIGHTH,
 	}
-	public enum enmUpgrade {
-		NONE,
-		ELEMENT_MOVE_SPEED,
-		GENERATION_SPEED,
-		MAX_CAPACITY,
-		CRITICAL_CHANCE,
-	}
-
-	private int[] _upgrades = new int[8];
-
-	public int[] ApplyUpgrades() {
-		for (int i = 0; i < _upgrades.Length; i++) {
-			_upgrades[i] = (int)slots[i].installedUpgrade;
-		}
-		return _upgrades;
-	}
-
-	/// <summary>
-	/// Upgrades of the selected cell
-	/// </summary>
-	public int[] upgrades {
-		get { return _upgrades; }
-		set { _upgrades = value; }
-	}
-
 
 	private void Awake() {
 		EditCell.EditModeChanged += EditCell_EditModeChanged;
@@ -95,14 +71,14 @@ public class Upgrade_Manager : MonoBehaviour {
 		}
 	}
 
-	//Installs Upgrade onto specified slot
+	//Installs Upgrade onto specifiad slot
 	public void InstallUpgrade(enmUpgrade type, enmSlot number) {
-		slots[(int)number].installedUpgrade = type;
+		slots[(int)number].current = type;
 	}
 
 	//Removes Upgrade from a specified slot
 	public void UninstallUpgrade(enmSlot number) {
-		slots[(int)number].installedUpgrade = 0;
+		slots[(int)number].current = 0;
 	}
 
 	//Returns slots index in Upgrade Manager array as an enum
