@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeSlotState : Upgrade {
+public class UpgradeSlotState : MonoBehaviour {
 
 	public bool isUpgraded = false;
 	public BoxCollider2D col;
 
 	public CellBehaviour c;
 	public Upgrade_Manager um;
-	public enmUpgrade current = enmUpgrade.NONE;
+	private Upgrade_Manager.enmUpgrade _current = Upgrade_Manager.enmUpgrade.NONE;
 
 	private void Awake() {
 		EditCell.EditModeChanged += EditCell_EditModeChanged;
@@ -29,9 +29,9 @@ public class UpgradeSlotState : Upgrade {
 
 
 	//Returns this UpgradeSlot's installed upgrade
-	public enmUpgrade installedUpgrade {
-		get { return current; }
-		set { current = value; }
+	public Upgrade_Manager.enmUpgrade installedUpgrade {
+		get { return _current; }
+		set { _current = value; }
 	}
 
 	//Show upgrade slots on enter

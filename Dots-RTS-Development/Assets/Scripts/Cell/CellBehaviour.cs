@@ -7,23 +7,30 @@ public class CellBehaviour : Cell {
 	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();
 	public static event GameControll.TeamChangeEventHandler TeamChanged;
 
-	public bool isSelected = false;                                                             //Is cell selected for attack?
+	public bool isSelected = false;																					//Is cell selected for attack?
 
 	public Coroutine generateCoroutine;
 
-	
 	public GameObject cellObj;
 	public GameObject elementObj;
 
 	private void Awake() {
 		GameControll.cells.Add(this);
 	}
-
+	//Set defaul
 	private void Start() {
-		maxElements = 50;
-		elementCount = 10;
-		regenPeriod = 1.5f;
+		if (maxElements == 0) {
+			maxElements = 50;
+		}
+		if (elementCount == 0) {
+			elementCount = 10;
+		}
+		if (regenPeriod == 0) {
+			regenPeriod = 0.2f;
+		}
+
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+
 		UpdateCellInfo();
 	}
 
@@ -111,13 +118,22 @@ public class CellBehaviour : Cell {
 	}
 	#endregion
 
+	//Overriden function to include regeneration call
+	public override void UpdateCellInfo() {
+		base.UpdateCellInfo();
+		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && _team == enmTeam.ENEMY) {
+			StartCoroutine(GenerateElements());
+		}
+	}
 
-	public void SetCellData(Vector2 position, enmTeam Team, int startingCount = 0, int maximum = 100, float regenerationRate = 2f) {
+	//Generic code to set all the values of a cell
+	public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationPeriod = 1.5f, float radius = 1) {
 		gameObject.transform.position = position;
 		elementCount = startingCount;
 		maxElements = maximum;
-		regenPeriod = regenerationRate;
-		cellTeam = Team;
+		regenPeriod = regenerationPeriod;
+		cellTeam = team;
+		cellRadius = radius;
 	}
 
 	//Selects or deselects a cell
@@ -131,8 +147,7 @@ public class CellBehaviour : Cell {
 		}
 	}
 
-	//
-
+	//Chnges colour of element count - to "highlight" the cell, also used to Empower() the cell
 	private void OnMouseOver() {
 		if (!isSelected) {
 			elementNrDisplay.color = new Color32(255, 0, 0, 255);
