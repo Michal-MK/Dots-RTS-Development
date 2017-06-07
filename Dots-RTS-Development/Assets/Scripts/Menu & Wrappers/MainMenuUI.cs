@@ -6,12 +6,16 @@ using UnityEngine.SceneManagement;
 public class MainMenuUI : MonoBehaviour {
 
 	// Turns OFF the game
-	public void ExitGame () {
-		Application.Quit();
+	public void ExitGame() {
+		#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+		#else
+			Application.Quit();
+		#endif
 	}
-	
+
 	// Launches the level editor in which you can make levels, play them or save them.
-	public void LaunchLevelEditor () {
+	public void LaunchLevelEditor() {
 		SceneManager.LoadScene("LevelEditor");
 	}
 

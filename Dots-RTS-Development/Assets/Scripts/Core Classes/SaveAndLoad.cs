@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class SaveAndLoad : MonoBehaviour {
+public class SaveAndLoad {
 
 	private static List<Cell> cellList = new List<Cell>();
 
@@ -32,7 +32,7 @@ public class SaveAndLoad : MonoBehaviour {
 			serCell.maxElementCount = c.maxElements;
 			serCell.team = (int)c._team;
 			serCell.regenerationPeriod = c.regenPeriod;
-			serCell.installedUpgrades = new S_Upgrades { upgrade = c.u.upgrades };
+			serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades()};
 
 			save.cells.Add(serCell);
 		}
@@ -59,7 +59,7 @@ public class SaveAndLoad : MonoBehaviour {
 				c.maxElements = save.cells[index].maxElementCount;
 				c._team = (Cell.enmTeam)save.cells[index].team;
 				c.regenPeriod = save.cells[index].regenerationPeriod;
-				c.u.upgrades = save.cells[index].installedUpgrades.upgrade;
+				c.um.upgrades = save.cells[index].installedUpgrades.upgrade;
 			}
 		//}
 	}
