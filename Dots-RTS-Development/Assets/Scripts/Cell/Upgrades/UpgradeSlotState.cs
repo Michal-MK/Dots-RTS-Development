@@ -7,7 +7,7 @@ public class UpgradeSlotState : MonoBehaviour {
 	public bool isUpgraded = false;
 	public BoxCollider2D col;
 
-	public CellBehaviour c;
+	public CellBehaviour cb;
 	public Upgrade_Manager um;
 	private Upgrade_Manager.enmUpgrade _current = Upgrade_Manager.enmUpgrade.NONE;
 
@@ -36,9 +36,13 @@ public class UpgradeSlotState : MonoBehaviour {
 
 	//Show upgrade slots on enter
 	private void OnMouseEnter() {
-		if (c != null) {
-			if (c.cellTeam == Cell.enmTeam.ALLIED) {
-				um.gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
+		if (cb != null) {
+			if (cb.cellTeam == Cell.enmTeam.ALLIED) {
+				um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
+				foreach(UpgradeSlotState s in um.slots) {
+					print(s.gameObject.name);
+					s.col.enabled = true;
+				}
 			}
 		}
 	}

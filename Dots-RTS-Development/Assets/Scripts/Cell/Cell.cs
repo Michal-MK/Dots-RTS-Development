@@ -98,7 +98,7 @@ public class Cell : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Twam this cell belongs to.
+	/// Team this cell belongs to.
 	/// </summary>
 	public enmTeam cellTeam {
 		get { return _team; }

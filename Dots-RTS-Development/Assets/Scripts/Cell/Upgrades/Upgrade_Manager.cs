@@ -9,6 +9,7 @@ public class Upgrade_Manager : MonoBehaviour {
 	public SpriteRenderer upgradeSlotsRenderer;
 	public CellBehaviour bScript;
 	public Cell cScript;
+	public CircleCollider2D col;
 
 	public enum enmSlot {
 		NULL = -1,
@@ -73,14 +74,14 @@ public class Upgrade_Manager : MonoBehaviour {
 	private void OnMouseEnter() {
 		if (bScript != null) {
 			if (bScript.cellTeam == Cell.enmTeam.ALLIED) {
+				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
 				for (int i = 0; i < slots.Length; i++) {
-					upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
-					slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = true;
+					slots[i].col.enabled = true;
 				}
 			}
 			else {
 				for (int i = 0; i < slots.Length; i++) {
-					slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
+					slots[i].col.enabled = false;
 				}
 			}
 		}

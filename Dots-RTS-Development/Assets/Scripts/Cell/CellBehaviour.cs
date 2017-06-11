@@ -7,7 +7,7 @@ public class CellBehaviour : Cell {
 	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();
 	public static event GameControll.TeamChangeEventHandler TeamChanged;
 
-	public bool isSelected = false;																					//Is cell selected for attack?
+	public bool isSelected = false;                                                                                 //Is cell selected for attack?
 
 	public Coroutine generateCoroutine;
 
@@ -26,7 +26,7 @@ public class CellBehaviour : Cell {
 			elementCount = 10;
 		}
 		if (regenPeriod == 0) {
-			regenPeriod = 0.2f;
+			regenPeriod = 2f;
 		}
 
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
@@ -192,6 +192,13 @@ public class CellBehaviour : Cell {
 		#endregion
 	}
 
+	private void OnMouseEnter() {
+		foreach (UpgradeSlotState s in um.slots) {
+			s.col.enabled = true;
+		}
+		um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
+	}
+
 	//Changes the colour back to original
 	private void OnMouseExit() {
 		if (!isSelected) {
@@ -199,6 +206,9 @@ public class CellBehaviour : Cell {
 		}
 		else {
 			elementNrDisplay.color = new Color32(255, 0, 0, 255);
+		}
+		for (int i = 0; i < um.slots.Length; i++) {
+			um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 		}
 	}
 
