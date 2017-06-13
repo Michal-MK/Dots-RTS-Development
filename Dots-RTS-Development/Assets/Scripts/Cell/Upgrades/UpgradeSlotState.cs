@@ -12,14 +12,14 @@ public class UpgradeSlotState : MonoBehaviour {
 	private Upgrade_Manager.enmUpgrade _current = Upgrade_Manager.enmUpgrade.NONE;
 
 	private void Awake() {
-		EditCell.EditModeChanged += EditCell_EditModeChanged;
+		EditCell.changedASelectionOfCell += EditCell_EditModeChanged;
 	}
 	private void OnDestroy() {
-		EditCell.EditModeChanged -= EditCell_EditModeChanged;
+		EditCell.changedASelectionOfCell -= EditCell_EditModeChanged;
 	}
 
 	private void EditCell_EditModeChanged(EditCell sender) {
-		if (!sender.isEditing) {
+		if (!sender.thereIsACellSelected) {
 			col.enabled = false;
 		}
 		else {

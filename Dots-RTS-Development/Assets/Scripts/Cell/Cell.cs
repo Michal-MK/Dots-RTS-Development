@@ -30,6 +30,9 @@ public class Cell : MonoBehaviour {
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
 
+	private void Start() {
+		UpdateCellInfo();
+	}
 
 	public virtual void UpdateCellInfo() {
 

@@ -49,14 +49,14 @@ public class Upgrade_Manager : MonoBehaviour {
 
 
 	private void Awake() {
-		EditCell.EditModeChanged += EditCell_EditModeChanged;
+		EditCell.changedASelectionOfCell += EditCell_EditModeChanged;
 	}
 	private void OnDestroy() {
-		EditCell.EditModeChanged -= EditCell_EditModeChanged;
+		EditCell.changedASelectionOfCell -= EditCell_EditModeChanged;
 	}
 
 	private void EditCell_EditModeChanged(EditCell sender) {
-		if (!sender.isEditing) {
+		if (!sender.thereIsACellSelected) {
 			for (int i = 0; i < slots.Length; i++) {
 				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
