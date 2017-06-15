@@ -17,7 +17,8 @@ public class CellBehaviour : Cell {
 	private void Awake() {
 		GameControll.cells.Add(this);
 	}
-	//Set defaul
+
+	//Set default
 	private void Start() {
 		if (maxElements == 0) {
 			maxElements = 50;
@@ -41,12 +42,12 @@ public class CellBehaviour : Cell {
 			if (cell == cellsInSelection[i]) {
 				cellsInSelection.RemoveAt(i);
 				cell.SetSelected();
-				print(cellsInSelection.Count);
+				//print(cellsInSelection.Count);
 				return;
 			}
 		}
 		cellsInSelection.Add(cell);
-		print(cellsInSelection.Count);
+		//print(cellsInSelection.Count);
 		cell.SetSelected();
 
 	}
@@ -64,6 +65,11 @@ public class CellBehaviour : Cell {
 					cellsInSelection[i].EmpowerCell(target);
 				}
 			}
+			else if (team == enmTeam.NEUTRAL) {
+				for (int i = 0; i < cellsInSelection.Count; i++) {
+					cellsInSelection[i].AttackCell(target);
+				}
+			}
 		}
 		ClearSelection();
 	}
@@ -77,28 +83,31 @@ public class CellBehaviour : Cell {
 		cellsInSelection.Clear();
 	}
 
-
 	#region Attack Handling
 	//Code to attack selected cell
 	public void AttackCell(CellBehaviour target) {
-		int numElements = elementCount = elementCount / 2;
-		for (int i = 0; i < numElements; i++) {
-			GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
-			e.GetComponent<Element>().target = target;
-			e.GetComponent<Element>().attacker = this;
+		if (elementCount > 1) {
+			int numElements = elementCount = elementCount / 2;
+			for (int i = 0; i < numElements; i++) {
+				GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
+				e.GetComponent<Element>().target = target;
+				e.GetComponent<Element>().attacker = this;
+			}
+			base.UpdateCellInfo();
 		}
-		UpdateCellInfo();
 	}
 
 	//Called when "attacking" your own cell
 	public void EmpowerCell(CellBehaviour target) {
-		int numElements = elementCount = elementCount / 2;
-		for (int i = 0; i < numElements; i++) {
-			GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
-			e.GetComponent<Element>().target = target;
-			e.GetComponent<Element>().attacker = this;
+		if (elementCount > 1 && target != this) {
+			int numElements = elementCount = elementCount / 2;
+			for (int i = 0; i < numElements; i++) {
+				GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
+				e.GetComponent<Element>().target = target;
+				e.GetComponent<Element>().attacker = this;
+			}
+			base.UpdateCellInfo();
 		}
-		UpdateCellInfo();
 	}
 
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
@@ -118,6 +127,7 @@ public class CellBehaviour : Cell {
 	}
 	#endregion
 
+
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo() {
 		base.UpdateCellInfo();
@@ -127,11 +137,11 @@ public class CellBehaviour : Cell {
 	}
 
 	//Generic code to set all the values of a cell
-	public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationPeriod = 1.5f, float radius = 1) {
+	public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationFreq = 1.5f, float radius = 1) {
 		gameObject.transform.position = position;
 		elementCount = startingCount;
 		maxElements = maximum;
-		regenPeriod = regenerationPeriod;
+		regenPeriod = regenerationFreq;
 		cellTeam = team;
 		cellRadius = radius;
 	}
@@ -147,20 +157,17 @@ public class CellBehaviour : Cell {
 		}
 	}
 
-	//Chnges colour of element count - to "highlight" the cell, also used to Empower() the cell
+	//
 	private void OnMouseOver() {
-		if (!isSelected) {
-			elementNrDisplay.color = new Color32(255, 0, 0, 255);
-		}
-		else {
-			elementNrDisplay.color = new Color32(0, 255, 255, 255);
-		}
-		//OnMouseDown() doesn't support other mouse imputs except LMB .. lame 
 		if (Input.GetMouseButtonDown(1)) {
-			if (cellTeam == enmTeam.ALLIED) {
-				AttackWrapper(this, enmTeam.ALLIED);
-			}
+			print("Edit");
+
 		}
+		//Legacy Attack behaviour
+		if (Input.GetMouseButtonUp(0)) {
+			AttackWrapper(this, cellTeam);
+		}
+
 		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed, opposite buttons decrease the values
 		//Adjust max cell size
 		if (Input.GetKeyDown(KeyCode.Keypad8)) {
@@ -192,42 +199,39 @@ public class CellBehaviour : Cell {
 		#endregion
 	}
 
+	//
 	private void OnMouseEnter() {
-		foreach (UpgradeSlotState s in um.slots) {
-			s.col.enabled = true;
+		//Legacy Attack behaviour
+		if (Input.GetMouseButton(0)) {
+			if (cellTeam == enmTeam.ALLIED) {
+				ModifySelection(this);
+				print("Added " + gameObject.name);
+			}
 		}
-		um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
 	}
 
-	//Changes the colour back to original
+	//Hides Upgrade Slots
 	private void OnMouseExit() {
-		if (!isSelected) {
-			elementNrDisplay.color = new Color32(255, 255, 255, 255);
-		}
-		else {
-			elementNrDisplay.color = new Color32(255, 0, 0, 255);
-		}
-		for (int i = 0; i < um.slots.Length; i++) {
-			um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
-		}
+		um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 	}
+
 
 	//Determine action depending on clicked cell's team.
 	private void OnMouseDown() {
-		switch (cellTeam) {
-			case enmTeam.ALLIED: {
-				ModifySelection(this);
-				return;
-			}
-			case enmTeam.ENEMY: {
-				AttackWrapper(this, cellTeam);
-				return;
-			}
-			case enmTeam.NEUTRAL: {
-				AttackWrapper(this, enmTeam.ENEMY);
-				return;
-			}
+		if (cellTeam == enmTeam.ALLIED) {
+			ModifySelection(this);
+			print("Added " + gameObject.name);
 		}
 	}
 
+	private void OnMouseUp() {
+		print(gameObject.name);
+		if (cellTeam != enmTeam.ALLIED) {
+			AttackWrapper(this, cellTeam);
+		}
+		else {
+			EmpowerCell(this);
+		}
+
+	}
 }

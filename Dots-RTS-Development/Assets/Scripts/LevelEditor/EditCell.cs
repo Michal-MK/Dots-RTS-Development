@@ -15,6 +15,7 @@ public class EditCell : MonoBehaviour {
 
 	public bool thereIsACellSelected;
 
+	//instead of "thisCell" use keyword "this" or nothing since the class is not static
 	Cell thisCell;
 
 	private void Awake() {

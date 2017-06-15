@@ -47,19 +47,18 @@ public class SaveAndLoad {
 		//int numSaves = dir.GetFiles("*.phage").Length;
 		//for (int i = 0; i < numSaves; i++) {
 			FileStream file = File.Open(Application.dataPath + "/Saves/Level" + index + ".phage", FileMode.Open);
-			SaveData save = new SaveData();
-			save = (SaveData)formatter.Deserialize(file);
+			SaveData save = (SaveData)formatter.Deserialize(file);
 			file.Close();
 			for (int j = 0; j < save.cells.Count; j++) {
 
 				Cell c = new Cell();
 
 				c.cellPosition = (Vector3)save.cells[j].pos;
-				c.elementCount = save.cells[index].elementCount;
-				c.maxElements = save.cells[index].maxElementCount;
-				c._team = (Cell.enmTeam)save.cells[index].team;
-				c.regenPeriod = save.cells[index].regenerationPeriod;
-				c.um.upgrades = save.cells[index].installedUpgrades.upgrade;
+				c.elementCount = save.cells[j].elementCount;
+				c.maxElements = save.cells[j].maxElementCount;
+				c._team = (Cell.enmTeam)save.cells[j].team;
+				c.regenPeriod = save.cells[j].regenerationPeriod;
+				c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 			}
 		//}
 	}
