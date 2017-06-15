@@ -36,8 +36,8 @@ public class Cell : MonoBehaviour {
 
 	public virtual void UpdateCellInfo() {
 
-		if (elementCount <= maxElements) {
-			float mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1, 3);
+		if (elementCount >= 10 && elementCount <= maxElements) {
+			float mappedValue = Map.MapFloat(elementCount, 0, maxElements, 1, 2);
 
 			transform.localScale = new Vector3(mappedValue, mappedValue, 1);
 			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;

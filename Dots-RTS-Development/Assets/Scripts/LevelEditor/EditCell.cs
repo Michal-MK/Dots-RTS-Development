@@ -15,21 +15,28 @@ public class EditCell : MonoBehaviour {
 
 	public bool thereIsACellSelected;
 
-	//instead of "thisCell" use keyword "this" or nothing since the class is not static
+	private float _defaultSize;
+	private float _zoomedSize;
+
 	Cell thisCell;
 
 	private void Awake() {
 		thisCell = gameObject.GetComponent<Cell>();
 		_cam = Camera.main;
-		//core = GameObject.Find("Main Camera").GetComponent<LevelEditorCore>();
 		LevelEditorCore.modeChange += EditorModeUpdate;
 		LevelEditorCore.panelChange += RefreshCellFromPanel;
 
 	}
 	private void OnDisable() {
 		LevelEditorCore.modeChange -= EditorModeUpdate;
+		LevelEditorCore.panelChange -= RefreshCellFromPanel;
+
 	}
 
+	private void Start() {
+		_defaultSize = _cam.orthographicSize;
+		_zoomedSize = _defaultSize * 0.25f;
+	}
 
 	private void OnMouseOver() {
 		if (Input.GetMouseButtonDown(0)) {
@@ -37,8 +44,9 @@ public class EditCell : MonoBehaviour {
 				thereIsACellSelected = true;
 				_oldCamPos = _cam.transform.position;
 				_cam.transform.position = gameObject.transform.position + new Vector3(0, 0, -10);
-				_cam.orthographicSize = _cam.orthographicSize * 0.25f;
-				
+				if (LevelEditorCore.start >= 10 && LevelEditorCore.start <= LevelEditorCore.max) {
+					_cam.orthographicSize = Map.MapFloat(LevelEditorCore.start, 10, LevelEditorCore.max, _zoomedSize, 120);
+				}
 
 				LevelEditorCore.teamInput.text = ((int)thisCell._team).ToString();
 				LevelEditorCore.startInput.text = thisCell.elementCount.ToString();
@@ -54,8 +62,9 @@ public class EditCell : MonoBehaviour {
 
 	private void Update() {
 		if (thereIsACellSelected) {
+
 			if (Input.GetKeyDown(KeyCode.Escape)) {
-				_cam.orthographicSize = _cam.orthographicSize * 4;
+				_cam.orthographicSize = _defaultSize;
 				_cam.transform.position = _oldCamPos;
 				thereIsACellSelected = false;
 			}
@@ -64,6 +73,9 @@ public class EditCell : MonoBehaviour {
 
 	private void RefreshCellFromPanel() {
 		if (thereIsACellSelected) {
+			if (LevelEditorCore.start >= 10 && LevelEditorCore.start <= LevelEditorCore.max) {
+				_cam.orthographicSize = Map.MapFloat(LevelEditorCore.start, 10, LevelEditorCore.max, _zoomedSize, 105.8f);
+			}
 			thisCell.elementCount = LevelEditorCore.start;
 			thisCell._team = (Cell.enmTeam)LevelEditorCore.team;
 			thisCell.maxElements = LevelEditorCore.max;
@@ -73,7 +85,7 @@ public class EditCell : MonoBehaviour {
 
 	private void EditorModeUpdate(LevelEditorCore.Mode mode) {
 		if (thereIsACellSelected) {
-			_cam.orthographicSize = _cam.orthographicSize * 4;
+			_cam.orthographicSize = _defaultSize;
 			_cam.transform.position = _oldCamPos;
 			thereIsACellSelected = false;
 		}
