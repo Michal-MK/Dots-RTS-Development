@@ -505,9 +505,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61405196207976776}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114300641882000904
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,6 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82966c8520408794da321cbe97f6f47b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRegenerating: 0
   _team: 0
   enemy:
     serializedVersion: 2
@@ -529,6 +529,7 @@ MonoBehaviour:
   neutral:
     serializedVersion: 2
     rgba: 4294967295
+  um: {fileID: 114889160387685830}
   cellSprite: {fileID: 212889015483235864}
   elementNrDisplay: {fileID: 102407273969586368}
   textRenderer: {fileID: 23188911867152260}
@@ -545,9 +546,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61365623199666740}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114434843814687146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -559,9 +559,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4784a05ebf6bfa4e92167193f0fc1ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  core: {fileID: 0}
   um: {fileID: 114889160387685830}
-  isEditing: 0
+  thereIsACellSelected: 0
 --- !u!114 &114434905858793014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -575,9 +574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61123142742778102}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114555311850289316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -591,9 +589,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61231761937205426}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114791701018551162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -607,9 +604,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61881549933522022}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114884273549824134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -623,9 +619,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61276725428269110}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114889160387685830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -649,6 +644,7 @@ MonoBehaviour:
   upgradeSlotsRenderer: {fileID: 212340395696583466}
   bScript: {fileID: 0}
   cScript: {fileID: 0}
+  col: {fileID: 0}
 --- !u!114 &114928255416859242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -662,9 +658,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61266602107136288}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!114 &114987030713934858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -678,9 +673,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUpgraded: 0
   col: {fileID: 61487535565750182}
-  c: {fileID: 0}
+  cb: {fileID: 0}
   um: {fileID: 114889160387685830}
-  current: 0
 --- !u!212 &212061085761532198
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1291,7 +1285,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1000, y: 500}
+  m_AnchoredPosition: {x: -60.269745, y: 128.99962}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224631813019261850

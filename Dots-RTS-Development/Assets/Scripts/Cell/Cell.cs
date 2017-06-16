@@ -36,6 +36,7 @@ public class Cell : MonoBehaviour {
 
 	public virtual void UpdateCellInfo() {
 
+
 		if (elementCount >= 10 && elementCount <= maxElements) {
 			float mappedValue = Map.MapFloat(elementCount, 0, maxElements, 1, 2);
 
