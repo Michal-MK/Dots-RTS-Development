@@ -42,14 +42,11 @@ public class CellBehaviour : Cell {
 			if (cell == cellsInSelection[i]) {
 				cellsInSelection.RemoveAt(i);
 				cell.SetSelected();
-				//print(cellsInSelection.Count);
 				return;
 			}
 		}
 		cellsInSelection.Add(cell);
-		//print(cellsInSelection.Count);
 		cell.SetSelected();
-
 	}
 
 	//Wrapper for cell atacking
@@ -89,9 +86,10 @@ public class CellBehaviour : Cell {
 		if (elementCount > 1) {
 			int numElements = elementCount = elementCount / 2;
 			for (int i = 0; i < numElements; i++) {
-				GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
-				e.GetComponent<Element>().target = target;
-				e.GetComponent<Element>().attacker = this;
+				Element e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity).GetComponent<Element>();
+				e.target = target;
+				e.attacker = this;
+				e.team = this._team;
 			}
 			base.UpdateCellInfo();
 		}
@@ -102,9 +100,10 @@ public class CellBehaviour : Cell {
 		if (elementCount > 1 && target != this) {
 			int numElements = elementCount = elementCount / 2;
 			for (int i = 0; i < numElements; i++) {
-				GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
-				e.GetComponent<Element>().target = target;
-				e.GetComponent<Element>().attacker = this;
+				Element e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity).GetComponent<Element>();
+				e.target = target;
+				e.attacker = this;
+				e.team = this._team;
 			}
 			base.UpdateCellInfo();
 		}
@@ -137,14 +136,15 @@ public class CellBehaviour : Cell {
 	}
 
 	//Generic code to set all the values of a cell
-	public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationFreq = 1.5f, float radius = 1) {
-		gameObject.transform.position = position;
-		elementCount = startingCount;
-		maxElements = maximum;
-		regenPeriod = regenerationFreq;
-		cellTeam = team;
-		cellRadius = radius;
-	}
+	//public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationFreq = 1.5f, float radius = 1) {
+	//	gameObject.transform.position = position;
+	//	elementCount = startingCount;
+	//	maxElements = maximum;
+	//	regenPeriod = regenerationFreq;
+	//	cellTeam = team;
+	//	cellRadius = radius;
+	//}
+
 
 	//Selects or deselects a cell
 	public void SetSelected() {
@@ -212,7 +212,8 @@ public class CellBehaviour : Cell {
 
 	//Hides Upgrade Slots
 	private void OnMouseExit() {
-		um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
+		base.UpdateCellInfo();
+		//um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 	}
 
 
@@ -225,7 +226,7 @@ public class CellBehaviour : Cell {
 	}
 
 	private void OnMouseUp() {
-		print(gameObject.name);
+		//print(gameObject.name);
 		if (cellTeam != enmTeam.ALLIED) {
 			AttackWrapper(this, cellTeam);
 		}
