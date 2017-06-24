@@ -31,7 +31,7 @@ public class Element : MonoBehaviour {
 		//print(d + " " + target._radius);
 		if (d < target.cellRadius) {
 			//Execute this code after collision with target.
-			if (team != 0) {
+			if (team != 0 || (int)team != -1) {
 				target.DamageCell(team);
 			} else {
 				throw new System.InvalidOperationException();

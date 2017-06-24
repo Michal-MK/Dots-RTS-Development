@@ -13,16 +13,33 @@ public class Cell : MonoBehaviour {
 	public enmTeam _team;                                                                       //Cell's team
 
 	public enum enmTeam {
+		NONE = -1,
 		NEUTRAL,
 		ALLIED,
-		ENEMY,
+		ENEMY1,
+		ENEMY2,
+		ENEMY3,
+		ENEMY4,
+		ENEMY5,
+		ENEMY6,
+		ENEMY7,
+		ENEMY8,
 	}
 
 	private float _radius;
 
-	public Color32 enemy = new Color32(255, 0, 0, 255);                                        //Default enemy colour
 	public Color32 ally = new Color32(0, 255, 0, 255);                                         //Default ally colour
 	public Color32 neutral = new Color32(255, 255, 255, 255);                                  //Default neutral colour
+
+	public Color32 enemy1 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy2 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy3 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy4 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy5 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy6 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy7 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy8 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+
 
 	public Upgrade_Manager um;
 
@@ -47,20 +64,49 @@ public class Cell : MonoBehaviour {
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingOrder = 2;
 
+		//Change Colour depending on the team
 		switch (cellTeam) {
 			case enmTeam.ALLIED: {
 				cellSprite.color = ally;
-				return;
-			}
-			case enmTeam.ENEMY: {
-				cellSprite.color = enemy;
-
 				return;
 			}
 			case enmTeam.NEUTRAL: {
 				cellSprite.color = neutral;
 				return;
 			}
+			case enmTeam.ENEMY1: {
+				cellSprite.color = enemy1;
+				return;
+			}
+			case enmTeam.ENEMY2: {
+				cellSprite.color = enemy2;
+				return;
+			}
+			case enmTeam.ENEMY3: {
+				cellSprite.color = enemy3;
+				return;
+			}
+			case enmTeam.ENEMY4: {
+				cellSprite.color = enemy4;
+				return;
+			}
+			case enmTeam.ENEMY5: {
+				cellSprite.color = enemy5;
+				return;
+			}
+			case enmTeam.ENEMY6: {
+				cellSprite.color = enemy6;
+				return;
+			}
+			case enmTeam.ENEMY7: {
+				cellSprite.color = enemy7;
+				return;
+			}
+			case enmTeam.ENEMY8: {
+				cellSprite.color = enemy8;
+				return;
+			}
+
 		}
 	}
 

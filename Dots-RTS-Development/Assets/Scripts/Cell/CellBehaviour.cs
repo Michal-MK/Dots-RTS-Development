@@ -52,7 +52,7 @@ public class CellBehaviour : Cell {
 	//Wrapper for cell atacking
 	public static void AttackWrapper(CellBehaviour target, enmTeam team) {
 		if (cellsInSelection.Count != 0) {
-			if (team == enmTeam.ENEMY) {
+			if ((int)team >= 2) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
@@ -131,7 +131,7 @@ public class CellBehaviour : Cell {
 		float angle = Random.Range(0, 2 * Mathf.PI);
 		float x = Mathf.Sin(angle);
 		float y = Mathf.Cos(angle);
-		print(new Vector3(x,y));
+		//print(new Vector3(x,y));
 		return new Vector3(transform.position.x + x * cellRadius,transform.position.y + y * cellRadius);
 	}
 	#endregion
@@ -140,7 +140,7 @@ public class CellBehaviour : Cell {
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo() {
 		base.UpdateCellInfo();
-		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && _team == enmTeam.ENEMY) {
+		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && (int)_team >= 2) {
 			StartCoroutine(GenerateElements());
 		}
 	}

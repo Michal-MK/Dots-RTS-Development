@@ -20,4 +20,11 @@ public class DebugButton : MonoBehaviour {
 			print(aiScript._neutrals[i].gameObject.name);
 		}
 	}
+
+	public void ListCells() {
+		foreach (Cell item in GameControll.cells) {
+			print(item.gameObject.name);
+		}
+		print(GameControll.cells.Count);
+	}
 }
