@@ -81,12 +81,13 @@ public class CellBehaviour : Cell {
 	}
 
 	#region Attack Handling
+
 	//Code to attack selected cell
 	public void AttackCell(CellBehaviour target) {
 		if (elementCount > 1) {
 			int numElements = elementCount = elementCount / 2;
 			for (int i = 0; i < numElements; i++) {
-				Element e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity).GetComponent<Element>();
+				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
 				e.target = target;
 				e.attacker = this;
 				e.team = this._team;
@@ -100,7 +101,7 @@ public class CellBehaviour : Cell {
 		if (elementCount > 1 && target != this) {
 			int numElements = elementCount = elementCount / 2;
 			for (int i = 0; i < numElements; i++) {
-				Element e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity).GetComponent<Element>();
+				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
 				e.target = target;
 				e.attacker = this;
 				e.team = this._team;
@@ -123,6 +124,15 @@ public class CellBehaviour : Cell {
 			cellTeam = elementTeam;
 		}
 		UpdateCellInfo();
+	}
+
+
+	public Vector3 ElementSpawnPoint() {
+		float angle = Random.Range(0, 2 * Mathf.PI);
+		float x = Mathf.Sin(angle);
+		float y = Mathf.Cos(angle);
+		print(new Vector3(x,y));
+		return new Vector3(transform.position.x + x * cellRadius,transform.position.y + y * cellRadius);
 	}
 	#endregion
 
