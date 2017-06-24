@@ -14,16 +14,6 @@ public class GameControll : MonoBehaviour {
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
 
-	public void SaveGame() {
-		SaveAndLoad sl = new SaveAndLoad();
-		sl.Save();
-	}
-
-	public void LoadGame() {
-		SaveAndLoad sl = new SaveAndLoad();
-		sl.Load();
-	}
-
 
 	public static void GameOver() {
 		print("You Lost");

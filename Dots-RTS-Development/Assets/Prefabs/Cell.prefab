@@ -511,16 +511,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRegenerating: 0
-  _team: 1
-  enemy:
-    serializedVersion: 2
-    rgba: 4278190335
+  _team: 0
   ally:
     serializedVersion: 2
     rgba: 4278255360
   neutral:
     serializedVersion: 2
     rgba: 4294967295
+  enemy1:
+    serializedVersion: 2
+    rgba: 4278190335
+  enemy2:
+    serializedVersion: 2
+    rgba: 4294901843
+  enemy3:
+    serializedVersion: 2
+    rgba: 4278255580
+  enemy4:
+    serializedVersion: 2
+    rgba: 4278226608
+  enemy5:
+    serializedVersion: 2
+    rgba: 4291493632
+  enemy6:
+    serializedVersion: 2
+    rgba: 4294902011
+  enemy7:
+    serializedVersion: 2
+    rgba: 4278190080
+  enemy8:
+    serializedVersion: 2
+    rgba: 4291209215
   um: {fileID: 114873760863696038}
   cellSprite: {fileID: 212300405552671422}
   elementNrDisplay: {fileID: 102996459730448940}

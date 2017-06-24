@@ -42,20 +42,17 @@ public class CellBehaviour : Cell {
 			if (cell == cellsInSelection[i]) {
 				cellsInSelection.RemoveAt(i);
 				cell.SetSelected();
-				//print(cellsInSelection.Count);
 				return;
 			}
 		}
 		cellsInSelection.Add(cell);
-		//print(cellsInSelection.Count);
 		cell.SetSelected();
-
 	}
 
 	//Wrapper for cell atacking
 	public static void AttackWrapper(CellBehaviour target, enmTeam team) {
 		if (cellsInSelection.Count != 0) {
-			if (team == enmTeam.ENEMY) {
+			if ((int)team >= 2) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
@@ -84,14 +81,16 @@ public class CellBehaviour : Cell {
 	}
 
 	#region Attack Handling
+
 	//Code to attack selected cell
 	public void AttackCell(CellBehaviour target) {
 		if (elementCount > 1) {
 			int numElements = elementCount = elementCount / 2;
 			for (int i = 0; i < numElements; i++) {
-				GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
-				e.GetComponent<Element>().target = target;
-				e.GetComponent<Element>().attacker = this;
+				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
+				e.target = target;
+				e.attacker = this;
+				e.team = this._team;
 			}
 			base.UpdateCellInfo();
 		}
@@ -102,9 +101,10 @@ public class CellBehaviour : Cell {
 		if (elementCount > 1 && target != this) {
 			int numElements = elementCount = elementCount / 2;
 			for (int i = 0; i < numElements; i++) {
-				GameObject e = Instantiate(elementObj, gameObject.transform.position, Quaternion.identity);
-				e.GetComponent<Element>().target = target;
-				e.GetComponent<Element>().attacker = this;
+				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
+				e.target = target;
+				e.attacker = this;
+				e.team = this._team;
 			}
 			base.UpdateCellInfo();
 		}
@@ -125,26 +125,36 @@ public class CellBehaviour : Cell {
 		}
 		UpdateCellInfo();
 	}
+
+
+	public Vector3 ElementSpawnPoint() {
+		float angle = Random.Range(0, 2 * Mathf.PI);
+		float x = Mathf.Sin(angle);
+		float y = Mathf.Cos(angle);
+		//print(new Vector3(x,y));
+		return new Vector3(transform.position.x + x * cellRadius,transform.position.y + y * cellRadius);
+	}
 	#endregion
 
 
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo() {
 		base.UpdateCellInfo();
-		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && _team == enmTeam.ENEMY) {
+		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && (int)_team >= 2) {
 			StartCoroutine(GenerateElements());
 		}
 	}
 
 	//Generic code to set all the values of a cell
-	public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationFreq = 1.5f, float radius = 1) {
-		gameObject.transform.position = position;
-		elementCount = startingCount;
-		maxElements = maximum;
-		regenPeriod = regenerationFreq;
-		cellTeam = team;
-		cellRadius = radius;
-	}
+	//public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationFreq = 1.5f, float radius = 1) {
+	//	gameObject.transform.position = position;
+	//	elementCount = startingCount;
+	//	maxElements = maximum;
+	//	regenPeriod = regenerationFreq;
+	//	cellTeam = team;
+	//	cellRadius = radius;
+	//}
+
 
 	//Selects or deselects a cell
 	public void SetSelected() {
@@ -212,7 +222,8 @@ public class CellBehaviour : Cell {
 
 	//Hides Upgrade Slots
 	private void OnMouseExit() {
-		um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
+		base.UpdateCellInfo();
+		//um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 	}
 
 
@@ -225,7 +236,7 @@ public class CellBehaviour : Cell {
 	}
 
 	private void OnMouseUp() {
-		print(gameObject.name);
+		//print(gameObject.name);
 		if (cellTeam != enmTeam.ALLIED) {
 			AttackWrapper(this, cellTeam);
 		}

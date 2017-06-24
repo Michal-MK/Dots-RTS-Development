@@ -7,6 +7,7 @@ public class Element : MonoBehaviour {
 	private Vector3 vel;
 	private float maxSpeed = 10;
 
+	public Cell.enmTeam team;
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
@@ -30,7 +31,11 @@ public class Element : MonoBehaviour {
 		//print(d + " " + target._radius);
 		if (d < target.cellRadius) {
 			//Execute this code after collision with target.
-			target.DamageCell(attacker.cellTeam);
+			if (team != 0 || (int)team != -1) {
+				target.DamageCell(team);
+			} else {
+				throw new System.InvalidOperationException();
+			}
 			Destroy(gameObject);
 		}
 		Vector3 seekF = target.gameObject.transform.position - gameObject.transform.position;
