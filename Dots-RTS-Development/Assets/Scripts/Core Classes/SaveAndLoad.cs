@@ -29,15 +29,139 @@ public class SaveAndLoad : MonoBehaviour {
 	}
 
 
+#if UNITY_ANDROID
+
+
 	public void Save() {
-		if (!Directory.Exists(Application.dataPath + "/Saves")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves");
+		ErrorMessages.text = "Can't chceck is a directory exists";
+		if (!Directory.Exists(Application.persistentDataPath + "/Saves")) {
+			Directory.CreateDirectory(Application.persistentDataPath + "/Saves");
+			ErrorMessages.text = "Created the Saves directory";
+		}
+
+		BinaryFormatter formatter = new BinaryFormatter();
+		FileStream file = File.Create(Application.persistentDataPath + "/Saves/" + fileName + ".phage");
+		if (File.Exists(Application.persistentDataPath + "/Saves/" + fileName + ".phage")) {
+			ErrorMessages.text = "Succes, Created a file: " + fileName;
+		}
+		else {
+			ErrorMessages.text = "Fail, change the file name";
+			return;
+		}
+		SaveData save = new SaveData();
+
+
+		for (int i = 0; i < cellList.Count; i++) {
+			Cell c = cellList[i];
+
+			S_Cell serCell = new S_Cell();
+			serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
+			serCell.elementCount = c.elementCount;
+			serCell.maxElementCount = c.maxElements;
+			serCell.team = (int)c._team;
+			serCell.regenerationPeriod = c.regenPeriod;
+			serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
+
+			save.cells.Add(serCell);
+		}
+
+		formatter.Serialize(file, save);
+		file.Close();
+	}
+
+	public void Load() {
+		StartCoroutine(LoadENUM());
+		//WWW loadStreamingAsset = new WWW("jar:file://" + Application.dataPath + "!assets/Saves/" + fileName + ".phage");
+
+		////Freeze until it loads
+		//while (loadStreamingAsset.isDone == false) {
+
+		//}
+
+		//if (!string.IsNullOrEmpty(loadStreamingAsset.error)) {
+		//	ErrorMessages.text = (loadStreamingAsset.error);
+		//}
+
+		//if (loadStreamingAsset.text != "") {
+		//	//ErrorMessages.text = loadStreamingAsset.text;
+		//}
+		//else {
+		//	ErrorMessages.text = "No such file as " + fileName;
+		//	return;
+		//}
+
+		//BinaryFormatter formatter = new BinaryFormatter();
+		////DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "/Saves");
+		////int numSaves = dir.GetFiles("*.phage").Length;
+		////for (int i = 0; i < numSaves; i++) {
+		//File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
+		//FileStream file = File.Open(Application.persistentDataPath + "/Saves/" + fileName + ".phage", FileMode.Open);
+		//SaveData save = (SaveData)formatter.Deserialize(file);
+		//file.Close();
+		//for (int j = 0; j < save.cells.Count; j++) {
+
+		//	Cell c = Instantiate(prefab).GetComponent<Cell>();
+
+		//	c.cellPosition = (Vector3)save.cells[j].pos;
+		//	c.gameObject.transform.position = (Vector3)c.cellPosition;
+		//	c.elementCount = save.cells[j].elementCount;
+		//	c.maxElements = save.cells[j].maxElementCount;
+		//	c._team = (Cell.enmTeam)save.cells[j].team;
+		//	c.regenPeriod = save.cells[j].regenerationPeriod;
+		//	c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+
+		//}
+	}
+	IEnumerator LoadENUM () {
+		WWW loadStreamingAsset = new WWW("jar:file://" + Application.dataPath + "!assets/Saves/" + fileName + ".phage");
+
+		yield return new WaitUntil(() => loadStreamingAsset.isDone == true);
+
+		if (!string.IsNullOrEmpty(loadStreamingAsset.error)) {
+			ErrorMessages.text = (loadStreamingAsset.error);
+		}
+
+		if (loadStreamingAsset.text != "") {
+			//ErrorMessages.text = loadStreamingAsset.text;
+		}
+		else {
+			ErrorMessages.text = "No such file as " + fileName;
+			yield break;
+		}
+
+		BinaryFormatter formatter = new BinaryFormatter();
+		File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
+		FileStream file = File.Open(Application.persistentDataPath + "/Saves/" + fileName + ".phage", FileMode.Open);
+		SaveData save = (SaveData)formatter.Deserialize(file);
+		file.Close();
+		for (int j = 0; j < save.cells.Count; j++) {
+
+			Cell c = Instantiate(prefab).GetComponent<Cell>();
+
+			c.cellPosition = (Vector3)save.cells[j].pos;
+			c.gameObject.transform.position = (Vector3)c.cellPosition;
+			c.elementCount = save.cells[j].elementCount;
+			c.maxElements = save.cells[j].maxElementCount;
+			c._team = (Cell.enmTeam)save.cells[j].team;
+			c.regenPeriod = save.cells[j].regenerationPeriod;
+			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+
+
+		}
+	}
+}
+#else
+
+	public void Save() {
+		ErrorMessages.text = "Can't chceck is a directory exists";
+		if (!Directory.Exists(Application.streamingAssetsPath + "/Saves")) {
+			Directory.CreateDirectory(Application.streamingAssetsPath + "/Saves");
 			ErrorMessages.text = "Created the Saves directory";
 		}
 		
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.dataPath + "/Saves/" + fileName + ".phage");
-		if (File.Exists(Application.dataPath + "/Saves/" + fileName + ".phage")) {
+		FileStream file = File.Create(Application.streamingAssetsPath + "/Saves/" + fileName + ".phage");
+		if (File.Exists(Application.streamingAssetsPath + "/Saves/" + fileName + ".phage")) {
 			ErrorMessages.text = "Succes, Created a file: " + fileName;
 		}
 		else {
@@ -66,7 +190,7 @@ public class SaveAndLoad : MonoBehaviour {
 	}
 
 	public void Load() {
-		if (File.Exists(Application.dataPath + "/Saves/" + fileName + ".phage")) {
+		if (File.Exists(Application.streamingAssetsPath + "/Saves/" + fileName + ".phage")) {
 			ErrorMessages.text = "Succes, Found a file: " + fileName;
 		}
 		else {
@@ -75,11 +199,11 @@ public class SaveAndLoad : MonoBehaviour {
 		}
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		//DirectoryInfo dir = new DirectoryInfo(Application.dataPath + "/Saves");
+		//DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "/Saves");
 		//int numSaves = dir.GetFiles("*.phage").Length;
 		//for (int i = 0; i < numSaves; i++) {
 		
-		FileStream file = File.Open(Application.dataPath + "/Saves/" + fileName + ".phage", FileMode.Open);
+		FileStream file = File.Open(Application.streamingAssetsPath + "/Saves/" + fileName + ".phage", FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		file.Close();
 			for (int j = 0; j < save.cells.Count; j++) {
@@ -99,6 +223,8 @@ public class SaveAndLoad : MonoBehaviour {
 		//}
 	}
 }
+
+#endif
 
 [Serializable]
 public class SaveData {
