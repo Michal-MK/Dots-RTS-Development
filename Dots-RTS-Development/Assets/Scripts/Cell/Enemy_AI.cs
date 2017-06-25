@@ -10,15 +10,17 @@ public class Enemy_AI : MonoBehaviour {
 	public Cell.enmTeam _aiTeam;
 
 
-	public List<CellBehaviour> _targets = new List<CellBehaviour>();
-	public List<CellBehaviour> _aiCells = new List<CellBehaviour>();
-	public List<CellBehaviour> _neutrals = new List<CellBehaviour>();
+	public List<CellBehaviour> _targets = new List<CellBehaviour>();            //Cells this AI will attack
+	public List<CellBehaviour> _aiCells = new List<CellBehaviour>();            //This AIs cells
+	public List<CellBehaviour> _neutrals = new List<CellBehaviour>();           //Neutral cells in the scene
+	public List<CellBehaviour> _allies = new List<CellBehaviour>();             //Cells this AI will not attacka
 
+	public List<Enemy_AI> alliesOfThisAI = new List<Enemy_AI>();
 
-	private CellBehaviour selectedAiCell;                                      //Selected AI cell that will prefrom the action.
-	private CellBehaviour selectedTargetCell;                                  //Selected target that can be attacked
-	private CellBehaviour selectedNeutralCell;                                 //Selected cell for expansion
-	private CellBehaviour selectedAiCellForAid = null;						   //Selected cell for empowering
+	private CellBehaviour selectedAiCell;                                       //Selected AI cell that will prefrom the action.
+	private CellBehaviour selectedTargetCell;                                   //Selected target that can be attacked
+	private CellBehaviour selectedNeutralCell;                                  //Selected cell for expansion
+	private CellBehaviour selectedAiCellForAid = null;                          //Selected cell for empowering
 
 	private float attackChoiceProbability = 0;
 	private float expandChoiceProbability = 0;
@@ -40,23 +42,49 @@ public class Enemy_AI : MonoBehaviour {
 
 		for (int i = 0; i < GameControll.cells.Count; i++) {
 
-			if (GameControll.cells[i].cellTeam == _aiTeam) {
-				_aiCells.Add(GameControll.cells[i]);
+			CellBehaviour current = GameControll.cells[i];
+
+			if (current.cellTeam == _aiTeam) {
+				_aiCells.Add(current);
 			}
-			else if (GameControll.cells[i].cellTeam == Cell.enmTeam.NEUTRAL) {
-				_neutrals.Add(GameControll.cells[i]);
+			else if (current.cellTeam == Cell.enmTeam.NEUTRAL) {
+				_neutrals.Add(current);
 			}
 			else {
-				_targets.Add(GameControll.cells[i]);
+				_targets.Add(current);
 			}
 		}
 		StartCoroutine(PreformAction());
 	}
 
+	private void ConsiderAllies() {
+
+		//Loop through all allied Enemy_AIs
+		for (int j = 0; j < alliesOfThisAI.Count; j++) {
+			Enemy_AI currentAI = alliesOfThisAI[j];																					//print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
+
+			//Loop though all aiCells of the allied Enemy_AI
+			for (int k = 0; k < alliesOfThisAI[j]._aiCells.Count; k++) {
+				CellBehaviour currentAlliedCellOfTheAlliedAI = alliesOfThisAI[j]._aiCells[k];                                       //print(currentAlliedCellOfTheAlliedAI.gameObject.name);
+
+				//Loop though all the targets of this AI
+				for (int l = 0; l < _targets.Count; l++) {
+					CellBehaviour current = _targets[l];																			//print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
+
+					//If aiCell of the other AI and target of this AI are the same cell do Stuff
+					if (currentAlliedCellOfTheAlliedAI == current) {
+						this._allies.Add(current);
+						this._targets.Remove(currentAlliedCellOfTheAlliedAI);
+					}
+				}
+			}
+		}
+	}
+
 	//Triggered when a cell changs team
 	private void Cell_TeamChanged(CellBehaviour sender, Cell.enmTeam prev, Cell.enmTeam current) {
 		//Removes the cell from a team list
-		if(prev == 0) {
+		if (prev == 0) {
 			_neutrals.Remove(sender);
 			goto addCell;
 		}
@@ -83,7 +111,21 @@ public class Enemy_AI : MonoBehaviour {
 		//		_aiCells.Remove(sender);
 		//		goto addCell;
 		//	}
-
+		//
+		//switch (current) {
+		//	case Cell.enmTeam.ALLIED: {
+		//		_targets.Add(sender);
+		//		return;
+		//	}
+		//	case Cell.enmTeam.ENEMY: {
+		//		_aiCells.Add(sender);
+		//		return;
+		//	}
+		//	case Cell.enmTeam.NEUTRAL: {
+		//		_neutrals.Add(sender);
+		//		return;
+		//	}
+		//}
 
 		//Adds the cell to a new list that it belongs to
 		addCell:
@@ -103,25 +145,13 @@ public class Enemy_AI : MonoBehaviour {
 			return;
 		}
 
-		//Pre-MultiEnemy code for swithing teams
-		//switch (current) {
-		//	case Cell.enmTeam.ALLIED: {
-		//		_targets.Add(sender);
-		//		return;
-		//	}
-		//	case Cell.enmTeam.ENEMY: {
-		//		_aiCells.Add(sender);
-		//		return;
-		//	}
-		//	case Cell.enmTeam.NEUTRAL: {
-		//		_neutrals.Add(sender);
-		//		return;
-		//	}
-		//}
 	}
 
 	//This is where the AI magic happens
 	public IEnumerator PreformAction() {
+		yield return new WaitForEndOfFrame();
+		ConsiderAllies();
+
 
 		while (isActive) {
 			restart:
@@ -182,8 +212,7 @@ public class Enemy_AI : MonoBehaviour {
 
 			if (factor == 0) {
 				if (selectedNeutralCell == null) {
-					//print("Expanding as " + selectedAiCell.gameObject.name + " to " + selectedNeutralCell.gameObject.name);
-					//Debug.LogError("Somehow Neutral cell is not assigned.");
+					print("Expanding as " + selectedAiCell.gameObject.name + " to " + selectedNeutralCell.gameObject.name);
 				}
 				else {
 					Expand(selectedAiCell, selectedNeutralCell);
@@ -191,8 +220,7 @@ public class Enemy_AI : MonoBehaviour {
 			}
 			else if (factor == 1) {
 				if (selectedTargetCell == null) {
-					//print("Attacking as " + selectedAiCell.gameObject.name + " to " + selectedTargetCell.gameObject.name);
-					//Debug.LogError("Somehow Target cell is not assigned.");
+					print("Attacking as " + selectedAiCell.gameObject.name + " to " + selectedTargetCell.gameObject.name);
 				}
 				else {
 					Attack(selectedAiCell, selectedTargetCell);
@@ -200,8 +228,7 @@ public class Enemy_AI : MonoBehaviour {
 			}
 			else {
 				if (selectedAiCellForAid == null) {
-					//print("Defending as " + selectedAiCell.gameObject.name + " to " + selectedAiCellForAid.gameObject.name);
-					//Debug.LogError("Somehow Allied cell is not assigned.");
+					print("Defending as " + selectedAiCell.gameObject.name + " to " + selectedAiCellForAid.gameObject.name);
 				}
 				else {
 					Defend(selectedAiCell, selectedAiCellForAid);

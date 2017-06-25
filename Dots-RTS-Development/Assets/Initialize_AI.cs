@@ -8,6 +8,12 @@ public class Initialize_AI : MonoBehaviour {
 	public Cell.enmTeam[] aiTeams = new Cell.enmTeam[8];
 	public float[] decisionSpeeds = new float[8];
 
+	private List<Enemy_AI> AIs = new List<Enemy_AI>();
+
+	private List<Enemy_AI> team1;
+	private List<Enemy_AI> team2;
+	private List<Enemy_AI> team3;
+	private List<Enemy_AI> team4;
 
 
 	void Start() {
@@ -60,10 +66,39 @@ public class Initialize_AI : MonoBehaviour {
 			initAIs[index] = true;
 			aiTeams[index] = team;
 
-			Enemy_AI ai = gameObject.AddComponent<Enemy_AI>();
+			GameObject aiHolder = new GameObject("AI " + index);
+			Enemy_AI ai = aiHolder.AddComponent<Enemy_AI>();
 			ai.decisionSpeed = decisionSpeeds[index];
 			ai._aiTeam = team;
 			ai.isActive = true;
+			AIs.Add(ai);
+		}
+	}
+
+	public void AITeams(Enemy_AI[] teams) {
+		if (team1 != null) {
+			team1 = new List<Enemy_AI>();
+			for (int i = 0; i < teams.Length; i++) {
+				team1.Add(teams[i]);
+			}
+		}
+		else if (team2 != null) {
+			team2 = new List<Enemy_AI>();
+			for (int i = 0; i < teams.Length; i++) {
+				team2.Add(teams[i]);
+			}
+		}
+		else if (team3 != null) {
+			team3 = new List<Enemy_AI>();
+			for (int i = 0; i < teams.Length; i++) {
+				team3.Add(teams[i]);
+			}
+		}
+		else if (team4 != null) {
+			team4 = new List<Enemy_AI>();
+			for (int i = 0; i < teams.Length; i++) {
+				team4.Add(teams[i]);
+			}
 		}
 	}
 

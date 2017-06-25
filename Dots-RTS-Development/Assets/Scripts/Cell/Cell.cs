@@ -31,14 +31,14 @@ public class Cell : MonoBehaviour {
 	public Color32 ally = new Color32(0, 255, 0, 255);                                         //Default ally colour
 	public Color32 neutral = new Color32(255, 255, 255, 255);                                  //Default neutral colour
 
-	public Color32 enemy1 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy2 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy3 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy4 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy5 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy6 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy7 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
-	public Color32 enemy8 = new Color32(255, 0, 0, 255);                                        //Default enemy colour
+	public Color32 enemy1 = new Color32(255, 0, 0, 255);                                        //Default enemy1 colour
+	public Color32 enemy2 = new Color32(80, 0, 255, 255);                                       //Default enemy2 colour
+	public Color32 enemy3 = new Color32(220, 255, 0, 255);                                      //Default enemy3 colour
+	public Color32 enemy4 = new Color32(0, 255, 230, 255);                                      //Default enemy4 colour
+	public Color32 enemy5 = new Color32(150, 140, 0, 255);                                      //Default enemy5 colour
+	public Color32 enemy6 = new Color32(255, 0, 255, 255);                                      //Default enemy6 colour
+	public Color32 enemy7 = new Color32(0, 0, 0, 255);											//Default enemy7 colour
+	public Color32 enemy8 = new Color32(255, 150, 200, 255);                                    //Default enemy8 colour
 
 
 	public Upgrade_Manager um;
