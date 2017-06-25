@@ -113,7 +113,7 @@ public class SaveAndLoad : MonoBehaviour {
 		//}
 	}
 	IEnumerator LoadENUM () {
-		WWW loadStreamingAsset = new WWW("jar:file://" + Application.dataPath + "!assets/Saves/" + fileName + ".phage");
+		WWW loadStreamingAsset = new WWW("jar:file://" + Application.dataPath + "!/assets/Saves/" + fileName + ".phage");
 
 		yield return new WaitUntil(() => loadStreamingAsset.isDone == true);
 
@@ -121,17 +121,9 @@ public class SaveAndLoad : MonoBehaviour {
 			ErrorMessages.text = (loadStreamingAsset.error);
 		}
 
-		if (loadStreamingAsset.text != "") {
-			//ErrorMessages.text = loadStreamingAsset.text;
-		}
-		else {
-			ErrorMessages.text = "No such file as " + fileName;
-			yield break;
-		}
-
 		BinaryFormatter formatter = new BinaryFormatter();
 		File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
-		FileStream file = File.Open(Application.persistentDataPath + "/Saves/" + fileName + ".phage", FileMode.Open);
+		FileStream file = File.Open(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		file.Close();
 		for (int j = 0; j < save.cells.Count; j++) {
