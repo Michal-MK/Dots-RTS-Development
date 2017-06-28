@@ -11,6 +11,10 @@ public class Element : MonoBehaviour {
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
+	private void Start() {
+		attacker.UpdateCellInfo();
+	}
+
 	//Calculates steering behaviour for the element 
 	private void Update() {
 		Vector3 seek = Seek(target);

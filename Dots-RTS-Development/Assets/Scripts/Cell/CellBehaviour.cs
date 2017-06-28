@@ -92,7 +92,7 @@ public class CellBehaviour : Cell {
 				e.attacker = this;
 				e.team = this._team;
 			}
-			base.UpdateCellInfo();
+			UpdateCellInfo();
 		}
 	}
 
@@ -106,7 +106,7 @@ public class CellBehaviour : Cell {
 				e.attacker = this;
 				e.team = this._team;
 			}
-			base.UpdateCellInfo();
+			UpdateCellInfo();
 		}
 	}
 
@@ -131,7 +131,6 @@ public class CellBehaviour : Cell {
 		float angle = Random.Range(0, 2 * Mathf.PI);
 		float x = Mathf.Sin(angle);
 		float y = Mathf.Cos(angle);
-		//print(new Vector3(x,y));
 		return new Vector3(transform.position.x + x * cellRadius,transform.position.y + y * cellRadius);
 	}
 	#endregion
@@ -142,6 +141,14 @@ public class CellBehaviour : Cell {
 		base.UpdateCellInfo();
 		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && (int)_team >= 2) {
 			StartCoroutine(GenerateElements());
+		}
+		if (isSelected) {
+			circle.enabled = true;
+			CreateCircle_AndLine(transform.position, cellRadius, 20);
+		}
+		else {
+			circle.enabled = false;
+			circle.positionCount = 0;
 		}
 	}
 
@@ -160,10 +167,16 @@ public class CellBehaviour : Cell {
 	public void SetSelected() {
 		if (isSelected) {
 			isSelected = false;
+			elementNrDisplay.color = new Color32(255, 255, 255, 255);
+			circle.enabled = false;
+
 		}
 		else {
 			isSelected = true;
 			elementNrDisplay.color = new Color32(255, 0, 0, 255);
+			circle.enabled = true;
+			CreateCircle_AndLine(transform.position, cellRadius, 20);
+
 		}
 	}
 
@@ -209,6 +222,7 @@ public class CellBehaviour : Cell {
 		#endregion
 	}
 
+
 	//
 	private void OnMouseEnter() {
 		//Legacy Attack behaviour
@@ -243,6 +257,36 @@ public class CellBehaviour : Cell {
 		else {
 			EmpowerCell(this);
 		}
+		circle.positionCount = 0;
 
 	}
+
+	public void CreateCircle_AndLine(Vector3 _position, float _r, int segments) {
+
+		circle.positionCount = segments + 1;
+		circle.useWorldSpace = true;
+
+		float x;
+		float y;
+		float z = 0f;
+
+		float angle = 20f;
+
+		for (int i = 0; i < (segments + 1); i++) {
+			x = Mathf.Sin(Mathf.Deg2Rad * angle) * _r;
+			y = Mathf.Cos(Mathf.Deg2Rad * angle) * _r;
+
+			circle.SetPosition(i, new Vector3(_position.x + x, _position.y + y, z));
+
+			angle += (360f / segments);
+		}
+	}
+
+	//	private void Update() {
+	//		if (isSelected) {
+	//			lineToMouse.SetPosition(0, transform.position);
+	//			lineToMouse.SetPosition(1, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+	//		}
+	//	}
 }

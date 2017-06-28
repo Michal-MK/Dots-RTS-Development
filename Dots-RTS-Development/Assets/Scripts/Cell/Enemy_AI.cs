@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Enemy_AI : MonoBehaviour {
 	public bool isActive = true;
-	public float decisionSpeed = 0.4f;
+	public float decisionSpeed = 1f;
 
 	public Cell.enmTeam _aiTeam;
 
@@ -37,9 +37,6 @@ public class Enemy_AI : MonoBehaviour {
 
 	//Sort cells on screen to lists by their team
 	void Start() {
-
-
-
 		for (int i = 0; i < GameControll.cells.Count; i++) {
 
 			CellBehaviour current = GameControll.cells[i];
@@ -62,6 +59,9 @@ public class Enemy_AI : MonoBehaviour {
 		//Loop through all allied Enemy_AIs
 		for (int j = 0; j < alliesOfThisAI.Count; j++) {
 			Enemy_AI currentAI = alliesOfThisAI[j];																					//print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
+			if(currentAI == null) {
+				return;
+			}
 
 			//Loop though all aiCells of the allied Enemy_AI
 			for (int k = 0; k < alliesOfThisAI[j]._aiCells.Count; k++) {

@@ -5,10 +5,12 @@ using UnityEngine;
 public class Initialize_AI : MonoBehaviour {
 
 	public bool[] initAIs = new bool[8] { false, false, false, false, false, false, false, false };
-	public Cell.enmTeam[] aiTeams = new Cell.enmTeam[8];
+	public Cell.enmTeam[] aiTeams = new Cell.enmTeam[8] { Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE };
 	public float[] decisionSpeeds = new float[8];
 
-	private List<Enemy_AI> AIs = new List<Enemy_AI>();
+	public Ally[] alliesOfAi = new Ally[8];
+
+	private Enemy_AI[] AIs = new Enemy_AI[8];
 
 	private List<Enemy_AI> team1;
 	private List<Enemy_AI> team2;
@@ -18,88 +20,125 @@ public class Initialize_AI : MonoBehaviour {
 
 	void Start() {
 		foreach (Cell c in GameControll.cells) {
+			//If cell is enemy create ai for that enemy - Only once
 			if ((int)c.cellTeam >= 2) {
-				print((int)c.cellTeam + "  " + c.gameObject.name);
+				//print((int)c.cellTeam + "  " + c.gameObject.name);
 				switch ((int)c.cellTeam) {
 					case 2: {
-						SetAIs(0, c.cellTeam);
-						print(GameControll.cells.Count);
+						SetAis(0, c.cellTeam);
 						break;
 					}
 					case 3: {
-						SetAIs(1, c.cellTeam);
+						SetAis(1, c.cellTeam);
 						break;
 					}
 					case 4: {
-						SetAIs(2, c.cellTeam);
+						SetAis(2, c.cellTeam);
 						break;
 					}
 					case 5: {
-						SetAIs(3, c.cellTeam);
+						SetAis(3, c.cellTeam);
 						break;
 					}
 					case 6: {
-						SetAIs(4, c.cellTeam);
+						SetAis(4, c.cellTeam);
 						break;
 					}
 					case 7: {
-						SetAIs(5, c.cellTeam);
+						SetAis(5, c.cellTeam);
 						break;
 					}
 					case 8: {
-						SetAIs(6, c.cellTeam);
+						SetAis(6, c.cellTeam);
 						break;
 					}
 					case 9: {
-						SetAIs(7, c.cellTeam);
+						SetAis(7, c.cellTeam);
 						break;
 					}
 
 				}
 			}
 		}
+		CreateAlly(0, new int[] { 1, 2 });
+		CreateAlly(3, new int[] { 0, 2, 7 });
+		FormTeams();
 
 	}
-	private void SetAIs(int index, Cell.enmTeam team) {
-		print("Attepting to set AI at " + index + " with team " + team);
+	private void SetAis(int index, Cell.enmTeam team) {
+		//print("Attepting to set AI at " + index + " with team " + team);
 		if (initAIs[index] == false) {
 			initAIs[index] = true;
 			aiTeams[index] = team;
 
-			GameObject aiHolder = new GameObject("AI " + index);
+			GameObject aiHolder = new GameObject("AI " + "code " + index + " enemy " + (index + 1));
 			Enemy_AI ai = aiHolder.AddComponent<Enemy_AI>();
 			ai.decisionSpeed = decisionSpeeds[index];
 			ai._aiTeam = team;
 			ai.isActive = true;
-			AIs.Add(ai);
+			AIs[index] = ai;
+		}
+
+	}
+
+	public void FormTeams() {
+
+		//for (int i = 0; i < alliesOfAi.Length; i++) {
+		//	string s = "";
+		//	if(alliesOfAi[i] != null) {
+		//		s += i + " ";
+		//		s += "Working with code Enemy: " + alliesOfAi[i].index + "  ";
+		//		for (int j = 0; j < alliesOfAi[i].allies.Length; j++) {
+		//			if(alliesOfAi[i].allies[j] != null) {
+		//				s += alliesOfAi[i].allies[j].gameObject.name;
+		//			}
+		//		}
+		//		print(s);
+		//	}
+		//	else {
+		//		s = "NULL";
+		//		print(s);
+		//	}
+		//}
+
+		//Loop though all the AIs
+		for (int i = 0; i < AIs.Length; i++) {
+			//If allies for this AI exist
+			if (AIs[i] != null) {
+				for (int j = 0; j < alliesOfAi.Length; j++) {
+					if (alliesOfAi[j] != null) {
+						if (i == alliesOfAi[j].index) {
+							for (int k = 0; k < alliesOfAi[j].allies.Length; k++) {
+								if (alliesOfAi[j].allies[k] != null) {
+									AIs[i].alliesOfThisAI.Add(alliesOfAi[j].allies[k]);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
-	public void AITeams(Enemy_AI[] teams) {
-		if (team1 != null) {
-			team1 = new List<Enemy_AI>();
-			for (int i = 0; i < teams.Length; i++) {
-				team1.Add(teams[i]);
+	private void CreateAlly(int enemyIndex, int[] allyIndexes) {
+		foreach (int i in allyIndexes) {
+			if (enemyIndex == i) {
+				throw new System.Exception("Can't assign myself as my ally!");
 			}
 		}
-		else if (team2 != null) {
-			team2 = new List<Enemy_AI>();
-			for (int i = 0; i < teams.Length; i++) {
-				team2.Add(teams[i]);
-			}
-		}
-		else if (team3 != null) {
-			team3 = new List<Enemy_AI>();
-			for (int i = 0; i < teams.Length; i++) {
-				team3.Add(teams[i]);
-			}
-		}
-		else if (team4 != null) {
-			team4 = new List<Enemy_AI>();
-			for (int i = 0; i < teams.Length; i++) {
-				team4.Add(teams[i]);
+
+		alliesOfAi[enemyIndex] = new Ally();
+
+		alliesOfAi[enemyIndex].index = enemyIndex;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < allyIndexes.Length; j++) {
+				if(i == allyIndexes[j]) {
+					if (AIs[i] != null) {
+						alliesOfAi[enemyIndex].allies[i] = AIs[i];
+					}
+				}
 			}
 		}
 	}
-
 }
+

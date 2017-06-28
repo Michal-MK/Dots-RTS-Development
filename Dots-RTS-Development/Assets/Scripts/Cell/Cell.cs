@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(LineRenderer), typeof(CircleCollider2D))]
+
 public class Cell : MonoBehaviour {
 
 	private int _elementCount;                                                                  //Current amount of elements inside the cell
-	private float _regenP;																		//How fast will the cell regenerate
+	private float _regenP;                                                                      //How fast will the cell regenerate
 	private int _maxElementCount;                                                               //How much can the cell hold
 	private Vector2 _position;                                                                  //Cells position
 	public bool isRegenerating = false;
@@ -34,10 +36,10 @@ public class Cell : MonoBehaviour {
 	public Color32 enemy1 = new Color32(255, 0, 0, 255);                                        //Default enemy1 colour
 	public Color32 enemy2 = new Color32(80, 0, 255, 255);                                       //Default enemy2 colour
 	public Color32 enemy3 = new Color32(220, 255, 0, 255);                                      //Default enemy3 colour
-	public Color32 enemy4 = new Color32(0, 255, 230, 255);                                      //Default enemy4 colour
+	public Color32 enemy4 = new Color32(120, 60, 0, 255);										//Default enemy4 colour
 	public Color32 enemy5 = new Color32(150, 140, 0, 255);                                      //Default enemy5 colour
 	public Color32 enemy6 = new Color32(255, 0, 255, 255);                                      //Default enemy6 colour
-	public Color32 enemy7 = new Color32(0, 0, 0, 255);											//Default enemy7 colour
+	public Color32 enemy7 = new Color32(0, 0, 0, 255);                                          //Default enemy7 colour
 	public Color32 enemy8 = new Color32(255, 150, 200, 255);                                    //Default enemy8 colour
 
 
@@ -46,6 +48,8 @@ public class Cell : MonoBehaviour {
 	public SpriteRenderer cellSprite;
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
+	public LineRenderer circle;
+	public LineRenderer lineToMouse;
 
 	private void Start() {
 		UpdateCellInfo();
