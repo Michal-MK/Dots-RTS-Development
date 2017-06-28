@@ -13,12 +13,26 @@ public class SaveAndLoad : MonoBehaviour {
 
 	public GameObject prefab;
 	string fileName;
+	float aiDiff = 1;
 	public InputField fileNameIF;
+	public InputField AiPeriodInput;
 	public Text ErrorMessages;
 
 	public void fileNameIFChange() {
 		fileName = fileNameIF.text;
 		ErrorMessages.text = "FileName changed.";
+	}
+
+	public void AiPeriodChange() {
+		if (float.TryParse(AiPeriodInput.text, out aiDiff) == false) {
+			ErrorMessages.text = "Invalid difficulty";
+			aiDiff = 1;
+		}
+		else {
+			ErrorMessages.text = "New difficulty: " + aiDiff;
+		}
+		
+
 	}
 
 	public static void AddCell(Cell c) {
@@ -64,7 +78,7 @@ public class SaveAndLoad : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
-
+		save.difficulty = aiDiff;
 		formatter.Serialize(file, save);
 		file.Close();
 	}
@@ -176,7 +190,7 @@ public class SaveAndLoad : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
-
+		save.difficulty = aiDiff;
 		formatter.Serialize(file, save);
 		file.Close();
 	}
@@ -221,6 +235,7 @@ public class SaveAndLoad : MonoBehaviour {
 [Serializable]
 public class SaveData {
 	public List<S_Cell> cells = new List<S_Cell>();
+	public float difficulty;
 }
 
 [Serializable]
