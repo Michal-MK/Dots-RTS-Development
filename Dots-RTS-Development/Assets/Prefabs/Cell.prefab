@@ -528,7 +528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRegenerating: 0
-  _team: 1
+  _team: 0
   ally:
     serializedVersion: 2
     rgba: 4278255360

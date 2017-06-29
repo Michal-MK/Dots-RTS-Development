@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class SaveAndLoad : MonoBehaviour {
+public class SaveAndLoadEditor : MonoBehaviour {
 
 	private static List<Cell> cellList = new List<Cell>();
 

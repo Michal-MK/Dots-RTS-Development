@@ -22,7 +22,7 @@ public class PlaceCells : MonoBehaviour {
 
 			print(LevelEditorCore.start);
 
-			SaveAndLoad.AddCell(c);
+			SaveAndLoadEditor.AddCell(c);
 		}
 #endif
 #if UNITY_ANDROID

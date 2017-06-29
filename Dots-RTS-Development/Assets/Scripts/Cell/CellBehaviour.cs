@@ -142,7 +142,8 @@ public class CellBehaviour : Cell {
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo() {
 		base.UpdateCellInfo();
-		if (!isRegenerating && _team == enmTeam.ALLIED || !isRegenerating && (int)_team >= 2) {
+		if (!isRegenerating && ( _team == enmTeam.ALLIED || (int)_team >= 2 )) {
+			//print(_team);
 			StartCoroutine(GenerateElements());
 		}
 		if (isSelected) {
