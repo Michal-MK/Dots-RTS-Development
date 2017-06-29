@@ -69,11 +69,11 @@ public class Enemy_AI : MonoBehaviour {
 
 				//Loop though all the targets of this AI
 				for (int l = 0; l < _targets.Count; l++) {
-					CellBehaviour current = _targets[l];																			//print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
+					CellBehaviour target = _targets[l];																			//print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
-					if (currentAlliedCellOfTheAlliedAI == current) {
-						this._allies.Add(current);
+					if (currentAlliedCellOfTheAlliedAI == target) {
+						this._allies.Add(target);
 						this._targets.Remove(currentAlliedCellOfTheAlliedAI);
 					}
 				}
@@ -94,6 +94,7 @@ public class Enemy_AI : MonoBehaviour {
 		}
 		else if ((int)prev > 1) {
 			_aiCells.Remove(sender);
+
 			goto addCell;
 		}
 

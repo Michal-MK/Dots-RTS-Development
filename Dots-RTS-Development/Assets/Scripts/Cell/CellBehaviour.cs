@@ -112,6 +112,7 @@ public class CellBehaviour : Cell {
 
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
 	public void DamageCell(enmTeam elementTeam) {
+
 		if (cellTeam == elementTeam) {
 			elementCount++;
 			UpdateCellInfo();
@@ -119,7 +120,9 @@ public class CellBehaviour : Cell {
 		}
 		elementCount--;
 		if (elementCount < 0) {
-			TeamChanged(this, cellTeam, elementTeam);
+			if (TeamChanged != null) {
+				TeamChanged(this, cellTeam, elementTeam);
+			}
 			elementCount = -elementCount;
 			cellTeam = elementTeam;
 		}
@@ -164,6 +167,7 @@ public class CellBehaviour : Cell {
 
 
 	//Selects or deselects a cell
+
 	public void SetSelected() {
 		if (isSelected) {
 			isSelected = false;

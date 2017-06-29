@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -82,7 +83,6 @@ public class Initialize_AI : MonoBehaviour {
 	}
 
 	public void FormTeams() {
-
 		//for (int i = 0; i < alliesOfAi.Length; i++) {
 		//	string s = "";
 		//	if(alliesOfAi[i] != null) {
@@ -101,16 +101,22 @@ public class Initialize_AI : MonoBehaviour {
 		//	}
 		//}
 
+
 		//Loop though all the AIs
 		for (int i = 0; i < AIs.Length; i++) {
 			//If allies for this AI exist
 			if (AIs[i] != null) {
+				//Loop though all of them
 				for (int j = 0; j < alliesOfAi.Length; j++) {
+					//If this enemy AI exists
 					if (alliesOfAi[j] != null) {
+						//If the AI index matches with the one in ally
 						if (i == alliesOfAi[j].index) {
+							//Loop though the associated allies and add them if they exist
 							for (int k = 0; k < alliesOfAi[j].allies.Length; k++) {
 								if (alliesOfAi[j].allies[k] != null) {
 									AIs[i].alliesOfThisAI.Add(alliesOfAi[j].allies[k]);
+									AIs[k].alliesOfThisAI.Add(AIs[i]);
 								}
 							}
 						}
@@ -119,6 +125,7 @@ public class Initialize_AI : MonoBehaviour {
 			}
 		}
 	}
+
 
 	private void CreateAlly(int enemyIndex, int[] allyIndexes) {
 		foreach (int i in allyIndexes) {
