@@ -11,15 +11,18 @@ public class Initialize_AI : MonoBehaviour {
 
 	public Ally[] alliesOfAi = new Ally[8];
 
-	private Enemy_AI[] AIs = new Enemy_AI[8];
+	public static Enemy_AI[] AIs = new Enemy_AI[8];
 
 	private List<Enemy_AI> team1;
 	private List<Enemy_AI> team2;
 	private List<Enemy_AI> team3;
 	private List<Enemy_AI> team4;
 
+	private void Start() {
+		StartAiInitialization();
+	}
 
-	public void StartAIInitialization() {
+	public void StartAiInitialization() {
 		foreach (Cell c in GameControll.cells) {
 			//If cell is enemy create ai for that enemy - Only once
 			if ((int)c.cellTeam >= 2) {
@@ -62,7 +65,10 @@ public class Initialize_AI : MonoBehaviour {
 			}
 		}
 		CreateAlly(0, new int[] { 1, 2 });
-		CreateAlly(3, new int[] { 0, 2, 7 });
+		CreateAlly(1, new int[] { 2 });
+		CreateAlly(7, new int[] { 3 });
+		//CreateAlly(3, new int[] { 1, 2, 0 });
+
 		FormTeams();
 
 	}
@@ -83,24 +89,6 @@ public class Initialize_AI : MonoBehaviour {
 	}
 
 	public void FormTeams() {
-		//for (int i = 0; i < alliesOfAi.Length; i++) {
-		//	string s = "";
-		//	if(alliesOfAi[i] != null) {
-		//		s += i + " ";
-		//		s += "Working with code Enemy: " + alliesOfAi[i].index + "  ";
-		//		for (int j = 0; j < alliesOfAi[i].allies.Length; j++) {
-		//			if(alliesOfAi[i].allies[j] != null) {
-		//				s += alliesOfAi[i].allies[j].gameObject.name;
-		//			}
-		//		}
-		//		print(s);
-		//	}
-		//	else {
-		//		s = "NULL";
-		//		print(s);
-		//	}
-		//}
-
 
 		//Loop though all the AIs
 		for (int i = 0; i < AIs.Length; i++) {
@@ -139,9 +127,10 @@ public class Initialize_AI : MonoBehaviour {
 		alliesOfAi[enemyIndex].index = enemyIndex;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < allyIndexes.Length; j++) {
-				if(i == allyIndexes[j]) {
+				if (i == allyIndexes[j]) {
 					if (AIs[i] != null) {
 						alliesOfAi[enemyIndex].allies[i] = AIs[i];
+						//alliesOfAi[enemyIndex].allies[j] = AIs[i];
 					}
 				}
 			}

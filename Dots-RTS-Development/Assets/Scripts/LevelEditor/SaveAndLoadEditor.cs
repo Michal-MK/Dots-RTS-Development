@@ -48,6 +48,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	public void Save() {
 		ErrorMessages.text = "Can't chceck is a directory exists";
+
 		if (!Directory.Exists(Application.persistentDataPath + "/Saves")) {
 			Directory.CreateDirectory(Application.persistentDataPath + "/Saves");
 			ErrorMessages.text = "Created the Saves directory";
@@ -84,7 +85,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	public void Load() {
-		StartCoroutine(LoadENUM());
+		StartCoroutine(LoadCoroutine());
 		//WWW loadStreamingAsset = new WWW("jar:file://" + Application.dataPath + "!assets/Saves/" + fileName + ".phage");
 
 		////Freeze until it loads
@@ -126,7 +127,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		//}
 	}
-	IEnumerator LoadENUM () {
+	IEnumerator LoadCoroutine () {
 		WWW loadStreamingAsset = new WWW("jar:file://" + Application.dataPath + "!/assets/Saves/" + fileName + ".phage");
 
 		yield return new WaitUntil(() => loadStreamingAsset.isDone == true);

@@ -28,6 +28,9 @@ public class CellBehaviour : Cell {
 		}
 		if (regenPeriod == 0) {
 			regenPeriod = 2f;
+			//	if(cellTeam == enmTeam.ENEMY8) {
+			//		regenPeriod = 0.1f;
+			//	}
 		}
 
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
@@ -143,12 +146,15 @@ public class CellBehaviour : Cell {
 	public override void UpdateCellInfo() {
 		base.UpdateCellInfo();
 		if (!isRegenerating && ( _team == enmTeam.ALLIED || (int)_team >= 2 )) {
-			//print(_team);
 			StartCoroutine(GenerateElements());
+		}
+		if(elementCount > maxElements) {
+			print("Decaying");
+			Decay(0.5f);
 		}
 		if (isSelected) {
 			circle.enabled = true;
-			CreateCircle_AndLine(transform.position, cellRadius, 20);
+			CreateCircle(transform.position, cellRadius, 30);
 		}
 		else {
 			circle.enabled = false;
@@ -156,19 +162,8 @@ public class CellBehaviour : Cell {
 		}
 	}
 
-	//Generic code to set all the values of a cell
-	//public void SetCellData(Vector2 position, enmTeam team, int startingCount = 10, int maximum = 50, float regenerationFreq = 1.5f, float radius = 1) {
-	//	gameObject.transform.position = position;
-	//	elementCount = startingCount;
-	//	maxElements = maximum;
-	//	regenPeriod = regenerationFreq;
-	//	cellTeam = team;
-	//	cellRadius = radius;
-	//}
-
 
 	//Selects or deselects a cell
-
 	public void SetSelected() {
 		if (isSelected) {
 			isSelected = false;
@@ -180,7 +175,7 @@ public class CellBehaviour : Cell {
 			isSelected = true;
 			elementNrDisplay.color = new Color32(255, 0, 0, 255);
 			circle.enabled = true;
-			CreateCircle_AndLine(transform.position, cellRadius, 20);
+			CreateCircle(transform.position, cellRadius, 30);
 
 		}
 	}
@@ -242,7 +237,6 @@ public class CellBehaviour : Cell {
 	//Hides Upgrade Slots
 	private void OnMouseExit() {
 		base.UpdateCellInfo();
-		//um.upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 	}
 
 
@@ -266,7 +260,7 @@ public class CellBehaviour : Cell {
 
 	}
 
-	public void CreateCircle_AndLine(Vector3 _position, float _r, int segments) {
+	public void CreateCircle(Vector3 _position, float _r, int segments) {
 
 		circle.positionCount = segments + 1;
 		circle.useWorldSpace = true;

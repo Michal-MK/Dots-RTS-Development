@@ -12,6 +12,7 @@ public class Cell : MonoBehaviour {
 	private int _maxElementCount;                                                               //How much can the cell hold
 	private Vector2 _position;                                                                  //Cells position
 	public bool isRegenerating = false;
+	public bool isDecaying = false;
 	public enmTeam _team;                                                                       //Cell's team
 
 	public enum enmTeam {
@@ -36,7 +37,7 @@ public class Cell : MonoBehaviour {
 	public Color32 enemy1 = new Color32(255, 0, 0, 255);                                        //Default enemy1 colour
 	public Color32 enemy2 = new Color32(80, 0, 255, 255);                                       //Default enemy2 colour
 	public Color32 enemy3 = new Color32(220, 255, 0, 255);                                      //Default enemy3 colour
-	public Color32 enemy4 = new Color32(120, 60, 0, 255);										//Default enemy4 colour
+	public Color32 enemy4 = new Color32(120, 60, 0, 255);                                       //Default enemy4 colour
 	public Color32 enemy5 = new Color32(150, 140, 0, 255);                                      //Default enemy5 colour
 	public Color32 enemy6 = new Color32(255, 0, 255, 255);                                      //Default enemy6 colour
 	public Color32 enemy7 = new Color32(0, 0, 0, 255);                                          //Default enemy7 colour
@@ -117,12 +118,33 @@ public class Cell : MonoBehaviour {
 	//Keeps generateing new elements for the cell
 	public IEnumerator GenerateElements() {
 		isRegenerating = true;
-		while (true) {
+		while (isRegenerating) {
 			yield return new WaitForSecondsRealtime(regenPeriod);
 			if (elementCount < maxElements) {
 				elementCount++;
 				elementNrDisplay.text = elementCount.ToString();
 				UpdateCellInfo();
+			}
+		}
+	}
+	public void Decay(float decayRate) {
+		if (!isDecaying) {
+			isDecaying = true;
+			StartCoroutine(DecayElements(decayRate));
+		}
+
+	}
+
+	//Elements start decaying when they go over the cap.
+	private IEnumerator DecayElements(float decayRate) {
+		float d = decayRate;
+		StopCoroutine(GenerateElements());
+		while (isDecaying) {
+			yield return new WaitForSeconds(d);
+			elementCount--;
+			if(elementCount <= maxElements) {
+				isDecaying = false;
+				isRegenerating = false;
 			}
 		}
 	}

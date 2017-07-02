@@ -1,16 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GeneralSSUI : MonoBehaviour {
 
-	// Use this for initialization
+	// Loads Main Menu
 	public void ToMainMenu () {
 		SceneManager.LoadScene("Main Menu");
 	}
 
-	// Update is called once per frame
+	// Lods Level Select
 	public void ToLevelSelect() {
 		SceneManager.LoadScene("LevelSelect");
 	}

@@ -58,8 +58,8 @@ public class Enemy_AI : MonoBehaviour {
 
 		//Loop through all allied Enemy_AIs
 		for (int j = 0; j < alliesOfThisAI.Count; j++) {
-			Enemy_AI currentAI = alliesOfThisAI[j];																					//print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
-			if(currentAI == null) {
+			Enemy_AI currentAI = alliesOfThisAI[j];                                                                                 //print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
+			if (currentAI == null) {
 				return;
 			}
 
@@ -69,7 +69,7 @@ public class Enemy_AI : MonoBehaviour {
 
 				//Loop though all the targets of this AI
 				for (int l = 0; l < _targets.Count; l++) {
-					CellBehaviour target = _targets[l];																			//print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
+					CellBehaviour target = _targets[l];                                                                         //print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
 					if (currentAlliedCellOfTheAlliedAI == target) {
@@ -83,18 +83,41 @@ public class Enemy_AI : MonoBehaviour {
 
 	//Triggered when a cell changs team
 	private void Cell_TeamChanged(CellBehaviour sender, Cell.enmTeam prev, Cell.enmTeam current) {
-		//Removes the cell from a team list
+		//Removes the cell from a team list -- If it is neutral
 		if (prev == 0) {
 			_neutrals.Remove(sender);
 			goto addCell;
 		}
+
+		//Removes the cell from a team list -- If it is a player controlled cell
 		else if (prev != _aiTeam && prev != Cell.enmTeam.NEUTRAL) {
 			_targets.Remove(sender);
+			for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
+				if (Initialize_AI.AIs[i] != null) {
+					Enemy_AI Ai = Initialize_AI.AIs[i];
+					for (int j = 0; j < Ai._allies.Count; j++) {
+						if (Ai._allies[j] == sender) {
+							Ai._allies.Remove(sender);
+						}
+					}
+				}
+			}
 			goto addCell;
 		}
+
+		//Removes the cell from a team list -- If it is controlled by an AI
 		else if ((int)prev > 1) {
 			_aiCells.Remove(sender);
-
+			for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
+				if (Initialize_AI.AIs[i] != null) {
+					Enemy_AI Ai = Initialize_AI.AIs[i];
+					for (int j = 0; j < Ai._allies.Count; j++) {
+						if (Ai._allies[j] == sender) {
+							Ai._allies.Remove(sender);
+						}
+					}
+				}
+			}
 			goto addCell;
 		}
 
@@ -130,19 +153,21 @@ public class Enemy_AI : MonoBehaviour {
 
 		//Adds the cell to a new list that it belongs to
 		addCell:
+		if (current == 0) {
+			throw new Exception("Overtaken cell can't be neutral... somthing went wrong.");
+		}
 		if (_aiCells.Count == 0) {
 			isActive = false;
 			GameControll.YouWon();
 		}
-		if (current == 0) {
-			throw new Exception("Overtaken cell can't be neutral... somthing went wrong.");
-		}
 		else if (current != _aiTeam && current != Cell.enmTeam.NEUTRAL) {
 			_targets.Add(sender);
+			ConsiderAllies();
 			return;
 		}
 		else if ((int)current > 1) {
 			_aiCells.Add(sender);
+			ConsiderAllies();
 			return;
 		}
 
@@ -156,7 +181,7 @@ public class Enemy_AI : MonoBehaviour {
 
 		while (isActive) {
 			restart:
-			yield return new WaitForSecondsRealtime(decisionSpeed);
+			yield return new WaitForSeconds(decisionSpeed);
 
 			redoAction:
 
@@ -415,32 +440,32 @@ public class Enemy_AI : MonoBehaviour {
 		if (attackChoiceProbability > expandChoiceProbability) {
 			if (defendChoiceProbability > expandChoiceProbability || defendChoiceProbability > attackChoiceProbability) {
 				if (UnityEngine.Random.Range(0, 10) < 5) {
-					print(selectedAiCell.gameObject.name + " Chose Defence with 50%");
+					//print(selectedAiCell.gameObject.name + " Chose Defence with 50%");
 					return 2;
 				}
 				else {
 					if (UnityEngine.Random.Range(0, 10) < 5) {
-						print(selectedAiCell.gameObject.name + " Chose Attack with 25%");
+						//print(selectedAiCell.gameObject.name + " Chose Attack with 25%");
 						return 1;
 					}
 					else {
-						print(selectedAiCell.gameObject.name + " Chose Expand with 25%");
+						//print(selectedAiCell.gameObject.name + " Chose Expand with 25%");
 						return 0;
 					}
 				}
 			}
 			else {
 				if (UnityEngine.Random.Range(0, 10) < 7) {
-					print(selectedAiCell.gameObject.name + " Chose Attack with 70%");
+					//print(selectedAiCell.gameObject.name + " Chose Attack with 70%");
 					return 1;
 				}
 				else {
 					if (UnityEngine.Random.Range(0, 10) < 5) {
-						print(selectedAiCell.gameObject.name + " Chose Defence with 15%");
+						//print(selectedAiCell.gameObject.name + " Chose Defence with 15%");
 						return 2;
 					}
 					else {
-						print(selectedAiCell.gameObject.name + " Chose Expand with 15%");
+						//print(selectedAiCell.gameObject.name + " Chose Expand with 15%");
 						return 0;
 					}
 				}
@@ -448,16 +473,16 @@ public class Enemy_AI : MonoBehaviour {
 		}
 		else {
 			if (UnityEngine.Random.Range(0, 10) < 8) {
-				print(selectedAiCell.gameObject.name + " Chose Expand with 80%");
+				//print(selectedAiCell.gameObject.name + " Chose Expand with 80%");
 				return 0;
 			}
 			else {
 				if (UnityEngine.Random.Range(0, 10) < 5) {
-					print(selectedAiCell.gameObject.name + " Chose Attack with 10%");
+					//print(selectedAiCell.gameObject.name + " Chose Attack with 10%");
 					return 1;
 				}
 				else {
-					print(selectedAiCell.gameObject.name + " Chose Defence with 10%");
+					//print(selectedAiCell.gameObject.name + " Chose Defence with 10%");
 					return 2;
 				}
 			}
