@@ -142,6 +142,9 @@ public class Cell : MonoBehaviour {
 		while (isDecaying) {
 			yield return new WaitForSeconds(d);
 			elementCount--;
+			if(maxElements - elementCount > maxElements * 0.5f) {
+				d = d * 0.5f;
+			}
 			if(elementCount <= maxElements) {
 				isDecaying = false;
 				isRegenerating = false;

@@ -149,7 +149,7 @@ public class CellBehaviour : Cell {
 			StartCoroutine(GenerateElements());
 		}
 		if(elementCount > maxElements) {
-			print("Decaying");
+			print("Decaying :" + elementCount + " is greater than " + maxElements);
 			Decay(0.5f);
 		}
 		if (isSelected) {
