@@ -18,6 +18,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public InputField AiPeriodInput;
 	public Text ErrorMessages;
 
+	private void Start() {
+		cellList.Clear();
+	}
+	private void OnDestroy() {
+		cellList.Clear();
+	}
+
 	public void fileNameIFChange() {
 		fileName = fileNameIF.text;
 		ErrorMessages.text = "FileName changed.";
@@ -173,12 +180,18 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 		else {
 			ErrorMessages.text = "Fail, change the file name";
+			file.Close();
 			return;
 		}
 		SaveData save = new SaveData();
 
 		
 		for (int i = 0; i < cellList.Count; i++) {
+			if (cellList[i] == null) {
+				ErrorMessages.text = "No cell number " + i + "found";
+				file.Close();
+				return;
+			}
 			Cell c = cellList[i];
 
 			S_Cell serCell = new S_Cell();
@@ -214,7 +227,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		file.Close();
 			for (int j = 0; j < save.cells.Count; j++) {
-	
+
 				Cell c = Instantiate(prefab).GetComponent<Cell>();
 
 				c.cellPosition = (Vector3)save.cells[j].pos;
@@ -224,6 +237,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				c._team = (Cell.enmTeam)save.cells[j].team;
 				c.regenPeriod = save.cells[j].regenerationPeriod;
 				c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+
+				cellList.Add(c);
 					
 				
 			}
