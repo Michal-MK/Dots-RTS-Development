@@ -519,20 +519,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRegenerating: 0
+  isDecaying: 0
   _team: 0
-  enemy:
-    serializedVersion: 2
-    rgba: 4278190335
   ally:
     serializedVersion: 2
     rgba: 4278255360
   neutral:
     serializedVersion: 2
     rgba: 4294967295
+  enemy1:
+    serializedVersion: 2
+    rgba: 4278190335
+  enemy2:
+    serializedVersion: 2
+    rgba: 4294901840
+  enemy3:
+    serializedVersion: 2
+    rgba: 4278255580
+  enemy4:
+    serializedVersion: 2
+    rgba: 4278205560
+  enemy5:
+    serializedVersion: 2
+    rgba: 4278226070
+  enemy6:
+    serializedVersion: 2
+    rgba: 4294902015
+  enemy7:
+    serializedVersion: 2
+    rgba: 4278190080
+  enemy8:
+    serializedVersion: 2
+    rgba: 4291335935
   um: {fileID: 114889160387685830}
   cellSprite: {fileID: 212889015483235864}
   elementNrDisplay: {fileID: 102407273969586368}
   textRenderer: {fileID: 23188911867152260}
+  circle: {fileID: 0}
+  lineToMouse: {fileID: 0}
 --- !u!114 &114409544089343134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -824,8 +848,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1693301633
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: df7680c2d466d694680c8f59530a519f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
@@ -864,8 +888,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 236e23705d565c04fa128d8d173ac4a3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1064,8 +1088,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 4eabc7a969499e342874aedb4faf3aa0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
