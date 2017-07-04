@@ -79,6 +79,8 @@ public class CellBehaviour : Cell {
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
 			cellsInSelection[i].elementNrDisplay.color = new Color(1, 1, 1);
+			cellsInSelection[i].circle.enabled = false;
+			cellsInSelection[i].circle.positionCount = 0;
 		}
 		cellsInSelection.Clear();
 	}

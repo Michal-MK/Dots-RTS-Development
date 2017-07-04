@@ -23,4 +23,13 @@ public class MainMenuUI : MonoBehaviour {
 	public void LaunchCampaignScreen() {
 		SceneManager.LoadScene("Game");
 	}
+
+	public void ReturnToMainMenu() {
+		SceneManager.LoadScene("Main Menu");
+	}
+
+	public void LoadLevel(GameObject levelName) {
+		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + levelName.name);
+		SceneManager.LoadScene("LevelPlayer");
+	}
 }
