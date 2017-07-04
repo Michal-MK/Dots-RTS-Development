@@ -35,6 +35,7 @@ public class CellBehaviour : Cell {
 
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 
+		//yield return new WaitUntil(()=>gameObject.activeInHierarchy);
 		UpdateCellInfo();
 	}
 
@@ -146,8 +147,10 @@ public class CellBehaviour : Cell {
 
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo() {
+		//print(gameObject.name);
 		base.UpdateCellInfo();
 		if (!isRegenerating && ( _team == enmTeam.ALLIED || (int)_team >= 2 )) {
+			//throw new System.Exception();
 			StartCoroutine(GenerateElements());
 		}
 		if(elementCount > maxElements) {

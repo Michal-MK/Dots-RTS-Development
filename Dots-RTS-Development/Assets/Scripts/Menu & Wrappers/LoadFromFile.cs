@@ -32,17 +32,18 @@ public class LoadFromFile : MonoBehaviour {
 		init.decisionSpeeds = new float[8] { decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed };
 		for (int j = 0; j < save.cells.Count; j++) {
 
-			CellBehaviour c = cellPrefab.GetComponent<CellBehaviour>();
+			CellBehaviour c = Instantiate(cellPrefab).GetComponent<CellBehaviour>();
 
 			c.cellPosition = (Vector3)save.cells[j].pos;
-			c.gameObject.transform.position = (Vector3)c.cellPosition;
+			c.gameObject.transform.position = c.cellPosition;
 			c.elementCount = save.cells[j].elementCount;
 			c.maxElements = save.cells[j].maxElementCount;
 			c._team = (Cell.enmTeam)save.cells[j].team;
 			c.regenPeriod = save.cells[j].regenerationPeriod;
 			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
-			GameObject newCell = Instantiate(c.gameObject);
+			print("Enabling the script");
+			c.enabled = true;
 		}
 		init.StartAiInitialization();
 	}

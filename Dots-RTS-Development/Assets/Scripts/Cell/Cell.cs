@@ -53,12 +53,14 @@ public class Cell : MonoBehaviour {
 	public LineRenderer lineToMouse;
 
 	private void Start() {
+		//yield return new WaitUntil(() => gameObject.activeInHierarchy);
+		//print("IS Active");
+		//throw new System.Exception();
 		UpdateCellInfo();
 	}
 
 	public virtual void UpdateCellInfo() {
-
-
+		//print(c.gameObject.name);
 		if (elementCount >= 10 && elementCount <= maxElements) {
 			float mappedValue = Map.MapFloat(elementCount, 0, maxElements, 1, 2);
 
