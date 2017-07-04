@@ -19,6 +19,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public InputField authorNameInput;
 	public Text ErrorMessages;
 
+<<<<<<< HEAD
 	private string fileName;
 	private float aiDiff;
 	private string levelName;
@@ -33,6 +34,18 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public void FileNameChanged() {
 		fileName = fileNameInput.text;
 		ErrorMessages.text = "File name changed.";
+=======
+	private void Start() {
+		cellList.Clear();
+	}
+	private void OnDestroy() {
+		cellList.Clear();
+	}
+
+	public void fileNameIFChange() {
+		fileName = fileNameIF.text;
+		ErrorMessages.text = "FileName changed.";
+>>>>>>> d12868be8d21eeb3a5606c9827c046fc42f42eb8
 	}
 
 	public void AiPeriodChanged() {
@@ -225,6 +238,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 		else {
 			ErrorMessages.text = "Fail, change the file name";
+			file.Close();
 			return;
 		}
 
@@ -232,6 +246,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 
 		for (int i = 0; i < cellList.Count; i++) {
+			if (cellList[i] == null) {
+				ErrorMessages.text = "No cell number " + i + "found";
+				file.Close();
+				return;
+			}
 			Cell c = cellList[i];
 
 			S_Cell serCell = new S_Cell();
@@ -265,6 +284,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		file.Close();
+<<<<<<< HEAD
 
 		for (int j = 0; j < save.cells.Count; j++) {
 
@@ -280,6 +300,25 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 
 		}
+=======
+			for (int j = 0; j < save.cells.Count; j++) {
+
+				Cell c = Instantiate(prefab).GetComponent<Cell>();
+
+				c.cellPosition = (Vector3)save.cells[j].pos;
+				c.gameObject.transform.position = (Vector3)c.cellPosition;
+				c.elementCount = save.cells[j].elementCount;
+				c.maxElements = save.cells[j].maxElementCount;
+				c._team = (Cell.enmTeam)save.cells[j].team;
+				c.regenPeriod = save.cells[j].regenerationPeriod;
+				c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+
+				cellList.Add(c);
+					
+				
+			}
+		//}
+>>>>>>> d12868be8d21eeb3a5606c9827c046fc42f42eb8
 	}
 }
 
