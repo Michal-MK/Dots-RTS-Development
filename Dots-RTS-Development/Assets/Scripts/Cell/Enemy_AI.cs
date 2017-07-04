@@ -290,7 +290,7 @@ public class Enemy_AI : MonoBehaviour {
 		int elementRecordAI = -1;
 		int recordIndex = -1;
 		CellBehaviour current;
-		print("Begin select Phase " + elementRecordAI +"  "+ recordIndex);
+		//print("Begin select Phase " + elementRecordAI +"  "+ recordIndex);
 
 		for (int i = 0; i < _aiCells.Count; i++) {
 			current = _aiCells[i];
@@ -302,26 +302,26 @@ public class Enemy_AI : MonoBehaviour {
 
 			//Just return the curent cell.. lel
 			if (UnityEngine.Random.Range(0, 10) < 1) {
-				print("randomly returning current");
+				//print("randomly returning current");
 				return current;
 			}
 
 		}
 		//If the biggest cell has more than "x" elements, I'm very likely returning it.
 		if (elementRecordAI > 10) {
-			print("Found a cell that has more than 10 elements.");
+			//print("Found a cell that has more than 10 elements.");
 			if (UnityEngine.Random.Range(0, 10) < 8) {
 				return _aiCells[recordIndex];
 			}
 			//Else I'll just pass
 			else {
-				print("Didn't actually chose it lel");
+				//print("Didn't actually chose it lel");
 				return null;
 			}
 		}
 		//Else I'll pass completetly
 		else {
-			print("no ai cell has more than 10 el.");
+			//print("no ai cell has more than 10 el.");
 			return null;
 		}
 	}

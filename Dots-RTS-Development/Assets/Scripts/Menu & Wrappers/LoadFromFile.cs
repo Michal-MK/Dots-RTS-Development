@@ -42,8 +42,11 @@ public class LoadFromFile : MonoBehaviour {
 			c.regenPeriod = save.cells[j].regenerationPeriod;
 			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
-			print("Enabling the script");
+
+			//print("Values set, Enabling the script");
 			c.enabled = true;
+
+			c.UpdateCellInfo();
 		}
 		init.StartAiInitialization();
 	}

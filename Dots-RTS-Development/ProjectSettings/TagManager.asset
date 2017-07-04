@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Cells
   - 
   - 
   - 
@@ -40,4 +40,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 4170068821
+    locked: 0
+  - name: Cells
+    uniqueID: 3366985275
+    locked: 0
+  - name: Elements
+    uniqueID: 4099901787
     locked: 0

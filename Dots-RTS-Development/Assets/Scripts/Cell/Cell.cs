@@ -59,7 +59,7 @@ public class Cell : MonoBehaviour {
 		UpdateCellInfo();
 	}
 
-	public virtual void UpdateCellInfo() {
+	public virtual void UpdateCellInfo(bool calledFromBase = true) {
 		//print(c.gameObject.name);
 		if (elementCount >= 10 && elementCount <= maxElements) {
 			float mappedValue = Map.MapFloat(elementCount, 0, maxElements, 1, 2);
@@ -69,7 +69,7 @@ public class Cell : MonoBehaviour {
 		}
 
 		elementNrDisplay.text = elementCount.ToString();
-		textRenderer.sortingOrder = 2;
+		textRenderer.sortingLayerName = "Cells";
 
 		//Change Colour depending on the team
 		switch (cellTeam) {
@@ -159,7 +159,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int elementCount {
 		get { return _elementCount; }
-		set { _elementCount = value; UpdateCellInfo(); }
+		set { _elementCount = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -167,7 +167,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public float regenPeriod {
 		get { return _regenP; }
-		set { _regenP = value; UpdateCellInfo(); }
+		set { _regenP = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -175,7 +175,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int maxElements {
 		get { return _maxElementCount; }
-		set { _maxElementCount = value; UpdateCellInfo(); }
+		set { _maxElementCount = value;  UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -183,7 +183,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public enmTeam cellTeam {
 		get { return _team; }
-		set { _team = value; UpdateCellInfo(); }
+		set { _team = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>

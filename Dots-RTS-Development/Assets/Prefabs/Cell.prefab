@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224177028302667174}
   - component: {fileID: 61040875740250348}
   - component: {fileID: 114614789310892846}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224233307604467664}
   - component: {fileID: 212929577003289232}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Organelle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 224598856278191516}
   - component: {fileID: 61988381487309822}
   - component: {fileID: 114557281685835388}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 224204828125027620}
   - component: {fileID: 212507222195416960}
   - component: {fileID: 114873760863696038}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 224564184509227460}
   - component: {fileID: 61711861902211890}
   - component: {fileID: 114803648549937596}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 224592870167764202}
   - component: {fileID: 23758171399307986}
   - component: {fileID: 102996459730448940}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Count
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 224905799173964040}
   - component: {fileID: 61042881372046520}
   - component: {fileID: 114745751246294382}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224532568559450686}
   - component: {fileID: 120648458152734208}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LineToMouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 224207115138687068}
   - component: {fileID: 61542321758236776}
   - component: {fileID: 114424220043590526}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 224582702187638146}
   - component: {fileID: 61651978562273068}
   - component: {fileID: 114435782476042638}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 224826234087334856}
   - component: {fileID: 61776718189822176}
   - component: {fileID: 114038397541396084}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 224122223006186208}
   - component: {fileID: 61052876077636382}
   - component: {fileID: 114151566981480790}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpgradeSlot_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 114076177898254638}
   - component: {fileID: 58681607452999552}
   - component: {fileID: 120392592380657662}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -487,7 +487,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1160216229584482}
-  m_Text: 10
+  m_Text: 100
   m_OffsetZ: -2
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -522,14 +522,14 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1930486067858668}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0bfa3bbda2142c45a7a84a92675bc12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isRegenerating: 0
-  isDecaying: 1
-  _team: 2
+  isDecaying: 0
+  _team: -1
   ally:
     serializedVersion: 2
     rgba: 4278255360
@@ -901,11 +901,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 4eabc7a969499e342874aedb4faf3aa0, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -981,8 +981,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 236e23705d565c04fa128d8d173ac4a3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1194,7 +1194,7 @@ RectTransform:
   m_GameObject: {fileID: 1930486067858668}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 224233307604467664}
   - {fileID: 224592870167764202}
@@ -1205,7 +1205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.100769, y: -72.31405}
+  m_AnchoredPosition: {x: -19.596313, y: 177.11598}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224826234087334856

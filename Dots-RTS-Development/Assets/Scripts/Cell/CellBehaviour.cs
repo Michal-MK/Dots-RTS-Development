@@ -77,6 +77,7 @@ public class CellBehaviour : Cell {
 
 	//Resets Cell colour and clears the selection list
 	public static void ClearSelection() {
+		print("Clearing");
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
 			cellsInSelection[i].elementNrDisplay.color = new Color(1, 1, 1);
@@ -146,24 +147,26 @@ public class CellBehaviour : Cell {
 
 
 	//Overriden function to include regeneration call
-	public override void UpdateCellInfo() {
-		//print(gameObject.name);
+	public override void UpdateCellInfo(bool calledFromBase = false) {
+
 		base.UpdateCellInfo();
-		if (!isRegenerating && ( _team == enmTeam.ALLIED || (int)_team >= 2 )) {
-			//throw new System.Exception();
-			StartCoroutine(GenerateElements());
-		}
-		if(elementCount > maxElements) {
-			print("Decaying :" + elementCount + " is greater than " + maxElements);
-			Decay(0.5f);
-		}
-		if (isSelected) {
-			circle.enabled = true;
-			CreateCircle(transform.position, cellRadius, 30);
-		}
-		else {
-			circle.enabled = false;
-			circle.positionCount = 0;
+
+		if (calledFromBase == false) {
+			if (!isRegenerating && (_team == enmTeam.ALLIED || (int)_team >= 2)) {
+				StartCoroutine(GenerateElements());
+			}
+			if (elementCount > maxElements) {
+				print("Decaying :" + elementCount + " is greater than " + maxElements);
+				Decay(0.5f);
+			}
+			if (isSelected) {
+				circle.enabled = true;
+				CreateCircle(transform.position, cellRadius, 30);
+			}
+			else {
+				circle.enabled = false;
+				circle.positionCount = 0;
+			}
 		}
 	}
 
