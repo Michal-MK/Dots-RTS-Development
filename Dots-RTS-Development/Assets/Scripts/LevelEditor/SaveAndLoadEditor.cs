@@ -19,7 +19,6 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public InputField authorNameInput;
 	public Text ErrorMessages;
 
-<<<<<<< HEAD
 	private string fileName;
 	private float aiDiff;
 	private string levelName;
@@ -29,12 +28,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		levelName = "DEFAULT";
 		creator = SystemInfo.deviceName;
 	}
-	//
-	#region Input filed data processing
-	public void FileNameChanged() {
-		fileName = fileNameInput.text;
-		ErrorMessages.text = "File name changed.";
-=======
+
 	private void Start() {
 		cellList.Clear();
 	}
@@ -42,10 +36,12 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		cellList.Clear();
 	}
 
-	public void fileNameIFChange() {
-		fileName = fileNameIF.text;
-		ErrorMessages.text = "FileName changed.";
->>>>>>> d12868be8d21eeb3a5606c9827c046fc42f42eb8
+
+	//
+	#region Input filed data processing
+	public void FileNameChanged() {
+		fileName = fileNameInput.text;
+		ErrorMessages.text = "File name changed.";
 	}
 
 	public void AiPeriodChanged() {
@@ -207,7 +203,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		if (aiDiff == 0 || string.IsNullOrEmpty(fileName)) {
 			ErrorMessages.text = "You did not provide all the necessary information!";
-			if(aiDiff == 0) {
+			if (aiDiff == 0) {
 				ErrorMessages.text += " C'mon man, really 0 difficulty...?";
 			}
 			return;
@@ -216,14 +212,14 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		int numAllies = 0;
 		int numEnemies = 0;
 		for (int i = 0; i < cellList.Count; i++) {
-			if(cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
+			if (cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
 				numAllies++;
 			}
-			if((int)cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
+			if ((int)cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
 				numEnemies++;
 			}
 		}
-		if(numAllies == 0 || numEnemies == 0) {
+		if (numAllies == 0 || numEnemies == 0) {
 			ErrorMessages.text = "Your level is missing an enemy, or you didn't create player's cell!";
 			return;
 		}
@@ -264,7 +260,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			save.cells.Add(serCell);
 		}
 		save.difficulty = aiDiff;
-		print(levelName +" "+ creator);
+		print(levelName + " " + creator);
 		save.levelInfo = new LevelInfo(levelName, creator);
 		formatter.Serialize(file, save);
 		file.Close();
@@ -284,41 +280,23 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		file.Close();
-<<<<<<< HEAD
 
 		for (int j = 0; j < save.cells.Count; j++) {
 
 			Cell c = Instantiate(prefab).GetComponent<Cell>();
 
 			c.cellPosition = (Vector3)save.cells[j].pos;
-			c.gameObject.transform.position = c.cellPosition;
+			c.gameObject.transform.position = (Vector3)c.cellPosition;
 			c.elementCount = save.cells[j].elementCount;
 			c.maxElements = save.cells[j].maxElementCount;
 			c._team = (Cell.enmTeam)save.cells[j].team;
 			c.regenPeriod = save.cells[j].regenerationPeriod;
 			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
+			cellList.Add(c);
+
 
 		}
-=======
-			for (int j = 0; j < save.cells.Count; j++) {
-
-				Cell c = Instantiate(prefab).GetComponent<Cell>();
-
-				c.cellPosition = (Vector3)save.cells[j].pos;
-				c.gameObject.transform.position = (Vector3)c.cellPosition;
-				c.elementCount = save.cells[j].elementCount;
-				c.maxElements = save.cells[j].maxElementCount;
-				c._team = (Cell.enmTeam)save.cells[j].team;
-				c.regenPeriod = save.cells[j].regenerationPeriod;
-				c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
-
-				cellList.Add(c);
-					
-				
-			}
-		//}
->>>>>>> d12868be8d21eeb3a5606c9827c046fc42f42eb8
 	}
 }
 
