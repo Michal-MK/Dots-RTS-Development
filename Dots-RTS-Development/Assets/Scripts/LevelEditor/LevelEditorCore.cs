@@ -16,24 +16,18 @@ public class LevelEditorCore : MonoBehaviour {
 	public static InputField maxInput;
 	public static InputField startInput;
 	public static InputField regenInput;
-	public static InputField difficultyInput;
-	public static InputField sizeInput;
 
 	// Current parsed values, imparsable gets turned into defalut
 	public static int team;
 	public static int max;
 	public static int start;
 	public static float regen;
-	public static float difficulty;
-	public static float gameSize;
 
 	// the set defaluts
 	public int defalutTeam;
 	public int defalutMax;
 	public int defalutStart;
 	public int defalutRegen;
-	public float defalutDifficulty;
-	public float defalutGameSize;
 
 	// The current editor mode
 	public enum Mode {
@@ -47,29 +41,18 @@ public class LevelEditorCore : MonoBehaviour {
 	public Texture2D[] cursors;
 
 	private void Start() {
-		
-		//Get All of the references to input fields even those that are later turned off;
+		//thisOneCamera = gameObject.GetComponent<Camera>();
+		//print(start);
 		teamInput = GameObject.Find("TeamInputField").GetComponent<InputField>();
 		maxInput = GameObject.Find("MaxElementCountIF").GetComponent<InputField>();
 		startInput = GameObject.Find("StartElementCountIF").GetComponent<InputField>();
 		regenInput = GameObject.Find("RegenInputField").GetComponent<InputField>();
-		difficultyInput = GameObject.Find("AiReactionSpeed").GetComponent<InputField>();
-		sizeInput = GameObject.Find("GameSize").GetComponent<InputField>();
+		//print(startInput.text);
 
-		//Disable the panels;
-		GameObject.Find("IOHugePanel").SetActive(false);
-		GameObject.Find("GameSettingsPanel").SetActive(false);
 
-		//Send an event
 		PanelChange();
-		//Subscribe to that event so even this script can use it
-		panelChange += internalPanelChange; 
-
 	}
 
-	private void OnDestroy() {
-		panelChange -= internalPanelChange;
-	}
 	public void DestoyCellsButton() {
 		editorMode = Mode.DeleteCells;
 		modeChange(Mode.DeleteCells);
@@ -88,12 +71,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public void PanelChange() {
 		//print("PanelChanged");
-		if (!float.TryParse(difficultyInput.text, out difficulty)) {
-			difficulty = defalutDifficulty;
-		}
-		if (!float.TryParse(sizeInput.text, out gameSize)) {
-			gameSize = defalutGameSize;
-		}
+		
 		if (!int.TryParse(teamInput.text, out team)) {
 			team = defalutTeam;
 		}
@@ -108,15 +86,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 
 		if (panelChange != null) {
-			//Start the panel change event;
 			panelChange();
-
-		}
-	}
-
-	void internalPanelChange() {
-		if (gameSize != Camera.main.orthographicSize) {
-			Camera.main.orthographicSize = gameSize;
 		}
 	}
 }
