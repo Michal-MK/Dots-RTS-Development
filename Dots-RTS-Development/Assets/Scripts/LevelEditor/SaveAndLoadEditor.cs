@@ -14,7 +14,6 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public GameObject prefab;
 
 	public InputField fileNameInput;
-	public InputField AiPeriodInput;
 	public InputField levelNameInput;
 	public InputField authorNameInput;
 	public Text ErrorMessages;
@@ -30,9 +29,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	private void Start() {
+		LevelEditorCore.panelChange += PanelChanged;
 		cellList.Clear();
 	}
 	private void OnDestroy() {
+		LevelEditorCore.panelChange -= PanelChanged;
 		cellList.Clear();
 	}
 
@@ -44,12 +45,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		ErrorMessages.text = "File name changed.";
 	}
 
-	public void AiPeriodChanged() {
-		if (float.TryParse(AiPeriodInput.text, out aiDiff) == false) {
-			ErrorMessages.text = "Invalid difficulty";
-			//aiDiff = 1;
-		}
-		else {
+
+	//TODO: do this for all of the panels;
+	public void PanelChanged() {
+		if (aiDiff != LevelEditorCore.difficulty) {
 			ErrorMessages.text = "New difficulty: " + aiDiff;
 		}
 	}
