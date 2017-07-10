@@ -150,8 +150,9 @@ public class CellBehaviour : Cell {
 	public override void UpdateCellInfo(bool calledFromBase = false) {
 
 		base.UpdateCellInfo();
-
+		
 		if (calledFromBase == false) {
+			circle.sortingOrder = 0;
 			if (!isRegenerating && (_team == enmTeam.ALLIED || (int)_team >= 2)) {
 				StartCoroutine(GenerateElements());
 			}

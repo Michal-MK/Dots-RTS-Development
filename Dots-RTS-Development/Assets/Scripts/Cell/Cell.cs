@@ -71,9 +71,8 @@ public class Cell : MonoBehaviour {
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
 		textRenderer.sortingOrder = 1;
-		circle.sortingLayerName = "Cells";
-		circle.sortingOrder = 0;
 
+		//circle.sortingOrder = 0;
 		//Change Colour depending on the team
 		switch (cellTeam) {
 			case enmTeam.ALLIED: {

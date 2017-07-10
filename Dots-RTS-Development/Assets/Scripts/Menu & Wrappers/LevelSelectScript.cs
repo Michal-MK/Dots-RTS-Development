@@ -16,8 +16,11 @@ public class LevelSelectScript : MonoBehaviour {
 
 	private void Start() {
 
+#if UNITY_ANDROID
+		saveDir = Application.persistentDataPath + "\\Saves";
+#else
 		saveDir = Application.streamingAssetsPath + "\\Saves";
-
+#endif
 
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		FileInfo[] saves = d.GetFiles("*.phage");
