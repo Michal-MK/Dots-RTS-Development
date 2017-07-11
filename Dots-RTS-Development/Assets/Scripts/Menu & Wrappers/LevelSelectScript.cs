@@ -35,7 +35,7 @@ public class LevelSelectScript : MonoBehaviour {
 			SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
 			level.name = saves[i].Name;
 
-			level.creationTime.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
+			level.time.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
 			try {
 				level.levelName.text = info.levelInfo.levelName;
 			}

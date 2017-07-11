@@ -274,7 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   save: {fileID: 1927296618382554, guid: adf3324806054cf42a9693ac0bc1b68a, type: 2}
   scrollViewContent: {fileID: 1101510208}
-  isGettingFileLocaly: 0
+  download: {fileID: 1384063732}
 --- !u!114 &366245820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -744,6 +744,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114128811315104548, guid: adf3324806054cf42a9693ac0bc1b68a,
+        type: 2}
+      propertyPath: downloadButton
+      value: 
+      objectReference: {fileID: 1384063732}
     - target: {fileID: 1927296618382554, guid: adf3324806054cf42a9693ac0bc1b68a, type: 2}
       propertyPath: m_IsActive
       value: 0
@@ -1068,6 +1073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c06bfad4c857e04e90abbc68f0d647f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  b: {fileID: 1384063732}
   selected: {fileID: 0}
 --- !u!1 &1666470821
 GameObject:

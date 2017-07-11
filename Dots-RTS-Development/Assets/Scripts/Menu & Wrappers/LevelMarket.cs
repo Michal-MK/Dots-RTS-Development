@@ -10,32 +10,33 @@ using UnityEngine.UI;
 public class LevelMarket : MonoBehaviour {
 	public GameObject save;
 	public Transform scrollViewContent;
+	public Button download;
 
 	public static GameObject selectedSave = null;
 
-	public bool isGettingFileLocaly = false;
+	//public bool isGettingFileLocaly = false;
 
 	private ServerAccesss server = new ServerAccesss();
 	private List<SaveFileInfo> saves = new List<SaveFileInfo>();
 	private string savesPath;
 	private string[] saveInfo = null;
 
+
+
 	// Use this for initialization
 	private IEnumerator Start() {
-		//RefreshLevels();
-		//yield break;
 		savesPath = Application.streamingAssetsPath + "\\Saves\\";
 
 		List<string> contents = server.GetContents();
 
-		//DirectoryInfo tempDir = new DirectoryInfo(Application.temporaryCachePath + "\\");
 		DirectoryInfo persistentDir = new DirectoryInfo(savesPath);
-		//FileInfo[] files = tempDir.GetFiles("*.phage");
 
 
 		for (int i = 0; i < contents.Count; i++) {
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
+			s.downloadButton = download;
 
+			//Unusable since it can't be done asynchronously
 			//bool isSavedLocally = false;
 			//for (int j = 0; j < files.Length; j++) {
 			//	//print(files[j].Name + " " + contents[i]);
@@ -61,13 +62,13 @@ public class LevelMarket : MonoBehaviour {
 					//print("Name Fail");
 				}
 				try {
-					s.author.text = saveInfo[1];
+					s.levelName.text += " by " + saveInfo[1];
 				}
 				catch {
 					//print("Author fail");
 				}
 				try {
-					s.creationTime.text = saveInfo[2];
+					s.time.text = saveInfo[2];
 				}
 				catch {
 					//print("Time Falied");
@@ -121,22 +122,11 @@ public class LevelMarket : MonoBehaviour {
 		ServerAccesss s = new ServerAccesss();
 		string filePath = s.GetFile(path);
 		yield return new WaitUntil(() => !s.isDownloading);
-		//print("Assigning save");
 		saveInfo = s.GetLevelInfo();
 	}
 
 	public void RefreshLevels() {
-		int[] ints = new int[5] { 0, 1, 2, 3, 4 };
-		int[] moreints = new int[10] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-		for (int i = 0; i < ints.Length; i++) {
-			for (int j = 0; j < moreints.Length; j++) {
-				if (ints[i] == moreints[j]) {
-					print("Mathced");
-					break;
-				}
-			}
-		}
 	}
 
 

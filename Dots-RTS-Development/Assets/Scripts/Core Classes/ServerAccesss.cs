@@ -7,41 +7,25 @@ using UnityEngine;
 
 public class ServerAccesss {
 	public bool isDownloading = false;
-
-	//public string[] ServerAccess(string filePath){
-	//	DownloadFileFTP(filePath,true);
-	//	FileStream file = File.Open(Application.temporaryCachePath + "\\" + filePath, FileMode.Open);
-	//	return GetLevelInfo(file);
-	//}
-
 	public string downloadedFile = "";
-
-
-
 
 	public string GetFile(string filePath) {
 		DownloadFileFTP(filePath, true);
 		return downloadedFile;
 	}
 
+
 	public List<string> GetContents() {
-		//string inputfilepath = Application.streamingAssetsPath + "\\Downloads";
+		List<string> contents = new List<string>();
 
-		string ftpfullpath = "ftp://" + "kocicka.endora.cz/";
-
-		FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpfullpath);
+		FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://kocicka.endora.cz/");
 
 		request.Credentials = new NetworkCredential("phage", "Abcd123");
 		request.Method = WebRequestMethods.Ftp.ListDirectory;
 
-		List<string> contents = new List<string>();
-
 		try {
-
 			FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
 			StreamReader s = new StreamReader(response.GetResponseStream());
-
 
 			string line = s.ReadLine();
 
@@ -59,13 +43,7 @@ public class ServerAccesss {
 		catch (System.Exception e) {
 			Debug.Log(e);
 		}
-
-		foreach (string s in contents) {
-			Debug.Log(s);
-		}
-
 		return contents;
-
 	}
 
 	string inputfilepath;
@@ -76,6 +54,7 @@ public class ServerAccesss {
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public void DownloadFileFTP(string fileName, bool temp = false) {
 		isDownloading = true;
+
 		if (temp) {
 			inputfilepath = Application.temporaryCachePath + "\\";
 		}
@@ -83,15 +62,12 @@ public class ServerAccesss {
 			inputfilepath = Application.streamingAssetsPath + "\\Saves\\";
 		}
 		inputfilepath += fileName;
-		string ftpfullpath = "ftp://kocicka.endora.cz/" + fileName;
-		System.Uri uri = new System.Uri(ftpfullpath);
 
 		using (WebClient request = new WebClient()) {
 			request.Credentials = new NetworkCredential("phage", "Abcd123");
 			try {
 				request.DownloadDataCompleted += Request_DownloadDataCompleted;
-				request.DownloadDataAsync(uri);
-
+				request.DownloadDataAsync(new System.Uri("ftp://kocicka.endora.cz/" + fileName));
 			}
 			catch (System.Exception e) {
 				Debug.Log(e);
@@ -110,10 +86,10 @@ public class ServerAccesss {
 
 			fileS.Close();
 
-			Debug.Log(s.levelInfo.levelName + "----------------------------------------");
 			info[0] = s.levelInfo.levelName;
 			info[1] = s.levelInfo.creator;
-			info[2] = "time placeholder";
+			info[2] = string.Format("{0:dd/MM/yy H:mm:ss}", s.levelInfo.creationTime);
+
 		}
 		return info;
 	}

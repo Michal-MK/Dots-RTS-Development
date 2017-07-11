@@ -7,10 +7,12 @@ using UnityEngine.UI;
 
 public class SaveFileInfo : MonoBehaviour {
 	public bool isSavedLocaly = false;
+
+	public Button downloadButton;
 	public Text levelName;
-	public Text creationTime;
-	public Text author;
+	public Text time;
 	public Image indicator;
+	public Image bg;
 
 	public static event GameControll.NewSelectionForDownload newTarget;
 
@@ -22,6 +24,13 @@ public class SaveFileInfo : MonoBehaviour {
 	}
 
 	public void UploadLevel(Transform fileName) {
+		List<string> contents = serverAccess.GetContents();
+		for (int i = 0; i < contents.Count; i++) {
+			if(contents[i] == fileName.name) {
+				print("File with this name already exists. Upload cancelled.");
+				return;
+			}
+		}
 		serverAccess.UploadFileFTP(fileName.name);
 	}
 
@@ -32,7 +41,18 @@ public class SaveFileInfo : MonoBehaviour {
 	public void SetAsTarget() {
 		LevelMarket.selectedSave = this.gameObject;
 		newTarget(this);
-		print("OUOUOUOUOUO");
+	}
+
+	//TO-DO Replace Fixed Update with someting more efficient
+	private void FixedUpdate() {
+		if (downloadButton != null) {
+			if (downloadButton.name == this.gameObject.name) {
+				bg.color = new Color32(100, 100, 255, 150);
+			}
+			else {
+				bg.color = Color.white;
+			}
+		}
 	}
 
 	public void LoadLevel(Transform levelName) {
