@@ -36,6 +36,8 @@ public class PlaceCells : MonoBehaviour {
 			c.regenPeriod = LevelEditorCore.regen;
 			c.elementCount = LevelEditorCore.start;
 
+			newCell.SetActive(true);
+
 			SaveAndLoadEditor.AddCell(c);
 		}
 #endif

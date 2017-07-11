@@ -17,10 +17,17 @@ public class LevelSelectScript : MonoBehaviour {
 
 	private void Start() {
 
+<<<<<<< HEAD
 #if !UNITY_ANDROID
 		saveDir = Application.streamingAssetsPath + "\\Saves";
 #else
 		saveDir = Application.persistentDataPath + "/Saves";
+=======
+#if UNITY_ANDROID
+		saveDir = Application.persistentDataPath + "\\Saves";
+#else
+		saveDir = Application.streamingAssetsPath + "\\Saves";
+>>>>>>> origin/master
 #endif
 
 		DirectoryInfo d = new DirectoryInfo(saveDir);

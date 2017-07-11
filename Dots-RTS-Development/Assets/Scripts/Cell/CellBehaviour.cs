@@ -150,9 +150,14 @@ public class CellBehaviour : Cell {
 		circle.sortingOrder = 0;
 
 		base.UpdateCellInfo();
-
+		
 		if (calledFromBase == false) {
+<<<<<<< HEAD
 			if (!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >= 2)) {
+=======
+			circle.sortingOrder = 0;
+			if (!isRegenerating && (_team == enmTeam.ALLIED || (int)_team >= 2)) {
+>>>>>>> origin/master
 				StartCoroutine(GenerateElements());
 			}
 			if (elementCount > maxElements) {
