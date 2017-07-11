@@ -28,13 +28,14 @@ public class LevelMarket : MonoBehaviour {
 
 		List<string> contents = server.GetContents();
 
-		DirectoryInfo tempDir = new DirectoryInfo(Application.temporaryCachePath + "\\");
+		//DirectoryInfo tempDir = new DirectoryInfo(Application.temporaryCachePath + "\\");
 		DirectoryInfo persistentDir = new DirectoryInfo(savesPath);
-		FileInfo[] files = tempDir.GetFiles("*.phage");
+		//FileInfo[] files = tempDir.GetFiles("*.phage");
 
 
 		for (int i = 0; i < contents.Count; i++) {
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
+
 			//bool isSavedLocally = false;
 			//for (int j = 0; j < files.Length; j++) {
 			//	//print(files[j].Name + " " + contents[i]);
@@ -45,6 +46,7 @@ public class LevelMarket : MonoBehaviour {
 			//	}
 			//}
 			//if (!isSavedLocally) {
+
 				StartCoroutine(GetLevelInfo(contents[i]));
 				yield return new WaitUntil(() => saveInfo != null);
 

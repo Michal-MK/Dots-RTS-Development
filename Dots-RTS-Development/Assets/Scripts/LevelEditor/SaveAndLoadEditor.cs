@@ -49,9 +49,9 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	//TODO: do this for all of the panels;
 	public void PanelChanged() {
-		if (aiDiff != LevelEditorCore.difficulty) {
-			ErrorMessages.text = "New difficulty: " + aiDiff;
-		}
+		//if (aiDiff != LevelEditorCore.) {
+		//	ErrorMessages.text = "New difficulty: " + aiDiff;
+		//}
 	}
 
 	public void LevelNameChanged() {
