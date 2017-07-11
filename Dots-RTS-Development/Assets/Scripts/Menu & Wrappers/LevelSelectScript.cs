@@ -13,13 +13,18 @@ public class LevelSelectScript : MonoBehaviour {
 	public GameObject levelObject;
 	public Transform scrollViewContent;
 	public InputField manualFileNameIF;
+	public Text error;
 
 	private void Start() {
 
+#if !UNITY_ANDROID
 		saveDir = Application.streamingAssetsPath + "\\Saves";
-
+#else
+		saveDir = Application.persistentDataPath + "/Saves";
+#endif
 
 		DirectoryInfo d = new DirectoryInfo(saveDir);
+		error.text = "";
 		FileInfo[] saves = d.GetFiles("*.phage");
 		for (int i = 0; i < saves.Length; i++) {
 			BinaryFormatter bf = new BinaryFormatter();
@@ -31,14 +36,18 @@ public class LevelSelectScript : MonoBehaviour {
 			level.name = saves[i].Name;
 
 			level.creationTime.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
-			level.levelName.text = info.levelInfo.levelName;
-
+			try {
+				level.levelName.text = info.levelInfo.levelName;
+			}
+			catch {
+				error.text += "Error " + saves[i].Name;
+			}
 		}
 	}
 
 #if UNITY_ANDROID
 	public void loadButtonPress() {
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "\\Saves\\" + manualFileNameIF.text + ".phage");
+		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "/Saves/" + manualFileNameIF.text + ".phage");
 		SceneManager.LoadScene("LevelPlayer");
 	}
 #else

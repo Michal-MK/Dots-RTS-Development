@@ -1,40 +1,28 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EditorCheckMark : MonoBehaviour {
 
-	//This script reacts to the LevelEditorModeChanging
+	public Image checkMarkImg;																				//Attached Image
+	public LevelEditorCore.Mode correspondingMode;                                                         // ManuallySetMode which if it is the one thats current it makes the script turn on the image
 
-	//Attached Image
-	//TODO: if there is no image attached it crashes
-	Image myVeryOwnRenderer;
-	
-	// ManuallySetMode which if it is the one thats current it makes the script turn on the image
-	public LevelEditorCore.Mode correspondingMode;
-	
-	
 	void Start () {
-		//Fetching the Image Component from the gameObject
-		myVeryOwnRenderer = gameObject.GetComponent<Image>();
-
-		// subscribing to the Event in LevelEditorCore
-		LevelEditorCore.modeChange += ModeChangedWoah;
+		LevelEditorCore.modeChange += UpdateCheckmark;
 	}
 	void OnDestroy() {
-		// unbscribing to the Event in LevelEditorCore
-		LevelEditorCore.modeChange -= ModeChangedWoah;
+		LevelEditorCore.modeChange -= UpdateCheckmark;
 	}
 
 	// ActualReaction
-	public void ModeChangedWoah (LevelEditorCore.Mode mode) {
+	public void UpdateCheckmark (LevelEditorCore.Mode mode) {
 		// It is set in GameControll that this passes a mode along
 		if (mode == correspondingMode) {
-			myVeryOwnRenderer.enabled = true;
+			checkMarkImg.enabled = true;
 		}
 		else{
-			myVeryOwnRenderer.enabled = false;
+			checkMarkImg.enabled = false;
 		}
 	}
 }

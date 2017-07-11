@@ -7,29 +7,15 @@ public class MainMenuUI : MonoBehaviour {
 
 	// Turns OFF the game
 	public void ExitGame() {
-		#if UNITY_EDITOR
-			UnityEditor.EditorApplication.isPlaying = false;
-		#else
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
 			Application.Quit();
-		#endif
+#endif
 	}
 
-	// Launches the level editor in which you can make levels, play them or save them.
-	public void LaunchLevelEditor() {
-		SceneManager.LoadScene("LevelEditor");
-	}
-
-	// Sends you to a screen with premade levels.
-	public void LaunchCampaignScreen() {
-		SceneManager.LoadScene("Game");
-	}
-
-	public void ReturnToMainMenu() {
-		SceneManager.LoadScene("Main Menu");
-	}
-
-	public void LoadLevel(GameObject levelName) {
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + levelName.name);
-		SceneManager.LoadScene("LevelPlayer");
+	//Switch scene accroding to its build index
+	public void SwitchScene(int sceneIndex) {
+		SceneManager.LoadScene(sceneIndex);
 	}
 }

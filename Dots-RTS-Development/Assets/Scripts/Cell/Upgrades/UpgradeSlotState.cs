@@ -19,7 +19,7 @@ public class UpgradeSlotState : MonoBehaviour {
 	}
 
 	private void EditCell_EditModeChanged(EditCell sender) {
-		if (!sender.thereIsACellSelected) {
+		if (!sender.isCellSelected) {
 			col.enabled = false;
 		}
 		else {

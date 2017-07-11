@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +29,7 @@ public class ControlsCore : MonoBehaviour {
 		}
 	}
 
-	//Call this to refresh the defalut point of orientation
+	//Call this to refresh the default point of orientation
 	public void RefreshOrientation () {
 		DeviceOrientOrigin = Input.acceleration;
 	}

@@ -38,12 +38,10 @@ public class LoadFromFile : MonoBehaviour {
 			c.gameObject.transform.position = c.cellPosition;
 			c.elementCount = save.cells[j].elementCount;
 			c.maxElements = save.cells[j].maxElementCount;
-			c._team = (Cell.enmTeam)save.cells[j].team;
+			c.cellTeam = (Cell.enmTeam)save.cells[j].team;
 			c.regenPeriod = save.cells[j].regenerationPeriod;
 			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
-
-			//print("Values set, Enabling the script");
 			c.enabled = true;
 
 			c.UpdateCellInfo();

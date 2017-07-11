@@ -17,40 +17,31 @@ public class LevelEditorCore : MonoBehaviour {
 	public static InputField startInput;
 	public static InputField regenInput;
 
-	// Current parsed values, imparsable gets turned into defalut
+	// Current parsed values, imparsable gets turned into default
 	public static int team;
 	public static int max;
 	public static int start;
 	public static float regen;
 
-	// the set defaluts
-	public int defalutTeam;
-	public int defalutMax;
-	public int defalutStart;
-	public int defalutRegen;
+	// the set defaults
+	public int defaultTeam = 0;
+	public int defaultMax = 50;
+	public int defaultStart = 10;
+	public int defaultRegen = 1;
 
 	// The current editor mode
-	public enum Mode {
-		WaitForModeChange,
-		EditCells,
-		DeleteCells,
-		PlaceCells
-	};
+	public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells };
+
 	public static Mode editorMode;
 
 	public Texture2D[] cursors;
 
 	private void Start() {
-		//thisOneCamera = gameObject.GetComponent<Camera>();
-		//print(start);
 		teamInput = GameObject.Find("TeamInputField").GetComponent<InputField>();
 		maxInput = GameObject.Find("MaxElementCountIF").GetComponent<InputField>();
 		startInput = GameObject.Find("StartElementCountIF").GetComponent<InputField>();
 		regenInput = GameObject.Find("RegenInputField").GetComponent<InputField>();
-		//print(startInput.text);
-
-
-		PanelChange();
+		GetPanelValues();
 	}
 
 	public void DestoyCellsButton() {
@@ -69,22 +60,26 @@ public class LevelEditorCore : MonoBehaviour {
 		Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 	}
 
-	public void PanelChange() {
-		//print("PanelChanged");
-		
+	public void GetPanelValues() {
+
 		if (!int.TryParse(teamInput.text, out team)) {
-			team = defalutTeam;
+			team = defaultTeam;
 		}
 		if (!int.TryParse(maxInput.text, out max)) {
-			max = defalutMax;
+			max = defaultMax;
 		}
 		if (!int.TryParse(startInput.text, out start)) {
-			start = defalutStart;
+			start = defaultStart;
 		}
 		if (!float.TryParse(regenInput.text, out regen)) {
-			regen = defalutRegen;
+			regen = defaultRegen;
 		}
 
+		editorMode = Mode.PlaceCells;
+
+		if(modeChange != null) {
+			modeChange(Mode.PlaceCells);
+		}
 		if (panelChange != null) {
 			panelChange();
 		}

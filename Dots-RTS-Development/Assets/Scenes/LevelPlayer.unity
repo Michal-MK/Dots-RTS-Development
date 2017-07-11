@@ -323,7 +323,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 778015215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810c63e41b1cfbc418a3bf38db53b513, type: 3}
+  m_Script: {fileID: 11500000, guid: 595daf893cd5f4943bda440f5f1b4caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &778015218
@@ -366,8 +366,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 778015217}
-        m_MethodName: ToMainMenu
-        m_Mode: 1
+        m_MethodName: SwitchScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

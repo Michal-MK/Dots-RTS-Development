@@ -13,7 +13,7 @@ public class EditCell : MonoBehaviour {
 	private Camera _cam;
 	private Vector3 _oldCamPos;
 
-	public bool thereIsACellSelected;
+	public bool isCellSelected = false;
 
 	private float _defaultSize;
 	private float _zoomedSize;
@@ -23,6 +23,7 @@ public class EditCell : MonoBehaviour {
 	private void Awake() {
 		thisCell = gameObject.GetComponent<Cell>();
 		_cam = Camera.main;
+
 		LevelEditorCore.modeChange += EditorModeUpdate;
 		LevelEditorCore.panelChange += RefreshCellFromPanel;
 
@@ -40,15 +41,15 @@ public class EditCell : MonoBehaviour {
 
 	private void OnMouseOver() {
 		if (Input.GetMouseButtonDown(0)) {
-			if (LevelEditorCore.editorMode == LevelEditorCore.Mode.EditCells && thereIsACellSelected == false) {
-				thereIsACellSelected = true;
+			if (LevelEditorCore.editorMode == LevelEditorCore.Mode.EditCells && isCellSelected == false) {
+				isCellSelected = true;
 				_oldCamPos = _cam.transform.position;
 				_cam.transform.position = gameObject.transform.position + new Vector3(0, 0, -10);
 				if (LevelEditorCore.start >= 10 && LevelEditorCore.start <= LevelEditorCore.max) {
 					_cam.orthographicSize = Map.MapFloat(LevelEditorCore.start, 10, LevelEditorCore.max, _zoomedSize, 120);
 				}
 
-				LevelEditorCore.teamInput.text = ((int)thisCell._team).ToString();
+				LevelEditorCore.teamInput.text = ((int)thisCell.cellTeam).ToString();
 				LevelEditorCore.startInput.text = thisCell.elementCount.ToString();
 				LevelEditorCore.regenInput.text = thisCell.regenPeriod.ToString();
 				LevelEditorCore.maxInput.text = thisCell.maxElements.ToString();
@@ -61,33 +62,32 @@ public class EditCell : MonoBehaviour {
 
 
 	private void Update() {
-		if (thereIsACellSelected) {
-
+		if (isCellSelected) {
 			if (Input.GetKeyDown(KeyCode.Escape)) {
 				_cam.orthographicSize = _defaultSize;
 				_cam.transform.position = _oldCamPos;
-				thereIsACellSelected = false;
+				isCellSelected = false;
 			}
 		}
 	}
 
 	private void RefreshCellFromPanel() {
-		if (thereIsACellSelected) {
+		if (isCellSelected) {
 			if (LevelEditorCore.start >= 10 && LevelEditorCore.start <= LevelEditorCore.max) {
 				_cam.orthographicSize = Map.MapFloat(LevelEditorCore.start, 10, LevelEditorCore.max, _zoomedSize, 105.8f);
 			}
 			thisCell.elementCount = LevelEditorCore.start;
-			thisCell._team = (Cell.enmTeam)LevelEditorCore.team;
+			thisCell.cellTeam = (Cell.enmTeam)LevelEditorCore.team;
 			thisCell.maxElements = LevelEditorCore.max;
 			thisCell.regenPeriod = LevelEditorCore.regen;
 		}
 	}
 
 	private void EditorModeUpdate(LevelEditorCore.Mode mode) {
-		if (thereIsACellSelected) {
+		if (isCellSelected) {
 			_cam.orthographicSize = _defaultSize;
 			_cam.transform.position = _oldCamPos;
-			thereIsACellSelected = false;
+			isCellSelected = false;
 		}
 	}
 

@@ -238,7 +238,7 @@ public class Enemy_AI : MonoBehaviour {
 
 			if (factor == 0) {
 				if (selectedNeutralCell == null) {
-					print("Expanding as " + selectedAiCell.gameObject.name + " to " + selectedNeutralCell.gameObject.name);
+					print("Expanding as " + selectedAiCell.gameObject.name + " to " + null);
 				}
 				else {
 					Expand(selectedAiCell, selectedNeutralCell);
@@ -246,7 +246,7 @@ public class Enemy_AI : MonoBehaviour {
 			}
 			else if (factor == 1) {
 				if (selectedTargetCell == null) {
-					print("Attacking as " + selectedAiCell.gameObject.name + " to " + selectedTargetCell.gameObject.name);
+					print("Attacking as " + selectedAiCell.gameObject.name + " to " + null);
 				}
 				else {
 					Attack(selectedAiCell, selectedTargetCell);
@@ -254,7 +254,7 @@ public class Enemy_AI : MonoBehaviour {
 			}
 			else {
 				if (selectedAiCellForAid == null) {
-					print("Defending as " + selectedAiCell.gameObject.name + " to " + selectedAiCellForAid.gameObject.name);
+					print("Defending as " + selectedAiCell.gameObject.name + " to " + null);
 				}
 				else {
 					Defend(selectedAiCell, selectedAiCellForAid);

@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class Cell : MonoBehaviour {
 
-	private int _elementCount;                                                                  //Current amount of elements inside the cell
-	private float _regenP;                                                                      //How fast will the cell regenerate
-	private int _maxElementCount;                                                               //How much can the cell hold
-	private Vector2 _position;                                                                  //Cells position
+	public int _elementCount;                                                                  //Current amount of elements inside the cell
+	public float _regenP;                                                                      //How fast will the cell regenerate
+	public int _maxElementCount;                                                               //How much can the cell hold
+	public Vector2 _position;                                                                  //Cells position
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
 	public enmTeam _team;                                                                       //Cell's team
@@ -44,18 +44,19 @@ public class Cell : MonoBehaviour {
 	public Color32 enemy8 = new Color32(255, 150, 200, 255);                                    //Default enemy8 colour
 
 
-	public Upgrade_Manager um;
-
+	//Prefab references
 	public SpriteRenderer cellSprite;
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
 	public LineRenderer circle;
 	public LineRenderer lineToMouse;
 
+
+	//Not implemented yet
+	public Upgrade_Manager um;
+
+
 	private void Start() {
-		//yield return new WaitUntil(() => gameObject.activeInHierarchy);
-		//print("IS Active");
-		//throw new System.Exception();
 		UpdateCellInfo();
 	}
 
@@ -71,8 +72,8 @@ public class Cell : MonoBehaviour {
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
 		textRenderer.sortingOrder = 1;
-		circle.sortingLayerName = "Cells";
-		circle.sortingOrder = 0;
+		//circle.sortingLayerName = "Cells";
+		//circle.sortingOrder = 0;
 
 		//Change Colour depending on the team
 		switch (cellTeam) {

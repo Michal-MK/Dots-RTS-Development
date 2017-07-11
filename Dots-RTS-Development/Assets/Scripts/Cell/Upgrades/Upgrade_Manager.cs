@@ -56,7 +56,7 @@ public class Upgrade_Manager : MonoBehaviour {
 	}
 
 	private void EditCell_EditModeChanged(EditCell sender) {
-		if (!sender.thereIsACellSelected) {
+		if (!sender.isCellSelected) {
 			for (int i = 0; i < slots.Length; i++) {
 				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
 				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;

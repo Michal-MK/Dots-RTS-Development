@@ -5,6 +5,9 @@ using UnityEngine;
 public class CellBehaviour : Cell {
 
 	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();
+	/// <summary>
+	/// Called when cell Changes team after collision with an element.
+	/// </summary>
 	public static event GameControll.TeamChangeEventHandler TeamChanged;
 
 	public bool isSelected = false;                                                                                 //Is cell selected for attack?
@@ -28,14 +31,9 @@ public class CellBehaviour : Cell {
 		}
 		if (regenPeriod == 0) {
 			regenPeriod = 2f;
-			//	if(cellTeam == enmTeam.ENEMY8) {
-			//		regenPeriod = 0.1f;
-			//	}
 		}
 
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
-
-		//yield return new WaitUntil(()=>gameObject.activeInHierarchy);
 		UpdateCellInfo();
 	}
 
@@ -97,7 +95,7 @@ public class CellBehaviour : Cell {
 				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
 				e.target = target;
 				e.attacker = this;
-				e.team = this._team;
+				e.team = this.cellTeam;
 			}
 			UpdateCellInfo();
 		}
@@ -111,7 +109,7 @@ public class CellBehaviour : Cell {
 				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
 				e.target = target;
 				e.attacker = this;
-				e.team = this._team;
+				e.team = this.cellTeam;
 			}
 			UpdateCellInfo();
 		}
@@ -148,11 +146,13 @@ public class CellBehaviour : Cell {
 
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo(bool calledFromBase = false) {
+		circle.sortingLayerName = "Cells";
+		circle.sortingOrder = 0;
 
 		base.UpdateCellInfo();
 
 		if (calledFromBase == false) {
-			if (!isRegenerating && (_team == enmTeam.ALLIED || (int)_team >= 2)) {
+			if (!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >= 2)) {
 				StartCoroutine(GenerateElements());
 			}
 			if (elementCount > maxElements) {
@@ -188,7 +188,6 @@ public class CellBehaviour : Cell {
 		}
 	}
 
-	//
 	private void OnMouseOver() {
 		if (Input.GetMouseButtonDown(1)) {
 			print("Edit");
@@ -229,9 +228,7 @@ public class CellBehaviour : Cell {
 		}
 		#endregion
 	}
-
-
-	//
+	
 	private void OnMouseEnter() {
 		//Legacy Attack behaviour
 		if (Input.GetMouseButton(0)) {
@@ -252,7 +249,7 @@ public class CellBehaviour : Cell {
 	private void OnMouseDown() {
 		if (cellTeam == enmTeam.ALLIED) {
 			ModifySelection(this);
-			print("Added " + gameObject.name);
+			//print("Added " + gameObject.name);
 		}
 	}
 
@@ -288,12 +285,4 @@ public class CellBehaviour : Cell {
 			angle += (360f / segments);
 		}
 	}
-
-	//	private void Update() {
-	//		if (isSelected) {
-	//			lineToMouse.SetPosition(0, transform.position);
-	//			lineToMouse.SetPosition(1, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
-	//		}
-	//	}
 }
