@@ -25,16 +25,15 @@ public class LevelMarket : MonoBehaviour {
 
 	// Use this for initialization
 	private IEnumerator Start() {
-		savesPath = Application.streamingAssetsPath + "\\Saves\\";
 
 		List<string> contents = server.GetContents();
 
-		DirectoryInfo persistentDir = new DirectoryInfo(savesPath);
+		DirectoryInfo persistentDir = new DirectoryInfo(Application.streamingAssetsPath + "\\Saves\\");
 
 
 		for (int i = 0; i < contents.Count; i++) {
+
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
-			s.downloadButton = download;
 
 			//Unusable since it can't be done asynchronously
 			//bool isSavedLocally = false;
@@ -47,36 +46,32 @@ public class LevelMarket : MonoBehaviour {
 			//	}
 			//}
 			//if (!isSavedLocally) {
-
-				StartCoroutine(GetLevelInfo(contents[i]));
-				yield return new WaitUntil(() => saveInfo != null);
-
-				server.downloadedFile = "";
-
-				s.gameObject.name = contents[i];
-
-				try {
-					s.levelName.text = saveInfo[0];
-				}
-				catch {
-					//print("Name Fail");
-				}
-				try {
-					s.levelName.text += " by " + saveInfo[1];
-				}
-				catch {
-					//print("Author fail");
-				}
-				try {
-					s.time.text = saveInfo[2];
-				}
-				catch {
-					//print("Time Falied");
-				}
-
-				saves.Add(s);
-				saveInfo = null;
+			//Uncomented Code Below
+			// |
+			// V
 			//}
+
+			//Old method of obtaining file information from server;
+			//StartCoroutine(GetLevelInfo(contents[i]));
+			//yield return new WaitUntil(() => saveInfo != null);
+
+			IEnumerator e = server.GetLevelInfo(contents[i]);
+			yield return e;
+			saveInfo = e.Current as string[];
+
+			try {
+				s.downloadButton = download;
+				s.gameObject.name = contents[i];
+				s.levelName.text = saveInfo[0];
+				s.levelName.text += " by " + saveInfo[1];
+				s.time.text = saveInfo[2];
+			}
+			catch {
+				print("Soething Failed");
+			}
+
+			saves.Add(s);
+			saveInfo = null;
 		}
 
 		FileInfo[] localSaves = persistentDir.GetFiles();
@@ -117,13 +112,6 @@ public class LevelMarket : MonoBehaviour {
 	//		print("Got File Locally");
 	//	}
 	//}
-
-	public IEnumerator GetLevelInfo(string path) {
-		ServerAccesss s = new ServerAccesss();
-		string filePath = s.GetFile(path);
-		yield return new WaitUntil(() => !s.isDownloading);
-		saveInfo = s.GetLevelInfo();
-	}
 
 	public void RefreshLevels() {
 

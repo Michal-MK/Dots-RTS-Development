@@ -72,7 +72,7 @@ public class ServerAccesss {
 			catch (System.Exception e) {
 				Debug.Log(e);
 			}
-			Debug.Log("Success");
+			Debug.Log("Successfully downloaded file");
 		}
 	}
 
@@ -93,6 +93,34 @@ public class ServerAccesss {
 		}
 		return info;
 	}
+
+	//public IEnumerator GetLevelInfo(string path) {
+	//	string filePath = GetFile(path);
+	//	yield return new WaitUntil(() => !isDownloading);
+	//	saveInfo = GetLevelInfo();
+	//}
+
+	public IEnumerator GetLevelInfo(string path) {
+		string filePath = GetFile(path);
+		yield return new WaitUntil(() => !isDownloading);
+		string[] info = new string[3];
+
+		BinaryFormatter bf = new BinaryFormatter();
+		using (FileStream fileS = File.Open(downloadedFile, FileMode.Open)) {
+			SaveData s = (SaveData)bf.Deserialize(fileS);
+
+			fileS.Close();
+
+			info[0] = s.levelInfo.levelName;
+			info[1] = s.levelInfo.creator;
+			info[2] = string.Format("{0:dd/MM/yy H:mm:ss}", s.levelInfo.creationTime);
+
+		}
+		yield return info;
+		//yield return GetLevelInfo();
+	}
+
+
 
 
 	private void Request_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
@@ -124,6 +152,7 @@ public class ServerAccesss {
 			catch (System.Exception e) {
 				Debug.Log(e);
 			}
+			Debug.Log("Successfully uploaded file");
 		}
 	}
 }

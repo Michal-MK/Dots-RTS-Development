@@ -447,8 +447,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 360731992cb38104ba1588d6edd9b183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSavedLocaly: 0
+  downloadButton: {fileID: 0}
   levelName: {fileID: 114950192659386730}
-  creationTime: {fileID: 114434136105305590}
+  time: {fileID: 114434136105305590}
+  indicator: {fileID: 0}
+  bg: {fileID: 0}
 --- !u!114 &114950192659386730
 MonoBehaviour:
   m_ObjectHideFlags: 1

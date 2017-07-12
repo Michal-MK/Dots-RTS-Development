@@ -19,7 +19,6 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public Text ErrorMessages;
 
 	private string fileName;
-	private float aiDiff;
 	private string levelName;
 	private string creator;
 
@@ -49,9 +48,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	//TODO: do this for all of the panels;
 	public void PanelChanged() {
-		//if (aiDiff != LevelEditorCore.) {
-		//	ErrorMessages.text = "New difficulty: " + aiDiff;
-		//}
+		ErrorMessages.text = "New difficulty: " + LevelEditorCore.aiDificulty;
 	}
 
 	public void LevelNameChanged() {
@@ -91,9 +88,9 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 #endif
 
-		if (aiDiff == 0 || string.IsNullOrEmpty(fileName)) {
+		if (LevelEditorCore.aiDificulty == 0 || string.IsNullOrEmpty(fileName)) {
 			ErrorMessages.text = "You did not provide all the necessary information!";
-			if (aiDiff == 0) {
+			if (LevelEditorCore.aiDificulty == 0) {
 				ErrorMessages.text += " C'mon man, really 0 difficulty...?";
 			}
 			return;
@@ -149,7 +146,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
-		save.difficulty = aiDiff;
+		save.difficulty = LevelEditorCore.aiDificulty;
 		save.levelInfo = new LevelInfo(levelName, creator);
 		ErrorMessages.text += "  " + save.levelInfo.levelName;
 		formatter.Serialize(file, save);
@@ -195,7 +192,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
-		save.difficulty = aiDiff;
+		save.difficulty = LevelEditorCore.aiDificulty;
 		print(levelName + " " + creator);
 		save.levelInfo = new LevelInfo(levelName, creator);
 		formatter.Serialize(file, save);
@@ -306,7 +303,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 //#endif
 
 
-	[Serializable]
+[Serializable]
 public class LevelInfo {
 	public string levelName;
 	public string creator;
