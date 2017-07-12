@@ -170,6 +170,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			save.cells.Add(serCell);
 		}
 		save.difficulty = LevelEditorCore.aiDificulty;
+		save.gameSize = LevelEditorCore.gameSize;
 		print(LevelEditorCore.levelName + " " + LevelEditorCore.authorName);
 		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName);
 		formatter.Serialize(file, save);
@@ -205,6 +206,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		FileStream file = File.Open(Application.streamingAssetsPath + "\\Saves\\" + LevelEditorCore.fileName + ".phage", FileMode.Open);
 #endif
 		SaveData save = (SaveData)formatter.Deserialize(file);
+		LevelEditorCore.gameSize = save.gameSize;
+		gameObject.GetComponent<LevelEditorCore>().RefreshCameraSize();
 		file.Close();
 
 		for (int j = 0; j < save.cells.Count; j++) {
@@ -290,6 +293,7 @@ public class SaveData {
 	public List<S_Cell> cells = new List<S_Cell>();
 	public LevelInfo levelInfo;
 	public float difficulty;
+	public float gameSize;
 }
 
 [Serializable]

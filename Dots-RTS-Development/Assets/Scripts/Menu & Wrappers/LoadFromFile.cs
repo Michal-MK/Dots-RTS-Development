@@ -29,6 +29,7 @@ public class LoadFromFile : MonoBehaviour {
 		
 		file.Close();
 		float decisionSpeed = save.difficulty;
+		Camera.main.orthographicSize = save.gameSize;
 		init.decisionSpeeds = new float[8] { decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed };
 		for (int j = 0; j < save.cells.Count; j++) {
 

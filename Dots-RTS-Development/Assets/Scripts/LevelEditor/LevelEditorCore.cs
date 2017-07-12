@@ -83,8 +83,8 @@ public class LevelEditorCore : MonoBehaviour {
 		sizeInput = GameObject.Find("GameSize").GetComponent<InputField>();
 
 		fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
-		levelNameInput = GameObject.Find("Author's name").GetComponent<InputField>();
-		authorNameInput = GameObject.Find("Level Name").GetComponent<InputField>();
+		levelNameInput = GameObject.Find("Level Name").GetComponent<InputField>();
+		authorNameInput = GameObject.Find("Author's name").GetComponent<InputField>();
 
 		//Disable the panels;
 		GameObject.Find("IOHugePanel").SetActive(false);
@@ -179,7 +179,7 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 
 	//This is called with the panelChange event;
-	void RefreshCameraSize() {
+	public void RefreshCameraSize() {
 		if (gameSize != Camera.main.orthographicSize) {
 			Camera.main.orthographicSize = gameSize;
 			
