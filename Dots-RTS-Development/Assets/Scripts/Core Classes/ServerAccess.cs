@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class ServerAccess {
 	public bool isDownloading = false;
 	public string downloadedFile = "";
+	//public Text t = null;
 
 	/// <summary>
 	/// Connects to the FTP server and reads its contents
@@ -31,6 +32,7 @@ public class ServerAccess {
 			while (!string.IsNullOrEmpty(line)) {
 				if (line != "." && line != "..") {
 					if (line.Contains(".phage")) {
+						//t.text += line + " | ";
 						contents.Add(line);
 					}
 				}
@@ -40,10 +42,12 @@ public class ServerAccess {
 			response.Close();
 		}
 		catch (System.Exception e) {
+			//t.text += e.ToString();
 		}
 
 		//t.text += "Returned value : ";
 		for (int i = 0; i < contents.Count; i++) {
+			//t.text += contents[i] + ", ";
 		}
 
 		return contents;
@@ -103,7 +107,9 @@ public class ServerAccess {
 			downloadedFile = inputfilepath;
 			file.Close();
 			isDownloading = false;
+			//if (t != null) {
 				//t.text += "Success";
+			//}
 			try {
 				//t.text += "Successful download.";
 			}
@@ -114,6 +120,7 @@ public class ServerAccess {
 	}
 
 	public IEnumerator GetLevelInfo(string path) {
+		GetFile(path);
 		yield return new WaitUntil(() => !isDownloading);
 		string[] info = new string[3];
 
