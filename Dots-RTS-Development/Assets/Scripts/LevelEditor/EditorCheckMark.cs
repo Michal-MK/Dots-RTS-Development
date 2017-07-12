@@ -17,6 +17,7 @@ public class EditorCheckMark : MonoBehaviour {
 
 	// ActualReaction
 	public void UpdateCheckmark (LevelEditorCore.Mode mode) {
+		//print("called");
 		// It is set in GameControll that this passes a mode along
 		if (mode == correspondingMode) {
 			checkMarkImg.enabled = true;

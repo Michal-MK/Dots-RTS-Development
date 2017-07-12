@@ -11,30 +11,57 @@ public class LevelEditorCore : MonoBehaviour {
 	//When EditMode Changes, passes the new mode
 	public static event GameControll.EditModeChanged modeChange;
 
-	// All of the input fields, there's only one input panel so this can be static
+	/// <summary>
+	/// All of the input fields, there's only one input panel so this can be static
+	/// </summary>
+	//PlaceCellsPanel
 	public static InputField teamInput;
 	public static InputField maxInput;
 	public static InputField startInput;
 	public static InputField regenInput;
+	//GameSetttingPanel
 	public static InputField aiDifficultyInput;
 	public static InputField sizeInput;
+	//IOPanel
+	public static InputField fileNameInput;
+	public static InputField levelNameInput;
+	public static InputField authorNameInput;
+	
 
-	// Current parsed values, imparsable gets turned into default
+	/// <summary>
+	/// Current parsed values, imparsable gets turned into default
+	/// </summary>
+	//PlaceCellsPanel
 	public static int team;
 	public static int max;
 	public static int start;
 	public static float regen;
+	//GameSettingsPanel
 	public static float aiDificulty;
 	public static float gameSize;
+	//IOPanel
+	public static string fileName;
+	public static string levelName;
+	public static string authorName;
+	
 
 
-	// the set defaults
+	/// <summary>
+	/// the set defaults
+	/// </summary>
+	//PlaceCellsPanel
 	public int defaultTeam = 0;
 	public int defaultMax = 50;
 	public int defaultStart = 10;
 	public float defaultRegen = 1f;
+	//GameSettingsPanel
 	public float defaultDificulty = 2f;
-	public float defalutGameSize = 250f;
+	public float defaultGameSize = 250f;
+	//IOPanel
+	public string defaultFileName = "UserMadeLevel";
+	public string defaultLevelName = "CustomLevel";
+	public string defaultAuthorName = "Anonymous";
+	
 
 	// The current editor mode
 	public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells };
@@ -43,27 +70,42 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public Texture2D[] cursors;
 
+
+
 	private void Start() {
+		//Find all of the input fields;
 		teamInput = GameObject.Find("TeamInputField").GetComponent<InputField>();
 		maxInput = GameObject.Find("MaxElementCountIF").GetComponent<InputField>();
 		startInput = GameObject.Find("StartElementCountIF").GetComponent<InputField>();
 		regenInput = GameObject.Find("RegenInputField").GetComponent<InputField>();
+
 		aiDifficultyInput = GameObject.Find("AiReactionSpeed").GetComponent<InputField>();
-		sizeInput = GameObject.Find("GameSettingsPanel").GetComponent<InputField>();
+		sizeInput = GameObject.Find("GameSize").GetComponent<InputField>();
+
+		fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
+		levelNameInput = GameObject.Find("Author's name").GetComponent<InputField>();
+		authorNameInput = GameObject.Find("Level Name").GetComponent<InputField>();
 
 		//Disable the panels;
 		GameObject.Find("IOHugePanel").SetActive(false);
 		GameObject.Find("GameSettingsPanel").SetActive(false);
 
-		//Send an event
-		GetPanelValues();
+		//Set the defaluts by parsing all of the input fields
+		GetPlaceCellPanelValues();
+		GetGameSettingsPanelValues();
+		GetIOPanelValues();
 
-		//Subscribe to that event so even this script can use it
-		panelChange += internalPanelChange;
+		// Set defalut mode to placeCells
+		StartCoroutine(WaitOneFrame());
+	}
+
+	//Have to wait for all of the things to initialize before I can call a button press
+	IEnumerator WaitOneFrame() {
+		yield return new WaitForEndOfFrame();
+		PlaceCellButton();
 	}
 
 	private void OnDestroy() {
-		panelChange -= internalPanelChange;
 	}
 
 	public void DestoyCellsButton() {
@@ -82,8 +124,8 @@ public class LevelEditorCore : MonoBehaviour {
 		Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 	}
 
-	public void GetPanelValues() {
-
+	public void GetPlaceCellPanelValues() {
+		
 		if (!int.TryParse(teamInput.text, out team)) {
 			team = defaultTeam;
 		}
@@ -96,24 +138,51 @@ public class LevelEditorCore : MonoBehaviour {
 		if (!float.TryParse(regenInput.text, out regen)) {
 			regen = defaultRegen;
 		}
-		if (!float.TryParse(aiDifficultyInput.text, out aiDificulty)) {
-			aiDificulty = defaultDificulty;
-		}
+		
 
-		editorMode = Mode.PlaceCells;
-
-		if(modeChange != null) {
-			modeChange(Mode.PlaceCells);
-		}
 		if (panelChange != null) {
 			panelChange();
 		}
 
 	}
+	public void GetGameSettingsPanelValues () {
+		if (!float.TryParse(aiDifficultyInput.text, out aiDificulty)) {
+			aiDificulty = defaultDificulty;
+		}
+		if (!float.TryParse(sizeInput.text, out gameSize)) {
+			gameSize = defaultGameSize;
+		}
 
-	void internalPanelChange() {
+		RefreshCameraSize();
+	}
+	public void GetIOPanelValues() {
+		if (string.IsNullOrEmpty(fileNameInput.text) || fileNameInput.text == " ") {
+			fileName = defaultFileName;
+		}
+		else {
+			fileName = fileNameInput.text;
+		}
+
+		if (string.IsNullOrEmpty(levelNameInput.text) || levelNameInput.text == " ") {
+			levelName = defaultLevelName;			
+		}
+		else {
+			levelName = levelNameInput.text;
+		}
+
+		if (string.IsNullOrEmpty(authorNameInput.text) || authorNameInput.text == " ") {
+			authorName = defaultAuthorName;
+		}
+		else {
+			authorName = authorNameInput.text;
+		}
+	}
+
+	//This is called with the panelChange event;
+	void RefreshCameraSize() {
 		if (gameSize != Camera.main.orthographicSize) {
 			Camera.main.orthographicSize = gameSize;
+			
 		}
 	}
 }
