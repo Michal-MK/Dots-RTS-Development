@@ -11,12 +11,13 @@ public class LevelMarket : MonoBehaviour {
 	public GameObject save;
 	public Transform scrollViewContent;
 	public Button download;
+	public Text androidDebug;
 
 	public static GameObject selectedSave = null;
 
 	//public bool isGettingFileLocaly = false;
 
-	private ServerAccesss server = new ServerAccesss();
+	private ServerAccess server = new ServerAccess();
 	private List<SaveFileInfo> saves = new List<SaveFileInfo>();
 	private string savesPath;
 	private string[] saveInfo = null;
@@ -25,12 +26,23 @@ public class LevelMarket : MonoBehaviour {
 
 	// Use this for initialization
 	private IEnumerator Start() {
+		//server.t = androidDebug;
 
 		List<string> contents = server.GetContents();
 
+#if !UNITY_ANDROID
+		if(!Directory.Exists(Application.persistentDataPath + "\\Saves\\")) {
+			Directory.CreateDirectory(Application.persistentDataPath + "\\Saves\\");
+		}
 		DirectoryInfo persistentDir = new DirectoryInfo(Application.streamingAssetsPath + "\\Saves\\");
+#else
+		if (!Directory.Exists(Application.persistentDataPath + "/Saves/")) {
+			Directory.CreateDirectory(Application.persistentDataPath + "/Saves/");
+		}
+		DirectoryInfo persistentDir = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
+#endif
 
-
+		//server.t.text += "Ready to instantiate " +  contents.Count + " | ";
 		for (int i = 0; i < contents.Count; i++) {
 
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
@@ -55,9 +67,12 @@ public class LevelMarket : MonoBehaviour {
 			//StartCoroutine(GetLevelInfo(contents[i]));
 			//yield return new WaitUntil(() => saveInfo != null);
 
+			//server.t.text += "Getting level info | ";
 			IEnumerator e = server.GetLevelInfo(contents[i]);
 			yield return e;
 			saveInfo = e.Current as string[];
+
+			//server.t.text += "Retrieved! | ";
 
 			try {
 				s.downloadButton = download;
@@ -67,6 +82,7 @@ public class LevelMarket : MonoBehaviour {
 				s.time.text = saveInfo[2];
 			}
 			catch {
+				//server.t.text += "Try block failed. | ";
 				print("Soething Failed");
 			}
 

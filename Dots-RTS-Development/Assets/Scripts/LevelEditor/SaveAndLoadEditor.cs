@@ -74,6 +74,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	//
 
 	public void Save() {
+
 		#region Pre-Save Error checking
 
 #if !UNITY_ANDROID
@@ -112,7 +113,6 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 
 		#endregion
-
 
 #if UNITY_ANDROID
 

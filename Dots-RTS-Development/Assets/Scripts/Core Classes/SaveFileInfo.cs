@@ -16,10 +16,14 @@ public class SaveFileInfo : MonoBehaviour {
 
 	public static event GameControll.NewSelectionForDownload newTarget;
 
-	public ServerAccesss serverAccess = new ServerAccesss();
+	public ServerAccess serverAccess = new ServerAccess();
 
 	public void DeleteObject(Transform fileName) {
+#if !UNITY_ANDROID
 		File.Delete(Application.streamingAssetsPath + "\\Saves\\" + fileName.name);
+#else
+		File.Delete(Application.persistentDataPath + "/Saves/" + fileName.name);
+#endif
 		Destroy(gameObject);
 	}
 

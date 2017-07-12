@@ -8,8 +8,14 @@ using System.IO;
 public class DownloadButton : MonoBehaviour {
 	public Button b;
 	public GameObject selected;
+
+
+	public Text debug;
+	public ServerAccess s = new ServerAccess();
+
 	// Use this for initialization
 	void Start() {
+		//s.t = debug;
 		SaveFileInfo.newTarget += SaveFileInfo_newTarget;
 	}
 	private void OnDestroy() {
@@ -20,13 +26,15 @@ public class DownloadButton : MonoBehaviour {
 	private void SaveFileInfo_newTarget(SaveFileInfo sender) {
 		gameObject.name = sender.gameObject.name;
 		selected = sender.gameObject;
-
+#if !UNITY_ANDROID
 		DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "\\Saves\\");
+#else
+		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
+#endif
 		FileInfo[] files = dir.GetFiles();
 
 		for (int i = 0; i < files.Length; i++) {
 			if(files[i].Name == gameObject.name) {
-				print("Got this one");
 				b.interactable = false;
 				return;
 			}
@@ -36,8 +44,9 @@ public class DownloadButton : MonoBehaviour {
 
 	public void DownloadLevel() {
 		if (LevelMarket.selectedSave != null) {
-			ServerAccesss s = new ServerAccesss();
+			//s.t.text = "Download Initiated | ";
 			s.DownloadFileFTP(gameObject.name);
+
 			LevelMarket.selectedSave.GetComponent<SaveFileInfo>().indicator.color = Color.green;
 			b.interactable = false;
 		}
