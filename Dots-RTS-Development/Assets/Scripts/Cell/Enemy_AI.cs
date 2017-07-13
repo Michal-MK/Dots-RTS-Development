@@ -192,12 +192,9 @@ public class Enemy_AI : MonoBehaviour {
 		//	}
 		//}
 
-		bool isAiCell = false;
-		bool isTargetCell = false;
-		bool isAlliedCell = false;
-		bool isNEutralCell = false;
 
 		foreach (DataHolder instance in data) {
+
 			if (instance.AI == this) {
 				List<CellBehaviour> aiCells = new List<CellBehaviour>(instance.AI._aiCells);
 				foreach (CellBehaviour c in aiCells) {
@@ -206,11 +203,12 @@ public class Enemy_AI : MonoBehaviour {
 							if (c == instance.cells[i]) {
 								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its AICELLS");
 								if (elementTeam != _aiTeam) {
-									_aiCells.Remove(sender);
-									_targets.Add(sender);
-									isTargetCell = true;
-
-
+									if (_aiCells.Contains(sender)) {
+										_aiCells.Remove(sender);
+									}
+									if (!_targets.Contains(sender)) {
+										_targets.Add(sender);
+									}
 								}
 							}
 						}
@@ -223,21 +221,23 @@ public class Enemy_AI : MonoBehaviour {
 							if (c == instance.cells[i]) {
 								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its TRAGETS");
 								if (elementTeam == _aiTeam) {
-									_aiCells.Add(sender);
-									_targets.Remove(sender);
-									isAiCell = true;
-
-
+									if (!_aiCells.Contains(sender)) {
+										_aiCells.Add(sender);
+									}
+									if (_targets.Contains(sender)) {
+										_targets.Remove(sender);
+									}
 								}
 								else {
 									foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
 										if (elementTeam == ai._aiTeam) {
-											print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
-											_allies.Add(sender);
-											_targets.Remove(sender);
-											isAlliedCell = true;
-
-
+											//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
+											if (!_allies.Contains(sender)) {
+												_allies.Add(sender);
+											}
+											if (_targets.Contains(sender)) {
+												_targets.Remove(sender);
+											}
 										}
 									}
 								}
@@ -251,31 +251,32 @@ public class Enemy_AI : MonoBehaviour {
 						if (instance.cells[i] != null) {
 							if (c == instance.cells[i]) {
 								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its ALLIES");
-								if(elementTeam == _aiTeam) {
-									_allies.Remove(sender);
-									aiCells.Add(sender);
-									isAiCell = true;
-
-
+								if (elementTeam == _aiTeam) {
+									if (!_allies.Contains(sender)) {
+										_allies.Remove(sender);
+									}
+									if (!_aiCells.Contains(sender)) {
+										_aiCells.Add(sender);
+									}
 								}
 								else {
 									bool isOvertakenByAlly = false;
 									foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
-										if(elementTeam == ai._aiTeam){
-											print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
-											_allies.Add(sender);
+										if (elementTeam == ai._aiTeam) {
+											//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
+											if (!_allies.Contains(sender)) {
+												_allies.Add(sender);
+											}
 											isOvertakenByAlly = true;
-											isAlliedCell = true;
-
-
 										}
 									}
 									if (!isOvertakenByAlly) {
-										_targets.Add(sender);
-										_allies.Remove(sender);
-										isTargetCell = true;
-
-
+										if (!_targets.Contains(sender)) {
+											_targets.Add(sender);
+										}
+										if (_allies.Contains(sender)) {
+											_allies.Remove(sender);
+										}
 									}
 								}
 							}
@@ -292,27 +293,22 @@ public class Enemy_AI : MonoBehaviour {
 
 								if (elementTeam == _aiTeam) {
 									_aiCells.Add(sender);
-									isAiCell = true;
-
-
 								}
 								else {
 									bool willBeAlly = false;
 									foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
 										if (elementTeam == ai._aiTeam) {
-											print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
-											_allies.Add(sender);
+											//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
+											if (!_allies.Contains(sender)) {
+												_allies.Add(sender);
+											}
 											willBeAlly = true;
-											isAlliedCell = true;
-
-
 										}
 									}
 									if (!willBeAlly) {
-										_targets.Add(sender);
-										isTargetCell = true;
-
-
+										if (!_targets.Contains(sender)) {
+											_targets.Add(sender);
+										}
 									}
 								}
 							}
@@ -320,6 +316,7 @@ public class Enemy_AI : MonoBehaviour {
 					}
 				}
 			}
+			//Debug.Break();
 		}
 
 		//foreach (DataHolder instance in data) {
