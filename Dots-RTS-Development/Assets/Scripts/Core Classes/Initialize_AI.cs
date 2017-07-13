@@ -69,6 +69,7 @@ public class Initialize_AI : MonoBehaviour {
 		CreateAlly(7, new int[] { 3 });
 		//CreateAlly(3, new int[] { 1, 2, 0 });
 
+		print("forming");
 		FormTeams();
 
 	}
@@ -112,6 +113,7 @@ public class Initialize_AI : MonoBehaviour {
 				}
 			}
 		}
+		print("formed");
 	}
 
 

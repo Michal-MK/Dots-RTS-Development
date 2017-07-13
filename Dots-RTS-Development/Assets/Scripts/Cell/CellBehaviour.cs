@@ -30,7 +30,7 @@ public class CellBehaviour : Cell {
 			elementCount = 10;
 		}
 		if (regenPeriod == 0) {
-			regenPeriod = 2f;
+			regenPeriod = 0.3f;
 		}
 
 		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
