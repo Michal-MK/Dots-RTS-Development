@@ -15,7 +15,7 @@ public class LevelEditorCore : MonoBehaviour {
 	/// All of the input fields, there's only one input panel so this can be static
 	/// </summary>
 	//PlaceCellsPanel
-	public static InputField teamInput;
+	public static TeamSelectScript teamInput;
 	public static InputField maxInput;
 	public static InputField startInput;
 	public static InputField regenInput;
@@ -32,7 +32,7 @@ public class LevelEditorCore : MonoBehaviour {
 	/// Current parsed values, imparsable gets turned into default
 	/// </summary>
 	//PlaceCellsPanel
-	public static int team;
+	public static int _team;
 	public static int max;
 	public static int start;
 	public static float regen;
@@ -74,7 +74,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	private void Start() {
 		//Find all of the input fields;
-		teamInput = GameObject.Find("TeamInputField").GetComponent<InputField>();
+		teamInput = gameObject.GetComponent<TeamSelectScript>();
 		maxInput = GameObject.Find("MaxElementCountIF").GetComponent<InputField>();
 		startInput = GameObject.Find("StartElementCountIF").GetComponent<InputField>();
 		regenInput = GameObject.Find("RegenInputField").GetComponent<InputField>();
@@ -105,6 +105,10 @@ public class LevelEditorCore : MonoBehaviour {
 		PlaceCellButton();
 	}
 
+	public static void TeamSET() {
+		teamInput.UpdateButtonVisual();
+	}
+
 	private void OnDestroy() {
 	}
 
@@ -126,9 +130,8 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public void GetPlaceCellPanelValues() {
 		
-		if (!int.TryParse(teamInput.text, out team)) {
-			team = defaultTeam;
-		}
+		team = teamInput.team;
+
 		if (!int.TryParse(maxInput.text, out max)) {
 			max = defaultMax;
 		}
@@ -184,5 +187,10 @@ public class LevelEditorCore : MonoBehaviour {
 			Camera.main.orthographicSize = gameSize;
 			
 		}
+	}
+
+	public static int team {
+		get { return _team; }
+		set { _team = value; TeamSET(); }
 	}
 }
