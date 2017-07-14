@@ -172,7 +172,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		save.difficulty = LevelEditorCore.aiDificulty;
 		save.gameSize = LevelEditorCore.gameSize;
 		print(LevelEditorCore.levelName + " " + LevelEditorCore.authorName);
-		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName);
+		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
 		formatter.Serialize(file, save);
 		file.Close();
 #endif
@@ -282,9 +282,10 @@ public class LevelInfo {
 	public string creator;
 	public DateTime creationTime;
 
-	public LevelInfo(string levelName, string creator) {
+	public LevelInfo(string levelName, string creator, DateTime time) {
 		this.levelName = levelName;
 		this.creator = creator;
+		this.creationTime = time;
 	}
 }
 

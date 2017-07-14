@@ -309,7 +309,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 1
 --- !u!222 &46093511
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3360,7 +3360,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 4
 --- !u!222 &727838267
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3508,7 +3508,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 3
 --- !u!222 &757053003
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3716,7 +3716,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 2
 --- !u!222 &765765135
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4600,7 +4600,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter a height, width gets adjusted automatically
+  m_Text: Enter game filed size, value smaller than 250 => 250
 --- !u!222 &982268741
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6024,7 +6024,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 8
 --- !u!222 &1381637713
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6585,7 +6585,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 6
 --- !u!222 &1566970758
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6996,6 +6996,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1608202353}
+--- !u!1001 &1618928740
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1710892646
 GameObject:
   m_ObjectHideFlags: 0
@@ -7139,7 +7181,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 7
 --- !u!222 &1714625417
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8526,7 +8568,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enemy
+  m_Text: Enemy 5
 --- !u!222 &2146510919
 CanvasRenderer:
   m_ObjectHideFlags: 0

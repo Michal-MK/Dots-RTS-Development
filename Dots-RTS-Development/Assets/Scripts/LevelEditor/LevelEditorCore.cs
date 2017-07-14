@@ -7,9 +7,9 @@ using UnityEngine.EventSystems;
 
 public class LevelEditorCore : MonoBehaviour {
 
-	public static event GameControll.PanelValueChanged panelChange;
+	public static event Control.PanelValueChanged panelChange;
 	//When EditMode Changes, passes the new mode
-	public static event GameControll.EditModeChanged modeChange;
+	public static event Control.EditModeChanged modeChange;
 
 	/// <summary>
 	/// All of the input fields, there's only one input panel so this can be static
@@ -184,8 +184,12 @@ public class LevelEditorCore : MonoBehaviour {
 	//This is called with the panelChange event;
 	public void RefreshCameraSize() {
 		if (gameSize != Camera.main.orthographicSize) {
+			if (gameSize < 250) {
+				sizeInput.text = "250";
+				gameSize = 250;
+			}
+
 			Camera.main.orthographicSize = gameSize;
-			
 		}
 	}
 

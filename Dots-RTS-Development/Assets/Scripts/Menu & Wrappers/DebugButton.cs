@@ -22,9 +22,9 @@ public class DebugButton : MonoBehaviour {
 	}
 
 	public void ListCells() {
-		foreach (Cell item in GameControll.cells) {
+		foreach (Cell item in Control.cells) {
 			print(item.gameObject.name);
 		}
-		print(GameControll.cells.Count);
+		print(Control.cells.Count);
 	}
 }

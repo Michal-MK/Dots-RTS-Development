@@ -48,12 +48,12 @@ public class LevelSelectScript : MonoBehaviour {
 #if UNITY_ANDROID
 	public void loadButtonPress() {
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "/Saves/" + manualFileNameIF.text + ".phage");
-		SceneManager.LoadScene("LevelPlayer");
+		SceneManager.LoadScene(3);
 	}
 #else
 	public void loadButtonPress() {
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + manualFileNameIF.text + ".phage");
-		SceneManager.LoadScene("LevelPlayer");
+		SceneManager.LoadScene(3);
 	}
 
 #endif

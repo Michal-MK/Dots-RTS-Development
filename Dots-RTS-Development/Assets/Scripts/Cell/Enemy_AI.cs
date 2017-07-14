@@ -38,9 +38,9 @@ public class Enemy_AI : MonoBehaviour {
 
 	//Sort cells on screen to lists by their team
 	private IEnumerator Start() {
-		for (int i = 0; i < GameControll.cells.Count; i++) {
+		for (int i = 0; i < Control.cells.Count; i++) {
 
-			CellBehaviour current = GameControll.cells[i];
+			CellBehaviour current = Control.cells[i];
 
 			if (current.cellTeam == _aiTeam) {
 				_aiCells.Add(current);
@@ -639,7 +639,7 @@ public class Enemy_AI : MonoBehaviour {
 				selectedTargetCell = TargetCellSelector();
 			}
 			else {
-				GameControll.GameOver();
+				Control.GameOver();
 				yield break;
 			}
 

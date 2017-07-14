@@ -14,7 +14,7 @@ public class SaveFileInfo : MonoBehaviour {
 	public Image indicator;
 	public Image bg;
 
-	public static event GameControll.NewSelectionForDownload newTarget;
+	public static event Control.NewSelectionForDownload newTarget;
 
 	public ServerAccess serverAccess = new ServerAccess();
 
@@ -62,10 +62,10 @@ public class SaveFileInfo : MonoBehaviour {
 	public void LoadLevel(Transform levelName) {
 #if !UNITY_ANDROID
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + levelName.name);
-		SceneManager.LoadScene("LevelPlayer");
+		SceneManager.LoadScene(3);
 #else
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "/Saves/" + levelName.name);
-		SceneManager.LoadScene("LevelPlayer");
+		SceneManager.LoadScene(3);
 #endif
 	}
 }

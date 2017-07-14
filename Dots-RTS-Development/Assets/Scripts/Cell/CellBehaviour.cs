@@ -8,7 +8,7 @@ public class CellBehaviour : Cell {
 	/// <summary>
 	/// Called when cell Changes team after collision with an element.
 	/// </summary>
-	public static event GameControll.TeamChangeEventHandler TeamChanged;
+	public static event Control.TeamChangeEventHandler TeamChanged;
 
 	public bool isSelected = false;                                                                                 //Is cell selected for attack?
 
@@ -18,7 +18,7 @@ public class CellBehaviour : Cell {
 	public GameObject elementObj;
 
 	private void Awake() {
-		GameControll.cells.Add(this);
+		Control.cells.Add(this);
 	}
 
 	//Set default

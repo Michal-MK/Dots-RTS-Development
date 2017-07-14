@@ -8,7 +8,7 @@ public class EditCell : MonoBehaviour {
 
 	public Upgrade_Manager um;
 
-	public static event GameControll.EnteredCellEditMode changedASelectionOfCell;
+	public static event Control.EnteredCellEditMode changedASelectionOfCell;
 
 	private Camera _cam;
 	private Vector3 _oldCamPos;

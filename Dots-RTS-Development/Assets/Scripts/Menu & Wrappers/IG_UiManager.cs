@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +21,6 @@ public class IG_UiManager : MonoBehaviour {
 
 	IEnumerator ReturnToLevelSelectIn(float seconds) {
 		yield return new WaitForSeconds(seconds);
-		SceneManager.LoadScene("LevelSelect");
+		SceneManager.LoadScene(2);
 	}
 }

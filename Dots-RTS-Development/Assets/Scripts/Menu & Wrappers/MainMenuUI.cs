@@ -17,7 +17,7 @@ public class MainMenuUI : MonoBehaviour {
 	//Switch scene accroding to its build index
 	public void SwitchScene(int sceneIndex) {
 
-		if (SceneManager.GetActiveScene().name == "LevelEditor") {
+		if (SceneManager.GetActiveScene().buildIndex == 1) {
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 		}
 

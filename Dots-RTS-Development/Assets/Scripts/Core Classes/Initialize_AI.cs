@@ -23,7 +23,7 @@ public class Initialize_AI : MonoBehaviour {
 	}
 
 	public void StartAiInitialization() {
-		foreach (Cell c in GameControll.cells) {
+		foreach (Cell c in Control.cells) {
 			//If cell is enemy create ai for that enemy - Only once
 			if ((int)c.cellTeam >= 2) {
 				//print((int)c.cellTeam + "  " + c.gameObject.name);
