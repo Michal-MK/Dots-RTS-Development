@@ -12,22 +12,19 @@ public class LevelMarket : MonoBehaviour {
 	public Transform scrollViewContent;
 	public Button download;
 	public Text androidDebug;
-
 	public static GameObject selectedSave = null;
-
-	//public bool isGettingFileLocaly = false;
 
 	private ServerAccess server = new ServerAccess();
 	private List<SaveFileInfo> saves = new List<SaveFileInfo>();
 	private string savesPath;
 	private string[] saveInfo = null;
-
+	private bool isRefeshing = false;
 
 
 	// Use this for initialization
 	private IEnumerator Start() {
 		//server.t = androidDebug;
-
+		isRefeshing = false;
 		List<string> contents = server.GetContents();
 
 #if !UNITY_ANDROID
@@ -44,6 +41,10 @@ public class LevelMarket : MonoBehaviour {
 
 		//server.t.text += "Ready to instantiate " +  contents.Count + " | ";
 		for (int i = 0; i < contents.Count; i++) {
+			if (isRefeshing) {
+				isRefeshing = false;
+				yield break;
+			}
 
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
 
@@ -83,7 +84,7 @@ public class LevelMarket : MonoBehaviour {
 			}
 			catch {
 				//server.t.text += "Try block failed. | ";
-				print("Soething Failed");
+				print("Something Failed");
 			}
 
 			saves.Add(s);
@@ -130,7 +131,11 @@ public class LevelMarket : MonoBehaviour {
 	//}
 
 	public void RefreshLevels() {
-
+		isRefeshing = true;
+		foreach (Component g in scrollViewContent.GetComponentsInChildren(typeof(SaveFileInfo))) {
+			Destroy(g.gameObject);
+		}
+		StartCoroutine(Start());
 	}
 
 

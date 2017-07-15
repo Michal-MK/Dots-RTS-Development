@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class ServerAccess {
 	public bool isDownloading = false;
@@ -55,9 +56,11 @@ public class ServerAccess {
 
 
 	public string GetFile(string filePath) {
+		isDownloading = true;
 		DownloadFileFTP(filePath, true);
 		return downloadedFile;
 	}
+
 
 	string inputfilepath;
 
@@ -66,7 +69,7 @@ public class ServerAccess {
 	/// </summary>
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public void DownloadFileFTP(string fileName, bool temp = false) {
-		isDownloading = true;
+
 
 		if (temp) {
 			//t.text += "Getting temp file | ";
@@ -90,15 +93,75 @@ public class ServerAccess {
 		using (WebClient request = new WebClient()) {
 			request.Credentials = new NetworkCredential("phage", "Abcd123");
 			try {
+				//Debug.Log("Dowload Initiated.");
 				request.DownloadDataCompleted += Request_DownloadDataCompleted;
 				request.DownloadDataAsync(new System.Uri("ftp://kocicka.endora.cz/" + fileName));
+				//Debug.Log("download started");
 			}
-			catch (System.Exception e) {
+			catch (WebException e) {
+				Debug.Log(e);
+				if (e.Status == WebExceptionStatus.Timeout) {
+					//DownloadFileFTP(fileName, temp);
+				}
+			}
+			catch (Exception e) {
 				Debug.Log(e);
 			}
-			//t.text += "Successful download. %% ";
-			Debug.Log("Successfully downloaded file");
+
 		}
+	}
+
+	public void DownloadFTP(string fileName, bool temp = false) {
+		inputfilepath = "";
+
+		if (temp) {
+			//t.text += "Getting temp file | ";
+#if !UNITY_ANDROID
+			inputfilepath = Application.temporaryCachePath + "\\";
+#else
+			inputfilepath = Application.temporaryCachePath + "/";
+#endif
+		}
+		else {
+			//t.text += "Getting normal file | ";
+#if !UNITY_ANDROID
+			inputfilepath = Application.streamingAssetsPath + "\\Saves\\";
+#else
+			inputfilepath = Application.persistentDataPath + "/Saves/";
+#endif
+		}
+
+		inputfilepath += fileName;
+
+		FtpWebRequest req = (FtpWebRequest)WebRequest.Create("ftp://kocicka.endora.cz/" + fileName);
+		req.Credentials = new NetworkCredential("phage", "Abcd123");
+		req.Method = WebRequestMethods.Ftp.DownloadFile;
+		req.UseBinary = true;
+
+		try {
+			FtpWebResponse response = (FtpWebResponse)req.GetResponse();
+			//t.text += "Got response | ";
+			Stream s = response.GetResponseStream();
+			using (FileStream file = new FileStream(inputfilepath, FileMode.Create)) {
+				byte[] buffer = new byte[4096];
+				int ReadCount = s.Read(buffer, 0, buffer.Length);
+				Debug.Log(response.StatusDescription);
+				Debug.Log(ReadCount);
+				while (ReadCount > 0) {
+					file.Write(buffer, 0, ReadCount);
+					ReadCount = s.Read(buffer, 0, buffer.Length);
+					Debug.Log(ReadCount);
+				}
+				file.Close();
+				s.Close();
+				downloadedFile = inputfilepath;
+				isDownloading = false;
+			}
+		}
+		catch(Exception e) {
+			Debug.Log(e);
+		}
+		isDownloading = false;
 	}
 
 	private void Request_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
@@ -107,8 +170,9 @@ public class ServerAccess {
 			downloadedFile = inputfilepath;
 			file.Close();
 			isDownloading = false;
+			//Debug.Log("Successfully downloaded file");
 			//if (t != null) {
-				//t.text += "Success";
+			//t.text += "Success";
 			//}
 			try {
 				//t.text += "Successful download.";
