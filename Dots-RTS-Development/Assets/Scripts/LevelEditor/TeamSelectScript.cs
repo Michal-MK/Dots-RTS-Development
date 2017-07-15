@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,48 +34,48 @@ public class TeamSelectScript : MonoBehaviour {
 		if (LevelEditorCore.team == 0) {
 			teamSBText.text = "Neutral";
 			teamSBText.color = Color.black;
-			teamSB_IMG.color = Cell.neutral;
+			teamSB_IMG.color = Cell.neutralColour;
 		}
 		else if (LevelEditorCore.team == 1) {
 			teamSBText.text = "Ally";
 			teamSBText.color = Color.black;
-			teamSB_IMG.color = Cell.ally;
+			teamSB_IMG.color = Cell.allyColour;
 		}
 		else if (LevelEditorCore.team == 2) {
 			teamSBText.text = "Enemy";
 			teamSBText.color = Color.black;
-			teamSB_IMG.color = Cell.enemy1;
+			teamSB_IMG.color = Cell.enemy1Colour;
 		}
 		else {
 			//might eventually implement allies
 			teamSBText.text = "Enemy";
 			if (LevelEditorCore.team == 3) {
 				teamSBText.color = Color.white;
-				teamSB_IMG.color = Cell.enemy2;
+				teamSB_IMG.color = Cell.enemy2Colour;
 			}
 			else if (LevelEditorCore.team == 4) {
 				teamSBText.color = Color.black;
-				teamSB_IMG.color = Cell.enemy3;
+				teamSB_IMG.color = Cell.enemy3Colour;
 			}
 			else if (LevelEditorCore.team == 5) {
 				teamSBText.color = Color.white;
-				teamSB_IMG.color = Cell.enemy4;
+				teamSB_IMG.color = Cell.enemy4Colour;
 			}
 			else if (LevelEditorCore.team == 6) {
 				teamSBText.color = Color.white;
-				teamSB_IMG.color = Cell.enemy5;
+				teamSB_IMG.color = Cell.enemy5Colour;
 			}
 			else if (LevelEditorCore.team == 7) {
 				teamSBText.color = Color.black;
-				teamSB_IMG.color = Cell.enemy6;
+				teamSB_IMG.color = Cell.enemy6Colour;
 			}
 			else if (LevelEditorCore.team == 8) {
 				teamSBText.color = Color.white;
-				teamSB_IMG.color = Cell.enemy7;
+				teamSB_IMG.color = Cell.enemy7Colour;
 			}
 			else if (LevelEditorCore.team == 9) {
 				teamSBText.color = Color.black;
-				teamSB_IMG.color = Cell.enemy8;
+				teamSB_IMG.color = Cell.enemy8Colour;
 			}
 		}
 	}

@@ -31,17 +31,17 @@ public class Cell : MonoBehaviour {
 
 	private float _radius;
 
-	public static Color32 ally = new Color32(0, 255, 0, 255);                                         //Default ally colour
-	public static Color32 neutral = new Color32(255, 255, 255, 255);                                  //Default neutral colour
+	public static Color32 allyColour = new Color32(0, 255, 0, 255);                                         //Default ally colour
+	public static Color32 neutralColour = new Color32(255, 255, 255, 255);                                  //Default neutral colour
 
-	public static Color32 enemy1 = new Color32(255, 0, 0, 255);                                        //Default enemy1 colour
-	public static Color32 enemy2 = new Color32(80, 0, 255, 255);                                       //Default enemy2 colour
-	public static Color32 enemy3 = new Color32(220, 255, 0, 255);                                      //Default enemy3 colour
-	public static Color32 enemy4 = new Color32(120, 60, 0, 255);                                       //Default enemy4 colour
-	public static Color32 enemy5 = new Color32(150, 140, 0, 255);                                      //Default enemy5 colour
-	public static Color32 enemy6 = new Color32(255, 0, 255, 255);                                      //Default enemy6 colour
-	public static Color32 enemy7 = new Color32(0, 0, 0, 255);                                          //Default enemy7 colour
-	public static Color32 enemy8 = new Color32(255, 150, 200, 255);                                    //Default enemy8 colour
+	public static Color32 enemy1Colour = new Color32(255, 0, 0, 255);                                        //Default enemy1 colour
+	public static Color32 enemy2Colour = new Color32(80, 0, 255, 255);                                       //Default enemy2 colour
+	public static Color32 enemy3Colour = new Color32(220, 255, 0, 255);                                      //Default enemy3 colour
+	public static Color32 enemy4Colour = new Color32(120, 60, 0, 255);                                       //Default enemy4 colour
+	public static Color32 enemy5Colour = new Color32(150, 140, 0, 255);                                      //Default enemy5 colour
+	public static Color32 enemy6Colour = new Color32(255, 0, 255, 255);                                      //Default enemy6 colour
+	public static Color32 enemy7Colour = new Color32(0, 0, 0, 255);                                          //Default enemy7 colour
+	public static Color32 enemy8Colour = new Color32(255, 150, 200, 255);                                    //Default enemy8 colour
 
 
 	//Prefab references
@@ -78,43 +78,43 @@ public class Cell : MonoBehaviour {
 		//Change Colour depending on the team
 		switch (cellTeam) {
 			case enmTeam.ALLIED: {
-				cellSprite.color = ally;
+				cellSprite.color = allyColour;
 				return;
 			}
 			case enmTeam.NEUTRAL: {
-				cellSprite.color = neutral;
+				cellSprite.color = neutralColour;
 				return;
 			}
 			case enmTeam.ENEMY1: {
-				cellSprite.color = enemy1;
+				cellSprite.color = enemy1Colour;
 				return;
 			}
 			case enmTeam.ENEMY2: {
-				cellSprite.color = enemy2;
+				cellSprite.color = enemy2Colour;
 				return;
 			}
 			case enmTeam.ENEMY3: {
-				cellSprite.color = enemy3;
+				cellSprite.color = enemy3Colour;
 				return;
 			}
 			case enmTeam.ENEMY4: {
-				cellSprite.color = enemy4;
+				cellSprite.color = enemy4Colour;
 				return;
 			}
 			case enmTeam.ENEMY5: {
-				cellSprite.color = enemy5;
+				cellSprite.color = enemy5Colour;
 				return;
 			}
 			case enmTeam.ENEMY6: {
-				cellSprite.color = enemy6;
+				cellSprite.color = enemy6Colour;
 				return;
 			}
 			case enmTeam.ENEMY7: {
-				cellSprite.color = enemy7;
+				cellSprite.color = enemy7Colour;
 				return;
 			}
 			case enmTeam.ENEMY8: {
-				cellSprite.color = enemy8;
+				cellSprite.color = enemy8Colour;
 				return;
 			}
 

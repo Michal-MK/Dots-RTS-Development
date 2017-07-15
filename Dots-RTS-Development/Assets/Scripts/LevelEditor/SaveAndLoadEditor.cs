@@ -128,7 +128,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			save.cells.Add(serCell);
 		}
 		save.difficulty = LevelEditorCore.aiDificulty;
-		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName);
+		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
 		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 		formatter.Serialize(file, save);
 		file.Close();
