@@ -10,7 +10,12 @@ using System;
 public class ServerAccess {
 	public bool isDownloading = false;
 	public string downloadedFile = "";
+
+
+
 	//public Text t = null;
+
+
 
 	/// <summary>
 	/// Connects to the FTP server and reads its contents
@@ -71,38 +76,26 @@ public class ServerAccess {
 	public void DownloadFileFTP(string fileName, bool temp = false) {
 
 
-		if (temp) {
-			//t.text += "Getting temp file | ";
-#if !UNITY_ANDROID
-			inputfilepath = Application.temporaryCachePath + "\\";
+#if UNITY_ANDROID
+		string tempPath = Application.temporaryCachePath;
+		string persistentPath = Application.persistentDataPath + "/Saves/";
 #else
-			inputfilepath = Application.temporaryCachePath + "/";
+		string tempPath = Application.temporaryCachePath + "\\Saves\\;
+		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
 #endif
+		if (temp) {
+			inputfilepath = tempPath;
 		}
 		else {
-			//t.text += "Getting normal file | ";
-#if !UNITY_ANDROID
-			inputfilepath = Application.streamingAssetsPath + "\\Saves\\";
-#else
-			inputfilepath = Application.persistentDataPath + "/Saves/";
-#endif
+			inputfilepath = persistentPath;
 		}
 		inputfilepath += fileName;
-		//t.text += "Path set | ";
 
 		using (WebClient request = new WebClient()) {
 			request.Credentials = new NetworkCredential("phage", "Abcd123");
 			try {
-				//Debug.Log("Dowload Initiated.");
 				request.DownloadDataCompleted += Request_DownloadDataCompleted;
 				request.DownloadDataAsync(new System.Uri("ftp://kocicka.endora.cz/" + fileName));
-				//Debug.Log("download started");
-			}
-			catch (WebException e) {
-				Debug.Log(e);
-				if (e.Status == WebExceptionStatus.Timeout) {
-					//DownloadFileFTP(fileName, temp);
-				}
 			}
 			catch (Exception e) {
 				Debug.Log(e);
@@ -112,23 +105,22 @@ public class ServerAccess {
 	}
 
 	public void DownloadFTP(string fileName, bool temp = false) {
+		isDownloading = true;
 		inputfilepath = "";
 
-		if (temp) {
-			//t.text += "Getting temp file | ";
-#if !UNITY_ANDROID
-			inputfilepath = Application.temporaryCachePath + "\\";
+#if UNITY_ANDROID
+		string tempPath = Application.temporaryCachePath;
+		string persistentPath = Application.persistentDataPath + "/Saves/";
 #else
-			inputfilepath = Application.temporaryCachePath + "/";
+		string tempPath = Application.temporaryCachePath + "\\Saves\\;
+		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
 #endif
+
+		if (temp) {
+			inputfilepath = tempPath;
 		}
 		else {
-			//t.text += "Getting normal file | ";
-#if !UNITY_ANDROID
-			inputfilepath = Application.streamingAssetsPath + "\\Saves\\";
-#else
-			inputfilepath = Application.persistentDataPath + "/Saves/";
-#endif
+			inputfilepath = persistentPath;
 		}
 
 		inputfilepath += fileName;
@@ -140,8 +132,8 @@ public class ServerAccess {
 
 		try {
 			FtpWebResponse response = (FtpWebResponse)req.GetResponse();
-			//t.text += "Got response | ";
 			Stream s = response.GetResponseStream();
+
 			using (FileStream file = new FileStream(inputfilepath, FileMode.Create)) {
 				byte[] buffer = new byte[4096];
 				int ReadCount = s.Read(buffer, 0, buffer.Length);
@@ -156,12 +148,12 @@ public class ServerAccess {
 				s.Close();
 				downloadedFile = inputfilepath;
 				isDownloading = false;
+				Debug.Log("Successfully downloaded file - Standard");
 			}
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 			Debug.Log(e);
 		}
-		isDownloading = false;
 	}
 
 	private void Request_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
@@ -170,22 +162,14 @@ public class ServerAccess {
 			downloadedFile = inputfilepath;
 			file.Close();
 			isDownloading = false;
-			//Debug.Log("Successfully downloaded file");
-			//if (t != null) {
-			//t.text += "Success";
-			//}
-			try {
-				//t.text += "Successful download.";
-			}
-			catch (System.Exception ex) {
-				Debug.Log(ex);
-			}
+			Debug.Log("Successfully downloaded file - Async");
 		}
 	}
 
 	public IEnumerator GetLevelInfo(string path) {
-		GetFile(path);
+		DownloadFTP(path, true);
 		yield return new WaitUntil(() => !isDownloading);
+
 		string[] info = new string[3];
 
 		BinaryFormatter bf = new BinaryFormatter();
@@ -209,22 +193,23 @@ public class ServerAccess {
 	/// </summary>
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public void UploadFileFTP(string fileName) {
-#if !UNITY_ANDROID
-		string inputfilepath = Application.streamingAssetsPath + "\\Saves\\" + fileName;
-#else
-		string inputfilepath = Application.persistentDataPath + "/Saves/" + fileName;
-#endif
-		string ftpfullpath = "ftp://kocicka.endora.cz/" + fileName;
-		System.Uri uri = new System.Uri(ftpfullpath);
 
+#if UNITY_ANDROID
+		string persistentPath = Application.persistentDataPath + "/Saves/";
+#else
+		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
+#endif
+
+		string inputfilepath = persistentPath + fileName;
+		string ftpfullpath = "ftp://kocicka.endora.cz/" + fileName;
 
 		using (WebClient request = new WebClient()) {
 			request.Credentials = new NetworkCredential("phage", "Abcd123");
 
 			try {
-				request.UploadDataAsync(uri, WebRequestMethods.Ftp.UploadFile, File.ReadAllBytes(inputfilepath));
+				request.UploadDataAsync(new Uri(ftpfullpath), WebRequestMethods.Ftp.UploadFile, File.ReadAllBytes(inputfilepath));
 			}
-			catch (System.Exception e) {
+			catch (Exception e) {
 				Debug.Log(e);
 			}
 			Debug.Log("Successfully uploaded file");

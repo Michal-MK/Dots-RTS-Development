@@ -15,11 +15,11 @@ public class Control : MonoBehaviour {
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
 
-	private static bool isPaused = false;
+	public static bool isPaused = false;
 
 	private static Control script;
 
-	public GameObject menuPanel;
+	public static GameObject menuPanel;
 
 	#region Initializers
 	private void Awake() {
@@ -34,6 +34,10 @@ public class Control : MonoBehaviour {
 	private void Start() {
 		DontDestroyOnLoad(this);
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+		if(SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
+			menuPanel = GameObject.Find("MenuPanel");
+			menuPanel.SetActive(false);
+		}
 	}
 	private void OnDestroy() {
 		SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
@@ -65,11 +69,13 @@ public class Control : MonoBehaviour {
 	public static void Pause() {
 		isPaused = true;
 		Time.timeScale = 0;
+		menuPanel.SetActive(true);
 	}
 
 	public static void UnPause() {
 		isPaused = false;
 		Time.timeScale = 1;
+		menuPanel.SetActive(false);
 	}
 
 

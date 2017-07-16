@@ -5,6 +5,7 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class LevelMarket : MonoBehaviour {
@@ -131,12 +132,6 @@ public class LevelMarket : MonoBehaviour {
 	//}
 
 	public void RefreshLevels() {
-		isRefeshing = true;
-		foreach (Component g in scrollViewContent.GetComponentsInChildren(typeof(SaveFileInfo))) {
-			Destroy(g.gameObject);
-		}
-		StartCoroutine(Start());
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
-
-
 }

@@ -72,8 +72,6 @@ public class Cell : MonoBehaviour {
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
 		textRenderer.sortingOrder = 1;
-		//circle.sortingLayerName = "Cells";
-		//circle.sortingOrder = 0;
 
 		//Change Colour depending on the team
 		switch (cellTeam) {
@@ -125,7 +123,7 @@ public class Cell : MonoBehaviour {
 	public IEnumerator GenerateElements() {
 		isRegenerating = true;
 		while (isRegenerating) {
-			yield return new WaitForSecondsRealtime(regenPeriod);
+			yield return new WaitForSeconds(regenPeriod);
 			if (elementCount < maxElements) {
 				elementCount++;
 				elementNrDisplay.text = elementCount.ToString();

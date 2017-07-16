@@ -16,7 +16,7 @@ public class Element : MonoBehaviour {
 	}
 
 	//Calculates steering behaviour for the element 
-	private void Update() {
+	private void FixedUpdate() {
 		Vector3 seek = Seek(target);
 		ApplyForce(seek);
 		gameObject.transform.position += vel;
