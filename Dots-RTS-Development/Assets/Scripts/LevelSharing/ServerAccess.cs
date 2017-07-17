@@ -67,22 +67,22 @@ public class ServerAccess {
 	}
 
 
-	string inputfilepath;
+	string inputfilepath = "";
 
 	/// <summary>
 	/// Gets a file from a server
 	/// </summary>
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public void DownloadFileFTP(string fileName, bool temp = false) {
+		isDownloading = true;
 
-
-#if UNITY_ANDROID
+        #if UNITY_ANDROID
 		string tempPath = Application.temporaryCachePath;
 		string persistentPath = Application.persistentDataPath + "/Saves/";
-#else
-		string tempPath = Application.temporaryCachePath + "\\Saves\\;
+        #else
+		string tempPath = Application.temporaryCachePath + "\\Saves\\";
 		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
-#endif
+        #endif
 		if (temp) {
 			inputfilepath = tempPath;
 		}
@@ -90,12 +90,11 @@ public class ServerAccess {
 			inputfilepath = persistentPath;
 		}
 		inputfilepath += fileName;
-
 		using (WebClient request = new WebClient()) {
 			request.Credentials = new NetworkCredential("phage", "Abcd123");
 			try {
 				request.DownloadDataCompleted += Request_DownloadDataCompleted;
-				request.DownloadDataAsync(new System.Uri("ftp://kocicka.endora.cz/" + fileName));
+				request.DownloadDataAsync(new Uri("ftp://kocicka.endora.cz/" + fileName));
 			}
 			catch (Exception e) {
 				Debug.Log(e);
@@ -104,6 +103,7 @@ public class ServerAccess {
 		}
 	}
 
+	/*
 	public void DownloadFTP(string fileName, bool temp = false) {
 		isDownloading = true;
 		inputfilepath = "";
@@ -112,7 +112,7 @@ public class ServerAccess {
 		string tempPath = Application.temporaryCachePath;
 		string persistentPath = Application.persistentDataPath + "/Saves/";
 #else
-		string tempPath = Application.temporaryCachePath + "\\Saves\\;
+		string tempPath = Application.temporaryCachePath + "\\Saves\\";
 		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
 #endif
 
@@ -155,19 +155,31 @@ public class ServerAccess {
 			Debug.Log(e);
 		}
 	}
+	*/
 
 	private void Request_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
-		using (FileStream file = File.Create(inputfilepath)) {
-			file.Write(e.Result, 0, e.Result.Length);
-			downloadedFile = inputfilepath;
-			file.Close();
-			isDownloading = false;
-			Debug.Log("Successfully downloaded file - Async");
+		try {
+			using (FileStream file = new FileStream(inputfilepath, FileMode.Create)) {
+				file.Write(e.Result, 0, e.Result.Length);
+				downloadedFile = inputfilepath;
+				file.Close();
+				isDownloading = false;
+				Debug.Log("Successfully downloaded file - Async");
+			}
+
+		}
+		catch (Exception ex) {
+			Debug.Log(ex);
+		}
+
+		if (!File.Exists(inputfilepath)) {
+			Debug.Log("OMG");
 		}
 	}
 
 	public IEnumerator GetLevelInfo(string path) {
-		DownloadFTP(path, true);
+		Debug.Log(path);
+		DownloadFileFTP(path, true);
 		yield return new WaitUntil(() => !isDownloading);
 
 		string[] info = new string[3];
@@ -183,6 +195,7 @@ public class ServerAccess {
 			info[2] = string.Format("{0:dd/MM/yy H:mm:ss}", s.levelInfo.creationTime);
 
 		}
+		Debug.Log(info[0]);
 		yield return info;
 	}
 

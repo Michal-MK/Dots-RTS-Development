@@ -32,15 +32,22 @@ public class LevelMarket : MonoBehaviour {
 		if(!Directory.Exists(Application.persistentDataPath + "\\Saves\\")) {
 			Directory.CreateDirectory(Application.persistentDataPath + "\\Saves\\");
 		}
+		if (!Directory.Exists(Application.temporaryCachePath + "\\Saves\\")) {
+			Directory.CreateDirectory(Application.temporaryCachePath + "\\Saves\\");
+		}
 		DirectoryInfo persistentDir = new DirectoryInfo(Application.streamingAssetsPath + "\\Saves\\");
 #else
 		if (!Directory.Exists(Application.persistentDataPath + "/Saves/")) {
 			Directory.CreateDirectory(Application.persistentDataPath + "/Saves/");
 		}
+		if (!Directory.Exists(Application.temporaryCachePath + "/Saves/")) {
+			Directory.CreateDirectory(Application.temporaryCachePath + "/Saves/");
+		}
 		DirectoryInfo persistentDir = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
 #endif
 
 		//server.t.text += "Ready to instantiate " +  contents.Count + " | ";
+
 		for (int i = 0; i < contents.Count; i++) {
 			if (isRefeshing) {
 				isRefeshing = false;
@@ -103,6 +110,7 @@ public class LevelMarket : MonoBehaviour {
 			}
 		}
 	}
+
 
 	//Unusable since you can't do it asynchronously
 	//public void GetFileLocaly(string fileName, SaveFileInfo saveInfoScript) {

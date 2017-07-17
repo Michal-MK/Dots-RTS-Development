@@ -50,6 +50,7 @@ public class Control : MonoBehaviour {
 			menuPanel = GameObject.Find("MenuPanel");
 			menuPanel.SetActive(false);
 		}
+		Time.timeScale = 1;
 	}
 
 	private void Update() {
