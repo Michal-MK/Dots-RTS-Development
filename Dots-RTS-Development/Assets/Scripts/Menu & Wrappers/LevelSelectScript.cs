@@ -17,7 +17,7 @@ public class LevelSelectScript : MonoBehaviour {
 
 	private void Start() {
 
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
 		saveDir = Application.streamingAssetsPath + "\\Saves";
 #else
 		saveDir = Application.persistentDataPath + "/Saves";
@@ -45,7 +45,7 @@ public class LevelSelectScript : MonoBehaviour {
 		}
 	}
 
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 	public void loadButtonPress() {
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "/Saves/" + manualFileNameIF.text + ".phage");
 		SceneManager.LoadScene(3);

@@ -48,7 +48,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		#region Pre-Save Error checking
 
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
 		if (!Directory.Exists(Application.streamingAssetsPath + "\\Saves")) {
 			Directory.CreateDirectory(Application.streamingAssetsPath + "\\Saves");
 			ErrorMessages.text = "Created the Saves directory";
@@ -100,7 +100,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		#endregion
 
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/Saves/" + LevelEditorCore.fileName + ".phage");
@@ -180,7 +180,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	public void Load() {
 
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 		if (File.Exists(Application.persistentDataPath + "/Saves/ " + LevelEditorCore.fileName + ".phage")) {
 			ErrorMessages.text = "Succes, Found a file: " + LevelEditorCore.fileName;
 		}
@@ -200,7 +200,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		BinaryFormatter formatter = new BinaryFormatter();
 		//File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 		FileStream file = File.Open(Application.persistentDataPath + "/Saves/ " + LevelEditorCore.fileName + ".phage", FileMode.Open);
 #else
 		FileStream file = File.Open(Application.streamingAssetsPath + "\\Saves\\" + LevelEditorCore.fileName + ".phage", FileMode.Open);

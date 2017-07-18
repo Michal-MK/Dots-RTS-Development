@@ -28,8 +28,8 @@ public class LevelMarket : MonoBehaviour {
 		isRefeshing = false;
 		List<string> contents = server.GetContents();
 
-#if !UNITY_ANDROID
-		if(!Directory.Exists(Application.persistentDataPath + "\\Saves\\")) {
+#if !(UNITY_ANDROID || UNITY_IOS)
+		if (!Directory.Exists(Application.persistentDataPath + "\\Saves\\")) {
 			Directory.CreateDirectory(Application.persistentDataPath + "\\Saves\\");
 		}
 		if (!Directory.Exists(Application.temporaryCachePath + "\\Saves\\")) {

@@ -19,7 +19,7 @@ public class SaveFileInfo : MonoBehaviour {
 	public ServerAccess serverAccess = new ServerAccess();
 
 	public void DeleteObject(Transform fileName) {
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
 		File.Delete(Application.streamingAssetsPath + "\\Saves\\" + fileName.name);
 #else
 		File.Delete(Application.persistentDataPath + "/Saves/" + fileName.name);
@@ -60,7 +60,7 @@ public class SaveFileInfo : MonoBehaviour {
 	}
 
 	public void LoadLevel(Transform levelName) {
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + levelName.name);
 		SceneManager.LoadScene(3);
 #else

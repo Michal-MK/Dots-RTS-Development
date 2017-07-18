@@ -26,7 +26,7 @@ public class DownloadButton : MonoBehaviour {
 	private void SaveFileInfo_newTarget(SaveFileInfo sender) {
 		gameObject.name = sender.gameObject.name;
 		selected = sender.gameObject;
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
 		DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "\\Saves\\");
 #else
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "/Saves/");

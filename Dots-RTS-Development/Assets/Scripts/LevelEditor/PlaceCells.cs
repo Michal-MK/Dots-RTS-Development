@@ -25,7 +25,7 @@ public class PlaceCells : MonoBehaviour {
 			SaveAndLoadEditor.AddCell(c);
 		}
 #endif
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && LevelEditorCore.editorMode == LevelEditorCore.Mode.PlaceCells) {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);

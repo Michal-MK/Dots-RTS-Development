@@ -76,10 +76,10 @@ public class ServerAccess {
 	public void DownloadFileFTP(string fileName, bool temp = false) {
 		isDownloading = true;
 
-        #if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 		string tempPath = Application.temporaryCachePath;
 		string persistentPath = Application.persistentDataPath + "/Saves/";
-        #else
+#else
 		string tempPath = Application.temporaryCachePath + "\\Saves\\";
 		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
         #endif
@@ -108,7 +108,7 @@ public class ServerAccess {
 		isDownloading = true;
 		inputfilepath = "";
 
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 		string tempPath = Application.temporaryCachePath;
 		string persistentPath = Application.persistentDataPath + "/Saves/";
 #else
@@ -207,7 +207,7 @@ public class ServerAccess {
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public void UploadFileFTP(string fileName) {
 
-#if UNITY_ANDROID
+#if (UNITY_ANDROID || UNITY_IOS)
 		string persistentPath = Application.persistentDataPath + "/Saves/";
 #else
 		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
