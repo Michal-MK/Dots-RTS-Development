@@ -15,7 +15,7 @@ public class LevelEditorCore : MonoBehaviour {
 	/// All of the input fields, there's only one input panel so this can be static
 	/// </summary>
 	//PlaceCellsPanel
-	public static TeamSelectScript teamInput;
+	public static TeamSelectScript teamButton;
 	public static InputField maxInput;
 	public static InputField startInput;
 	public static InputField regenInput;
@@ -72,15 +72,15 @@ public class LevelEditorCore : MonoBehaviour {
 
 
 
-	private void Start() {
+	private IEnumerator Start() {
 		//Find all of the input fields;
-		teamInput = gameObject.GetComponent<TeamSelectScript>();
-		maxInput = GameObject.Find("MaxElementCountIF").GetComponent<InputField>();
-		startInput = GameObject.Find("StartElementCountIF").GetComponent<InputField>();
-		regenInput = GameObject.Find("RegenInputField").GetComponent<InputField>();
+		teamButton = gameObject.GetComponent<TeamSelectScript>();
+		maxInput = GameObject.Find("MAX_Elements_IF").GetComponent<InputField>();
+		startInput = GameObject.Find("START_Elements_IF").GetComponent<InputField>();
+		regenInput = GameObject.Find("REGEN_Elements_IF").GetComponent<InputField>();
 
-		aiDifficultyInput = GameObject.Find("AiReactionSpeed").GetComponent<InputField>();
-		sizeInput = GameObject.Find("GameSize").GetComponent<InputField>();
+		aiDifficultyInput = GameObject.Find("AI_Diff_IF").GetComponent<InputField>();
+		sizeInput = GameObject.Find("CAM_Size_IF").GetComponent<InputField>();
 
 		fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
 		levelNameInput = GameObject.Find("Level Name").GetComponent<InputField>();
@@ -96,17 +96,13 @@ public class LevelEditorCore : MonoBehaviour {
 		GetIOPanelValues();
 
 		// Set defalut mode to placeCells
-		StartCoroutine(WaitOneFrame());
-	}
-
-	//Have to wait for all of the things to initialize before I can call a button press
-	IEnumerator WaitOneFrame() {
+		//Have to wait for all of the things to initialize before I can call a button press
 		yield return new WaitForEndOfFrame();
 		PlaceCellButton();
 	}
 
 	public static void TeamSET() {
-		teamInput.UpdateButtonVisual();
+		teamButton.UpdateButtonVisual();
 	}
 
 	private void OnDestroy() {
@@ -130,7 +126,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public void GetPlaceCellPanelValues() {
 		
-		team = teamInput.team;
+		team = teamButton.team;
 
 		if (!int.TryParse(maxInput.text, out max)) {
 			max = defaultMax;

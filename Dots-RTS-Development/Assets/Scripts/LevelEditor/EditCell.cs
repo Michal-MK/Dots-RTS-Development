@@ -49,7 +49,7 @@ public class EditCell : MonoBehaviour {
 					_cam.orthographicSize = Map.MapFloat(LevelEditorCore.start, 10, LevelEditorCore.max, _zoomedSize, 120);
 				}
 
-				LevelEditorCore.teamInput.team = ((int)thisCell.cellTeam);
+				LevelEditorCore.teamButton.team = ((int)thisCell.cellTeam);
 				LevelEditorCore.startInput.text = thisCell.elementCount.ToString();
 				LevelEditorCore.regenInput.text = thisCell.regenPeriod.ToString();
 				LevelEditorCore.maxInput.text = thisCell.maxElements.ToString();
