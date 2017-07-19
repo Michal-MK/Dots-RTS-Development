@@ -12,8 +12,8 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public GameObject levelObject;
 	public Transform scrollViewContent;
-	public InputField manualFileNameIF;
 	public Text error;
+	public SaveAndLoadEditor saveAndLoadEditor;
 
 	private void Start() {
 
@@ -42,20 +42,9 @@ public class LevelSelectScript : MonoBehaviour {
 			catch {
 				error.text += "Error " + saves[i].Name;
 			}
+			if (SceneManager.GetActiveScene().buildIndex == 1) {
+				level.saveAndLoadEditor = saveAndLoadEditor;
+			}
 		}
 	}
-
-#if (UNITY_ANDROID || UNITY_IOS)
-	public void loadButtonPress() {
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "/Saves/" + manualFileNameIF.text + ".phage");
-		SceneManager.LoadScene(3);
-	}
-#else
-	public void loadButtonPress() {
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + manualFileNameIF.text + ".phage");
-		SceneManager.LoadScene(3);
-	}
-
-#endif
-
 }

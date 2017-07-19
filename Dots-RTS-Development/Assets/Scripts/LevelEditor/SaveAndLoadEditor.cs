@@ -18,6 +18,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public InputField authorNameInput;
 	public Text ErrorMessages;
 
+	public static string fileName;
+
 
 	private void Awake() {
 		ErrorMessages.text = Application.persistentDataPath;
@@ -25,6 +27,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	private void Start() {
 		cellList.Clear();
+
+		if (!string.IsNullOrEmpty(PlayerPrefs.GetString("LoadLevelFilePath"))) {
+			Load(PlayerPrefs.GetString("LoadLevelFilePath"));
+		}
+		//fileName = string.Format(DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString());
 	}
 	private void OnDestroy() {
 		cellList.Clear();
@@ -45,7 +52,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	//
 
 	public void Save() {
-
+		//fileName = string.Format(DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString());
+		fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 		#region Pre-Save Error checking
 
 #if !(UNITY_ANDROID || UNITY_IOS)
@@ -76,12 +84,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			return;
 		}
 
-		if (LevelEditorCore.fileName == gameObject.GetComponent<LevelEditorCore>().defaultFileName) {
-			ErrorMessages.text += "You picked the default fileName: " + LevelEditorCore.fileName + ". \n";
-		}
-		else {
-			ErrorMessages.text += "You picked the fileName: " + LevelEditorCore.fileName + ". \n";
-		}
+		ErrorMessages.text += "You picked the fileName: " + fileName+ ". \n";
 
 		if (LevelEditorCore.levelName == gameObject.GetComponent<LevelEditorCore>().defaultLevelName) {
 			ErrorMessages.text += "You picked the default levelName: " + LevelEditorCore.levelName + ". \n";
@@ -103,8 +106,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 #if (UNITY_ANDROID || UNITY_IOS)
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/Saves/" + LevelEditorCore.fileName + ".phage");
-		if (File.Exists(Application.persistentDataPath + "/Saves/" + LevelEditorCore.fileName + ".phage")) {
+		FileStream file = File.Create(Application.persistentDataPath + "/Saves/" + fileName+ ".phage");
+		if (File.Exists(Application.persistentDataPath + "/Saves/" + fileName+ ".phage")) {
 			ErrorMessages.text += "Succes, Created a file: " + LevelEditorCore.fileName;
 		}
 		else {
@@ -137,10 +140,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.streamingAssetsPath + "\\Saves\\" + LevelEditorCore.fileName + ".phage");
+		FileStream file = File.Create(Application.streamingAssetsPath + "\\Saves\\" + fileName+ ".phage");
 
-		if (File.Exists(Application.streamingAssetsPath + "\\Saves\\" + LevelEditorCore.fileName + ".phage")) {
-			ErrorMessages.text += "Succes, Created a file: " + LevelEditorCore.fileName;
+		if (File.Exists(Application.streamingAssetsPath + "\\Saves\\" + fileName+ ".phage")) {
+			ErrorMessages.text += "Succes, Created a file: " + fileName;
 		}
 		else {
 			ErrorMessages.text += "Fail, change the file name";
@@ -178,33 +181,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 #endif
 	}
 
-	public void Load() {
-
-#if (UNITY_ANDROID || UNITY_IOS)
-		if (File.Exists(Application.persistentDataPath + "/Saves/ " + LevelEditorCore.fileName + ".phage")) {
-			ErrorMessages.text = "Succes, Found a file: " + LevelEditorCore.fileName;
-		}
-		else {
-			ErrorMessages.text = "No such file as " + LevelEditorCore.fileName;
-			return;
-		}
-#else
-		if (File.Exists(Application.streamingAssetsPath + "\\Saves\\" + LevelEditorCore.fileName + ".phage")) {
-			ErrorMessages.text = "Succes, Found a file: " + LevelEditorCore.fileName;
-		}
-		else {
-			ErrorMessages.text = "No such file as " + LevelEditorCore.fileName;
-			return;
-		}
-#endif
-
+	public void Load(string path) {
 		BinaryFormatter formatter = new BinaryFormatter();
 		//File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
-#if (UNITY_ANDROID || UNITY_IOS)
-		FileStream file = File.Open(Application.persistentDataPath + "/Saves/ " + LevelEditorCore.fileName + ".phage", FileMode.Open);
-#else
-		FileStream file = File.Open(Application.streamingAssetsPath + "\\Saves\\" + LevelEditorCore.fileName + ".phage", FileMode.Open);
-#endif
+		FileStream file = File.Open(path, FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		LevelEditorCore.gameSize = save.gameSize;
 		gameObject.GetComponent<LevelEditorCore>().RefreshCameraSize();

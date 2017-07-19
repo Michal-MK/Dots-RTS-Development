@@ -13,34 +13,12 @@ public class SaveFileInfo : MonoBehaviour {
 	public Text time;
 	public Image indicator;
 	public Image bg;
+	public SaveAndLoadEditor saveAndLoadEditor;
 
 	public static event Control.NewSelectionForDownload newTarget;
 
 	public ServerAccess serverAccess = new ServerAccess();
 
-	public void DeleteObject(Transform fileName) {
-#if !(UNITY_ANDROID || UNITY_IOS)
-		File.Delete(Application.streamingAssetsPath + "\\Saves\\" + fileName.name);
-#else
-		File.Delete(Application.persistentDataPath + "/Saves/" + fileName.name);
-#endif
-		Destroy(gameObject);
-	}
-
-	public void UploadLevel(Transform fileName) {
-		List<string> contents = serverAccess.GetContents();
-		for (int i = 0; i < contents.Count; i++) {
-			if(contents[i] == fileName.name) {
-				print("File with this name already exists. Upload cancelled.");
-				return;
-			}
-		}
-		serverAccess.UploadFileFTP(fileName.name);
-	}
-
-	public void DowloadLevel(Transform filename) {
-		serverAccess.DownloadFileFTP(filename.name);
-	}
 
 	public void SetAsTarget() {
 		LevelMarket.selectedSave = this.gameObject;
@@ -59,6 +37,17 @@ public class SaveFileInfo : MonoBehaviour {
 		}
 	}
 
+	#region Server Specific
+
+	public void DowloadLevel(Transform filename) {
+		serverAccess.DownloadFileFTP(filename.name);
+	}
+
+
+	#endregion
+
+	#region Local
+
 	public void LoadLevel(Transform levelName) {
 #if !(UNITY_ANDROID || UNITY_IOS)
 		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + levelName.name);
@@ -68,4 +57,40 @@ public class SaveFileInfo : MonoBehaviour {
 		SceneManager.LoadScene(3);
 #endif
 	}
+
+	public void DeleteObject(Transform fileName) {
+#if !(UNITY_ANDROID || UNITY_IOS)
+		File.Delete(Application.streamingAssetsPath + "\\Saves\\" + fileName.name);
+#else
+		File.Delete(Application.persistentDataPath + "/Saves/" + fileName.name);
+#endif
+		Destroy(gameObject);
+	}
+
+	public void UploadLevel(Transform fileName) {
+		List<string> contents = serverAccess.GetContents();
+		for (int i = 0; i < contents.Count; i++) {
+			if (contents[i] == fileName.name) {
+				print("File with this name already exists. Upload cancelled.");
+				return;
+			}
+		}
+		serverAccess.UploadFileFTP(fileName.name);
+	}
+
+	#endregion
+
+	#region Editor Specific
+
+	public void LoadToEditor() {
+		string fileName;
+#if (UNITY_ANDROID || UNITY_IOS)
+		fileName = Application.persistentDataPath + "/Saves/ " + transform.name;
+#else
+		fileName = Application.streamingAssetsPath + "\\Saves\\" + transform.name;
+#endif
+		saveAndLoadEditor.Load(fileName);
+	}
+
+	#endregion
 }

@@ -10,7 +10,8 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void EditMode() {
-		throw new System.NotImplementedException("Transition to Level Editor is not yet Implemented");
+		Control.cells.Clear();
+		SceneManager.LoadScene(1);
 	}
 
 	public void PauseGameorEscape() {

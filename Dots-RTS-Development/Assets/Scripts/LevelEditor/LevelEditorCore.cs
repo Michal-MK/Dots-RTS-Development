@@ -23,7 +23,7 @@ public class LevelEditorCore : MonoBehaviour {
 	public static InputField aiDifficultyInput;
 	public static InputField sizeInput;
 	//IOPanel
-	public static InputField fileNameInput;
+	//public static InputField fileNameInput;
 	public static InputField levelNameInput;
 	public static InputField authorNameInput;
 	
@@ -40,7 +40,7 @@ public class LevelEditorCore : MonoBehaviour {
 	public static float aiDificulty;
 	public static float gameSize;
 	//IOPanel
-	public static string fileName;
+	//public static string fileName;
 	public static string levelName;
 	public static string authorName;
 	
@@ -58,7 +58,7 @@ public class LevelEditorCore : MonoBehaviour {
 	public float defaultDificulty = 2f;
 	public float defaultGameSize = 250f;
 	//IOPanel
-	public string defaultFileName = "UserMadeLevel";
+	//public string defaultFileName = "UserMadeLevel";
 	public string defaultLevelName = "CustomLevel";
 	public string defaultAuthorName = "Anonymous";
 	
@@ -82,12 +82,12 @@ public class LevelEditorCore : MonoBehaviour {
 		aiDifficultyInput = GameObject.Find("AI_Diff_IF").GetComponent<InputField>();
 		sizeInput = GameObject.Find("CAM_Size_IF").GetComponent<InputField>();
 
-		fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
-		levelNameInput = GameObject.Find("Level Name").GetComponent<InputField>();
-		authorNameInput = GameObject.Find("Author's name").GetComponent<InputField>();
+		//fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
+		levelNameInput = GameObject.Find("Level Name IF").GetComponent<InputField>();
+		authorNameInput = GameObject.Find("Author's name IF").GetComponent<InputField>();
 
 		//Disable the panels;
-		GameObject.Find("IOHugePanel").SetActive(false);
+		GameObject.Find("SavePanel").SetActive(false);
 		GameObject.Find("GameSettingsPanel").SetActive(false);
 
 		//Set the defaluts by parsing all of the input fields
@@ -155,12 +155,12 @@ public class LevelEditorCore : MonoBehaviour {
 		RefreshCameraSize();
 	}
 	public void GetIOPanelValues() {
-		if (string.IsNullOrEmpty(fileNameInput.text) || fileNameInput.text == " ") {
-			fileName = defaultFileName;
-		}
-		else {
-			fileName = fileNameInput.text;
-		}
+		//if (string.IsNullOrEmpty(fileNameInput.text) || fileNameInput.text == " ") {
+		//	fileName = defaultFileName;
+		//}
+		//else {
+		//	fileName = fileNameInput.text;
+		//}
 
 		if (string.IsNullOrEmpty(levelNameInput.text) || levelNameInput.text == " ") {
 			levelName = defaultLevelName;			

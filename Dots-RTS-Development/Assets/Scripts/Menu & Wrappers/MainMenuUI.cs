@@ -20,7 +20,10 @@ public class MainMenuUI : MonoBehaviour {
 		if (SceneManager.GetActiveScene().buildIndex == 1) {
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 		}
-
+		if (sceneIndex == 1) {
+			PlayerPrefs.SetString("LoadLevelFilePath", null);
+		}
+		Control.cells.Clear();
 		SceneManager.LoadScene(sceneIndex);
 
 	}

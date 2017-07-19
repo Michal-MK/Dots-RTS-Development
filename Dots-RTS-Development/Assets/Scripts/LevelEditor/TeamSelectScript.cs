@@ -31,6 +31,7 @@ public class TeamSelectScript : MonoBehaviour {
 
 
 	public void UpdateButtonVisual() {
+
 		if (LevelEditorCore.team == 0) {
 			teamSBText.text = "Neutral";
 			teamSBText.color = Color.black;
