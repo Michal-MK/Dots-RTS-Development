@@ -50,7 +50,8 @@ public class LevelSorting : MonoBehaviour {
 					if (value > 0) {
 						Swap(saves, i, i + 1);
 					}
-				}else {
+				}
+				else {
 					if (value < 0) {
 						Swap(saves, i, i + 1);
 					}
@@ -98,43 +99,29 @@ public class LevelSorting : MonoBehaviour {
 	}
 
 	int swaps = 0;
-	string values = "";
-
 	public void SortDate() {
 		isAscending = !isAscending;
-
-		print(isAscending);
 
 		SaveFileInfo[] saves = LevelSelectScript.displayedSaves.ToArray();
 
 		for (int j = saves.Length - 1; j > 0; j--) {
 			for (int i = 0; i < j; i++) {
-				int value = DateTime.Compare(Convert.ToDateTime(saves[i].timeRaw), Convert.ToDateTime(saves[i+1].timeRaw));
-				
+				int value = DateTime.Compare(Convert.ToDateTime(saves[i].timeRaw), Convert.ToDateTime(saves[i + 1].timeRaw));
+
 				if (isAscending) {
 					if (value > 0) {
 						Swap(saves, i, i + 1);
-						values += "{" + value + "} | ";
-					}
-					else {
-						values += "}" + value + "{ | ";
 					}
 				}
 				else {
 					if (value < 0) {
 						Swap(saves, i, i + 1);
-						values += "}"+value + "{ | ";
-					}
-					else {
-						values += "{" + value + "} | ";
 					}
 				}
 			}
 		}
 		print(swaps);
-		print(values);
 		swaps = 0;
-		values = "";
 
 		foreach (SaveFileInfo save in saves) {
 			LevelSelectScript.displayedSaves.Remove(save);
