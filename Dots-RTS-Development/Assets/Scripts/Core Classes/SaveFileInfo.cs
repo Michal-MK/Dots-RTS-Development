@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class SaveFileInfo : MonoBehaviour {
 	public bool isSavedLocaly = false;
@@ -11,9 +12,11 @@ public class SaveFileInfo : MonoBehaviour {
 	public Button downloadButton;
 	public Text levelName;
 	public Text time;
+	public Text author;
 	public Image indicator;
 	public Image bg;
 	public SaveAndLoadEditor saveAndLoadEditor;
+	public string timeRaw;
 
 	public static event Control.NewSelectionForDownload newTarget;
 

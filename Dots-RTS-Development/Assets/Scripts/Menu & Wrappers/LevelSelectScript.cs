@@ -15,6 +15,7 @@ public class LevelSelectScript : MonoBehaviour {
 	public Text error;
 	public SaveAndLoadEditor saveAndLoadEditor;
 
+	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
 	private void Start() {
 
 #if !(UNITY_ANDROID || UNITY_IOS)
@@ -38,6 +39,8 @@ public class LevelSelectScript : MonoBehaviour {
 			level.time.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
 			try {
 				level.levelName.text = info.levelInfo.levelName;
+				level.author.text = info.levelInfo.creator;
+				level.timeRaw = info.levelInfo.creationTime.ToString();
 			}
 			catch {
 				error.text += "Error " + saves[i].Name;
@@ -45,6 +48,7 @@ public class LevelSelectScript : MonoBehaviour {
 			if (SceneManager.GetActiveScene().buildIndex == 1) {
 				level.saveAndLoadEditor = saveAndLoadEditor;
 			}
+			displayedSaves.Add(level);
 		}
 	}
 }
