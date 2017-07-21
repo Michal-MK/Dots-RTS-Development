@@ -1,23 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TeamBox : MonoBehaviour {
+public class TeamBox : MonoBehaviour, IDragHandler, IDropHandler {
 
 	// Use this for initialization
-	TeamSetup myParrent;
+	public TeamSetup myParrent;
+	public Vector3 initialPos;
 	// Update is called once per frame
-	private void Start() {
-		myParrent = transform.parent.GetComponent<TeamSetup>();
+	public void AllThingsSet() {
+		//myParrent = transform.parent.GetComponent<TeamSetup>();
+
+		initialPos = transform.position;
 	}
-	void OnMouseOver () {
-		if (Input.GetMouseButton(0)) {
-			print("xxx");
-			transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		}
-		if (Input.GetMouseButtonUp(0)) {
-			myParrent.TeamBoxPosChange(transform.position);
+
+	public void OnDrag(PointerEventData eventData) {
+		if (eventData.dragging) {
+			transform.position = eventData.position;
 		}
 	}
 
+	public void OnDrop(PointerEventData eventData) {
+		myParrent.TeamBoxPosChange(transform.position);
+		//transform.position = initialPos;
+	}
 }
