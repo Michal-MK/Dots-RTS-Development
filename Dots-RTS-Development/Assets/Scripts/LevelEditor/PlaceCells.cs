@@ -21,8 +21,9 @@ public class PlaceCells : MonoBehaviour {
 			c.elementCount = LevelEditorCore.start;
 
 			//print(LevelEditorCore.start);
+			newCell.SetActive(true);
 
-			SaveAndLoadEditor.AddCell(c);
+			LevelEditorCore.AddCell(c);
 		}
 #endif
 #if (UNITY_ANDROID || UNITY_IOS)
@@ -38,7 +39,7 @@ public class PlaceCells : MonoBehaviour {
 
 			newCell.SetActive(true);
 
-			SaveAndLoadEditor.AddCell(c);
+			LevelEditorCore.AddCell(c);
 		}
 #endif
 	}

@@ -11,6 +11,8 @@ public class LevelEditorCore : MonoBehaviour {
 	//When EditMode Changes, passes the new mode
 	public static event Control.EditModeChanged modeChange;
 
+	public static List<Cell> cellList = new List<Cell>();
+	public static List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
 	/// <summary>
 	/// All of the input fields, there's only one input panel so this can be static
 	/// </summary>
@@ -70,7 +72,27 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public Texture2D[] cursors;
 
+	#region Functions to add or remove a cell from the static list
+	public static void AddCell(Cell c) {
 
+		cellList.Add(c);
+		if (c._team != Cell.enmTeam.ALLIED && c._team != Cell.enmTeam.NEUTRAL) {
+			if (!teamList.Contains(c._team)) {
+				teamList.Add(c._team);
+			}
+		}
+		
+	}
+	public static void RemoveCell(Cell c) {
+		cellList.Remove(c);
+		foreach (Cell cell in cellList) {
+			if (cell._team == c._team) {
+				return;
+			}
+		}
+		teamList.Remove(c._team);
+	}
+	#endregion
 
 	private IEnumerator Start() {
 		//Find all of the input fields;
@@ -94,7 +116,6 @@ public class LevelEditorCore : MonoBehaviour {
 		GetPlaceCellPanelValues();
 		GetGameSettingsPanelValues();
 		GetIOPanelValues();
-
 		// Set defalut mode to placeCells
 		//Have to wait for all of the things to initialize before I can call a button press
 		yield return new WaitForEndOfFrame();
@@ -106,6 +127,7 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		LevelEditorCore.cellList.Clear();
 	}
 
 	public void DestoyCellsButton() {

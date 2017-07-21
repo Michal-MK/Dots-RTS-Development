@@ -4,40 +4,47 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ColourTheTeamButtons : MonoBehaviour {
-
 	// Use this for initialization
 	void Start () {
-		switch (gameObject.name) {
 
-			case "Team (0)": {
-				gameObject.GetComponent<Image>().color = Cell.neutralColour;return;
+		int team = int.Parse(gameObject.name[6].ToString());
+		gameObject.GetComponent<Image>().color = GetColorBasedOnTeam(team);
+	}
+
+	public static Color32 GetColorBasedOnTeam(int team) {
+		switch (team) {
+			case 0: {
+				return Cell.neutralColour;
 			}
-			case "Team (1)": {
-				gameObject.GetComponent<Image>().color = Cell.allyColour;return;
+			case 1: {
+				return Cell.allyColour;
 			}
-			case "Team (2)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy1Colour;return;
+			case 2: {
+				return Cell.enemy1Colour;
 			}
-			case "Team (3)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy2Colour;return;
+			case 3: {
+				return Cell.enemy2Colour;
 			}
-			case "Team (4)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy3Colour;return;
+			case 4: {
+				return Cell.enemy3Colour;
 			}
-			case "Team (5)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy4Colour;return;
+			case 5: {
+				return Cell.enemy4Colour;
 			}
-			case "Team (6)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy5Colour;return;
+			case 6: {
+				return Cell.enemy5Colour;
 			}
-			case "Team (7)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy6Colour;return;
+			case 7: {
+				return Cell.enemy6Colour;
 			}
-			case "Team (8)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy7Colour;return;
+			case 8: {
+				return Cell.enemy7Colour;
 			}
-			case "Team (9)": {
-				gameObject.GetComponent<Image>().color = Cell.enemy8Colour;return;
+			case 9: {
+				return Cell.enemy8Colour;
+			}
+			default: {
+				return Color.white;
 			}
 		}
 	}

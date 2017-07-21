@@ -55,7 +55,9 @@ public class EditCell : MonoBehaviour {
 				LevelEditorCore.maxInput.text = thisCell.maxElements.ToString();
 			}
 			if (LevelEditorCore.editorMode == LevelEditorCore.Mode.DeleteCells) {
+				LevelEditorCore.RemoveCell(gameObject.GetComponent<Cell>());
 				Destroy(gameObject);
+				
 			}
 		}
 	}

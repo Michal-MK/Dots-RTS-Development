@@ -513,50 +513,24 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1238293250153330}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82966c8520408794da321cbe97f6f47b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _elementCount: 0
+  _regenP: 0
+  _maxElementCount: 0
+  _position: {x: 0, y: 0}
   isRegenerating: 0
   isDecaying: 0
   _team: 0
-  ally:
-    serializedVersion: 2
-    rgba: 4278255360
-  neutral:
-    serializedVersion: 2
-    rgba: 4294967295
-  enemy1:
-    serializedVersion: 2
-    rgba: 4278190335
-  enemy2:
-    serializedVersion: 2
-    rgba: 4294901840
-  enemy3:
-    serializedVersion: 2
-    rgba: 4278255580
-  enemy4:
-    serializedVersion: 2
-    rgba: 4278205560
-  enemy5:
-    serializedVersion: 2
-    rgba: 4278226070
-  enemy6:
-    serializedVersion: 2
-    rgba: 4294902015
-  enemy7:
-    serializedVersion: 2
-    rgba: 4278190080
-  enemy8:
-    serializedVersion: 2
-    rgba: 4291335935
-  um: {fileID: 114889160387685830}
   cellSprite: {fileID: 212889015483235864}
   elementNrDisplay: {fileID: 102407273969586368}
   textRenderer: {fileID: 23188911867152260}
   circle: {fileID: 0}
   lineToMouse: {fileID: 0}
+  um: {fileID: 114889160387685830}
 --- !u!114 &114409544089343134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -584,7 +558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   um: {fileID: 114889160387685830}
-  thereIsACellSelected: 0
+  isCellSelected: 0
 --- !u!114 &114434905858793014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -739,6 +713,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212134248134075734
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -779,6 +755,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212285782467714768
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -819,6 +797,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212340395696583466
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -859,6 +839,8 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
 --- !u!212 &212364765839916254
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -899,6 +881,8 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
 --- !u!212 &212383758580138158
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -939,6 +923,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212513107819345434
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -979,6 +965,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212568308973590028
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1019,6 +1007,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212620244889957952
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1059,6 +1049,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!212 &212889015483235864
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1099,6 +1091,8 @@ SpriteRenderer:
   m_Size: {x: 102.4, y: 102.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
 --- !u!212 &212915814570583508
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1139,6 +1133,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
 --- !u!224 &224133232747055478
 RectTransform:
   m_ObjectHideFlags: 1

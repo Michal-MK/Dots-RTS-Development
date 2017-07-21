@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class SaveAndLoadEditor : MonoBehaviour {
 
-	private static List<Cell> cellList = new List<Cell>();
 
 	public GameObject prefab;
 
@@ -26,7 +25,6 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	private void Start() {
-		cellList.Clear();
 
 		if (!string.IsNullOrEmpty(PlayerPrefs.GetString("LoadLevelFilePath"))) {
 			Load(PlayerPrefs.GetString("LoadLevelFilePath"));
@@ -34,21 +32,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		//fileName = string.Format(DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString());
 	}
 	private void OnDestroy() {
-		cellList.Clear();
 	}
 
 
 	//
 	//
 	//
-	#region Functions to add or remove a cell from the static list
-	public static void AddCell(Cell c) {
-		cellList.Add(c);
-	}
-	public static void RemoveCell(Cell c) {
-		cellList.Remove(c);
-	}
-	#endregion
+
 	//
 
 	public void Save() {
@@ -71,11 +61,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 		int numAllies = 0;
 		int numEnemies = 0;
-		for (int i = 0; i < cellList.Count; i++) {
-			if (cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
+		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+			if (LevelEditorCore.cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
 				numAllies++;
 			}
-			if ((int)cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
+			if ((int)LevelEditorCore.cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
 				numEnemies++;
 			}
 		}
@@ -117,8 +107,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		SaveData save = new SaveData();
 
 
-		for (int i = 0; i < cellList.Count; i++) {
-			Cell c = cellList[i];
+		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+			Cell c = LevelEditorCore.cellList[i];
 
 			S_Cell serCell = new S_Cell();
 			serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
@@ -154,13 +144,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		SaveData save = new SaveData();
 
 
-		for (int i = 0; i < cellList.Count; i++) {
-			if (cellList[i] == null) {
+		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+			if (LevelEditorCore.cellList[i] == null) {
 				ErrorMessages.text += "No cell number " + i + "found";
 				file.Close();
 				return;
 			}
-			Cell c = cellList[i];
+			Cell c = LevelEditorCore.cellList[i];
 
 			S_Cell serCell = new S_Cell();
 			serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
@@ -202,7 +192,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			c.regenPeriod = save.cells[j].regenerationPeriod;
 			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
-			AddCell(c);
+			LevelEditorCore.AddCell(c);
 		}
 	}
 }	
@@ -224,13 +214,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 //	SaveData save = new SaveData();
 
 
-//	for (int i = 0; i < cellList.Count; i++) {
-//		if (cellList[i] == null) {
+//	for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+//		if (LevelEditorCore.cellList[i] == null) {
 //			ErrorMessages.text = "No cell number " + i + "found";
 //			file.Close();
 //			return;
 //		}
-//		Cell c = cellList[i];
+//		Cell c = LevelEditorCore.cellList[i];
 
 //		S_Cell serCell = new S_Cell();
 //		serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
