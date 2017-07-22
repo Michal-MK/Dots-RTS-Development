@@ -98,7 +98,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/Saves/" + fileName+ ".phage");
 		if (File.Exists(Application.persistentDataPath + "/Saves/" + fileName+ ".phage")) {
-			ErrorMessages.text += "Succes, Created a file: " + LevelEditorCore.fileName;
+			ErrorMessages.text += "Succes, Created a file: " + fileName;
 		}
 		else {
 			ErrorMessages.text += "Fail, change the file name";

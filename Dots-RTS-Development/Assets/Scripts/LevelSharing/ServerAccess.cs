@@ -4,17 +4,11 @@ using System.Net;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 
 public class ServerAccess {
 	public bool isDownloading = false;
 	public string downloadedFile = "";
-
-
-
-	//public Text t = null;
-
 
 
 	/// <summary>
@@ -25,7 +19,7 @@ public class ServerAccess {
 		//t.text += "Called | ";
 		List<string> contents = new List<string>();
 
-		FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new System.Uri("ftp://kocicka.endora.cz/"));
+		FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://kocicka.endora.cz/"));
 		//t.text += "Request created | ";
 		request.Credentials = new NetworkCredential("phage", "Abcd123");
 		request.Method = WebRequestMethods.Ftp.ListDirectory;
@@ -47,8 +41,8 @@ public class ServerAccess {
 			s.Close();
 			response.Close();
 		}
-		catch (System.Exception e) {
-			//t.text += e.ToString();
+		catch (Exception e) {
+			Debug.Log(e);
 		}
 
 		//t.text += "Returned value : ";
@@ -82,7 +76,7 @@ public class ServerAccess {
 #else
 		string tempPath = Application.temporaryCachePath + "\\Saves\\";
 		string persistentPath = Application.streamingAssetsPath + "\\Saves\\";
-        #endif
+		#endif
 		if (temp) {
 			inputfilepath = tempPath;
 		}

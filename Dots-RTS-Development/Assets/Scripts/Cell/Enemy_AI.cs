@@ -325,7 +325,7 @@ public class Enemy_AI : MonoBehaviour {
 		//		if (Initialize_AI.AIs[i] != null) {
 		//			print("BBBBBBBBBBB " + data.Count + " " + Initialize_AI.AIs.Length + " " + data.Count * Initialize_AI.AIs.Length * 5);
 		//			if (instance.AI == Initialize_AI.AIs[i]) {
-
+		//
 		//				for (int j = 0; j < instance.cells.Length; j++) {
 		//					if (instance.cells[j] != null) {
 		//						print("Current Process = " + gameObject.name + " " + instance.AI.gameObject.name + " " + instance.cells[j].name + " " + j);
@@ -333,13 +333,13 @@ public class Enemy_AI : MonoBehaviour {
 		//					switch (j) {
 		//						case 0: {
 		//							if (instance.cells[j] != null) {
-
+		//
 		//								print("I know that " + instance.AI.name + " contains " + instance.cells[j].name + " as AICELL!");
 		//								if (cellTeam != _aiTeam) {
 		//									print("Cell " + sender.name + " of team " + cellTeam + " will be " + elementTeam + " => " + this.gameObject.name + " has to remove it from aiCells");
 		//									_aiCells.Remove(sender);
 		//								}
-
+		//
 		//								if (elementTeam == _aiTeam) {
 		//									print("Cell " + sender.name + " of team " + cellTeam + " will be " + elementTeam + " => " + this.gameObject.name + " has to add it as a aicell.");
 		//									_aiCells.Add(sender);
@@ -446,21 +446,21 @@ public class Enemy_AI : MonoBehaviour {
 		//				else {
 
 		//					_neutrals.Remove(sender);
-
+		//
 		//				}
 		//			}
 		//		}
 		//	}
 		//}
-
+		//
 		//Debug.Break();
-
+		//
 		//if (cellTeam == Cell.enmTeam.NEUTRAL) {
 		//	_neutrals.Remove(sender);
 		//	AddCell(sender, elementTeam);
 		//	return;
 		//}
-
+		//
 		////Cell was of team ALLIED
 		//else if (cellTeam == Cell.enmTeam.ALLIED) {
 		//	_targets.Remove(sender);
@@ -472,17 +472,17 @@ public class Enemy_AI : MonoBehaviour {
 		//	//The AI the cell belonged to
 		//	Enemy_AI homeAI = null;
 		//	Enemy_AI newHomeAI = null;
-
+		//
 		//	for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
 		//		if (Initialize_AI.AIs[i] != null) {
-
+		//
 		//			//If cellteam and aiteam are the same => remove from controlled
 		//			if (Initialize_AI.AIs[i]._aiTeam == cellTeam && cellTeam == _aiTeam) {
 		//				homeAI = Initialize_AI.AIs[i];
 		//				/*Initialize_AI.AIs[i].*/
 		//				_aiCells.Remove(sender);
 		//			}
-
+		//
 		//			if (Initialize_AI.AIs[i]._aiTeam == elementTeam) {
 		//				newHomeAI = Initialize_AI.AIs[i];
 		//			}
@@ -494,8 +494,8 @@ public class Enemy_AI : MonoBehaviour {
 		//		if (Initialize_AI.AIs[i] != null) {
 		//			for (int j = 0; j < Initialize_AI.AIs[i].alliesOfThisAI.Count; j++) {
 		//				Enemy_AI allyOfAnyAI = Initialize_AI.AIs[i].alliesOfThisAI[j];
-
-
+		//
+		//
 		//				if (allyOfAnyAI == homeAI && homeAI._aiTeam == _aiTeam) {
 		//					/*allyOfAnyAI.*/
 		//					_allies.Remove(sender);
@@ -639,7 +639,6 @@ public class Enemy_AI : MonoBehaviour {
 				selectedTargetCell = TargetCellSelector();
 			}
 			else {
-				Control.GameOver();
 				yield break;
 			}
 

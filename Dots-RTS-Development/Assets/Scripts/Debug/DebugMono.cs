@@ -15,6 +15,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 	Color target = Color.red;
 	RectTransform rect;
 	RectTransform panel;
+	LineRenderer line;
 
 	//private void OnMouseOver() {
 	//	if (Input.GetMouseButton(0)) {
@@ -24,7 +25,16 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 	//		transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 10);
 	//	}
 	//}
-	void Awake() {
+	void Start() {
+		try {
+			line = GetComponent<LineRenderer>();
+			print("Got");
+			RenderLine();
+		}
+		catch {
+
+		}
+
 
 		try {
 			sprite = GetComponent<SpriteRenderer>();
@@ -42,7 +52,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 	Vector3 oldMousePos = Vector2.zero;
 	bool assign = true;
-
+	
 	public void OnDrag(PointerEventData eventData) {
 		if (assign) {
 			oldMousePos = eventData.position;
@@ -82,12 +92,26 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 	}
 
+	public void RenderLine() {
+		try {
+			RectTransform[] children = GameObject.Find("Panel").GetComponentsInChildren<RectTransform>() as RectTransform[];
+			line.positionCount = children.Length;
+			for (int i = 0; i < line.positionCount; i++) {
+				if (children[i].name != "Panel") {
+					line.SetPosition(i, Camera.main.ScreenToWorldPoint(children[i].position) + Vector3.forward * 10);
+				}
+			}
+		}
+		catch {
 
+		}
+	}
 
 
 	void Update() {
 		if (Input.GetMouseButtonUp(0)) {
 			assign = true;
+			RenderLine();
 		}
 
 		try {

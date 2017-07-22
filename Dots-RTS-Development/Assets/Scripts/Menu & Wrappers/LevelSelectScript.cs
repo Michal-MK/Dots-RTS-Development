@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class LevelSelectScript : MonoBehaviour {
 
@@ -27,6 +28,7 @@ public class LevelSelectScript : MonoBehaviour {
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		error.text = "";
 		FileInfo[] saves = d.GetFiles("*.phage");
+		CheckCorruption(saves);
 		for (int i = 0; i < saves.Length; i++) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = saves[i].Open(FileMode.Open);
@@ -49,6 +51,14 @@ public class LevelSelectScript : MonoBehaviour {
 				level.saveAndLoadEditor = saveAndLoadEditor;
 			}
 			displayedSaves.Add(level);
+		}
+	}
+
+	private void CheckCorruption(FileInfo[] saves) {
+		foreach(FileInfo i in saves) {
+			if(i.Length <= 100) {
+				i.Delete();
+			}
 		}
 	}
 }

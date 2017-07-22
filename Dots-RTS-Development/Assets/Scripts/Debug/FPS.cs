@@ -3,16 +3,9 @@ using UnityEngine;
 public class FPS : MonoBehaviour {
 
 	float deltaTime = 0.0f;
-	int quality;
-
-	void OnEnable() {
-		quality = QualitySettings.GetQualityLevel();
-	}
-
 
 	void Update() {
 		deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-
 	}
 
 	void OnGUI() {

@@ -69,7 +69,7 @@ public class Initialize_AI : MonoBehaviour {
 		CreateAlly(7, new int[] { 3 });
 		//CreateAlly(3, new int[] { 1, 2, 0 });
 
-		print("forming");
+		//print("forming");
 		FormTeams();
 
 	}
@@ -79,7 +79,7 @@ public class Initialize_AI : MonoBehaviour {
 			initAIs[index] = true;
 			aiTeams[index] = team;
 
-			GameObject aiHolder = new GameObject("AI " + "code " + index + " enemy " + (index + 1));
+			GameObject aiHolder = new GameObject("AI code " + index + " enemy " + (index + 1));
 			Enemy_AI ai = aiHolder.AddComponent<Enemy_AI>();
 			ai.decisionSpeed = decisionSpeeds[index];
 			ai._aiTeam = team;
@@ -113,14 +113,13 @@ public class Initialize_AI : MonoBehaviour {
 				}
 			}
 		}
-		print("formed");
 	}
 
 
 	private void CreateAlly(int enemyIndex, int[] allyIndexes) {
 		foreach (int i in allyIndexes) {
 			if (enemyIndex == i) {
-				throw new System.Exception("Can't assign myself as my ally!");
+				throw new Exception("Can't assign myself as my ally!");
 			}
 		}
 

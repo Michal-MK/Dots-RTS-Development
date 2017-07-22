@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(LineRenderer), typeof(CircleCollider2D))]
-
 public class Cell : MonoBehaviour {
 
 	public int _elementCount;                                                                  //Current amount of elements inside the cell
@@ -61,13 +60,21 @@ public class Cell : MonoBehaviour {
 	}
 
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
-		//print(c.gameObject.name);
-		if (elementCount >= 10 && elementCount <= maxElements) {
-			float mappedValue = Map.MapFloat(elementCount, 0, maxElements, 1, 2);
 
-			transform.localScale = new Vector3(mappedValue, mappedValue, 1);
-			cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		float mappedValue;
+		if (elementCount < 10) {
+			mappedValue = 1;
 		}
+		else if (elementCount >= 10 && elementCount <= maxElements) {
+			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
+		}
+		else {
+			mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+
+		}
+
+		transform.localScale = new Vector3(mappedValue, mappedValue, 1);
+		cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
 
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
@@ -146,10 +153,10 @@ public class Cell : MonoBehaviour {
 		while (isDecaying) {
 			yield return new WaitForSeconds(d);
 			elementCount--;
-			if(maxElements - elementCount > maxElements * 0.5f) {
+			if (maxElements - elementCount > maxElements * 0.5f) {
 				d = d * 0.5f;
 			}
-			if(elementCount <= maxElements) {
+			if (elementCount <= maxElements) {
 				isDecaying = false;
 				isRegenerating = false;
 			}
@@ -177,7 +184,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int maxElements {
 		get { return _maxElementCount; }
-		set { _maxElementCount = value;  UpdateCellInfo(true); }
+		set { _maxElementCount = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
