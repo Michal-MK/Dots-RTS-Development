@@ -81,6 +81,9 @@ public class Control : MonoBehaviour {
 			}
 			time.text = gameTime;
 		}
+		if(newS.buildIndex == 2) {
+			LevelSelectScript.displayedSaves.Clear();
+		}
 	}
 
 

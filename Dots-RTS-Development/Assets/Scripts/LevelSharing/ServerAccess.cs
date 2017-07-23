@@ -53,7 +53,11 @@ public class ServerAccess {
 		return contents;
 	}
 
-
+	/// <summary>
+	/// Downloads selected file
+	/// </summary>
+	/// <param name="filePath">Name of the file - NOT full name.</param>
+	/// <returns>Location of the file.</returns>
 	public string GetFile(string filePath) {
 		isDownloading = true;
 		DownloadFileFTP(filePath, true);
@@ -151,6 +155,7 @@ public class ServerAccess {
 	}
 	*/
 
+	//Async function to trigger when the download finishes.
 	private void Request_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e) {
 		try {
 			using (FileStream file = new FileStream(inputfilepath, FileMode.Create)) {
@@ -171,6 +176,11 @@ public class ServerAccess {
 		}
 	}
 
+	/// <summary>
+	/// Downloads File from the server and return its contents
+	/// </summary>
+	/// <param name="path">Path to the file</param>
+	/// <returns>An array - [0] = Level name, [1] = Author, [2] = Formated date+time.</returns>
 	public IEnumerator GetLevelInfo(string path) {
 		Debug.Log(path);
 		DownloadFileFTP(path, true);

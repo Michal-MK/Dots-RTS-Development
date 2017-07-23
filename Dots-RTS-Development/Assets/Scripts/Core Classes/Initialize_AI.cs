@@ -22,6 +22,7 @@ public class Initialize_AI : MonoBehaviour {
 		StartAiInitialization();
 	}
 
+	//Goes though all the cells and creates an AI for each team.
 	public void StartAiInitialization() {
 		foreach (Cell c in Control.cells) {
 			//If cell is enemy create ai for that enemy - Only once
@@ -73,6 +74,7 @@ public class Initialize_AI : MonoBehaviour {
 		FormTeams();
 
 	}
+	//Creates a new AI, sets its state to true in the corresponding slot in the Array
 	private void SetAis(int index, Cell.enmTeam team) {
 		//print("Attepting to set AI at " + index + " with team " + team);
 		if (initAIs[index] == false) {
@@ -89,8 +91,8 @@ public class Initialize_AI : MonoBehaviour {
 
 	}
 
+	//Function to match AI together
 	public void FormTeams() {
-
 		//Loop though all the AIs
 		for (int i = 0; i < AIs.Length; i++) {
 			//If allies for this AI exist
@@ -115,7 +117,11 @@ public class Initialize_AI : MonoBehaviour {
 		}
 	}
 
-
+	/// <summary>
+	/// Create an alliance
+	/// </summary>
+	/// <param name="enemyIndex">Ai index in an Array => Enemy1 has an index of 0.</param>
+	/// <param name="allyIndexes">Other indexes of allies, same rule applies.</param>
 	private void CreateAlly(int enemyIndex, int[] allyIndexes) {
 		foreach (int i in allyIndexes) {
 			if (enemyIndex == i) {

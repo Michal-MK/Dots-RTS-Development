@@ -76,9 +76,9 @@ public class LevelEditorCore : MonoBehaviour {
 	public static void AddCell(Cell c) {
 
 		cellList.Add(c);
-		if (c._team != Cell.enmTeam.ALLIED && c._team != Cell.enmTeam.NEUTRAL) {
-			if (!teamList.Contains(c._team)) {
-				teamList.Add(c._team);
+		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
+			if (!teamList.Contains(c.cellTeam)) {
+				teamList.Add(c.cellTeam);
 			}
 		}
 		
@@ -86,11 +86,11 @@ public class LevelEditorCore : MonoBehaviour {
 	public static void RemoveCell(Cell c) {
 		cellList.Remove(c);
 		foreach (Cell cell in cellList) {
-			if (cell._team == c._team) {
+			if (cell.cellTeam == c.cellTeam) {
 				return;
 			}
 		}
-		teamList.Remove(c._team);
+		teamList.Remove(c.cellTeam);
 	}
 	#endregion
 

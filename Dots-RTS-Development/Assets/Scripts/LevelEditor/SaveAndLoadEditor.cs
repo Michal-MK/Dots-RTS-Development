@@ -42,8 +42,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	//
 
 	public void Save() {
-		//fileName = string.Format(DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString());
 		fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+		
 		#region Pre-Save Error checking
 
 #if !(UNITY_ANDROID || UNITY_IOS)
@@ -156,7 +156,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
 			serCell.elementCount = c.elementCount;
 			serCell.maxElementCount = c.maxElements;
-			serCell.team = (int)c._team;
+			serCell.team = (int)c.cellTeam;
 			serCell.regenerationPeriod = c.regenPeriod;
 			serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
 
@@ -195,7 +195,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			LevelEditorCore.AddCell(c);
 		}
 	}
-}	
+}
 
 //public void Save() {
 
@@ -226,7 +226,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 //		serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
 //		serCell.elementCount = c.elementCount;
 //		serCell.maxElementCount = c.maxElements;
-//		serCell.team = (int)c._team;
+//		serCell.team = (int)c.cellTeam;
 //		serCell.regenerationPeriod = c.regenPeriod;
 //		serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
 

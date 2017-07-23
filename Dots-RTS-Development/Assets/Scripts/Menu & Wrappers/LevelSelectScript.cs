@@ -17,6 +17,8 @@ public class LevelSelectScript : MonoBehaviour {
 	public SaveAndLoadEditor saveAndLoadEditor;
 
 	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
+
+	//Display alll saves that you can find in the scroll view
 	private void Start() {
 
 #if !(UNITY_ANDROID || UNITY_IOS)
@@ -54,6 +56,7 @@ public class LevelSelectScript : MonoBehaviour {
 		}
 	}
 
+	//Looks for files that are smaller than 100 bytes, happens when download fails.
 	private void CheckCorruption(FileInfo[] saves) {
 		foreach(FileInfo i in saves) {
 			if(i.Length <= 100) {

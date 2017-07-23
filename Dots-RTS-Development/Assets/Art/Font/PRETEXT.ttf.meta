@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: efcce68e48001d54bb41aaab2131d9ad
+timeCreated: 1500803239
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: PRETEXT
+  fontNames:
+  - PRETEXT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

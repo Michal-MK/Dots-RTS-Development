@@ -58,7 +58,7 @@ public class Cell : MonoBehaviour {
 	private void Start() {
 		UpdateCellInfo();
 	}
-
+	//Function to update visuals of the cell
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
 
 		float mappedValue;
@@ -138,6 +138,7 @@ public class Cell : MonoBehaviour {
 			}
 		}
 	}
+	//Wrapper for Decaying
 	public void Decay(float decayRate) {
 		if (!isDecaying) {
 			isDecaying = true;
@@ -146,7 +147,7 @@ public class Cell : MonoBehaviour {
 
 	}
 
-	//Elements start decaying when they go over the cap.
+	//Elements start decaying when they go over the cap(max Elements).
 	private IEnumerator DecayElements(float decayRate) {
 		float d = decayRate;
 		StopCoroutine(GenerateElements());

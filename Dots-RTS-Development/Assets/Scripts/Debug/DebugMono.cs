@@ -48,11 +48,36 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 		}
 
+		//string[] strings = new string[10] { "b", "g", "d", "w", "k", "p", "c", "z", "u", "a" }; Success
+		string[] strings = new string[10] { "b", "G", "d", "w", "k", "P", "C", "z", "u", "a" };
+
+
+		foreach (string s in strings) {
+			print(s);
+		}
+
+		for (int j = strings.Length - 1; j > 0; j--) {
+			for (int i = 0; i < j; i++) {
+				string precedingName = strings[i];
+				string folowingName = strings[i + 1];
+				int value = string.Compare(precedingName, folowingName, true);
+				if (value > 0) {
+					string temp = strings[i];
+
+					strings[i] = strings[i + 1];
+					strings[i + 1] = temp;
+				}
+			}
+		}
+		print("---------------------------");
+		foreach (string s in strings) {
+			print(s);
+		}
 	}
 
 	Vector3 oldMousePos = Vector2.zero;
 	bool assign = true;
-	
+
 	public void OnDrag(PointerEventData eventData) {
 		if (assign) {
 			oldMousePos = eventData.position;
@@ -66,13 +91,13 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 		target = Color.magenta;
 
 		if (transform.parent.name == "Panel") {
-			rect.position = mousePos + mouseOffset + mouseDelta;	//print("I am here " + mousePos + " and the gameObjects center is " + rect.position + " so the offset is " + mouseOffset + " so the expected position is " + (mousePos + mouseOffset + mouseDelta));
+			rect.position = mousePos + mouseOffset + mouseDelta;    //print("I am here " + mousePos + " and the gameObjects center is " + rect.position + " so the offset is " + mouseOffset + " so the expected position is " + (mousePos + mouseOffset + mouseDelta));
 		}
 		oldMousePos = mousePos;
 
-		if(rect.position.x + rect.sizeDelta.x / 2 > panel.position.x + panel.sizeDelta.x / 2) {
+		if (rect.position.x + rect.sizeDelta.x / 2 > panel.position.x + panel.sizeDelta.x / 2) {
 			rect.position = new Vector3(panel.position.x + panel.sizeDelta.x / 2 - rect.sizeDelta.x / 2, rect.position.y);
-			
+
 		}
 
 		if (rect.position.x - rect.sizeDelta.x / 2 < panel.position.x - panel.sizeDelta.x / 2) {

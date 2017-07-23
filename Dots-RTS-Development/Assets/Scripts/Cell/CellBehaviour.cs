@@ -155,7 +155,7 @@ public class CellBehaviour : Cell {
 
 			circle.sortingOrder = 0;
 
-			if (!isRegenerating && (_team == enmTeam.ALLIED || (int)_team >= 2)) {
+			if (!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >= 2)) {
 
 				StartCoroutine(GenerateElements());
 			}

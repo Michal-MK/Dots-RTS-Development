@@ -6,36 +6,7 @@ using System;
 public class LevelSorting : MonoBehaviour {
 
 	bool isAscending = false;
-
-	// Use this for initialization
-	void Start() {
-		//string[] strings = new string[10] { "b", "g", "d", "w", "k", "p", "c", "z", "u", "a" }; Success
-		string[] strings = new string[10] { "b", "G", "d", "w", "k", "P", "C", "z", "u", "a" };
-
-
-		foreach (string s in strings) {
-			print(s);
-		}
-
-		for (int j = strings.Length - 1; j > 0; j--) {
-			for (int i = 0; i < j; i++) {
-				string precedingName = strings[i];
-				string folowingName = strings[i + 1];
-				int value = string.Compare(precedingName, folowingName, true);
-				if (value > 0) {
-					string temp = strings[i];
-
-					strings[i] = strings[i + 1];
-					strings[i + 1] = temp;
-				}
-			}
-		}
-		print("---------------------------");
-		foreach (string s in strings) {
-			print(s);
-		}
-
-	}
+	//Sorts objects by name under Content alphabeticaly
 	public void SortName() {
 		isAscending = !isAscending;
 
@@ -62,11 +33,13 @@ public class LevelSorting : MonoBehaviour {
 		foreach (SaveFileInfo save in saves) {
 			LevelSelectScript.displayedSaves.Remove(save);
 			SaveFileInfo g = Instantiate(save, GameObject.Find("Content").transform);
+			g.gameObject.name = save.name;
 			LevelSelectScript.displayedSaves.Add(g);
 			Destroy(save.gameObject);
 		}
 	}
 
+	//Sorts objects by name under Content alphabeticaly
 	public void SortAuthor() {
 		isAscending = !isAscending;
 
@@ -99,6 +72,7 @@ public class LevelSorting : MonoBehaviour {
 	}
 
 	int swaps = 0;
+	//Sorts objects by date under Content asc/desc.
 	public void SortDate() {
 		isAscending = !isAscending;
 
@@ -130,7 +104,7 @@ public class LevelSorting : MonoBehaviour {
 			Destroy(save.gameObject);
 		}
 	}
-
+	//Function to swap two elements in an erray.
 	private void Swap(SaveFileInfo[] data, int i, int j) {
 		SaveFileInfo temp = data[i];
 		swaps++;
