@@ -67,7 +67,9 @@ public class SaveFileInfo : MonoBehaviour {
 #else
 		File.Delete(Application.persistentDataPath + "/Saves/" + fileName.name);
 #endif
+		LevelSelectScript.displayedSaves.Remove(this);
 		Destroy(gameObject);
+
 	}
 
 	public void UploadLevel(Transform fileName) {
