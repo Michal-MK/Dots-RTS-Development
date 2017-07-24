@@ -13,6 +13,9 @@ public class Cell : MonoBehaviour {
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
 	public enmTeam _team;                                                                       //Cell's team
+	public Element.enmDebuffs providedDebuff;
+
+	public List<Element.enmDebuffs> appliedDebuffs = new List<Element.enmDebuffs>();
 
 	public enum enmTeam {
 		NONE = -1,
@@ -144,7 +147,6 @@ public class Cell : MonoBehaviour {
 			isDecaying = true;
 			StartCoroutine(DecayElements(decayRate));
 		}
-
 	}
 
 	//Elements start decaying when they go over the cap(max Elements).
@@ -163,6 +165,18 @@ public class Cell : MonoBehaviour {
 			}
 		}
 	}
+
+	public IEnumerator DoT(float speed, int strength) {
+		Debug.LogWarning("Called using default values, possibly not implemented yet!");
+		for (int i = 0; i < strength; i++) {
+			yield return new WaitForSeconds(speed);
+			if (elementCount >= 1) {
+				elementCount--;
+			}
+		}
+		appliedDebuffs.Remove(Element.enmDebuffs.DOT);
+	}
+	
 
 	/// <summary>
 	/// The elements that are available in selected cell.

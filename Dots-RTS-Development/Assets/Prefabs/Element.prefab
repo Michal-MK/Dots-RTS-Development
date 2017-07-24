@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4608163779393216}
   - component: {fileID: 212609977845706244}
-  - component: {fileID: 114765351679637432}
+  - component: {fileID: 114545092257096784}
   m_Layer: 0
   m_Name: Element
   m_TagString: Untagged
@@ -41,7 +41,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114765351679637432
+--- !u!114 &114545092257096784
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -49,10 +49,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1547613517417536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5297c87926319404ea0dddb7dfb9312c, type: 3}
+  m_Script: {fileID: 11500000, guid: ce9e00dd87989334eac376e5d51fedeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  debuff: 0
   attacker: {fileID: 0}
   target: {fileID: 0}
 --- !u!212 &212609977845706244
@@ -95,3 +96,5 @@ SpriteRenderer:
   m_Size: {x: 8, y: 8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0

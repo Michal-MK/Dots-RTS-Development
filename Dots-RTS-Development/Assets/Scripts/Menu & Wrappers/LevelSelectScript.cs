@@ -38,6 +38,7 @@ public class LevelSelectScript : MonoBehaviour {
 			file.Close();
 
 			SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
+			level.gameObject.SetActive(false);
 			level.name = saves[i].Name;
 
 			level.time.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
@@ -53,6 +54,7 @@ public class LevelSelectScript : MonoBehaviour {
 				level.saveAndLoadEditor = saveAndLoadEditor;
 			}
 			displayedSaves.Add(level);
+			level.gameObject.SetActive(true);
 		}
 	}
 

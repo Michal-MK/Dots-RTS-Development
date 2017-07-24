@@ -3,48 +3,67 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Element : MonoBehaviour {
-	private Vector3 acc;
-	private Vector3 vel;
-	private float maxSpeed = 10;
 
 	public Cell.enmTeam team;
+	public enmDebuffs debuff;
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
+	private int damage = 1;
+
+	public enum enmDebuffs {
+		NONE,
+		DOUBLE_DAMAGE,
+		CRITICAL_CHANCE,
+		SLOW_REGENERATION,
+		DOT,
+	}
+
 	private void Start() {
 		attacker.UpdateCellInfo();
+		debuff = attacker.providedDebuff;
+		transform.position = ElementSpawnPoint();
 	}
 
-	//Calculates steering behaviour for the element 
-	private void FixedUpdate() {
-		Vector3 seek = Seek(target);
-		ApplyForce(seek);
-		gameObject.transform.position += vel;
-		vel += acc;
-		acc = acc * 0;
+	private Vector3 ElementSpawnPoint() {
+		float angle = Random.Range(0, 2 * Mathf.PI);
+		float x = Mathf.Sin(angle);
+		float y = Mathf.Cos(angle);
+		return new Vector3(transform.position.x + x * attacker.cellRadius * 0.5f, transform.position.y + y * attacker.cellRadius * 0.5f);
 	}
+	public void ExecuteAttack() {
 
-	//Calculates steering behaviour for the element 
-	private void ApplyForce(Vector3 force) {
-		acc += force;
-	}
-
-	//Calculates the error between desired and current velocity
-	private Vector3 Seek(CellBehaviour target) {
-		float d = Vector3.Distance(target.transform.position, gameObject.transform.position);
-		//print(d + " " + target._radius);
-		if (d < target.cellRadius) {
-			//Execute this code after collision with target.
-			if (team != 0 || (int)team != -1) {
-				target.DamageCell(team);
-			} else {
-				throw new System.InvalidOperationException();
+		#region Deterimne type of attack (buff)
+		switch (debuff) {
+			case enmDebuffs.DOUBLE_DAMAGE: {
+				damage = 2;
+				break;
 			}
-			Destroy(gameObject);
+			case enmDebuffs.SLOW_REGENERATION: {
+				damage = 1;
+				print("Handeled by cell");
+				target.DamageCell(team, damage, debuff);
+				return;
+			}
+			case enmDebuffs.CRITICAL_CHANCE: {
+				if (Random.Range(0f, 1f) > 0.5f) {
+					print("CRitical!!");
+					damage = 2;
+				}
+				else {
+					damage = 1;
+				}
+				break;
+			}
+			case enmDebuffs.DOT: {
+				damage = 1;
+				print("Handeled by cell");
+				target.DamageCell(team, damage, debuff);
+				return;
+			}
 		}
-		Vector3 seekF = target.gameObject.transform.position - gameObject.transform.position;
-		seekF.Normalize();
-		seekF = seekF * maxSpeed;
-		return seekF - vel;
+		#endregion
+
+		target.DamageCell(team, damage);
 	}
 }

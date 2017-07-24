@@ -104,6 +104,7 @@ public class LevelSorting : MonoBehaviour {
 			Destroy(save.gameObject);
 		}
 	}
+
 	//Function to swap two elements in an erray.
 	private void Swap(SaveFileInfo[] data, int i, int j) {
 		SaveFileInfo temp = data[i];

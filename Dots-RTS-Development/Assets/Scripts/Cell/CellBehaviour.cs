@@ -114,16 +114,36 @@ public class CellBehaviour : Cell {
 			UpdateCellInfo();
 		}
 	}
+	#endregion
 
+	#region Element Damage Handling
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
-	public void DamageCell(enmTeam elementTeam) {
+	public void DamageCell(enmTeam elementTeam, int amoutOfDamage, Element.enmDebuffs additionalArg = 0) {
 
 		if (cellTeam == elementTeam) {
 			elementCount++;
 			UpdateCellInfo();
 			return;
 		}
-		elementCount--;
+		if (additionalArg != 0) {
+			bool isAffected = false;
+			for (int i = 0; i < appliedDebuffs.Count; i++) {
+				if (appliedDebuffs[i] == additionalArg) {
+					isAffected = true;
+				}
+			}
+			if (!isAffected) {
+				if(additionalArg == Element.enmDebuffs.SLOW_REGENERATION) {
+					regenPeriod *= 2;
+					appliedDebuffs.Add(additionalArg);
+				}
+				if (additionalArg == Element.enmDebuffs.DOT) {
+					StartCoroutine(DoT(1,4));
+					appliedDebuffs.Add(additionalArg);
+				}
+			}
+		}
+		elementCount -= amoutOfDamage;
 		if (elementCount < 0) {
 			if (TeamChanged != null) {
 				TeamChanged(this, cellTeam, elementTeam);
@@ -139,7 +159,7 @@ public class CellBehaviour : Cell {
 		float angle = Random.Range(0, 2 * Mathf.PI);
 		float x = Mathf.Sin(angle);
 		float y = Mathf.Cos(angle);
-		return new Vector3(transform.position.x + x * cellRadius,transform.position.y + y * cellRadius);
+		return new Vector3(transform.position.x + x * cellRadius * 0.70f, transform.position.y + y * cellRadius* 0.70f);
 	}
 	#endregion
 
@@ -150,7 +170,7 @@ public class CellBehaviour : Cell {
 		circle.sortingOrder = 0;
 
 		base.UpdateCellInfo();
-		
+
 		if (calledFromBase == false) {
 
 			circle.sortingOrder = 0;
@@ -233,7 +253,7 @@ public class CellBehaviour : Cell {
 		}
 		#endregion
 	}
-	
+
 	private void OnMouseEnter() {
 		//Legacy Attack behaviour
 		if (Input.GetMouseButton(0)) {

@@ -12,7 +12,6 @@ public class LevelMarket : MonoBehaviour {
 	public GameObject save;
 	public Transform scrollViewContent;
 	public Button download;
-	public Text androidDebug;
 	public static GameObject selectedSave = null;
 
 	private ServerAccess server = new ServerAccess();
@@ -24,7 +23,6 @@ public class LevelMarket : MonoBehaviour {
 
 	// Use this for initialization
 	private IEnumerator Start() {
-		//server.t = androidDebug;
 		isRefeshing = false;
 		List<string> contents = server.GetContents();
 
@@ -46,8 +44,6 @@ public class LevelMarket : MonoBehaviour {
 		DirectoryInfo persistentDir = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
 #endif
 
-		//server.t.text += "Ready to instantiate " +  contents.Count + " | ";
-
 		for (int i = 0; i < contents.Count; i++) {
 			if (isRefeshing) {
 				isRefeshing = false;
@@ -55,6 +51,7 @@ public class LevelMarket : MonoBehaviour {
 			}
 
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
+			s.gameObject.SetActive(false);
 
 			//Unusable since it can't be done asynchronously
 			//bool isSavedLocally = false;
@@ -91,11 +88,11 @@ public class LevelMarket : MonoBehaviour {
 				s.time.text = saveInfo[2];
 			}
 			catch {
-				//server.t.text += "Try block failed. | ";
 				print("Something Failed");
 			}
 
 			saves.Add(s);
+			s.gameObject.SetActive(true);
 			saveInfo = null;
 		}
 

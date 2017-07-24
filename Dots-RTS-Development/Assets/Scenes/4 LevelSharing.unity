@@ -275,7 +275,6 @@ MonoBehaviour:
   save: {fileID: 1374150506547576, guid: adf3324806054cf42a9693ac0bc1b68a, type: 2}
   scrollViewContent: {fileID: 1101510208}
   download: {fileID: 1384063732}
-  androidDebug: {fileID: 1215686980}
 --- !u!114 &366245820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,7 +320,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -10, y: 10}
+  m_AnchoredPosition: {x: -10, y: 18}
   m_SizeDelta: {x: 280, y: 33}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &415261742
@@ -1116,7 +1115,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1384063733}
   m_OnClick:
     m_PersistentCalls:
