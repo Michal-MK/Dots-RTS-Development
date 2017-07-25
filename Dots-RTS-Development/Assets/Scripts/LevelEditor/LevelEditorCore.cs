@@ -206,8 +206,9 @@ public class LevelEditorCore : MonoBehaviour {
 				sizeInput.text = "250";
 				gameSize = 250;
 			}
-
+			
 			Camera.main.orthographicSize = gameSize;
+			PositionColiders.UpdateTopPoint();
 		}
 	}
 

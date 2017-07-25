@@ -9,35 +9,40 @@ public class TeamSetup : MonoBehaviour {
 	public GameObject teamGOPrefab;
 	public GameObject xGO;
 	List<TeamBox> mySpawns = new List<TeamBox>();
-	public Dictionary<int, int> clanDict = new Dictionary<int, int>();
-	LineRenderer lineRenderer;
+	public static Dictionary<int, int> clanDict = new Dictionary<int, int>();
+	//LineRenderer lineRenderer;
+	public RectTransform roundTable;
+	public GameObject sampleLineRenderer;
+	List<GameObject> myLines = new List<GameObject>();
 
-	int ANTICRASH = 0;
 	// Use this for initialization
 	void OnEnable() {
-		lineRenderer = gameObject.GetComponent<LineRenderer>();
+		//lineRenderer = gameObject.GetComponent<LineRenderer>();
 		for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
 			GameObject newTeamBox = Instantiate(teamGOPrefab, this.transform);
 			newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
 			mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
 			mySpawns[i].team = (int)LevelEditorCore.teamList[i];
 			mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
+			mySpawns[i].panel = roundTable;
+			mySpawns[i].r = roundTable.sizeDelta.x / 2;
 		}
 		float diffAngle = (2 * Mathf.PI) / mySpawns.Count;
 		float nextAngle = 0;
 		for (int i = 0; i < mySpawns.Count; i++) {
-			mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * 200, Mathf.Sin(nextAngle) * 200, 0) + transform.position;
+			mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * 200, Mathf.Sin(nextAngle) * 200, 0) + roundTable.position;
 
 			nextAngle += diffAngle;
 			mySpawns[i].AllThingsSet();
 		}
+		MakeLines();
 	}
 	public void OnDisable() {
 		for (int i = 0; i < mySpawns.Count; i++) {
 			Destroy(mySpawns[i].gameObject);
 		}
 		mySpawns.Clear();
-
+		DestroyAllInList(myLines);
 	}
 
 	// Update is called once per frame
@@ -72,11 +77,10 @@ public class TeamSetup : MonoBehaviour {
 		else {
 			CreateAClan(indexMe, indexClosest);
 		}
-		//Visual
-		
+
 	}
 
-	void RemoveFromClan (int firstTeam) {
+	void RemoveFromClan(int firstTeam) {
 		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
 
 		Dictionary<int, int> changes = new Dictionary<int, int>();
@@ -101,11 +105,17 @@ public class TeamSetup : MonoBehaviour {
 			changes.TryGetValue(k, out value);
 
 			clanDict.Remove(k);
-			clanDict.Add(k, value);
+
+			if (value != 0) {
+				clanDict.Add(k, value);
+			}
+
 		}
 
 		clanDict.Remove(firstTeam);
 
+
+		MakeLines();
 		print("Keys ===============================");
 		keys = clanDict.Keys;
 		foreach (int j in keys) {
@@ -123,7 +133,7 @@ public class TeamSetup : MonoBehaviour {
 		int tempAllies = 0;
 
 		if (clanDict.ContainsKey(firstTeam)) {
-			
+
 			clanDict.TryGetValue(firstTeam, out tempAllies);
 
 			List<int> content = IntToList(tempAllies);
@@ -143,14 +153,6 @@ public class TeamSetup : MonoBehaviour {
 			tempAllies += secondTeam;
 
 			clanDict.Add(firstTeam, tempAllies);
-
-			//List<int> debug = new List<int>();
-			//clanDict.TryGetValue(firstTeam, out debug);
-
-			//print(debug.Count);
-			//foreach (int item in debug) {
-			//	print(item);
-			//}
 			tempAllies = 0;
 		}
 
@@ -176,13 +178,10 @@ public class TeamSetup : MonoBehaviour {
 			tempAllies = 0;
 		}
 
-		ANTICRASH += 1;
-		if (ANTICRASH < 10) {
-			CheckAndAddOtherTeams(firstTeam, secondTeam);
-		}
-		else {
-			
-		}
+		CheckAndAddOtherTeams(firstTeam, secondTeam);
+
+
+		MakeLines();
 		print("Keys ===============================");
 		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
 		foreach (int j in keys) {
@@ -191,43 +190,6 @@ public class TeamSetup : MonoBehaviour {
 			clanDict.TryGetValue(j, out debug);
 			print(j + " has these allies: " + debug);
 		}
-		//Debug.LogError("GoTStuck");
-
-		///
-		///
-
-
-		//print("Keys ===============================");
-		//Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
-		//foreach (int j in keys) {
-		//	//print(j + " Key");
-		//	int debug;
-		//	clanDict.TryGetValue(j, out debug);
-		//	print(j + " has these allies: " + debug);
-		//}
-
-		//print("Values ===============================");
-		//Dictionary<int, int>.ValueCollection vals = clanDict.Values;
-
-		//foreach (int item in vals) {
-		//	print(item);
-		//	//tempAlliesContent += (" " + i + ",");  
-		//}
-
-		//clanDict.TryGetValue(firstTeam, out tempAllies);
-		//string tempAlliesContent = "";
-
-		//print(firstTeam + "has these allies:" + tempAlliesContent);
-
-
-		//clanDict.TryGetValue(secondTeam, out tempAllies);
-		//tempAlliesContent = "";
-
-		//foreach (int i in tempAllies) {
-		//	tempAlliesContent += (" " + i + ",");
-		//}
-
-		//print(secondTeam + "has these allies:" + tempAlliesContent);
 	}
 
 	public static List<int> IntToList(int input) {
@@ -243,6 +205,9 @@ public class TeamSetup : MonoBehaviour {
 
 	public static int ListToInt(List<int> list) {
 		int output = 0;
+		if (list.Count == 0) {
+			return 0;
+		}
 		foreach (int i in list) {
 			output = output * 10;
 			output += i;
@@ -279,20 +244,82 @@ public class TeamSetup : MonoBehaviour {
 			}
 		}
 
-
-
 		List<int> misses2 = new List<int>();
 		for (int x = 0; x < firstTeamFriendsList.Count; x++) {
 			if (!secondTeamFriendsList.Contains(firstTeamFriendsList[x])) {
 				misses2.Add(firstTeamFriendsList[x]);
-				print("Miss is " + firstTeamFriendsList[x]);
+				//print("Miss is " + firstTeamFriendsList[x]);
 			}
 		}
 		foreach (int miss in misses2) {
-			Debug.Log("like This: " + miss + " " + secondTeam);
+			//Debug.Log("like This: " + miss + " " + secondTeam);
 			if (miss != secondTeam && miss != firstTeam) {
 				CreateAClan(miss, secondTeam);
 			}
 		}
+	}
+	void DestroyAllInList(List<GameObject> list) {
+		for (int i = 0; i < list.Count; i++) {
+			Destroy(list[i]);
+		}
+	}
+	void MakeLines() {
+
+		DestroyAllInList(myLines);
+		List<List<int>> ActualClans = new List<List<int>>();
+
+		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
+		foreach (int j in keys) {
+			//print(j + " Key");
+			int value;
+			clanDict.TryGetValue(j, out value);
+			List<int> clanJ = IntToList(value);
+			clanJ.Add(j);
+			clanJ.Sort();
+
+			for (int i = 0; i < clanJ.Count; i++) {
+				print(clanJ[i]);
+			}
+			bool newClan = true;
+			foreach (List<int> clan in ActualClans) {
+				//print(" one clan with [0] = " + clan[0]);
+				if (clanJ.Contains(clan[0])) {
+					newClan = false;
+					break;
+				}
+
+			}
+			if (newClan) {
+				ActualClans.Add(clanJ);
+			}
+
+		}
+		Debug.Log("number of clans: " + ActualClans.Count);
+		for (int c = 0; c < ActualClans.Count; c++) {
+
+			LineRenderer r = Instantiate(sampleLineRenderer).GetComponent<LineRenderer>();
+			myLines.Add(r.gameObject);
+			r.startColor = ColourTheTeamButtons.GetColorBasedOnTeam(c);
+			r.endColor = ColourTheTeamButtons.GetColorBasedOnTeam(c);
+			r.positionCount = ActualClans[c].Count;
+			for (int i = 0; i < ActualClans[c].Count; i++) {
+				r.SetPosition(i, (Vector2)Camera.main.ScreenToWorldPoint(mySpawns[MySpawnsIndexFromTeam(ActualClans[c][i])].transform.position));
+			}
+		}
+
+
+	}
+	int MySpawnsIndexFromTeam(int team) {
+		int output = -1;
+		for (int i = 0; i <	mySpawns.Count; i++) {
+			TeamBox spawn = mySpawns[i];
+			if (spawn.team == team) {
+				output = i;
+			}
+		}
+		if (output == -1) {
+			Debug.LogError("Nothing in mySpawns falls under team " + team);
+		}
+		return output;
 	}
 }

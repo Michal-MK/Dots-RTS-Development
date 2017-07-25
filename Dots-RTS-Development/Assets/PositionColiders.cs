@@ -13,20 +13,27 @@ public class PositionColiders : MonoBehaviour {
 	public BoxCollider2D bottomC;
 	public BoxCollider2D leftC;
 
+	public static Vector2 TopRightCameraPointWorld = Vector2.zero;
+	public static Vector2 TopRightCanvasPoint = Vector2.zero;
+
 	// Use this for initialization
 	void Start() {
 		transform.position = Vector3.zero;
 
 		Camera c = Camera.main;
 
+
 		top.transform.position = new Vector3(0, c.orthographicSize);
 		bottom.transform.position = new Vector3(0, -c.orthographicSize);
 		right.transform.position = new Vector3(c.orthographicSize * c.aspect, 0);
 		left.transform.position = new Vector3(-c.orthographicSize * c.aspect, 0);
 
-		topC.size = bottomC.size = new Vector2(c.orthographicSize * c.aspect, 1);
-		rightC.size = leftC.size = new Vector2(c.orthographicSize, 1);
+		topC.size = bottomC.size = new Vector2(c.orthographicSize * c.aspect * 2, 1);
+		rightC.size = leftC.size = new Vector2(c.orthographicSize * 2, 1);
+
 	}
-
-
+	public static void UpdateTopPoint() {
+		Camera c = Camera.main;
+		TopRightCameraPointWorld = new Vector2(c.orthographicSize * c.aspect, c.orthographicSize);
+	}
 }

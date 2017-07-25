@@ -97,7 +97,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 		if (rect.position.x + rect.sizeDelta.x / 2 > panel.position.x + panel.sizeDelta.x / 2) {
 			rect.position = new Vector3(panel.position.x + panel.sizeDelta.x / 2 - rect.sizeDelta.x / 2, rect.position.y);
-
+			mouseOffset = (rect.position - mousePos);
 		}
 
 		if (rect.position.x - rect.sizeDelta.x / 2 < panel.position.x - panel.sizeDelta.x / 2) {
