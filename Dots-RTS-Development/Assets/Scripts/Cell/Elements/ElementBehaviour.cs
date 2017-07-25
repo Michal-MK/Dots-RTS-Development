@@ -6,7 +6,6 @@ class ElementBehaviour : Element {
 
 	private Vector3 acc;
 	private Vector3 vel;
-	private float maxSpeed = 10;
 
 	//Calculates steering behaviour for the element 
 	private void FixedUpdate() {
@@ -29,10 +28,7 @@ class ElementBehaviour : Element {
 		if (d < target.cellRadius) {
 			//Execute this code after collision with target.
 			if (team > 0) {
-				print("Attack");
 				ExecuteAttack();
-
-				//target.DamageCell(team);
 			}
 			else {
 				throw new InvalidOperationException();
@@ -41,7 +37,7 @@ class ElementBehaviour : Element {
 		}
 		Vector3 seekF = target.gameObject.transform.position - gameObject.transform.position;
 		seekF.Normalize();
-		seekF = seekF * maxSpeed;
+		seekF = seekF * eSpeed;
 		return seekF - vel;
 	}
 }

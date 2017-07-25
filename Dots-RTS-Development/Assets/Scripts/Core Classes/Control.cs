@@ -62,6 +62,10 @@ public class Control : MonoBehaviour {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 			StartCoroutine(GameState());
 		}
+		else {
+			StopCoroutine(GameState());
+			isInGame = false;
+		}
 		Time.timeScale = 1;
 		time = 0;
 		if (newS.buildIndex == 6) {
@@ -81,7 +85,7 @@ public class Control : MonoBehaviour {
 			}
 			time.text = gameTime;
 		}
-		if(newS.buildIndex == 2) {
+		if (newS.buildIndex == 2) {
 			LevelSelectScript.displayedSaves.Clear();
 		}
 	}
@@ -91,15 +95,15 @@ public class Control : MonoBehaviour {
 		if (isInGame) {
 			time += Time.deltaTime;
 		}
-
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			if (isPaused) {
-				UnPause();
+		if (SceneManager.GetActiveScene().buildIndex != 1) {
+			if (Input.GetKeyDown(KeyCode.Escape)) {
+				if (isPaused) {
+					UnPause();
+				}
+				else {
+					Pause();
+				}
 			}
-			else {
-				Pause();
-			}
-
 		}
 	}
 
@@ -117,8 +121,8 @@ public class Control : MonoBehaviour {
 					}
 				}
 			}
-			print(activeAIs);
-			if (activeAIs == 0) {
+			print(activeAIs + " " + SceneManager.GetActiveScene().name);
+			if (activeAIs == 0 && (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3)) {
 				yield return new WaitForSeconds(2);
 				YouWon();
 				isInGame = false;
@@ -132,7 +136,7 @@ public class Control : MonoBehaviour {
 				}
 			}
 			print(playerCells);
-			if (playerCells == 0) {
+			if (playerCells == 0 && (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3)) {
 				yield return new WaitForSeconds(2);
 				GameOver();
 				isInGame = false;
@@ -171,7 +175,8 @@ public class Control : MonoBehaviour {
 		if (neutrals == 0) {
 			domination = true;
 		}
-		else { domination = false;
+		else {
+			domination = false;
 		}
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 	}

@@ -52,6 +52,8 @@ public class Cell : MonoBehaviour {
 	public MeshRenderer textRenderer;
 	public LineRenderer circle;
 	public LineRenderer lineToMouse;
+	public CircleCollider2D col;
+	public Rigidbody2D rg;
 
 
 	//Not implemented yet
@@ -77,7 +79,7 @@ public class Cell : MonoBehaviour {
 		}
 
 		transform.localScale = new Vector3(mappedValue, mappedValue, 1);
-		cellRadius = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		cellRadius = col.radius * transform.localScale.x;
 
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
@@ -137,7 +139,8 @@ public class Cell : MonoBehaviour {
 			if (elementCount < maxElements) {
 				elementCount++;
 				elementNrDisplay.text = elementCount.ToString();
-				UpdateCellInfo();
+				SendMessage("UpdateCellInfo",false,SendMessageOptions.DontRequireReceiver);
+				//UpdateCellInfo();
 			}
 		}
 	}

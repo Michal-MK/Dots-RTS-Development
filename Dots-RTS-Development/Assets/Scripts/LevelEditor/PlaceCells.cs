@@ -10,7 +10,7 @@ public class PlaceCells : MonoBehaviour {
 	private void Update() {
 
 #if (UNITY_EDITOR || UNITY_STANDALONE)
-		if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject() && LevelEditorCore.editorMode == LevelEditorCore.Mode.PlaceCells) {
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && LevelEditorCore.editorMode == LevelEditorCore.Mode.PlaceCells) {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
 			Cell c = newCell.GetComponent<Cell>();

@@ -525,11 +525,15 @@ MonoBehaviour:
   isRegenerating: 0
   isDecaying: 0
   _team: 0
+  providedDebuff: 0
+  appliedDebuffs: 
   cellSprite: {fileID: 212889015483235864}
   elementNrDisplay: {fileID: 102407273969586368}
   textRenderer: {fileID: 23188911867152260}
   circle: {fileID: 0}
   lineToMouse: {fileID: 0}
+  col: {fileID: 58687791029425176}
+  rg: {fileID: 0}
   um: {fileID: 114889160387685830}
 --- !u!114 &114409544089343134
 MonoBehaviour:

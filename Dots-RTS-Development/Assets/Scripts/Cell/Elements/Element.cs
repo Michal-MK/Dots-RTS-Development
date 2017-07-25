@@ -10,6 +10,7 @@ public class Element : MonoBehaviour {
 	public CellBehaviour target;
 
 	private int damage = 1;
+	public float eSpeed = 10;
 
 	public enum enmDebuffs {
 		NONE,
@@ -41,7 +42,7 @@ public class Element : MonoBehaviour {
 			}
 			case enmDebuffs.SLOW_REGENERATION: {
 				damage = 1;
-				print("Handeled by cell");
+				//print("Handeled by cell");
 				target.DamageCell(team, damage, debuff);
 				return;
 			}
@@ -57,7 +58,7 @@ public class Element : MonoBehaviour {
 			}
 			case enmDebuffs.DOT: {
 				damage = 1;
-				print("Handeled by cell");
+				//print("Handeled by cell");
 				target.DamageCell(team, damage, debuff);
 				return;
 			}

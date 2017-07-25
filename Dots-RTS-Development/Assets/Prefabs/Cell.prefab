@@ -555,11 +555,15 @@ MonoBehaviour:
   isRegenerating: 0
   isDecaying: 0
   _team: -1
+  providedDebuff: 0
+  appliedDebuffs: 
   cellSprite: {fileID: 212300405552671422}
   elementNrDisplay: {fileID: 102996459730448940}
   textRenderer: {fileID: 23758171399307986}
   circle: {fileID: 120392592380657662}
   lineToMouse: {fileID: 120648458152734208}
+  col: {fileID: 58681607452999552}
+  rg: {fileID: 50472514863298794}
   um: {fileID: 114873760863696038}
   isSelected: 0
   cellObj: {fileID: 1930486067858668}

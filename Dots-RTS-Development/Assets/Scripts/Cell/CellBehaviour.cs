@@ -33,7 +33,7 @@ public class CellBehaviour : Cell {
 			regenPeriod = 0.3f;
 		}
 
-		cellRadius = gameObject.GetComponent<CircleCollider2D>().radius * transform.localScale.x;
+		cellRadius = col.radius * transform.localScale.x;
 		UpdateCellInfo();
 	}
 
@@ -186,6 +186,7 @@ public class CellBehaviour : Cell {
 			}
 			if (isSelected) {
 				circle.enabled = true;
+				//circle.positionCount = 0;
 				CreateCircle(transform.position, cellRadius, 30);
 			}
 			else {
@@ -210,6 +211,21 @@ public class CellBehaviour : Cell {
 			circle.enabled = true;
 			CreateCircle(transform.position, cellRadius, 30);
 
+		}
+	}
+	Vector3 oldPos;
+	private void FixedUpdate() {
+		//Does not work for some reason..
+		//if(rg.velocity != Vector2.zero) {
+		//	UpdateCellInfo(false);
+		//}
+		if(oldPos == null) {
+			oldPos = transform.position;
+		}
+		Vector3 vel = transform.position - oldPos;
+
+		if(vel != Vector3.zero) {
+			UpdateCellInfo(false);
 		}
 	}
 
