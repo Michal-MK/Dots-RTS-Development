@@ -21,11 +21,7 @@ public class LevelSelectScript : MonoBehaviour {
 	//Display alll saves that you can find in the scroll view
 	private void Start() {
 
-#if !(UNITY_ANDROID || UNITY_IOS)
-		saveDir = Application.streamingAssetsPath + "\\Saves";
-#else
-		saveDir = Application.persistentDataPath + "/Saves";
-#endif
+		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves";
 
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		error.text = "";

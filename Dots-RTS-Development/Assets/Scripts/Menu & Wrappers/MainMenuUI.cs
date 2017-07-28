@@ -27,4 +27,11 @@ public class MainMenuUI : MonoBehaviour {
 		SceneManager.LoadScene(sceneIndex);
 
 	}
+	public void SwitchScene(string Name) {
+		if (SceneManager.GetActiveScene().buildIndex == 1) {
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+		}
+		Control.cells.Clear();
+		SceneManager.LoadScene(Name);
+	}
 }

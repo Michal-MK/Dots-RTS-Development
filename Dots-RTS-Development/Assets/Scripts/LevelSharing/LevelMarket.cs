@@ -26,23 +26,7 @@ public class LevelMarket : MonoBehaviour {
 		isRefeshing = false;
 		List<string> contents = server.GetContents();
 
-#if !(UNITY_ANDROID || UNITY_IOS)
-		if (!Directory.Exists(Application.persistentDataPath + "\\Saves\\")) {
-			Directory.CreateDirectory(Application.persistentDataPath + "\\Saves\\");
-		}
-		if (!Directory.Exists(Application.temporaryCachePath + "\\Saves\\")) {
-			Directory.CreateDirectory(Application.temporaryCachePath + "\\Saves\\");
-		}
-		DirectoryInfo persistentDir = new DirectoryInfo(Application.streamingAssetsPath + "\\Saves\\");
-#else
-		if (!Directory.Exists(Application.persistentDataPath + "/Saves/")) {
-			Directory.CreateDirectory(Application.persistentDataPath + "/Saves/");
-		}
-		if (!Directory.Exists(Application.temporaryCachePath + "/Saves/")) {
-			Directory.CreateDirectory(Application.temporaryCachePath + "/Saves/");
-		}
-		DirectoryInfo persistentDir = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
-#endif
+		DirectoryInfo persistentDir = new DirectoryInfo(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves");
 
 		for (int i = 0; i < contents.Count; i++) {
 			if (isRefeshing) {

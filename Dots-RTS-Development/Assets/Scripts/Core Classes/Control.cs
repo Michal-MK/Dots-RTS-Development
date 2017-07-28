@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class Control : MonoBehaviour {
+
+	#region Delegates
 	public delegate void TeamChangeEventHandler(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current);
-
 	public delegate void EnteredCellEditMode(EditCell sender);
-
 	public delegate void PanelValueChanged();
 	public delegate void EditModeChanged(LevelEditorCore.Mode mode);
 	public delegate void NewSelectionForDownload(SaveFileInfo sender);
+	#endregion
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
 
@@ -24,6 +26,8 @@ public class Control : MonoBehaviour {
 
 	private static float time;
 	private bool isInGame = false;
+
+	public GameObject profileVis;
 
 	#region Post-Game data
 	private static bool isWinner = true;
@@ -40,6 +44,17 @@ public class Control : MonoBehaviour {
 		else if (script != this) {
 			Destroy(gameObject);
 		}
+
+		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves")) {
+			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves");
+		}
+		if (!Directory.Exists(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves")) {
+			Directory.CreateDirectory(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
+		}
+		if(!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
+			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
+		}
+
 	}
 	private void Start() {
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
@@ -49,13 +64,12 @@ public class Control : MonoBehaviour {
 			isInGame = true;
 			StartCoroutine(GameState());
 		}
-
 	}
+
 	private void OnDestroy() {
 		SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
 	}
 	#endregion
-
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 		if (newS.buildIndex == 3 || newS.buildIndex == 5) {
@@ -88,8 +102,13 @@ public class Control : MonoBehaviour {
 		if (newS.buildIndex == 2) {
 			LevelSelectScript.displayedSaves.Clear();
 		}
-	}
 
+		if (SceneManager.GetActiveScene().name == "Profiles") {
+			print("Azzz");
+			ProfileManager p = new ProfileManager(profileVis, GameObject.Find("Content").transform);
+			p.ListProfiles();
+		}
+	}
 
 	private void Update() {
 		if (isInGame) {

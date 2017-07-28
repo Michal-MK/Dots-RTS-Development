@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class SaveAndLoadEditor : MonoBehaviour {
 
-
 	public GameObject prefab;
 
 	public InputField fileNameInput;
@@ -25,38 +24,16 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	private void Start() {
-
 		if (!string.IsNullOrEmpty(PlayerPrefs.GetString("LoadLevelFilePath"))) {
 			Load(PlayerPrefs.GetString("LoadLevelFilePath"));
 		}
-		//fileName = string.Format(DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString());
 	}
-	private void OnDestroy() {
-	}
-
-
-	//
-	//
-	//
-
-	//
 
 	public void Save() {
 		fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-		
+
 		#region Pre-Save Error checking
 
-#if !(UNITY_ANDROID || UNITY_IOS)
-		if (!Directory.Exists(Application.streamingAssetsPath + "\\Saves")) {
-			Directory.CreateDirectory(Application.streamingAssetsPath + "\\Saves");
-			ErrorMessages.text = "Created the Saves directory";
-		}
-#else
-		if (!Directory.Exists(Application.persistentDataPath + "/Saves")) {
-			Directory.CreateDirectory(Application.persistentDataPath + "/Saves");
-			ErrorMessages.text = "Created the Saves directory";
-		}
-#endif
 		ErrorMessages.text = "";
 
 		int numAllies = 0;
@@ -74,7 +51,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			return;
 		}
 
-		ErrorMessages.text += "You picked the fileName: " + fileName+ ". \n";
+		ErrorMessages.text += "You picked the fileName: " + fileName + ". \n";
 
 		if (LevelEditorCore.levelName == gameObject.GetComponent<LevelEditorCore>().defaultLevelName) {
 			ErrorMessages.text += "You picked the default levelName: " + LevelEditorCore.levelName + ". \n";
@@ -89,67 +66,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		else {
 			ErrorMessages.text += "You picked the authorName: " + LevelEditorCore.authorName + ". \n";
 		}
-
-
 		#endregion
 
-#if (UNITY_ANDROID || UNITY_IOS)
-
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/Saves/" + fileName+ ".phage");
-		if (File.Exists(Application.persistentDataPath + "/Saves/" + fileName+ ".phage")) {
-			ErrorMessages.text += "Succes, Created a file: " + fileName;
-		}
-		else {
-			ErrorMessages.text += "Fail, change the file name";
-			return;
-		}
+		FileStream file = File.Create(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage");
 		SaveData save = new SaveData();
 
-
 		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
-			Cell c = LevelEditorCore.cellList[i];
-
-			S_Cell serCell = new S_Cell();
-			serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
-			serCell.elementCount = c.elementCount;
-			serCell.maxElementCount = c.maxElements;
-			serCell.team = (int)c.cellTeam;
-			serCell.regenerationPeriod = c.regenPeriod;
-			serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
-
-			save.cells.Add(serCell);
-		}
-		save.difficulty = LevelEditorCore.aiDificulty;
-		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
-		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
-		formatter.Serialize(file, save);
-		file.Close();
-#else
-
-
-
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.streamingAssetsPath + "\\Saves\\" + fileName+ ".phage");
-
-		if (File.Exists(Application.streamingAssetsPath + "\\Saves\\" + fileName+ ".phage")) {
-			ErrorMessages.text += "Succes, Created a file: " + fileName;
-		}
-		else {
-			ErrorMessages.text += "Fail, change the file name";
-			file.Close();
-			return;
-		}
-
-		SaveData save = new SaveData();
-
-
-		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
-			if (LevelEditorCore.cellList[i] == null) {
-				ErrorMessages.text += "No cell number " + i + "found";
-				file.Close();
-				return;
-			}
 			Cell c = LevelEditorCore.cellList[i];
 
 			S_Cell serCell = new S_Cell();
@@ -164,11 +87,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 		save.difficulty = LevelEditorCore.aiDificulty;
 		save.gameSize = LevelEditorCore.gameSize;
-		print(LevelEditorCore.levelName + " " + LevelEditorCore.authorName);
 		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
+		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 		formatter.Serialize(file, save);
 		file.Close();
-#endif
 	}
 
 	public void Load(string path) {
@@ -185,7 +107,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			Cell c = Instantiate(prefab).GetComponent<Cell>();
 
 			c.cellPosition = (Vector3)save.cells[j].pos;
-			c.gameObject.transform.position = (Vector3)c.cellPosition;
+			c.gameObject.transform.position = c.cellPosition;
 			c.elementCount = save.cells[j].elementCount;
 			c.maxElements = save.cells[j].maxElementCount;
 			c.cellTeam = (Cell.enmTeam)save.cells[j].team;
@@ -196,55 +118,6 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 	}
 }
-
-//public void Save() {
-
-//	BinaryFormatter formatter = new BinaryFormatter();
-//	FileStream file = File.Create(Application.streamingAssetsPath + "\\Saves\\" + fileName + ".phage");
-
-//	if (File.Exists(Application.streamingAssetsPath + "\\Saves\\" + fileName + ".phage")) {
-//		ErrorMessages.text = "Succes, Created a file: " + fileName;
-//	}
-//	else {
-//		ErrorMessages.text = "Fail, change the file name";
-//		file.Close();
-//		return;
-//	}
-
-//	SaveData save = new SaveData();
-
-
-//	for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
-//		if (LevelEditorCore.cellList[i] == null) {
-//			ErrorMessages.text = "No cell number " + i + "found";
-//			file.Close();
-//			return;
-//		}
-//		Cell c = LevelEditorCore.cellList[i];
-
-//		S_Cell serCell = new S_Cell();
-//		serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
-//		serCell.elementCount = c.elementCount;
-//		serCell.maxElementCount = c.maxElements;
-//		serCell.team = (int)c.cellTeam;
-//		serCell.regenerationPeriod = c.regenPeriod;
-//		serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
-
-//		save.cells.Add(serCell);
-//	}
-//	save.difficulty = aiDiff;
-//	print(levelName + " " + creator);
-//	save.levelInfo = new LevelInfo(levelName, creator);
-//	formatter.Serialize(file, save);
-//	file.Close();
-//}
-
-
-//}
-//}
-
-//#endif
-
 
 [Serializable]
 public class LevelInfo {

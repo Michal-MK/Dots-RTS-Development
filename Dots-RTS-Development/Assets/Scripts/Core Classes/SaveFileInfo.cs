@@ -46,30 +46,19 @@ public class SaveFileInfo : MonoBehaviour {
 		serverAccess.DownloadFileFTP(filename.name);
 	}
 
-
 	#endregion
 
 	#region Local
 
 	public void LoadLevel(Transform levelName) {
-#if !(UNITY_ANDROID || UNITY_IOS)
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.streamingAssetsPath + "\\Saves\\" + levelName.name);
+		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
 		SceneManager.LoadScene(3);
-#else
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + "/Saves/" + levelName.name);
-		SceneManager.LoadScene(3);
-#endif
 	}
 
 	public void DeleteObject(Transform fileName) {
-#if !(UNITY_ANDROID || UNITY_IOS)
-		File.Delete(Application.streamingAssetsPath + "\\Saves\\" + fileName.name);
-#else
-		File.Delete(Application.persistentDataPath + "/Saves/" + fileName.name);
-#endif
+		File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
 		LevelSelectScript.displayedSaves.Remove(this);
 		Destroy(gameObject);
-
 	}
 
 	public void UploadLevel(Transform fileName) {
@@ -88,14 +77,9 @@ public class SaveFileInfo : MonoBehaviour {
 	#region Editor Specific
 
 	public void LoadToEditor() {
-		string fileName;
-#if (UNITY_ANDROID || UNITY_IOS)
-		fileName = Application.persistentDataPath + "/Saves/ " + transform.name;
-#else
-		fileName = Application.streamingAssetsPath + "\\Saves\\" + transform.name;
-#endif
+		string fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+
 		saveAndLoadEditor.Load(fileName);
 	}
-
 	#endregion
 }
