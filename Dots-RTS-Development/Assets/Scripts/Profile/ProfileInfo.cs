@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 class ProfileInfo : MonoBehaviour {
@@ -12,6 +13,8 @@ class ProfileInfo : MonoBehaviour {
 
 	public void SelectProfile() {
 		ProfileManager.currentProfile = selected;
+		SceneManager.LoadScene(0);
+		print(ProfileManager.currentProfile.profileName);
 	}
 
 }

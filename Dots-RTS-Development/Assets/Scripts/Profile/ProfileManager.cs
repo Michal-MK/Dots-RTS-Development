@@ -38,30 +38,28 @@ public class ProfileManager {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "\\Profiles\\");
 		FileInfo[] files = dir.GetFiles("*.gp");
 		BinaryFormatter bf = new BinaryFormatter();
-		
-		if(files.Length == 0) {
+
+		if (files.Length == 0) {
 			b.gameObject.SetActive(true);
 			b.onClick.AddListener(() => ShowProfileCreation());
 			return;
 		}
-		for (int i = 0; i < 10; i++) {
-			foreach (FileInfo f in files) {
-				using (FileStream fs = File.Open(f.FullName, FileMode.Open)) {
-					try {
-						Profile p = (Profile)bf.Deserialize(fs);
+		foreach (FileInfo f in files) {
+			using (FileStream fs = File.Open(f.FullName, FileMode.Open)) {
+				try {
+					Profile p = (Profile)bf.Deserialize(fs);
 
-						ProfileInfo pI = GameObject.Instantiate(profileVisual, parent).GetComponent<ProfileInfo>();
-						pI.selected = p;
-						pI.profileName.text = p.profileName;
-						/*
-						Texture2D t = new Texture2D(160, 90);
-						t.LoadImage(File.ReadAllBytes(byte[] preview of the level that this profile is on));
-						pI.careerLevel.texture = t;
-						*/
-					}
-					catch (Exception e) {
-						Debug.Log(e);
-					}
+					ProfileInfo pI = GameObject.Instantiate(profileVisual, parent).GetComponent<ProfileInfo>();
+					pI.selected = p;
+					pI.profileName.text = p.profileName;
+					/*
+					Texture2D t = new Texture2D(160, 90);
+					t.LoadImage(File.ReadAllBytes(byte[] preview of the level that this profile is on));
+					pI.careerLevel.texture = t;
+					*/
+				}
+				catch (Exception e) {
+					Debug.Log(e);
 				}
 			}
 		}
@@ -78,12 +76,12 @@ public class ProfileManager {
 	private void CreateNewProfile() {
 		string name = GameObject.Find("Name_IF").GetComponent<InputField>().text;
 
-		if(name.Length < 3) {
+		if (name.Length < 3) {
 			Debug.Log("Invalid name");
 		}
-		foreach(char ch in Path.GetInvalidFileNameChars()) {
+		foreach (char ch in Path.GetInvalidFileNameChars()) {
 			for (int i = 0; i < name.Length; i++) {
-				if(name[i] == ch) {
+				if (name[i] == ch) {
 					Debug.Log("Contains Invalid Character");
 					return;
 				}
@@ -101,7 +99,7 @@ public class ProfileManager {
 		p.onLevelBaseGame = 1;
 		p.onLevelImage = null;
 
-		using(FileStream fs = new FileStream(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp",FileMode.Create)) {
+		using (FileStream fs = new FileStream(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp", FileMode.Create)) {
 			bf.Serialize(fs, p);
 		}
 		profileCreation.SetActive(false);
@@ -117,7 +115,7 @@ public class ProfileManager {
 
 	public static Profile GetCurrentProfile {
 		get { return currentProfile; }
-	} 
+	}
 
 }
 

@@ -28,6 +28,7 @@ public class Control : MonoBehaviour {
 	private bool isInGame = false;
 
 	public GameObject profileVis;
+	public ProfileManager pM;
 
 	#region Post-Game data
 	private static bool isWinner = true;
@@ -54,8 +55,8 @@ public class Control : MonoBehaviour {
 		if(!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		}
-
 	}
+
 	private void Start() {
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 		if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
@@ -63,6 +64,14 @@ public class Control : MonoBehaviour {
 			time = 0;
 			isInGame = true;
 			StartCoroutine(GameState());
+		}
+		if (SceneManager.GetActiveScene().name == "Profiles") {
+			print("Azzz");
+			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
+			pM.ListProfiles();
+		}
+		if(ProfileManager.currentProfile == null) {
+			SceneManager.LoadScene("Profiles");
 		}
 	}
 
@@ -105,8 +114,11 @@ public class Control : MonoBehaviour {
 
 		if (SceneManager.GetActiveScene().name == "Profiles") {
 			print("Azzz");
-			ProfileManager p = new ProfileManager(profileVis, GameObject.Find("Content").transform);
-			p.ListProfiles();
+			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
+			pM.ListProfiles();
+		}
+		if(newS.buildIndex == 0) {
+			GameObject.Find("Profile").GetComponent<Text>().text += ProfileManager.currentProfile.profileName;
 		}
 	}
 
