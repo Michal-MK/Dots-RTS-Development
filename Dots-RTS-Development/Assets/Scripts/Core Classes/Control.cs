@@ -23,6 +23,7 @@ public class Control : MonoBehaviour {
 	private static Control script;
 
 	public static GameObject menuPanel;
+	public static int DebugSceneIndex = 0;
 
 	private static float time;
 	private bool isInGame = false;
@@ -71,6 +72,7 @@ public class Control : MonoBehaviour {
 			pM.ListProfiles();
 		}
 		if(ProfileManager.currentProfile == null) {
+			DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			SceneManager.LoadScene("Profiles");
 		}
 	}
@@ -113,7 +115,7 @@ public class Control : MonoBehaviour {
 		}
 
 		if (SceneManager.GetActiveScene().name == "Profiles") {
-			print("Azzz");
+			//print("Azzz");
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}

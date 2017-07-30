@@ -15,7 +15,8 @@ public class LevelSelectScript : MonoBehaviour {
 	public GameObject campaignObject;
 
 	public Transform scrollViewContent;
-	public Transform campaignViewContent;
+	public Transform campaignViewContent0;
+	public Transform campaignViewContent1;
 
 	public Text error;
 
@@ -23,10 +24,13 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
 
+	public int onPage = 0;
+	public int totalPages = 1;
+
 	private void Start() {
 		if (SceneManager.GetActiveScene().buildIndex == 2) {
 			ListCustomSaves();
-			ListCampaignLevels();
+			ListCampaignLevels(1);
 		}
 	}
 
@@ -66,16 +70,40 @@ public class LevelSelectScript : MonoBehaviour {
 		}
 	}
 
-	public void ListCampaignLevels() {
-		BinaryFormatter bf = new BinaryFormatter();
-		CampaignLevel c;
-		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign";
-		foreach (string dir in Directory.GetDirectories(saveDir)) {
-			DirectoryInfo d = new DirectoryInfo(dir);
-			for (int i = 0; i < d.GetFiles("*.pwl").Length; i++) {
+	public void ListCampaignLevels(int diff) {
+		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + diff;
+		DirectoryInfo d = new DirectoryInfo(saveDir);
+		int totalLevels = d.GetFiles("*.pwl").Length;
 
-				GameObject g = Instantiate(campaignObject, campaignViewContent);
-				g.name = "Level_" + (i + 1);
+		int totalPages = totalLevels / 10;
+
+
+		foreach (CampaignLevel g in campaignViewContent0.GetComponentsInChildren<CampaignLevel>()) {
+			Destroy(g.gameObject);
+		}
+		foreach (CampaignLevel g in campaignViewContent1.GetComponentsInChildren<CampaignLevel>()) {
+			Destroy(g.gameObject);
+		}
+
+		int i = onPage * 10;
+		int j;
+		if(totalLevels > 10) {
+			j = 10;
+		}
+		else {
+			j = totalLevels;
+		}
+
+		for (int q = i ; q < j; q++) {
+			if (q <= 4) {
+				CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
+				c.gameObject.name = "Level_" + (q + 1);
+				c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
+			}
+			else {
+				CampaignLevel c = Instantiate(campaignObject, campaignViewContent1).GetComponent<CampaignLevel>();
+				c.gameObject.name = "Level_" + (q + 1);
+				c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
 			}
 		}
 	}
@@ -88,4 +116,6 @@ public class LevelSelectScript : MonoBehaviour {
 			}
 		}
 	}
+
+
 }

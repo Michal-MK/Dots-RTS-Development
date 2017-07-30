@@ -98,37 +98,23 @@ public class SaveGameEditor : Editor {
 	}
 }
 
-public class EditorGUILayoutToggle : EditorWindow {
+public class CampaignLevelCreator : EditorWindow {
 	bool showBtn = true;
 
-	[MenuItem("Campaign/Test")]
+
+	[MenuItem("Campaign/SaveLevel")]
 	static void Init() {
-		EditorGUILayoutToggle window = (EditorGUILayoutToggle)GetWindow(typeof(EditorGUILayoutToggle), true, "My Empty Window");
+		CampaignLevelCreator window = (CampaignLevelCreator)GetWindow(typeof(CampaignLevelCreator), true, "My Empty Window");
 		window.Show();
 	}
 
 	void OnGUI() {
 		showBtn = EditorGUILayout.Toggle("Show Button", showBtn);
-		if (showBtn)
-			if (GUILayout.Button("Close"))
+		if (showBtn) {
+			if (GUILayout.Button("Close")) {
 				Close();
-	}
-
-	[MenuItem("CONTEXT/SaveFileInfo/Double Mass")]
-	static void DoubleMass(MenuCommand command) {
-		SaveFileInfo body = (SaveFileInfo)command.context;
-		Debug.Log("Doubled Rigidbody's Mass to " + body.name + " from Context Menu.");
-	}
-
-	[MenuItem("GameObject/MyCategory/Custom Game Object", false, 10)]
-	static void CreateCustomGameObject(MenuCommand menuCommand) {
-		// Create a custom game object
-		GameObject go = new GameObject("Custom Game Object");
-		// Ensure it gets reparented if this was a context click (otherwise does nothing)
-		GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
-		// Register the creation in the undo system
-		Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
-		Selection.activeObject = go;
+			}
+		}
 	}
 }
 
