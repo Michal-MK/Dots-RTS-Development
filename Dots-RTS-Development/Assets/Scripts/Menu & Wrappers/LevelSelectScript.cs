@@ -12,14 +12,22 @@ public class LevelSelectScript : MonoBehaviour {
 	string saveDir;
 
 	public GameObject levelObject;
+	public GameObject campaignObject;
+
 	public Transform scrollViewContent;
+	public Transform campaignViewContent;
+
 	public Text error;
+
 	public SaveAndLoadEditor saveAndLoadEditor;
 
 	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
 
 	private void Start() {
-		ListCustomSaves();
+		if (SceneManager.GetActiveScene().buildIndex == 2) {
+			ListCustomSaves();
+			ListCampaignLevels();
+		}
 	}
 
 	//Display alll saves that you can find in the scroll view
@@ -54,6 +62,20 @@ public class LevelSelectScript : MonoBehaviour {
 				displayedSaves.Add(level);
 				level.gameObject.SetActive(true);
 
+			}
+		}
+	}
+
+	public void ListCampaignLevels() {
+		BinaryFormatter bf = new BinaryFormatter();
+		CampaignLevel c;
+		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign";
+		foreach (string dir in Directory.GetDirectories(saveDir)) {
+			DirectoryInfo d = new DirectoryInfo(dir);
+			for (int i = 0; i < d.GetFiles("*.pwl").Length; i++) {
+
+				GameObject g = Instantiate(campaignObject, campaignViewContent);
+				g.name = "Level_" + (i + 1);
 			}
 		}
 	}

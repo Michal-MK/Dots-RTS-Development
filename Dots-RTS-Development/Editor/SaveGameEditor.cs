@@ -63,7 +63,6 @@ public class SaveGameEditor : Editor {
 				BinaryFormatter formatter = new BinaryFormatter();
 				using (FileStream file = File.Create(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + fileName + ".pwl")) {
 					SaveDataCampaign save = new SaveDataCampaign();
-					save.game = new SaveData();
 
 					for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
 						Cell c = LevelEditorCore.cellList[i];
@@ -80,11 +79,13 @@ public class SaveGameEditor : Editor {
 					}
 					save.game.difficulty = LevelEditorCore.aiDificulty;
 					save.game.gameSize = LevelEditorCore.gameSize;
-					save.game.levelInfo = new LevelInfo(name, LevelEditorCore.authorName, DateTime.Now);
+					save.game.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
 					save.isCleared = false;
 					string imgPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + fileName + ".png";
 					ScreenCapture.CaptureScreenshot(imgPath);
-					save.preview = imgPath;
+					Texture2D tex = new Texture2D(190, 80);
+					tex.LoadImage(File.ReadAllBytes(imgPath));
+					save.preview = tex;
 					formatter.Serialize(file, save);
 					file.Close();
 				}

@@ -219,9 +219,9 @@ public class CellBehaviour : Cell {
 		//if(rg.velocity != Vector2.zero) {
 		//	UpdateCellInfo(false);
 		//}
-		if(oldPos == null) {
-			oldPos = transform.position;
-		}
+		//if(oldPos == null) {
+		//	oldPos = transform.position;
+		//}
 		Vector3 vel = transform.position - oldPos;
 
 		if(vel != Vector3.zero) {

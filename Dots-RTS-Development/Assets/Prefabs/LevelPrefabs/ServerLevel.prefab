@@ -206,8 +206,11 @@ MonoBehaviour:
   downloadButton: {fileID: 0}
   levelName: {fileID: 114433716353977564}
   time: {fileID: 114441502796968872}
+  author: {fileID: 0}
   indicator: {fileID: 114967927502145628}
   bg: {fileID: 114624211746044356}
+  saveAndLoadEditor: {fileID: 0}
+  timeRaw: 
 --- !u!114 &114787902251538574
 MonoBehaviour:
   m_ObjectHideFlags: 1
