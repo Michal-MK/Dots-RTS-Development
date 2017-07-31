@@ -69,10 +69,14 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		#endregion
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage");
-		SaveData save = new SaveData();
+#if UNITY_ANDROID
+        FileStream file = File.Create(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage");
+#else
+        FileStream file = File.Create(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage");
+#endif
+        SaveData save = new SaveData();
 
-		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+        for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
 			Cell c = LevelEditorCore.cellList[i];
 
 			S_Cell serCell = new S_Cell();
@@ -88,6 +92,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		save.difficulty = LevelEditorCore.aiDificulty;
 		save.gameSize = LevelEditorCore.gameSize;
 		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
+        save.clans = TeamSetup.clanDict;
 		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 		formatter.Serialize(file, save);
 		file.Close();
@@ -100,7 +105,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		LevelEditorCore.gameSize = save.gameSize;
 		gameObject.GetComponent<LevelEditorCore>().RefreshCameraSize();
-		file.Close();
+        TeamSetup.clanDict = save.clans;
+        file.Close();
 
 		for (int j = 0; j < save.cells.Count; j++) {
 

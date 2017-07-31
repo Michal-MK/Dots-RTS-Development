@@ -19,14 +19,14 @@ public class TeamSetup : MonoBehaviour {
 	void OnEnable() {
 		//lineRenderer = gameObject.GetComponent<LineRenderer>();
 		for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
-			GameObject newTeamBox = Instantiate(teamGOPrefab, this.transform);
-			newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
-			mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
-			mySpawns[i].team = (int)LevelEditorCore.teamList[i];
-			mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
-			mySpawns[i].panel = roundTable;
-			mySpawns[i].r = roundTable.sizeDelta.x / 2;
-		}
+            GameObject newTeamBox = Instantiate(teamGOPrefab, this.transform);
+            newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
+            mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
+            mySpawns[i].team = (int)LevelEditorCore.teamList[i];
+            mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
+            mySpawns[i].panel = roundTable;
+            mySpawns[i].r = roundTable.sizeDelta.x / 2;
+        }
 		float diffAngle = (2 * Mathf.PI) / mySpawns.Count;
 		float nextAngle = 0;
 		for (int i = 0; i < mySpawns.Count; i++) {
