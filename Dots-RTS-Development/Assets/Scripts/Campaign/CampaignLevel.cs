@@ -15,10 +15,10 @@ class CampaignLevel : MonoBehaviour {
 	public Text clearTime;
 	#endregion
 
+	[HideInInspector]
 	public string levelPath;
 
 	private void Start() {
-		levelPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + gameObject.name + ".pwl";
 
 		BinaryFormatter bf = new BinaryFormatter();
 
@@ -29,6 +29,7 @@ class CampaignLevel : MonoBehaviour {
 			fs.Close();
 
 		}
+
 		Texture2D tex = new Texture2D(190, 80);
 		tex.LoadImage(File.ReadAllBytes(levelInfo.preview));
 

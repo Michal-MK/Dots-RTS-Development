@@ -13,8 +13,7 @@ class ProfileInfo : MonoBehaviour {
 
 	public void SelectProfile() {
 		ProfileManager.currentProfile = selected;
-		SceneManager.LoadScene(0);
-		print(ProfileManager.currentProfile.profileName);
+		SceneManager.LoadScene(Control.DebugSceneIndex);
 	}
 
 }
