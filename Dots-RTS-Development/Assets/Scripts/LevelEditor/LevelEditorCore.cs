@@ -22,8 +22,9 @@ public class LevelEditorCore : MonoBehaviour {
 	public static InputField startInput;
 	public static InputField regenInput;
 	//GameSetttingPanel
-	public static InputField aiDifficultyInput;
-	public static InputField sizeInput;
+	public static InputField aiDifficultyAllInput;
+    public static InputField aiDifficultySingleInput;
+    public static InputField sizeInput;
 	//IOPanel
 	//public static InputField fileNameInput;
 	public static InputField levelNameInput;
@@ -39,12 +40,14 @@ public class LevelEditorCore : MonoBehaviour {
 	public static int start;
 	public static float regen;
 	//GameSettingsPanel
-	public static float aiDificulty;
+	public static float aiDificultyAll;
 	public static float gameSize;
-	//IOPanel
-	//public static string fileName;
-	public static string levelName;
+    public static Dictionary<int, float> aiDifficultyDict = new Dictionary<int, float>();
+    //IOPanel
+    //public static string fileName;
+    public static string levelName;
 	public static string authorName;
+    
 	
 
 
@@ -101,7 +104,8 @@ public class LevelEditorCore : MonoBehaviour {
 		startInput = GameObject.Find("START_Elements_IF").GetComponent<InputField>();
 		regenInput = GameObject.Find("REGEN_Elements_IF").GetComponent<InputField>();
 
-		aiDifficultyInput = GameObject.Find("AI_Diff_IF").GetComponent<InputField>();
+		aiDifficultyAllInput = GameObject.Find("AI_Diff_IF").GetComponent<InputField>();
+        aiDifficultySingleInput = GameObject.Find("Single_Ai_Diff_IF").GetComponent<InputField>();
 		sizeInput = GameObject.Find("CAM_Size_IF").GetComponent<InputField>();
 
 		//fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
@@ -114,8 +118,9 @@ public class LevelEditorCore : MonoBehaviour {
 
 		//Set the defaluts by parsing all of the input fields
 		GetPlaceCellPanelValues();
-		GetGameSettingsPanelValues();
+		RefreshCameraSize();
 		GetIOPanelValues();
+        AiDiffHandler();
 		// Set defalut mode to placeCells
 		//Have to wait for all of the things to initialize before I can call a button press
 		yield return new WaitForEndOfFrame();
@@ -166,16 +171,42 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 
 	}
-	public void GetGameSettingsPanelValues () {
-		if (!float.TryParse(aiDifficultyInput.text, out aiDificulty)) {
-			aiDificulty = defaultDificulty;
-		}
-		if (!float.TryParse(sizeInput.text, out gameSize)) {
-			gameSize = defaultGameSize;
-		}
 
-		RefreshCameraSize();
-	}
+    /// <summary>
+    /// Refreshes the Ai difficulty
+    /// </summary>
+    /// <param name="team">the team this applies to, 0 = all</param>
+    public void AiDiffHandler(int team = 0) {
+        Dictionary<int, float>.KeyCollection keys = aiDifficultyDict.Keys;
+        if (float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
+
+            foreach (int key in aiDifficultyDict.Keys) {
+                aiDifficultyDict.Remove(key);
+                aiDifficultyDict.Add(key, aiDificultyAll);
+            }
+        }
+        else if (!float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
+            foreach (int key in aiDifficultyDict.Keys) {
+                aiDifficultyDict.Remove(key);
+                aiDifficultyDict.Add(key, defaultDificulty);
+            }
+        }
+        else {
+            float singleDiff;
+            if (float.TryParse(aiDifficultySingleInput.text, out singleDiff)) {
+                aiDifficultyDict.Remove(team);
+                aiDifficultyDict.Add(team, singleDiff);
+            }
+            else
+            {
+                aiDifficultyDict.Remove(team);
+                aiDifficultyDict.Add(team, defaultDificulty);
+
+            }
+        }
+
+    }
+
 	public void GetIOPanelValues() {
 		//if (string.IsNullOrEmpty(fileNameInput.text) || fileNameInput.text == " ") {
 		//	fileName = defaultFileName;
@@ -201,14 +232,17 @@ public class LevelEditorCore : MonoBehaviour {
 
 	//This is called with the panelChange event;
 	public void RefreshCameraSize() {
-		if (gameSize != Camera.main.orthographicSize) {
+        if (!float.TryParse(sizeInput.text, out gameSize) && gameSize < 250)
+        {
+            gameSize = defaultGameSize;
+        }
+        if (gameSize != Camera.main.orthographicSize) {
 			if (gameSize < 250) {
 				sizeInput.text = "250";
 				gameSize = 250;
 			}
 			
 			Camera.main.orthographicSize = gameSize;
-			PositionColiders.UpdateTopPoint();
 		}
 	}
 

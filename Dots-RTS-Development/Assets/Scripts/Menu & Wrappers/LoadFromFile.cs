@@ -28,14 +28,15 @@ public class LoadFromFile : MonoBehaviour {
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		
 		file.Close();
-		float decisionSpeed = save.difficulty;
-
 		if (save.gameSize != 0) {
 			Camera.main.orthographicSize = save.gameSize;
 		}
 
-
-		init.decisionSpeeds = new float[8] { decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed, decisionSpeed };
+        Dictionary<int, float>.KeyCollection diffKeys = save.difficulty.Keys;
+        foreach (int key in diffKeys) {
+            save.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+        }
+		
 		for (int j = 0; j < save.cells.Count; j++) {
 
 			CellBehaviour c = Instantiate(cellPrefab).GetComponent<CellBehaviour>();

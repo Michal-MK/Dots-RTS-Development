@@ -16,11 +16,11 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 	Vector2 oldMousePos = Vector2.zero;
 	bool cease;
 	public float r;
-
 	public static GameObject dragged;
+    float timeOfLastTap;
+    float doubleTapMaxTime = 0.5f;
 
-	// Update is called once per frame
-	public void AllThingsSet() {
+    public void AllThingsSet() {
 		//myParrent = transform.parent.GetComponent<TeamSetup>();
 		rect = gameObject.GetComponent<RectTransform>();
 		//panel = transform.parent.gameObject.GetComponent<RectTransform>();
@@ -34,48 +34,32 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 		Vector2 mouseDelta = (mousePos - oldMousePos);
 		Vector2 mouseOffset = ((Vector2)rect.position - mousePos);
 
-		if (Vector2.Distance(panel.position, mousePos + mouseOffset + mouseDelta) < (r - rect.sizeDelta.x)) {
-			rect.position = mousePos + mouseOffset + mouseDelta;
-		}
-		//print("I am here " + mousePos + " and the gameObjects center is " + rect.position + " so the offset is " + mouseOffset + " so the expected position is " + (mousePos + mouseOffset + mouseDelta));
+        if (Vector2.Distance(panel.position, mousePos + mouseOffset + mouseDelta) < (r - rect.sizeDelta.x)) {
+            rect.position = mousePos + mouseOffset + mouseDelta;
+        }
 		oldMousePos = mousePos;
-
-		
-		
-		//if (rect.position.x + rect.sizeDelta.x> panel.position.x + panel.sizeDelta.x / 2) {
-		//	rect.position = new Vector3(panel.position.x + panel.sizeDelta.x / 2 - rect.sizeDelta.x, rect.position.y);
-		//	mouseOffset = ((Vector2)rect.position - mousePos);
-		//}
-
-		//if (rect.position.x - rect.sizeDelta.x < panel.position.x - panel.sizeDelta.x / 2) {
-		//	rect.position = new Vector3(panel.position.x - panel.sizeDelta.x / 2 + rect.sizeDelta.x, rect.position.y);
-		//	mouseOffset = ((Vector2)rect.position - mousePos);
-		//}
-
-		//if (rect.position.y + rect.sizeDelta.y > panel.position.y + panel.sizeDelta.y / 2) {
-		//	rect.position = new Vector3(rect.position.x, panel.position.y + panel.sizeDelta.y / 2 - rect.sizeDelta.y);
-		//	mouseOffset = ((Vector2)rect.position - mousePos);
-		//}
-
-		//if (rect.position.y - rect.sizeDelta.y < panel.position.y - panel.sizeDelta.y / 2) {
-		//	rect.position = new Vector3(rect.position.x, panel.position.y - panel.sizeDelta.y / 2 + rect.sizeDelta.y);
-		//	mouseOffset = ((Vector2)rect.position - mousePos);
-		//}
 
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
 		oldMousePos = eventData.position;
 		dragged = gameObject;
-	}
+       
+        if (Time.time - timeOfLastTap < doubleTapMaxTime) {
+            PrepareDiffInputBox();
+            
+        }
+        timeOfLastTap = Time.time;
+    }
+    void PrepareDiffInputBox () {
+        LevelEditorCore.aiDifficultySingleInput.transform.position = (Vector2)transform.position + new Vector2(0,rect.sizeDelta.y / 2);
+        LevelEditorCore.aiDifficultySingleInput.gameObject.SetActive(true);
+        SingleDiffIF singleDiffIf = LevelEditorCore.aiDifficultySingleInput.gameObject.GetComponent<SingleDiffIF>();
+        singleDiffIf.OnMove(team);
+        singleDiffIf.core = Camera.main.GetComponent<LevelEditorCore>();
+        
+    }
 
-	//public void PointerExit() {
-	//	//print("BREXIT");
-	//	if (gameObject == dragged) {
-	//		transform.position = initialPos;
-	//		cease = true;
-	//	}
-	//}
 
 	public void OnPointerUp(PointerEventData eventData) {
 		TeamBox t = eventData.pointerPress.GetComponent<TeamBox>();

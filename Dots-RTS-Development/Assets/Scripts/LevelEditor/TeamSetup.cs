@@ -117,18 +117,18 @@ public class TeamSetup : MonoBehaviour {
 
 		MakeLines();
 		print("Keys ===============================");
-		keys = clanDict.Keys;
-		foreach (int j in keys) {
-			//print(j + " Key");
-			int debug;
-			clanDict.TryGetValue(j, out debug);
-			print(j + " has these allies: " + debug);
-		}
+		//keys = clanDict.Keys;
+		//foreach (int j in keys) {
+		//	//print(j + " Key");
+		//	int debug;
+		//	clanDict.TryGetValue(j, out debug);
+		//	print(j + " has these allies: " + debug);
+		//}
 	}
 
 	void CreateAClan(int firstTeam, int secondTeam) {
 
-		print("First team is " + firstTeam + " second team is " + secondTeam);
+		//print("First team is " + firstTeam + " second team is " + secondTeam);
 
 		int tempAllies = 0;
 
@@ -182,14 +182,14 @@ public class TeamSetup : MonoBehaviour {
 
 
 		MakeLines();
-		print("Keys ===============================");
-		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
-		foreach (int j in keys) {
-			//print(j + " Key");
-			int debug;
-			clanDict.TryGetValue(j, out debug);
-			print(j + " has these allies: " + debug);
-		}
+		////print("Keys ===============================");
+		//Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
+		//foreach (int j in keys) {
+		//	//print(j + " Key");
+		//	int debug;
+		//	clanDict.TryGetValue(j, out debug);
+		//	//print(j + " has these allies: " + debug);
+		//}
 	}
 
 	public static List<int> IntToList(int input) {
@@ -294,7 +294,7 @@ public class TeamSetup : MonoBehaviour {
 			}
 
 		}
-		Debug.Log("number of clans: " + ActualClans.Count);
+		//Debug.Log("number of clans: " + ActualClans.Count);
 		for (int c = 0; c < ActualClans.Count; c++) {
 
 			LineRenderer r = Instantiate(sampleLineRenderer).GetComponent<LineRenderer>();

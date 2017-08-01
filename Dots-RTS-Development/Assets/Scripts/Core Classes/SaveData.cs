@@ -6,18 +6,18 @@ using UnityEngine;
 public class SaveData {
 	public List<S_Cell> cells = new List<S_Cell>();
 	public LevelInfo levelInfo;
-	public float difficulty;
+	public Dictionary<int,float> difficulty;
 	public float gameSize;
     public Dictionary<int,int> clans;
+
 }
 
 [Serializable]
 public class SaveDataCampaign {
-	public SaveData game;
-	public string preview;
-	public int timeUnformated;
-	public bool isCleared;
-    public Dictionary<int, int> clans;
+    public SaveData game;
+    public string preview;
+    public int timeUnformated;
+    public bool isCleared;
 }
 
 [Serializable]

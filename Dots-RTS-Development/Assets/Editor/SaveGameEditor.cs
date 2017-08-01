@@ -78,7 +78,7 @@ public class SaveGameEditor : Editor {
 
 						save.game.cells.Add(serCell);
 					}
-					save.game.difficulty = LevelEditorCore.aiDificulty;
+					save.game.difficulty = LevelEditorCore.aiDifficultyDict;
 					save.game.gameSize = LevelEditorCore.gameSize;
 					save.game.levelInfo = new LevelInfo(name, LevelEditorCore.authorName, DateTime.Now);
 					save.isCleared = false;

@@ -89,7 +89,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
-		save.difficulty = LevelEditorCore.aiDificulty;
+		save.difficulty = LevelEditorCore.aiDifficultyDict;
 		save.gameSize = LevelEditorCore.gameSize;
 		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
         save.clans = TeamSetup.clanDict;
@@ -104,6 +104,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		FileStream file = File.Open(path, FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
 		LevelEditorCore.gameSize = save.gameSize;
+        LevelEditorCore.aiDifficultyDict = save.difficulty;
 		gameObject.GetComponent<LevelEditorCore>().RefreshCameraSize();
         TeamSetup.clanDict = save.clans;
         file.Close();
