@@ -181,7 +181,7 @@ public class CellBehaviour : Cell {
 			}
 
 			if (elementCount > maxElements) {
-				print("Decaying :" + elementCount + " is greater than " + maxElements);
+				print("Attempthing to decay if not decaying already: " + elementCount + " is greater than " + maxElements);
 				Decay(0.5f);
 			}
 			if (isSelected) {

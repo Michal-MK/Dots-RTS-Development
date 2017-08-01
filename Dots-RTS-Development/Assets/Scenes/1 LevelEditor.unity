@@ -4857,9 +4857,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelObject: {fileID: 1973262290409534, guid: 5a08ea14fb7dd5240b4b287495870443,
     type: 2}
+  campaignObject: {fileID: 0}
   scrollViewContent: {fileID: 415045887}
+  campaignViewContent0: {fileID: 0}
+  campaignViewContent1: {fileID: 0}
   error: {fileID: 707107598}
   saveAndLoadEditor: {fileID: 795130076}
+  onPage: 0
+  totalPages: 1
 --- !u!114 &795130074
 MonoBehaviour:
   m_ObjectHideFlags: 0

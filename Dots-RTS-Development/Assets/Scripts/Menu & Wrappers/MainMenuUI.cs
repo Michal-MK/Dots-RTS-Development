@@ -10,6 +10,11 @@ public class MainMenuUI : MonoBehaviour {
 
 	#endregion
 
+	#region Editor Refs
+	//private GameObject gameSettingsP;
+	//private GameObject saveGameP;
+	#endregion
+
 	#region LevelSelect Refs
 	private bool isDisplayingCampaign;
 	private RectTransform rectCampaign;
@@ -37,6 +42,10 @@ public class MainMenuUI : MonoBehaviour {
 			campaignButton = GameObject.Find("Campaign_Button");
 			customButton = GameObject.Find("Custom_Button");
 		}
+		//if(newS.buildIndex == 1) {
+		//	gameSettingsP = transform.Find("GameSettingsPanel").gameObject;
+		//	saveGameP = transform.Find("SavePanel").gameObject;
+		//}
 	}
 
 	// Turns OFF the game

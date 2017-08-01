@@ -24,31 +24,19 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
 
-<<<<<<< HEAD
 	public int onPage = 0;
 	public int totalPages = 1;
+
 
 	private void Start() {
 		if (SceneManager.GetActiveScene().buildIndex == 2) {
 			ListCustomSaves();
 			ListCampaignLevels(1);
 		}
+		if (SceneManager.GetActiveScene().buildIndex == 1) {
+			ListCustomSaves();
+		}
 	}
-
-=======
-    private void Start()
-    {
-        if (SceneManager.GetActiveScene().buildIndex == 2)
-        {
-            ListCustomSaves();
-            ListCampaignLevels();
-        }
-        if (SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            ListCustomSaves();
-        }
-    }
->>>>>>> 9a38a2c0394d3ab2202ebfbac774f24672643927
 	//Display alll saves that you can find in the scroll view
 	public void ListCustomSaves() {
 
@@ -90,7 +78,7 @@ public class LevelSelectScript : MonoBehaviour {
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		int totalLevels = d.GetFiles("*.pwl").Length;
 
-		int totalPages = totalLevels / 10;
+		//int totalPages = totalLevels / 10;
 
 
 		foreach (CampaignLevel g in campaignViewContent0.GetComponentsInChildren<CampaignLevel>()) {
@@ -102,14 +90,14 @@ public class LevelSelectScript : MonoBehaviour {
 
 		int i = onPage * 10;
 		int j;
-		if(totalLevels > 10) {
+		if (totalLevels > 10) {
 			j = 10;
 		}
 		else {
 			j = totalLevels;
 		}
 
-		for (int q = i ; q < j; q++) {
+		for (int q = i; q < j; q++) {
 			if (q <= 4) {
 				CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
 				c.gameObject.name = "Level_" + (q + 1);

@@ -53,7 +53,7 @@ public class Control : MonoBehaviour {
 		if (!Directory.Exists(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves")) {
 			Directory.CreateDirectory(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
 		}
-		if(!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
+		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		}
 	}
@@ -67,11 +67,10 @@ public class Control : MonoBehaviour {
 			StartCoroutine(GameState());
 		}
 		if (SceneManager.GetActiveScene().name == "Profiles") {
-			print("Azzz");
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}
-		if(ProfileManager.currentProfile == null) {
+		if (ProfileManager.currentProfile == null && SceneManager.GetActiveScene().buildIndex != 5) {
 			DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			SceneManager.LoadScene("Profiles");
 		}
@@ -83,6 +82,12 @@ public class Control : MonoBehaviour {
 	#endregion
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
+		if (ProfileManager.currentProfile == null && newS.name != "Profiles") {
+			DebugSceneIndex = newS.buildIndex;
+			SceneManager.LoadScene("Profiles");
+
+		}
+
 		if (newS.buildIndex == 3 || newS.buildIndex == 5) {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 			StartCoroutine(GameState());
@@ -119,7 +124,7 @@ public class Control : MonoBehaviour {
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}
-		if(newS.buildIndex == 0) {
+		if (newS.buildIndex == 0) {
 			GameObject.Find("Profile").GetComponent<Text>().text += ProfileManager.currentProfile.profileName;
 		}
 	}
@@ -155,9 +160,11 @@ public class Control : MonoBehaviour {
 				}
 			}
 			print(activeAIs + " " + SceneManager.GetActiveScene().name);
-			if (activeAIs == 0 && (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3)) {
+			if (activeAIs == 0) {
 				yield return new WaitForSeconds(2);
-				YouWon();
+				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
+					YouWon();
+				}
 				isInGame = false;
 			}
 
@@ -169,9 +176,11 @@ public class Control : MonoBehaviour {
 				}
 			}
 			print(playerCells);
-			if (playerCells == 0 && (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3)) {
+			if (playerCells == 0) {
 				yield return new WaitForSeconds(2);
-				GameOver();
+				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
+					GameOver();
+				}
 				isInGame = false;
 			}
 		}
