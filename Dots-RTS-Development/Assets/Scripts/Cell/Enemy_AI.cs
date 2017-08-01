@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy_AI : MonoBehaviour {
-	public bool isActive = true;
+
+
+    public bool isActive = true;
 	public float decisionSpeed = 1f;
 
 	public Cell.enmTeam _aiTeam;

@@ -24,6 +24,7 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
 
+<<<<<<< HEAD
 	public int onPage = 0;
 	public int totalPages = 1;
 
@@ -34,6 +35,20 @@ public class LevelSelectScript : MonoBehaviour {
 		}
 	}
 
+=======
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            ListCustomSaves();
+            ListCampaignLevels();
+        }
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            ListCustomSaves();
+        }
+    }
+>>>>>>> 9a38a2c0394d3ab2202ebfbac774f24672643927
 	//Display alll saves that you can find in the scroll view
 	public void ListCustomSaves() {
 

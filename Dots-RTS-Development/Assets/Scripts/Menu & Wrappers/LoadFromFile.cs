@@ -52,6 +52,6 @@ public class LoadFromFile : MonoBehaviour {
 
 			c.UpdateCellInfo();
 		}
-		init.StartAiInitialization();
+		init.StartAiInitialization(save.clans);
 	}
 }

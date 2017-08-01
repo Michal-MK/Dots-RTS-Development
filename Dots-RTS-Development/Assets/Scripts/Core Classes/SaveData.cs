@@ -8,6 +8,7 @@ public class SaveData {
 	public LevelInfo levelInfo;
 	public float difficulty;
 	public float gameSize;
+    public Dictionary<int,int> clans;
 }
 
 [Serializable]
@@ -16,6 +17,7 @@ public class SaveDataCampaign {
 	public string preview;
 	public int timeUnformated;
 	public bool isCleared;
+    public Dictionary<int, int> clans;
 }
 
 [Serializable]

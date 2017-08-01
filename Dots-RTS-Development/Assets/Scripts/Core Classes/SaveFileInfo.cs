@@ -51,7 +51,12 @@ public class SaveFileInfo : MonoBehaviour {
 	#region Local
 
 	public void LoadLevel(Transform levelName) {
-		PlayerPrefs.SetString("LoadLevelFilePath", Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
+#if UNITY_ANDROID
+        string s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+#else
+        string s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+#endif
+        PlayerPrefs.SetString("LoadLevelFilePath", s);
 		SceneManager.LoadScene(3);
 	}
 
@@ -72,14 +77,18 @@ public class SaveFileInfo : MonoBehaviour {
 		serverAccess.UploadFileFTP(fileName.name);
 	}
 
-	#endregion
+#endregion
 
-	#region Editor Specific
+    #region Editor Specific
 
 	public void LoadToEditor() {
-		string fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
-
+        //print(levelName.name);
+#if UNITY_ANDROID
+        string fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+#else
+        string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+#endif
 		saveAndLoadEditor.Load(fileName);
 	}
-	#endregion
+    #endregion
 }
