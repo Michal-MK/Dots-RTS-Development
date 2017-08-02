@@ -116,7 +116,7 @@ public class TeamSetup : MonoBehaviour {
 
 
 		MakeLines();
-		print("Keys ===============================");
+		//print("Keys ===============================");
 		//keys = clanDict.Keys;
 		//foreach (int j in keys) {
 		//	//print(j + " Key");
@@ -277,9 +277,6 @@ public class TeamSetup : MonoBehaviour {
 			clanJ.Add(j);
 			clanJ.Sort();
 
-			for (int i = 0; i < clanJ.Count; i++) {
-				print(clanJ[i]);
-			}
 			bool newClan = true;
 			foreach (List<int> clan in ActualClans) {
 				//print(" one clan with [0] = " + clan[0]);
