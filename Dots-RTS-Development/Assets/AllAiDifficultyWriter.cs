@@ -13,13 +13,18 @@ public class AllAiDifficultyWriter : MonoBehaviour {
     }
     public static void RedoText () {
         myText.text = "";
-        Dictionary<int, float>.KeyCollection keys = LevelEditorCore.aiDifficultyDict.Keys;
-        List<int> sortedKeys = keys.ToList();
-        sortedKeys.Sort();
-        foreach(int key in sortedKeys) {
+        
+        foreach (Cell.enmTeam teamEnm in LevelEditorCore.teamList) {
+            int team = (int)teamEnm;
             float diff;
-            LevelEditorCore.aiDifficultyDict.TryGetValue(key, out diff);
-            myText.text += "Enemy " + (key - 1) + " does an action every " + diff + " seconds \n";
+           // print(team);
+            if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out diff)) {
+                myText.text += "Enemy " + (team - 1) + " does an action every " + diff + " seconds \n";
+            }
+            else {
+                myText.text += "Enemy " + (team - 1) + "'s difficulty is not assinged \n";
+            }
+            
         }
 	}
 }

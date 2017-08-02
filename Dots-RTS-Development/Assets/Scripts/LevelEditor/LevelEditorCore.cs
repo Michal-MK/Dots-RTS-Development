@@ -82,7 +82,7 @@ public class LevelEditorCore : MonoBehaviour {
 		cellList.Add(c);
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
 			if (!teamList.Contains(c.cellTeam)) {
-				teamList.Add(c.cellTeam);
+				teamList.Add(c.cellTeam);    
 			}
 		}
 		

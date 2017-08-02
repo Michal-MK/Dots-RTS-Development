@@ -17,8 +17,10 @@ public class TeamSetup : MonoBehaviour {
 
 	// Use this for initialization
 	void OnEnable() {
-		//lineRenderer = gameObject.GetComponent<LineRenderer>();
-		for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
+        //lineRenderer = gameObject.GetComponent<LineRenderer>();
+        AllAiDifficultyWriter.RedoText();
+
+        for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
             GameObject newTeamBox = Instantiate(teamGOPrefab, this.transform);
             newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
             mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
@@ -31,7 +33,6 @@ public class TeamSetup : MonoBehaviour {
 		float nextAngle = 0;
 		for (int i = 0; i < mySpawns.Count; i++) {
 			mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * 200, Mathf.Sin(nextAngle) * 200, 0) + roundTable.position;
-
 			nextAngle += diffAngle;
 			mySpawns[i].AllThingsSet();
 		}
@@ -49,14 +50,9 @@ public class TeamSetup : MonoBehaviour {
 	public void TeamBoxPosChange(Vector2 pos, TeamBox it) {
 		float lowestDisFound = Mathf.Infinity;
 		int indexClosest = 99;
-		int indexMe = it.team;
-		for (int i = 0; i < mySpawns.Count; i++) {
-			//Debug.Log(i);
-			float dist = Vector2.Distance(mySpawns[i].gameObject.transform.position, pos);
-			if (mySpawns[i] == it) {
-				mySpawns[i].gameObject.transform.position = mySpawns[i].initialPos;
-				continue;
-			}
+        it.transform.position = it.initialPos;
+        for (int i = 0; i < mySpawns.Count; i++) {			//Debug.Log(i);
+			float dist = Vector2.Distance(mySpawns[i].initialPos, pos);
 			if (dist < lowestDisFound) {
 				lowestDisFound = dist;
 				indexClosest = mySpawns[i].team;
@@ -64,19 +60,14 @@ public class TeamSetup : MonoBehaviour {
 		}
 		float distToX = Vector2.Distance(xGO.transform.position, pos);
 		if (distToX < lowestDisFound) {
-			lowestDisFound = distToX;
-			indexClosest = -1;
+            RemoveFromClan(it.team);
+            return;
+        }
+        if (indexClosest == it.team) {
+            return;
 		}
-		if (Vector2.Distance(pos, it.initialPos) < lowestDisFound) {
-			return;
-		}
-
-		if (indexClosest == -1) {
-			RemoveFromClan(indexMe);
-		}
-		else {
-			CreateAClan(indexMe, indexClosest);
-		}
+        RemoveFromClan(it.team);
+        CreateAClan(it.team, indexClosest);
 
 	}
 
@@ -109,88 +100,41 @@ public class TeamSetup : MonoBehaviour {
 			if (value != 0) {
 				clanDict.Add(k, value);
 			}
-
 		}
 
 		clanDict.Remove(firstTeam);
-
-
 		MakeLines();
-		//print("Keys ===============================");
-		//keys = clanDict.Keys;
-		//foreach (int j in keys) {
-		//	//print(j + " Key");
-		//	int debug;
-		//	clanDict.TryGetValue(j, out debug);
-		//	print(j + " has these allies: " + debug);
-		//}
 	}
 
 	void CreateAClan(int firstTeam, int secondTeam) {
 
-		//print("First team is " + firstTeam + " second team is " + secondTeam);
-
-		int tempAllies = 0;
-
-		if (clanDict.ContainsKey(firstTeam)) {
-
-			clanDict.TryGetValue(firstTeam, out tempAllies);
-
-			List<int> content = IntToList(tempAllies);
-			if (AlreadyIsInList(content, secondTeam)) {
-
-			}
-			else {
-				tempAllies = tempAllies * 10;
-				tempAllies += secondTeam;
-
-				clanDict.Remove(firstTeam);
-				clanDict.Add(firstTeam, tempAllies);
-			}
-			tempAllies = 0;
-		}
-		else {
-			tempAllies += secondTeam;
-
-			clanDict.Add(firstTeam, tempAllies);
-			tempAllies = 0;
-		}
-
-		if (clanDict.ContainsKey(secondTeam)) {
-			clanDict.TryGetValue(secondTeam, out tempAllies);
-
-			List<int> content = IntToList(tempAllies);
-			if (AlreadyIsInList(content, firstTeam)) {
-
-			}
-			else {
-				tempAllies = tempAllies * 10;
-				tempAllies += firstTeam;
-
-				clanDict.Remove(secondTeam);
-				clanDict.Add(secondTeam, tempAllies);
-			}
-			tempAllies = 0;
-		}
-		else {
-			tempAllies += firstTeam;
-			clanDict.Add(secondTeam, tempAllies);
-			tempAllies = 0;
-		}
-
+        BindTwo(firstTeam, secondTeam);
+        BindTwo(secondTeam, firstTeam);
 		CheckAndAddOtherTeams(firstTeam, secondTeam);
+        MakeLines();
 
-
-		MakeLines();
-		////print("Keys ===============================");
-		//Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
-		//foreach (int j in keys) {
-		//	//print(j + " Key");
-		//	int debug;
-		//	clanDict.TryGetValue(j, out debug);
-		//	//print(j + " has these allies: " + debug);
-		//}
 	}
+    void BindTwo(int first, int second) {
+        int tempAllies = 0;
+        if (clanDict.ContainsKey(first)) {
+
+            clanDict.TryGetValue(first, out tempAllies);
+
+            List<int> content = IntToList(tempAllies);
+            if (!AlreadyIsInList(content, second)) {
+                tempAllies = tempAllies * 10;
+                tempAllies += second;
+
+                clanDict.Remove(first);
+                clanDict.Add(first, tempAllies);
+            }
+
+        }
+        else {
+            tempAllies += second;
+            clanDict.Add(first, tempAllies);
+        }
+    }
 
 	public static List<int> IntToList(int input) {
 		List<int> returnList = new List<int>();
@@ -202,7 +146,6 @@ public class TeamSetup : MonoBehaviour {
 
 		return returnList;
 	}
-
 	public static int ListToInt(List<int> list) {
 		int output = 0;
 		if (list.Count == 0) {
@@ -228,11 +171,11 @@ public class TeamSetup : MonoBehaviour {
 		clanDict.TryGetValue(firstTeam, out firstTeamFriends);
 		List<int> firstTeamFriendsList = IntToList(firstTeamFriends);
 
-		int secondTeamFriends;
-		clanDict.TryGetValue(secondTeam, out secondTeamFriends);
-		List<int> secondTeamFriendsList = IntToList(secondTeamFriends);
+        int secondTeamFriends;
+        clanDict.TryGetValue(secondTeam, out secondTeamFriends);
+        List<int> secondTeamFriendsList = IntToList(secondTeamFriends);
 
-		List<int> misses = new List<int>();
+        List<int> misses = new List<int>();
 		for (int y = 0; y < secondTeamFriendsList.Count; y++) {
 			if (!firstTeamFriendsList.Contains(secondTeamFriendsList[y])) {
 				misses.Add(secondTeamFriendsList[y]);
@@ -244,20 +187,20 @@ public class TeamSetup : MonoBehaviour {
 			}
 		}
 
-		List<int> misses2 = new List<int>();
-		for (int x = 0; x < firstTeamFriendsList.Count; x++) {
-			if (!secondTeamFriendsList.Contains(firstTeamFriendsList[x])) {
-				misses2.Add(firstTeamFriendsList[x]);
-				//print("Miss is " + firstTeamFriendsList[x]);
-			}
-		}
-		foreach (int miss in misses2) {
-			//Debug.Log("like This: " + miss + " " + secondTeam);
-			if (miss != secondTeam && miss != firstTeam) {
-				CreateAClan(miss, secondTeam);
-			}
-		}
-	}
+        misses.Clear();
+        for (int x = 0; x < firstTeamFriendsList.Count; x++) {
+            if (!secondTeamFriendsList.Contains(firstTeamFriendsList[x])) {
+                misses.Add(firstTeamFriendsList[x]);
+                //print("Miss is " + firstTeamFriendsList[x]);
+            }
+        }
+        foreach (int miss in misses) {
+            //Debug.Log("like This: " + miss + " " + secondTeam);
+            if (miss != secondTeam && miss != firstTeam) {
+                CreateAClan(miss, secondTeam);
+            }
+        }
+    }
 	void DestroyAllInList(List<GameObject> list) {
 		for (int i = 0; i < list.Count; i++) {
 			Destroy(list[i]);
@@ -296,9 +239,10 @@ public class TeamSetup : MonoBehaviour {
 
 			LineRenderer r = Instantiate(sampleLineRenderer).GetComponent<LineRenderer>();
 			myLines.Add(r.gameObject);
-			r.startColor = ColourTheTeamButtons.GetColorBasedOnTeam(c);
-			r.endColor = ColourTheTeamButtons.GetColorBasedOnTeam(c);
-			r.positionCount = ActualClans[c].Count;
+            Color32 colour = ColourTheTeamButtons.GetColorBasedOnTeam(c);
+            r.startColor = colour;
+            r.endColor = colour;
+            r.positionCount = ActualClans[c].Count;
 			for (int i = 0; i < ActualClans[c].Count; i++) {
 				r.SetPosition(i, (Vector2)Camera.main.ScreenToWorldPoint(mySpawns[MySpawnsIndexFromTeam(ActualClans[c][i])].transform.position));
 			}
@@ -312,6 +256,7 @@ public class TeamSetup : MonoBehaviour {
 			TeamBox spawn = mySpawns[i];
 			if (spawn.team == team) {
 				output = i;
+                break;
 			}
 		}
 		if (output == -1) {
