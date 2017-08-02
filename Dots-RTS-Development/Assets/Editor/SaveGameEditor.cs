@@ -6,129 +6,102 @@ using UnityEngine;
 using UnityEditor;
 using System.Runtime.Serialization.Formatters.Binary;
 
-[CustomEditor(typeof(SaveAndLoadEditor))]
-public class SaveGameEditor : Editor {
 
+public class EditorGUILayoutToggle : EditorWindow {
 	bool isOn = false;
 	int difficulty = 1;
-	string name = "";
+	string levelName = "";
 
-	public override void OnInspectorGUI() {
-		isOn = GUILayout.Toggle(isOn, new GUIContent("Campaign Creation"));
+	bool saveButton = true;
+	static GameObject canvas;
 
-		if (!isOn) {
-			base.OnInspectorGUI();
-		}
-		else {
+	[MenuItem("Campaign/SaveLevel")]
+	static void Init() {
+		EditorGUILayoutToggle window = (EditorGUILayoutToggle)GetWindow(typeof(EditorGUILayoutToggle), true, "My Empty Window");
+		canvas = GameObject.Find("Canvas");
+		window.Show();
+		canvas.SetActive(false);
+	}
 
-			SaveAndLoadEditor script = (SaveAndLoadEditor)target;
-			GUILayout.Label("Level Name");
-			name = GUILayout.TextField(name, 50);
-			difficulty = EditorGUILayout.IntField(new GUIContent("Level Difficulty"), difficulty);
-			EditorGUILayout.LabelField("Current Level", GetCurLevel(difficulty));
-			if (GUILayout.Button("Save")) {
+	void OnGUI() {
+		GUILayout.Label("Level Name");
+		name = GUILayout.TextField(name, 50);
+		difficulty = EditorGUILayout.IntField(new GUIContent("Level Difficulty"), difficulty);
+		EditorGUILayout.LabelField("Current Level", GetCurLevel(difficulty));
 
-				string fileName = "Level_" + GetCurLevel(difficulty);
+		saveButton = EditorGUILayout.Toggle("Save Level", saveButton);
+		if (saveButton) {
+			#region Pre-Save Error checking
 
-				#region Pre-Save Error checking
+
+			int numAllies = 0;
+			int numEnemies = 0;
+
+			for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+				if (LevelEditorCore.cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
+					numAllies++;
+				}
+				if ((int)LevelEditorCore.cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
+					numEnemies++;
+				}
+			}
+			if (numAllies == 0 || numEnemies == 0) {
+				return;
+			}
 
 
-				int numAllies = 0;
-				int numEnemies = 0;
+			if (string.IsNullOrEmpty(name)) {
+				return;
+			}
+
+			if (difficulty < 0 && difficulty > 5) {
+				return;
+			}
+			#endregion
+
+			BinaryFormatter formatter = new BinaryFormatter();
+			string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + GetCurLevel(difficulty);
+			using (FileStream file = File.Create(fileName + ".pwl")) {
+				SaveDataCampaign save = new SaveDataCampaign();
+				save.game = new SaveData();
 
 				for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
-					if (LevelEditorCore.cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
-						numAllies++;
-					}
-					if ((int)LevelEditorCore.cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
-						numEnemies++;
-					}
-				}
-				if (numAllies == 0 || numEnemies == 0) {
-					return;
-				}
+					Cell c = LevelEditorCore.cellList[i];
 
+					S_Cell serCell = new S_Cell();
+					serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
+					serCell.elementCount = c.elementCount;
+					serCell.maxElementCount = c.maxElements;
+					serCell.team = (int)c.cellTeam;
+					serCell.regenerationPeriod = c.regenPeriod;
+					serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
 
-				if (LevelEditorCore.levelName == script.gameObject.GetComponent<LevelEditorCore>().defaultLevelName) {
+					save.game.cells.Add(serCell);
 				}
-				else {
-				}
-
-				if (LevelEditorCore.authorName == script.GetComponent<LevelEditorCore>().defaultAuthorName) {
-				}
-				else {
-				}
-				#endregion
-
-				BinaryFormatter formatter = new BinaryFormatter();
-				using (FileStream file = File.Create(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + fileName + ".pwl")) {
-					SaveDataCampaign save = new SaveDataCampaign();
-					save.game = new SaveData();
-
-					for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
-						Cell c = LevelEditorCore.cellList[i];
-
-						S_Cell serCell = new S_Cell();
-						serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
-						serCell.elementCount = c.elementCount;
-						serCell.maxElementCount = c.maxElements;
-						serCell.team = (int)c.cellTeam;
-						serCell.regenerationPeriod = c.regenPeriod;
-						serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
-
-						save.game.cells.Add(serCell);
-					}
-					save.game.difficulty = LevelEditorCore.aiDifficultyDict;
-					save.game.gameSize = LevelEditorCore.gameSize;
-					save.game.levelInfo = new LevelInfo(name, LevelEditorCore.authorName, DateTime.Now);
-					save.isCleared = false;
-					string imgPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + fileName + ".png";
-					ScreenCapture.CaptureScreenshot(imgPath);
-					save.preview = imgPath;
-					formatter.Serialize(file, save);
-					file.Close();
-				}
+				save.game.difficulty = LevelEditorCore.aiDifficultyDict;
+				save.game.gameSize = LevelEditorCore.gameSize;
+				save.game.levelInfo = new LevelInfo(levelName, LevelEditorCore.authorName, DateTime.Now);
+				save.isCleared = false;
+				ScreenCapture.CaptureScreenshot(fileName + ".png");
+				save.preview = fileName + ".png";
+				formatter.Serialize(file, save);
+				file.Close();
 			}
 		}
 	}
 
+	private void OnDestroy() {
+		canvas.SetActive(true);
+	}
+
 	private string GetCurLevel(int dif) {
-		DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + dif);
-		return (dir.GetFiles("*.pwl").Length + 1).ToString();
-	}
-}
-
-public class EditorGUILayoutToggle : EditorWindow {
-	bool showBtn = true;
-
-	[MenuItem("Campaign/Test")]
-	static void Init() {
-		EditorGUILayoutToggle window = (EditorGUILayoutToggle)GetWindow(typeof(EditorGUILayoutToggle), true, "My Empty Window");
-		window.Show();
-	}
-
-	void OnGUI() {
-		showBtn = EditorGUILayout.Toggle("Show Button", showBtn);
-		if (showBtn)
-			if (GUILayout.Button("Close"))
-				Close();
-	}
-
-	[MenuItem("CONTEXT/SaveFileInfo/Double Mass")]
-	static void DoubleMass(MenuCommand command) {
-		SaveFileInfo body = (SaveFileInfo)command.context;
-		Debug.Log("Doubled Rigidbody's Mass to " + body.name + " from Context Menu.");
-	}
-
-	[MenuItem("GameObject/MyCategory/Custom Game Object", false, 10)]
-	static void CreateCustomGameObject(MenuCommand menuCommand) {
-		// Create a custom game object
-		GameObject go = new GameObject("Custom Game Object");
-		// Ensure it gets reparented if this was a context click (otherwise does nothing)
-		GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
-		// Register the creation in the undo system
-		Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
-		Selection.activeObject = go;
+		if (dif > 0 && dif <= 5) {
+			DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + dif);
+			return (dir.GetFiles("*.pwl").Length + 1).ToString();
+		}
+		else {
+			return "-1";
+		}
 	}
 }
 
