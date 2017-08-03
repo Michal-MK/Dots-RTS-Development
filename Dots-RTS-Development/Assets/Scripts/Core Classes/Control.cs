@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
+using TMPro;
 
 public class Control : MonoBehaviour {
 
@@ -125,7 +126,7 @@ public class Control : MonoBehaviour {
 			pM.ListProfiles();
 		}
 		if (newS.buildIndex == 0) {
-			GameObject.Find("Profile").GetComponent<Text>().text += ProfileManager.currentProfile.profileName;
+			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.currentProfile.profileName);
 		}
 	}
 
