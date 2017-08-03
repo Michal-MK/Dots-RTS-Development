@@ -5,14 +5,15 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
+using TMPro;
 
 class CampaignLevel : MonoBehaviour {
 
 	#region Preafab References
 	public RawImage preview;
 	public Image isPassed;
-	public Text levelName;
-	public Text clearTime;
+	public TextMeshProUGUI levelName;
+	public TextMeshProUGUI clearTime;
 	#endregion
 
 	[HideInInspector]
@@ -23,6 +24,7 @@ class CampaignLevel : MonoBehaviour {
 		BinaryFormatter bf = new BinaryFormatter();
 
 		SaveDataCampaign levelInfo;
+		//print(levelPath);
 		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
 
 			levelInfo = (SaveDataCampaign)bf.Deserialize(fs);

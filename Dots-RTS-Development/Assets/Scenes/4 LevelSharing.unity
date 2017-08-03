@@ -463,7 +463,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: d2b68367c75ac8c4fa38a234b80f1622, type: 3}
     m_FontSize: 23
     m_FontStyle: 0
     m_BestFit: 0
@@ -703,7 +703,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: d2b68367c75ac8c4fa38a234b80f1622, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -910,7 +910,7 @@ Prefab:
     - target: {fileID: 224600572787894666, guid: adf3324806054cf42a9693ac0bc1b68a,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 384.30002
+      value: 374.50003
       objectReference: {fileID: 0}
     - target: {fileID: 224600572787894666, guid: adf3324806054cf42a9693ac0bc1b68a,
         type: 2}
@@ -920,7 +920,7 @@ Prefab:
     - target: {fileID: 224600572787894666, guid: adf3324806054cf42a9693ac0bc1b68a,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 758.60004
+      value: 739.00006
       objectReference: {fileID: 0}
     - target: {fileID: 224600572787894666, guid: adf3324806054cf42a9693ac0bc1b68a,
         type: 2}
@@ -1235,7 +1235,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: d2b68367c75ac8c4fa38a234b80f1622, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
