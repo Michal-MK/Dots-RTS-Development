@@ -67,9 +67,9 @@ public class LevelMarket : MonoBehaviour {
 			try {
 				s.downloadButton = download;
 				s.gameObject.name = contents[i];
-				s.levelName.text = saveInfo[0];
-				s.levelName.text += " by " + saveInfo[1];
-				s.time.text = saveInfo[2];
+				s.levelNameAndAuthorTM.text = saveInfo[0];
+				s.levelNameAndAuthorTM.text += " by " + saveInfo[1];
+				s.timeTM.text = saveInfo[2];
 			}
 			catch {
 				print("Something Failed");
