@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class LevelEditorCore : MonoBehaviour {
 
@@ -81,7 +82,7 @@ public class LevelEditorCore : MonoBehaviour {
 		cellList.Add(c);
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
 			if (!teamList.Contains(c.cellTeam)) {
-				teamList.Add(c.cellTeam);
+				teamList.Add(c.cellTeam);    
 			}
 		}
 		
@@ -112,8 +113,9 @@ public class LevelEditorCore : MonoBehaviour {
 		levelNameInput = GameObject.Find("Level Name IF").GetComponent<InputField>();
 		authorNameInput = GameObject.Find("Author's name IF").GetComponent<InputField>();
 
-		//Disable the panels;
-		GameObject.Find("SavePanel").SetActive(false);
+        //Disable the panels;
+        aiDifficultySingleInput.gameObject.SetActive(false);
+        GameObject.Find("SavePanel").SetActive(false);
 		GameObject.Find("GameSettingsPanel").SetActive(false);
 
 		//Set the defaluts by parsing all of the input fields
@@ -121,6 +123,7 @@ public class LevelEditorCore : MonoBehaviour {
 		RefreshCameraSize();
 		GetIOPanelValues();
         AiDiffHandler();
+        
 		// Set defalut mode to placeCells
 		//Have to wait for all of the things to initialize before I can call a button press
 		yield return new WaitForEndOfFrame();
@@ -177,25 +180,30 @@ public class LevelEditorCore : MonoBehaviour {
     /// </summary>
     /// <param name="team">the team this applies to, 0 = all</param>
     public void AiDiffHandler(int team = 0) {
-        Dictionary<int, float>.KeyCollection keys = aiDifficultyDict.Keys;
         if (float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
-
-            foreach (int key in aiDifficultyDict.Keys) {
-                aiDifficultyDict.Remove(key);
+            foreach (int key in teamList) {
+                if (aiDifficultyDict.ContainsKey(key)) {
+                    aiDifficultyDict.Remove(key);
+                }
                 aiDifficultyDict.Add(key, aiDificultyAll);
             }
+            aiDifficultySingleInput.gameObject.SetActive(false);
         }
         else if (!float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
-            foreach (int key in aiDifficultyDict.Keys) {
-                aiDifficultyDict.Remove(key);
+            foreach (int key in teamList) {
+                if (aiDifficultyDict.ContainsKey(key)) {
+                    aiDifficultyDict.Remove(key);
+                }
                 aiDifficultyDict.Add(key, defaultDificulty);
             }
+            aiDifficultySingleInput.gameObject.SetActive(false);
         }
         else {
             float singleDiff;
             if (float.TryParse(aiDifficultySingleInput.text, out singleDiff)) {
                 aiDifficultyDict.Remove(team);
                 aiDifficultyDict.Add(team, singleDiff);
+
             }
             else
             {
@@ -204,7 +212,7 @@ public class LevelEditorCore : MonoBehaviour {
 
             }
         }
-
+        AllAiDifficultyWriter.RedoText();
     }
 
 	public void GetIOPanelValues() {

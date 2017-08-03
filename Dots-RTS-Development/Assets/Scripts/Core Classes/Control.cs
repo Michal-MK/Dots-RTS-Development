@@ -72,7 +72,12 @@ public class Control : MonoBehaviour {
 			pM.ListProfiles();
 		}
 		if (ProfileManager.currentProfile == null && SceneManager.GetActiveScene().buildIndex != 5) {
-			DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
+			if (SceneManager.GetActiveScene().name == "Profiles") {
+				DebugSceneIndex = 0;
+			}
+			else {
+				DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
+			}
 			SceneManager.LoadScene("Profiles");
 		}
 	}
@@ -100,9 +105,9 @@ public class Control : MonoBehaviour {
 		Time.timeScale = 1;
 		time = 0;
 		if (newS.buildIndex == 6) {
-			Text res = GameObject.Find("Result").GetComponent<Text>();
-			Text dom = GameObject.Find("Domination").GetComponent<Text>();
-			Text time = GameObject.Find("Time").GetComponent<Text>();
+			TextMeshProUGUI res = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
+			TextMeshProUGUI dom = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
+			TextMeshProUGUI time = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
 
 			if (isWinner) {
 				res.text = "You Won!";
@@ -114,7 +119,10 @@ public class Control : MonoBehaviour {
 			if (domination) {
 				dom.text = "Dominated all cells";
 			}
-			time.text = gameTime;
+			else {
+				dom.text = "";
+			}
+			time.text = "Fought for: " + gameTime;
 		}
 		if (newS.buildIndex == 2) {
 			LevelSelectScript.displayedSaves.Clear();

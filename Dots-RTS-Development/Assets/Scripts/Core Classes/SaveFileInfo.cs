@@ -5,14 +5,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class SaveFileInfo : MonoBehaviour {
 	public bool isSavedLocaly = false;
 
 	public Button downloadButton;
 	public Text levelName;
+	public TextMeshProUGUI levelNameAndAuthorTM;
+
 	public Text time;
+	public TextMeshProUGUI timeTM;
+
 	public Text author;
+
 	public Image indicator;
 	public Image bg;
 	public SaveAndLoadEditor saveAndLoadEditor;
@@ -52,11 +58,11 @@ public class SaveFileInfo : MonoBehaviour {
 
 	public void LoadLevel(Transform levelName) {
 #if UNITY_ANDROID
-        string s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+		string s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
 #else
-        string s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+		string s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
 #endif
-        PlayerPrefs.SetString("LoadLevelFilePath", s);
+		PlayerPrefs.SetString("LoadLevelFilePath", s);
 		SceneManager.LoadScene(3);
 	}
 
@@ -79,16 +85,16 @@ public class SaveFileInfo : MonoBehaviour {
 
 #endregion
 
-    #region Editor Specific
+	#region Editor Specific
 
 	public void LoadToEditor() {
-        //print(levelName.name);
+		//print(levelName.name);
 #if UNITY_ANDROID
-        string fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+		string fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
 #else
-        string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+		string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
 #endif
 		saveAndLoadEditor.Load(fileName);
 	}
-    #endregion
+	#endregion
 }
