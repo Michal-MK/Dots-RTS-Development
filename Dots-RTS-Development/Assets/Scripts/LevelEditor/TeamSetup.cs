@@ -29,15 +29,15 @@ public class TeamSetup : MonoBehaviour {
             mySpawns[i].panel = roundTable;
             mySpawns[i].r = roundTable.sizeDelta.x / 2;
         }
-		float diffAngle = (2 * Mathf.PI) / mySpawns.Count;
-		float nextAngle = 0;
-		for (int i = 0; i < mySpawns.Count; i++) {
-			mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * 200, Mathf.Sin(nextAngle) * 200, 0) + roundTable.position;
-			nextAngle += diffAngle;
-			mySpawns[i].AllThingsSet();
-		}
-		MakeLines();
-	}
+        float diffAngle = (2 * Mathf.PI) / mySpawns.Count;
+        float nextAngle = 0;
+        for (int i = 0; i < mySpawns.Count; i++) {
+            mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * 200, Mathf.Sin(nextAngle) * 200, 0) + roundTable.position;
+            nextAngle += diffAngle;
+            mySpawns[i].AllThingsSet();
+        }
+        MakeLines();
+    }
 	public void OnDisable() {
 		for (int i = 0; i < mySpawns.Count; i++) {
 			Destroy(mySpawns[i].gameObject);
