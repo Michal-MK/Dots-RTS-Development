@@ -8,11 +8,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class EditorGUILayoutToggle : EditorWindow {
-	bool isOn = false;
+
 	int difficulty = 1;
 	string levelName = "";
-
-	bool saveButton = true;
 	static GameObject canvas;
 
 	[MenuItem("Campaign/SaveLevel")]
@@ -29,8 +27,7 @@ public class EditorGUILayoutToggle : EditorWindow {
 		difficulty = EditorGUILayout.IntField(new GUIContent("Level Difficulty"), difficulty);
 		EditorGUILayout.LabelField("Current Level", GetCurLevel(difficulty));
 
-		saveButton = EditorGUILayout.Toggle("Save Level", saveButton);
-		if (saveButton) {
+		if (GUILayout.Button("Save Level")) {
 			#region Pre-Save Error checking
 
 
@@ -78,6 +75,7 @@ public class EditorGUILayoutToggle : EditorWindow {
 
 					save.game.cells.Add(serCell);
 				}
+
 				save.game.difficulty = LevelEditorCore.aiDifficultyDict;
 				save.game.gameSize = LevelEditorCore.gameSize;
 				save.game.levelInfo = new LevelInfo(levelName, LevelEditorCore.authorName, DateTime.Now);

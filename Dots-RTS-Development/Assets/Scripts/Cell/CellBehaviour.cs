@@ -213,15 +213,15 @@ public class CellBehaviour : Cell {
 
 		}
 	}
-	Vector3 oldPos;
+	Vector3 oldPos = Vector3.zero;
 	private void FixedUpdate() {
 		//Does not work for some reason..
 		//if(rg.velocity != Vector2.zero) {
 		//	UpdateCellInfo(false);
 		//}
-		//if(oldPos == null) {
-		//	oldPos = transform.position;
-		//}
+		if (oldPos == Vector3.zero) {
+			oldPos = transform.position;
+		}
 		Vector3 vel = transform.position - oldPos;
 
 		if(vel != Vector3.zero) {

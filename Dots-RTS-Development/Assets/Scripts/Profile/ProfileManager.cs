@@ -7,13 +7,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ProfileManager {
+
+	public delegate void profileDeleted(ProfileInfo sender);
+
 	private GameObject profileVisual;
 	private Transform parent;
 	public static Profile currentProfile;
 	public bool isProfileSelected = false;
 
 	private Button b;
-	private GameObject profileCreation;
+	public GameObject profileCreation;
 
 	/// <summary>
 	/// 
@@ -27,8 +30,14 @@ public class ProfileManager {
 		b.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
+		ProfileInfo.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
+		Debug.Log(b.gameObject.name + b.gameObject.activeInHierarchy);
+		Debug.Log(profileCreation.gameObject.name + profileCreation.gameObject.activeInHierarchy);
 	}
 
+	private void ProfileInfo_OnProfileDeleted(ProfileInfo sender) {
+		ListProfiles();
+	}
 
 	public void ProfileSelection() {
 		SceneManager.LoadScene("Profiles");
@@ -38,9 +47,14 @@ public class ProfileManager {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "\\Profiles\\");
 		FileInfo[] files = dir.GetFiles("*.gp");
 		BinaryFormatter bf = new BinaryFormatter();
+		foreach(ProfileInfo pF in parent.GetComponentsInChildren<ProfileInfo>()) {
+			GameObject.Destroy(pF.gameObject);
+		}
 
 		if (files.Length == 0) {
+			Debug.Log("No Profies Found");
 			b.gameObject.SetActive(true);
+			b.onClick.RemoveAllListeners();
 			b.onClick.AddListener(() => ShowProfileCreation());
 			return;
 		}
@@ -48,15 +62,9 @@ public class ProfileManager {
 			using (FileStream fs = File.Open(f.FullName, FileMode.Open)) {
 				try {
 					Profile p = (Profile)bf.Deserialize(fs);
-
 					ProfileInfo pI = GameObject.Instantiate(profileVisual, parent).GetComponent<ProfileInfo>();
-					pI.selected = p;
-					pI.profileName.text = p.profileName;
-					/*
-					Texture2D t = new Texture2D(160, 90);
-					t.LoadImage(File.ReadAllBytes(byte[] preview of the level that this profile is on));
-					pI.careerLevel.texture = t;
-					*/
+					pI.name = f.FullName;
+					pI.InitializeProfile(p, p.profileName);
 				}
 				catch (Exception e) {
 					Debug.Log(e);
@@ -69,6 +77,7 @@ public class ProfileManager {
 		b.gameObject.SetActive(false);
 		profileCreation.SetActive(true);
 		Button creationB = GameObject.Find("CreateProfileButton").GetComponent<Button>();
+		creationB.onClick.RemoveAllListeners();
 		creationB.onClick.AddListener(() => CreateNewProfile());
 		Debug.Log("Create");
 	}
@@ -97,7 +106,7 @@ public class ProfileManager {
 		p.contributedLevels = 0;
 		p.totalCreatedLevels = 0;
 		p.onLevelBaseGame = 1;
-		p.onLevelImage = null;
+		p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 
 		using (FileStream fs = new FileStream(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp", FileMode.Create)) {
 			bf.Serialize(fs, p);
@@ -105,6 +114,7 @@ public class ProfileManager {
 		profileCreation.SetActive(false);
 		Debug.Log("Created");
 		ListProfiles();
+		
 	}
 
 	public Profile SetProfile {

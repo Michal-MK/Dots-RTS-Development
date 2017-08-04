@@ -16,7 +16,7 @@ public class MainMenuUI : MonoBehaviour {
 	#endregion
 
 	#region LevelSelect Refs
-	private bool isDisplayingCampaign;
+	//private bool isDisplayingCampaign;
 	private RectTransform rectCampaign;
 	private RectTransform rectCustom;
 	private GameObject centralToMainMenu;
@@ -82,13 +82,13 @@ public class MainMenuUI : MonoBehaviour {
 
 	public void DisplaySelection(bool isCampaign) {
 		if (isCampaign) {
-			isDisplayingCampaign = true;
+			//isDisplayingCampaign = true;
 			rectCustom.anchoredPosition = new Vector3(2048, 0);
 			rectCampaign.anchoredPosition = new Vector3(0, 0);
 
 		}
 		else {
-			isDisplayingCampaign = false;
+			//isDisplayingCampaign = false;
 			rectCampaign.anchoredPosition = new Vector3(-2048, 0);
 			rectCustom.anchoredPosition = new Vector3(0, 0);
 		}

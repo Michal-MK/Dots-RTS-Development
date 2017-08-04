@@ -16,7 +16,7 @@ public class SaveData {
 public class SaveDataCampaign {
     public SaveData game;
     public string preview;
-    public int timeUnformated;
+    public float timeUnformated;
     public bool isCleared;
 }
 

@@ -6,12 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
+using UnityEngine.SceneManagement;
 
-class CampaignLevel : MonoBehaviour {
+public class CampaignLevel : MonoBehaviour {
 
 	#region Preafab References
 	public RawImage preview;
-	public Image isPassed;
+	public Image passedImg;
 	public TextMeshProUGUI levelName;
 	public TextMeshProUGUI clearTime;
 	#endregion
@@ -38,17 +39,41 @@ class CampaignLevel : MonoBehaviour {
 		preview.texture = tex;
 
 		if (levelInfo.isCleared) {
-			isPassed.enabled = true;
-			clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", levelInfo.timeUnformated / 60, levelInfo.timeUnformated % 60, levelInfo.timeUnformated.ToString().Remove(0, levelInfo.timeUnformated.ToString().Length - 2));
+			passedImg.enabled = true;
+			clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", levelInfo.timeUnformated / 60, levelInfo.timeUnformated % 60f, levelInfo.timeUnformated.ToString().Remove(0, levelInfo.timeUnformated.ToString().Length - 2));
 
 		}
 		else {
-			isPassed.enabled = false;
+			passedImg.enabled = false;
 			clearTime.text = "TBD";
 		}
 
 		levelName.text = levelInfo.game.levelInfo.levelName;
 	}
 
+	public void StartLevel() {
+		Control.currentCampaignLevel = this;
+		SceneManager.LoadScene(3);
+	}
+
+	public void MarkLevelAsPassed(float clearTime) {
+		BinaryFormatter bf = new BinaryFormatter();
+
+		SaveDataCampaign levelInfo;
+		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
+
+			levelInfo = (SaveDataCampaign)bf.Deserialize(fs);
+			fs.Close();
+		}
+
+		levelInfo.isCleared = true;
+		levelInfo.timeUnformated = clearTime;
+
+		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
+
+			bf.Serialize(fs, levelInfo);
+			fs.Close();
+		}
+	}
 }
 

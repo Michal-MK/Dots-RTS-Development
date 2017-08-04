@@ -487,7 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 20508344}
-  isPassed: {fileID: 692323389}
+  passedImg: {fileID: 0}
   levelName: {fileID: 0}
   clearTime: {fileID: 0}
   levelPath: D:/Dots-RTS-Development/Dots-RTS-Development/Assets/StreamingAssets\Campaign\Difficulty5\Level_4.pwl
@@ -2809,7 +2809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 312770404}
-  isPassed: {fileID: 383108667}
+  passedImg: {fileID: 0}
   levelName: {fileID: 0}
   clearTime: {fileID: 0}
   levelPath: D:/Dots-RTS-Development/Dots-RTS-Development/Assets/StreamingAssets\Campaign\Difficulty5\Level_5.pwl
@@ -5024,12 +5024,12 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 114926340298687298, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
+    - target: {fileID: 114652227412649196, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
         type: 2}
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114926340298687298, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
+    - target: {fileID: 114652227412649196, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
@@ -5044,24 +5044,15 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114652227412649196, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
-        type: 2}
-      propertyPath: m_fontMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114652227412649196, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
+    - target: {fileID: 114926340298687298, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
         type: 2}
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114652227412649196, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
+    - target: {fileID: 114926340298687298, guid: 79a4afa3a416caa4ba06967c77ef9ac3,
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795767609960620, guid: 79a4afa3a416caa4ba06967c77ef9ac3, type: 2}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79a4afa3a416caa4ba06967c77ef9ac3, type: 2}
@@ -6646,7 +6637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 1273845425}
-  isPassed: {fileID: 829743143}
+  passedImg: {fileID: 0}
   levelName: {fileID: 0}
   clearTime: {fileID: 0}
   levelPath: D:/Dots-RTS-Development/Dots-RTS-Development/Assets/StreamingAssets\Campaign\Difficulty5\Level_2.pwl
@@ -7503,7 +7494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 1286039547}
-  isPassed: {fileID: 1104962520}
+  passedImg: {fileID: 0}
   levelName: {fileID: 0}
   clearTime: {fileID: 0}
   levelPath: D:/Dots-RTS-Development/Dots-RTS-Development/Assets/StreamingAssets\Campaign\Difficulty5\Level_1.pwl
@@ -7690,7 +7681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 1608159175}
-  isPassed: {fileID: 87372480}
+  passedImg: {fileID: 0}
   levelName: {fileID: 0}
   clearTime: {fileID: 0}
   levelPath: D:/Dots-RTS-Development/Dots-RTS-Development/Assets/StreamingAssets\Campaign\Difficulty5\Level_3.pwl
