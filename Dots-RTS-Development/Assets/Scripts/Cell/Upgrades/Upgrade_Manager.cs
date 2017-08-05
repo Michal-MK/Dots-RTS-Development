@@ -1,119 +1,106 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Upgrade_Manager : MonoBehaviour {
+public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 
-	public UpgradeSlotState[] slots = new UpgradeSlotState[8];
+	public static bool isUpgrading = false;
 
-	public SpriteRenderer upgradeSlotsRenderer;
-	public CellBehaviour bScript;
-	public Cell cScript;
-	public CircleCollider2D col;
+	public static event Control.EnteredUpgradeMode OnUpgradeBegin;
+	public static event Control.QuitUpgradeMode OnUpgradeQuit;
 
-	public enum enmSlot {
-		NULL = -1,
-		FIRST,
-		SECOND,
-		THIRD,
-		FOURTH,
-		FIFTH,
-		SIXTH,
-		SEVENTH,
-		EIGHTH,
-	}
-	public enum enmUpgrade {
-		NONE,
-		ELEMENT_MOVE_SPEED,
-		GENERATION_SPEED,
-		MAX_CAPACITY,
-		CRITICAL_CHANCE,
-	}
+	public CellBehaviour cell;
+	public SpriteRenderer slotRender;
+	public Transform slotHolder;
 
-	private int[] _upgrades = new int[8];
+	public Upgrade.Upgrades[] upgrades = new Upgrade.Upgrades[8];
 
-	public int[] ApplyUpgrades() {
-		for (int i = 0; i < _upgrades.Length; i++) {
-			_upgrades[i] = (int)slots[i].installedUpgrade;
+	public GameObject[] slotsGO = new GameObject[8];
+
+	[HideInInspector]
+	public BoxCollider2D[] slots = new BoxCollider2D[8];
+
+	private void Start() {
+		for (int i = 0; i < slots.Length; i++) {
+			slots[i] = slotHolder.GetChild(i).GetComponent<BoxCollider2D>();
 		}
-		return _upgrades;
+		//print(slots[2].gameObject.name);
 	}
 
 	/// <summary>
-	/// Upgrades of the selected cell
+	/// Adds upgrades from a seav file of othetwise defined source
 	/// </summary>
-	public int[] upgrades {
-		get { return _upgrades; }
-		set { _upgrades = value; }
+	public Upgrade.Upgrades[] PreinstallUpgrades {
+		get { return upgrades; }
+		set { upgrades = value; }
+
 	}
 
-
-	private void Awake() {
-		EditCell.changedASelectionOfCell += EditCell_EditModeChanged;
-	}
-	private void OnDestroy() {
-		EditCell.changedASelectionOfCell -= EditCell_EditModeChanged;
-	}
-
-	private void EditCell_EditModeChanged(EditCell sender) {
-		if (!sender.isCellSelected) {
-			for (int i = 0; i < slots.Length; i++) {
-				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
-				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
-			}
-		}
-		else {
-			for (int i = 0; i < slots.Length; i++) {
-				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
-				slots[i].gameObject.GetComponent<BoxCollider2D>().enabled = true;
-			}
-		}
+	/// <summary>
+	/// Installs upgrade to set slot
+	/// </summary>
+	public void InstallUpgrade(int slot, Upgrade.Upgrades upgrade) {
+		upgrades[slot] = upgrade;
 	}
 
-	//Shows upgrade slots if the cell is allied
-	private void OnMouseEnter() {
-		if (bScript != null) {
-			if (bScript.cellTeam == Cell.enmTeam.ALLIED) {
-				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 255);
-				for (int i = 0; i < slots.Length; i++) {
-					slots[i].col.enabled = true;
-				}
-			}
-			else {
-				for (int i = 0; i < slots.Length; i++) {
-					slots[i].col.enabled = false;
-				}
+	/// <summary>
+	/// Uninstalls upgrade by slot
+	/// </summary>
+	public void UninstallUpgrade(int slot) {
+		upgrades[slot] = Upgrade.Upgrades.NONE;
+	}
+	/// <summary>
+	/// Uninstalls upgrade by type
+	/// </summary>
+	public void UninstallUpgrade(Upgrade.Upgrades type) {
+		for (int i = 0; i < upgrades.Length; i++) {
+			if (upgrades[i] == type) {
+				upgrades[i] = Upgrade.Upgrades.NONE;
 			}
 		}
 	}
-
-	//Makes upgrade slots invisible
-	private void OnMouseExit() {
-		if (bScript != null) {
-			for (int i = 0; i < slots.Length; i++) {
-				upgradeSlotsRenderer.color = new Color32(255, 255, 255, 0);
+	/// <summary>
+	/// Does the cell have this type of upgrade already?
+	/// </summary>
+	public bool HasUpgade(Upgrade.Upgrades type) {
+		for (int i = 0; i < upgrades.Length; i++) {
+			if (upgrades[i] == type) {
+				return true;
 			}
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// Can player install additional upgrades?
+	/// </summary>
+	public bool HasFreeSlots() {
+		for (int i = 0; i < upgrades.Length; i++) {
+			if (upgrades[i] == Upgrade.Upgrades.NONE) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void OnPointerClick(PointerEventData eventData) {
+		//Detects double click on cell
+		if (eventData.clickCount % 2 == 0) {
+			isUpgrading = true;
+			OnUpgradeBegin(this);
+			slotRender.color = new Color32(255, 255, 255, 30);
+
+			/*Display menu with upgrades, zoom camer onto the cell.*/
 		}
 	}
 
-	//Installs Upgrade onto specified slot
-	public void InstallUpgrade(enmUpgrade type, enmSlot number) {
-		slots[(int)number].installedUpgrade = type;
-	}
-
-	//Removes Upgrade from a specified slot
-	public void UninstallUpgrade(enmSlot number) {
-		slots[(int)number].installedUpgrade = 0;
-	}
-
-	//Returns slots index in Upgrade Manager array as an enum
-	public enmSlot SlotID(UpgradeSlotState slotHolder) {
-
-		for (int i = 0; i < slots.Length; i++) {
-			if (slotHolder == slots[i]) {
-				return (enmSlot)i;
+	private void Update() {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			if (isUpgrading) {
+				OnUpgradeQuit(this);
 			}
 		}
-		return (enmSlot)(-1);
 	}
 }

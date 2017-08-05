@@ -155,6 +155,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 	public void OnPointerClick(PointerEventData eventData) // 3
 	{
+		print(eventData.clickCount);
 		print("I was clicked");
 		target = Color.blue;
 	}
@@ -166,6 +167,30 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 	public void OnPointerExit(PointerEventData eventData) {
 		print("Exited");
 		target = Color.red;
+	}
+
+
+
+	public enum test {
+		A = 0,
+		B = 0,
+		C = 20,
+		D = 1,
+		F = 20,
+		G = F,
+		T = D - 1,
+		H = A + B + C + 100,
+		I = (F*D) - H,
+		J = 0,
+	}
+
+	public void Run() {
+		print((int)test.A);
+		print(Enum.GetName(typeof(test), test.B));
+		print(test.T);
+		print(Enum.GetName(typeof(test), test.C - test.F));
+		print(test.F - test.C);
+
 	}
 }
 

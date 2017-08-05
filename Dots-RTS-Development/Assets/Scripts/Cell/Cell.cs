@@ -13,9 +13,9 @@ public class Cell : MonoBehaviour {
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
 	public enmTeam _team;                                                                       //Cell's team
-	public Element.enmDebuffs providedDebuff;
+	public Upgrade.Upgrades providedDebuff;
 
-	public List<Element.enmDebuffs> appliedDebuffs = new List<Element.enmDebuffs>();
+	public List<Upgrade.Upgrades> appliedDebuffs = new List<Upgrade.Upgrades>();
 
 	public enum enmTeam {
 		NONE = -1,
@@ -177,7 +177,7 @@ public class Cell : MonoBehaviour {
 				elementCount--;
 			}
 		}
-		appliedDebuffs.Remove(Element.enmDebuffs.DOT);
+		appliedDebuffs.Remove(Upgrade.Upgrades.DOT);
 	}
 	
 

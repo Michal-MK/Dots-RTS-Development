@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using UnityEngine.Events;
 
 public class Control : MonoBehaviour {
 
@@ -15,6 +16,9 @@ public class Control : MonoBehaviour {
 	public delegate void PanelValueChanged();
 	public delegate void EditModeChanged(LevelEditorCore.Mode mode);
 	public delegate void NewSelectionForDownload(SaveFileInfo sender);
+
+	public delegate void EnteredUpgradeMode(Upgrade_Manager sender);
+	public delegate void QuitUpgradeMode(Upgrade_Manager sender);
 	#endregion
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
@@ -32,6 +36,7 @@ public class Control : MonoBehaviour {
 
 	public GameObject profileVis;
 	public static ProfileManager pM;
+
 
 	#region Post-Game data
 	private static bool isWinner = true;
@@ -107,39 +112,43 @@ public class Control : MonoBehaviour {
 		if (newS.buildIndex == 0) {
 			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.currentProfile.profileName);
 			currentCampaignLevel = null;
+			isInGame = false;
+
 		}
 
-		if(newS.buildIndex == 1) {
+		if (newS.buildIndex == 1) {
 			currentCampaignLevel = null;
+			isInGame = false;
+
 		}
 
 		if (newS.buildIndex == 2) {
 			LevelSelectScript.displayedSaves.Clear();
 			currentCampaignLevel = null;
+			isInGame = false;
+
 		}
 
 		if (newS.buildIndex == 3) {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 			StartCoroutine(GameState());
 		}
-		else {
-			StopCoroutine(GameState());
-			isInGame = false;
-		}
+
 
 		if(newS.buildIndex == 4) {
+			isInGame = false;
 
 		}
 
 		if (newS.buildIndex == 5) {
+			isInGame = true;
 
 		}
-		else {
-			StopCoroutine(GameState());
-			isInGame = false;
-		}
+
 
 		if (newS.buildIndex == 6) {
+			isInGame = false;
+
 			TextMeshProUGUI res = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
 			TextMeshProUGUI dom = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
 			TextMeshProUGUI time = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
@@ -184,7 +193,12 @@ public class Control : MonoBehaviour {
 					UnPause();
 				}
 				else {
-					Pause();
+					if (Upgrade_Manager.isUpgrading) {
+						Upgrade_Manager.isUpgrading = false;
+					}
+					else {
+						Pause();
+					}
 				}
 			}
 		}
@@ -192,6 +206,9 @@ public class Control : MonoBehaviour {
 
 	public IEnumerator GameState() {
 		isInGame = true;
+
+		print("Start");
+		print((SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) && isInGame);
 
 		while ((SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) && isInGame) {
 			yield return new WaitForSeconds(1);
@@ -204,7 +221,7 @@ public class Control : MonoBehaviour {
 					}
 				}
 			}
-			print(activeAIs + " " + SceneManager.GetActiveScene().name);
+			print(activeAIs);
 			if (activeAIs == 0) {
 				yield return new WaitForSeconds(2);
 				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
@@ -243,13 +260,11 @@ public class Control : MonoBehaviour {
 		menuPanel.SetActive(false);
 	}
 
-
 	public static void GameOver() {
 		SceneManager.LoadScene(6);
 		isWinner = false;
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 	}
-
 
 	public static void YouWon() {
 		SceneManager.LoadScene(6);

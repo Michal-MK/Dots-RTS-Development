@@ -47,7 +47,7 @@ public class LoadFromFile : MonoBehaviour {
 			c.maxElements = save.cells[j].maxElementCount;
 			c.cellTeam = (Cell.enmTeam)save.cells[j].team;
 			c.regenPeriod = save.cells[j].regenerationPeriod;
-			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+			//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
 			c.enabled = true;
 

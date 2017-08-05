@@ -5,20 +5,12 @@ using UnityEngine;
 public class Element : MonoBehaviour {
 
 	public Cell.enmTeam team;
-	public enmDebuffs debuff;
+	public Upgrade.Upgrades debuff;
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
 	private int damage = 1;
 	public float eSpeed = 10;
-
-	public enum enmDebuffs {
-		NONE,
-		DOUBLE_DAMAGE,
-		CRITICAL_CHANCE,
-		SLOW_REGENERATION,
-		DOT,
-	}
 
 	private void Start() {
 		attacker.UpdateCellInfo();
@@ -36,17 +28,16 @@ public class Element : MonoBehaviour {
 
 		#region Deterimne type of attack (buff)
 		switch (debuff) {
-			case enmDebuffs.DOUBLE_DAMAGE: {
+			case Upgrade.Upgrades.DOUBLE_DAMAGE: {
 				damage = 2;
 				break;
 			}
-			case enmDebuffs.SLOW_REGENERATION: {
+			case Upgrade.Upgrades.SLOW_REGENERATION: {
 				damage = 1;
-				//print("Handeled by cell");
 				target.DamageCell(team, damage, debuff);
 				return;
 			}
-			case enmDebuffs.CRITICAL_CHANCE: {
+			case Upgrade.Upgrades.CRITICAL_CHANCE: {
 				if (Random.Range(0f, 1f) > 0.5f) {
 					print("CRitical!!");
 					damage = 2;
@@ -56,9 +47,8 @@ public class Element : MonoBehaviour {
 				}
 				break;
 			}
-			case enmDebuffs.DOT: {
+			case Upgrade.Upgrades.DOT: {
 				damage = 1;
-				//print("Handeled by cell");
 				target.DamageCell(team, damage, debuff);
 				return;
 			}

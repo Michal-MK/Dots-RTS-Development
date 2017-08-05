@@ -17,6 +17,8 @@ public class CellBehaviour : Cell {
 	public GameObject cellObj;
 	public GameObject elementObj;
 
+	public Upgrade_Manager UM;
+
 	private void Awake() {
 		Control.cells.Add(this);
 	}
@@ -75,7 +77,7 @@ public class CellBehaviour : Cell {
 
 	//Resets Cell colour and clears the selection list
 	public static void ClearSelection() {
-		print("Clearing");
+		//print("Clearing");
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
 			cellsInSelection[i].elementNrDisplay.color = new Color(1, 1, 1);
@@ -118,7 +120,7 @@ public class CellBehaviour : Cell {
 
 	#region Element Damage Handling
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
-	public void DamageCell(enmTeam elementTeam, int amoutOfDamage, Element.enmDebuffs additionalArg = 0) {
+	public void DamageCell(enmTeam elementTeam, int amoutOfDamage, Upgrade.Upgrades additionalArg = 0) {
 
 		if (cellTeam == elementTeam) {
 			elementCount++;
@@ -133,11 +135,11 @@ public class CellBehaviour : Cell {
 				}
 			}
 			if (!isAffected) {
-				if(additionalArg == Element.enmDebuffs.SLOW_REGENERATION) {
+				if(additionalArg == Upgrade.Upgrades.SLOW_REGENERATION) {
 					regenPeriod *= 2;
 					appliedDebuffs.Add(additionalArg);
 				}
-				if (additionalArg == Element.enmDebuffs.DOT) {
+				if (additionalArg == Upgrade.Upgrades.DOT) {
 					StartCoroutine(DoT(1,4));
 					appliedDebuffs.Add(additionalArg);
 				}
@@ -169,6 +171,7 @@ public class CellBehaviour : Cell {
 		circle.sortingLayerName = "Cells";
 		circle.sortingOrder = 0;
 
+
 		base.UpdateCellInfo();
 
 		if (calledFromBase == false) {
@@ -181,7 +184,7 @@ public class CellBehaviour : Cell {
 			}
 
 			if (elementCount > maxElements) {
-				print("Attempthing to decay if not decaying already: " + elementCount + " is greater than " + maxElements);
+				//print("Attempthing to decay if not decaying already: " + elementCount + " is greater than " + maxElements);
 				Decay(0.5f);
 			}
 			if (isSelected) {
@@ -275,7 +278,7 @@ public class CellBehaviour : Cell {
 		if (Input.GetMouseButton(0)) {
 			if (cellTeam == enmTeam.ALLIED) {
 				ModifySelection(this);
-				print("Added " + gameObject.name);
+				//print("Added " + gameObject.name);
 			}
 		}
 	}

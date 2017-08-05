@@ -71,7 +71,7 @@ public class EditorGUILayoutToggle : EditorWindow {
 					serCell.maxElementCount = c.maxElements;
 					serCell.team = (int)c.cellTeam;
 					serCell.regenerationPeriod = c.regenPeriod;
-					serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
+					//serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
 
 					save.game.cells.Add(serCell);
 				}

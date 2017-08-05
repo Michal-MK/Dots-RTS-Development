@@ -84,7 +84,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			serCell.maxElementCount = c.maxElements;
 			serCell.team = (int)c.cellTeam;
 			serCell.regenerationPeriod = c.regenPeriod;
-			serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
+			//serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
 
 			save.cells.Add(serCell);
 		}
@@ -151,7 +151,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			c.maxElements = save.cells[j].maxElementCount;
 			c.cellTeam = (Cell.enmTeam)save.cells[j].team;
 			c.regenPeriod = save.cells[j].regenerationPeriod;
-			c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+			//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
 			LevelEditorCore.AddCell(c);
 		}
