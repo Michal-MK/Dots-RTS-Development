@@ -8,18 +8,19 @@ public class TeamSetup : MonoBehaviour {
 
 	public GameObject teamGOPrefab;
 	public GameObject xGO;
-	List<TeamBox> mySpawns = new List<TeamBox>();
+	static List<TeamBox> mySpawns = new List<TeamBox>();
 	public static Dictionary<int, int> clanDict = new Dictionary<int, int>();
 	//LineRenderer lineRenderer;
 	public RectTransform roundTable;
-	public GameObject sampleLineRenderer;
-	List<GameObject> myLines = new List<GameObject>();
+	public GameObject setSampleLineRenderer;
+    static GameObject sampleLineRenderer;
+	static List<GameObject> myLines = new List<GameObject>();
 
 	// Use this for initialization
 	void OnEnable() {
         //lineRenderer = gameObject.GetComponent<LineRenderer>();
         AllAiDifficultyWriter.RedoText();
-
+        sampleLineRenderer = setSampleLineRenderer;
         for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
             GameObject newTeamBox = Instantiate(teamGOPrefab, this.transform);
             newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
@@ -201,12 +202,12 @@ public class TeamSetup : MonoBehaviour {
             }
         }
     }
-	void DestroyAllInList(List<GameObject> list) {
+	static void DestroyAllInList(List<GameObject> list) {
 		for (int i = 0; i < list.Count; i++) {
 			Destroy(list[i]);
 		}
 	}
-	void MakeLines() {
+	public static void MakeLines() {
 
 		DestroyAllInList(myLines);
 		List<List<int>> ActualClans = new List<List<int>>();
@@ -250,7 +251,7 @@ public class TeamSetup : MonoBehaviour {
 
 
 	}
-	int MySpawnsIndexFromTeam(int team) {
+	public static int MySpawnsIndexFromTeam(int team) {
 		int output = -1;
 		for (int i = 0; i <	mySpawns.Count; i++) {
 			TeamBox spawn = mySpawns[i];

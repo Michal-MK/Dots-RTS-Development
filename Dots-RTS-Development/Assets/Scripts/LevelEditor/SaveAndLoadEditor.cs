@@ -24,6 +24,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	private void Start() {
 		if (!string.IsNullOrEmpty(PlayerPrefs.GetString("LoadLevelFilePath"))) {
 			Load(PlayerPrefs.GetString("LoadLevelFilePath"));
+           // print("thathappened");
 		}
 	}
 
@@ -97,36 +98,35 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	public void Load(string path) {
-        //foreach (Cell c in LevelEditorCore.cellList) {
-        //    Destroy(c.gameObject);
-        //}
-        //LevelEditorCore.cellList.Clear();
-        //TeamSetup.clanDict.Clear();
-        //LevelEditorCore.aiDifficultyDict.Clear();
-        
+        foreach (Cell c in LevelEditorCore.cellList) {
+            Destroy(c.gameObject);
+        }
+        LevelEditorCore.cellList.Clear();
+        TeamSetup.clanDict.Clear();
+        LevelEditorCore.aiDifficultyDict.Clear();
+
 
         BinaryFormatter formatter = new BinaryFormatter();
 		//File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
 		FileStream file = File.Open(path, FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
-		LevelEditorCore.gameSize = save.gameSize;
+        LevelEditorCore.gameSize = save.gameSize;
 
         LevelEditorCore.aiDifficultyDict = save.difficulty;
-		gameObject.GetComponent<LevelEditorCore>().RefreshCameraSize();
 
         if (save.difficulty != null) {
             LevelEditorCore.aiDifficultyDict = save.difficulty;
         }
         else {
             LevelEditorCore.aiDifficultyDict =new Dictionary<int, float>();
-            print("diff null");
+            //print("diff null");
         }
         if (save.clans != null) {
             TeamSetup.clanDict = save.clans;
         }
         else {
             TeamSetup.clanDict = new Dictionary<int, int>();
-            print("clan null");
+            //print("clan null");
         }
 
 
