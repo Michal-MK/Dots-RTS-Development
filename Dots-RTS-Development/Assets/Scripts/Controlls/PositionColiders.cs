@@ -17,12 +17,12 @@ public class PositionColiders : MonoBehaviour {
 	public static Vector2 TopRightCanvasPoint = Vector2.zero;
 
 	// Use this for initialization
-	void Start() {
+	IEnumerator Start() {
 		transform.position = Vector3.zero;
 
 		Camera c = Camera.main;
 
-
+		yield return new WaitForSeconds(0.5f);
 		top.transform.position = new Vector3(0, c.orthographicSize);
 		bottom.transform.position = new Vector3(0, -c.orthographicSize);
 		right.transform.position = new Vector3(c.orthographicSize * c.aspect, 0);

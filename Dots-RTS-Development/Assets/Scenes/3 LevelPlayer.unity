@@ -293,6 +293,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1337293547799692, guid: 832544c7e7bf75b4db0a86944091eae7, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 832544c7e7bf75b4db0a86944091eae7, type: 2}
   m_IsPrefabParent: 0
@@ -1002,7 +1006,6 @@ GameObject:
   - component: {fileID: 795130073}
   - component: {fileID: 795130072}
   - component: {fileID: 795130075}
-  - component: {fileID: 795130077}
   - component: {fileID: 795130076}
   - component: {fileID: 795130074}
   m_Layer: 0
@@ -1107,26 +1110,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 1930486067858668, guid: fbba495e544d3cc4ab7f76f6d081f3de, type: 2}
   init: {fileID: 795130075}
---- !u!50 &795130074
-Rigidbody2D:
-  serializedVersion: 4
+--- !u!114 &795130074
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 795130066}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1690312454, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &795130075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,20 +1159,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   c: {fileID: 795130070}
   background: {fileID: 2034937579}
---- !u!114 &795130077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 795130066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -768656878, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EventMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &930668627
 GameObject:
   m_ObjectHideFlags: 0

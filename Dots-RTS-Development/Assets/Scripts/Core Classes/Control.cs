@@ -83,17 +83,17 @@ public class Control : MonoBehaviour {
 				pM.ListProfiles();
 			}
 		}
-		if (ProfileManager.currentProfile == null && activeScene != 5) {
-			if (SceneManager.GetActiveScene().name == "Profiles") {
-				DebugSceneIndex = 0;
-			}
-			else {
-				DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-			}
-			if(SceneManager.GetActiveScene().name != "Profiles"){
-				SceneManager.LoadScene("Profiles");
-			}
-		}
+		//if (ProfileManager.currentProfile == null && activeScene != 5) {
+		//	if (SceneManager.GetActiveScene().name == "Profiles") {
+		//		DebugSceneIndex = 0;
+		//	}
+		//	else {
+		//		DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
+		//	}
+		//	if(SceneManager.GetActiveScene().name != "Profiles"){
+		//		SceneManager.LoadScene("Profiles");
+		//	}
+		//}
 	}
 
 	private void OnDestroy() {
@@ -103,7 +103,7 @@ public class Control : MonoBehaviour {
 
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
-		if (ProfileManager.currentProfile == null && newS.name != "Profiles") {
+		if (ProfileManager.currentProfile == null && newS.buildIndex == 0) {
 			DebugSceneIndex = newS.buildIndex;
 			SceneManager.LoadScene("Profiles");
 
@@ -182,7 +182,7 @@ public class Control : MonoBehaviour {
 		time = 0;
 	}
 
-	private void Update() {
+	private void LateUpdate() {
 		if (isInGame) {
 			time += Time.deltaTime;
 		}
@@ -193,6 +193,7 @@ public class Control : MonoBehaviour {
 					UnPause();
 				}
 				else {
+					print(Upgrade_Manager.isUpgrading);
 					if (Upgrade_Manager.isUpgrading) {
 						Upgrade_Manager.isUpgrading = false;
 					}
