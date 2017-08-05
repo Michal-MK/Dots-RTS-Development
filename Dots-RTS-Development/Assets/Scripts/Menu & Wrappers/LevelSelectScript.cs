@@ -39,9 +39,13 @@ public class LevelSelectScript : MonoBehaviour {
 	}
 	//Display alll saves that you can find in the scroll view
 	public void ListCustomSaves() {
+#if UNITY_ANDROID
+		saveDir = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves";
+#else
+        saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves";
+#endif
 
-		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves";
-		DirectoryInfo d = new DirectoryInfo(saveDir);
+        DirectoryInfo d = new DirectoryInfo(saveDir);
 		error.text = "";
 		FileInfo[] saves = d.GetFiles("*.phage");
 		BinaryFormatter bf = new BinaryFormatter();
