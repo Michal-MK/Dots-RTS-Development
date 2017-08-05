@@ -11,9 +11,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	public GameObject prefab;
 
-	public InputField fileNameInput;
-	public InputField levelNameInput;
-	public InputField authorNameInput;
+
 	public Text ErrorMessages;
 
 	public static string fileName;
@@ -26,6 +24,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	private void Start() {
 		if (!string.IsNullOrEmpty(PlayerPrefs.GetString("LoadLevelFilePath"))) {
 			Load(PlayerPrefs.GetString("LoadLevelFilePath"));
+           // print("thathappened");
 		}
 	}
 
@@ -99,14 +98,47 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	public void Load(string path) {
-		BinaryFormatter formatter = new BinaryFormatter();
+        foreach (Cell c in LevelEditorCore.cellList) {
+            Destroy(c.gameObject);
+        }
+        LevelEditorCore.cellList.Clear();
+        TeamSetup.clanDict.Clear();
+        LevelEditorCore.aiDifficultyDict.Clear();
+
+
+        BinaryFormatter formatter = new BinaryFormatter();
 		//File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
 		FileStream file = File.Open(path, FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
-		LevelEditorCore.gameSize = save.gameSize;
+        LevelEditorCore.gameSize = save.gameSize;
+
         LevelEditorCore.aiDifficultyDict = save.difficulty;
-		gameObject.GetComponent<LevelEditorCore>().RefreshCameraSize();
-        TeamSetup.clanDict = save.clans;
+
+        if (save.difficulty != null) {
+            LevelEditorCore.aiDifficultyDict = save.difficulty;
+        }
+        else {
+            LevelEditorCore.aiDifficultyDict =new Dictionary<int, float>();
+            //print("diff null");
+        }
+        if (save.clans != null) {
+            TeamSetup.clanDict = save.clans;
+        }
+        else {
+            TeamSetup.clanDict = new Dictionary<int, int>();
+            //print("clan null");
+        }
+
+
+        //Dictionary<int, float>.KeyCollection keys = LevelEditorCore.aiDifficultyDict.Keys;
+        //foreach (int j in keys) {
+        //    //print(j + " Key");
+        //   float diffOfJ;
+        //    LevelEditorCore.aiDifficultyDict.TryGetValue(j, out diffOfJ);
+        //    string s = ("teaj " + j + " is " + diffOfJ + " difficult");
+        //    print(s);
+
+        //}
         file.Close();
 
 		for (int j = 0; j < save.cells.Count; j++) {
