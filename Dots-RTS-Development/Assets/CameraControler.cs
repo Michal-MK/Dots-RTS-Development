@@ -30,6 +30,7 @@ public class CameraControler : MonoBehaviour {
 	void Start() {
 		defaultPos = transform.position;
 		defaultSize = c.orthographicSize;
+		//print(defaultSize);
 
 		camVertSize = c.orthographicSize;
 		camHorSize = c.orthographicSize * c.aspect;
@@ -38,7 +39,10 @@ public class CameraControler : MonoBehaviour {
 	}
 
 	private void OnBeginUpgrading(Upgrade_Manager sender) {
+		c.orthographicSize = defaultSize;
+		print(c.orthographicSize);
 		c.orthographicSize *= 0.5f;
+		print(c.orthographicSize);
 		Vector3 newPos = sender.transform.position + (Vector3.back * 10);
 
 		camVertDiff = (newPos.y + c.orthographicSize) - (background.position.y + bgVertSize);
@@ -66,6 +70,7 @@ public class CameraControler : MonoBehaviour {
 
 		transform.position = newPos;
 	}
+
 
 	private void OnQuitUpgrading(Upgrade_Manager sender) {
 		c.orthographicSize = defaultSize;

@@ -88,6 +88,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	public void OnPointerClick(PointerEventData eventData) {
 		//Detects double click on cell
 		if (eventData.clickCount % 2 == 0) {
+			print("Double");
 			isUpgrading = true;
 			OnUpgradeBegin(this);
 			slotRender.color = new Color32(255, 255, 255, 30);
@@ -99,6 +100,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	private void Update() {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (isUpgrading) {
+				print("HEEEELO");
 				OnUpgradeQuit(this);
 			}
 		}

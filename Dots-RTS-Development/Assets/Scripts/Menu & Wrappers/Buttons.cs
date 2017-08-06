@@ -24,6 +24,6 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void CreateNewProfile() {
-		Control.pM.profileCreation.SetActive(true);
+		Control.pM.ShowProfileCreation();
 	}
 }
