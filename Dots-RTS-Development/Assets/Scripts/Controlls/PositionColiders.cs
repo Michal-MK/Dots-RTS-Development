@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PositionColiders : MonoBehaviour {
 
+	public RectTransform background;
 	public GameObject top;
 	public GameObject right;
 	public GameObject bottom;
@@ -18,20 +19,27 @@ public class PositionColiders : MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start() {
-		transform.position = Vector3.zero;
-
+		yield return new WaitForEndOfFrame();
 		Camera c = Camera.main;
+		background.position = c.transform.position + Vector3.forward * 10;
+		transform.position = c.transform.position;
+
+		SpriteRenderer bg = background.GetComponent<SpriteRenderer>();
+		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * c.aspect, c.orthographicSize * 2);
+
 
 		yield return new WaitForSeconds(0.5f);
-		top.transform.position = new Vector3(0, c.orthographicSize);
-		bottom.transform.position = new Vector3(0, -c.orthographicSize);
-		right.transform.position = new Vector3(c.orthographicSize * c.aspect, 0);
-		left.transform.position = new Vector3(-c.orthographicSize * c.aspect, 0);
+		top.transform.position = new Vector3(c.transform.position.x, c.transform.position.y + c.orthographicSize);
+		bottom.transform.position = new Vector3(c.transform.position.x, c.transform.position.y - c.orthographicSize);
+		right.transform.position = new Vector3(c.transform.position.x + c.orthographicSize * c.aspect, c.transform.position.y);
+		left.transform.position = new Vector3(c.transform.position.x - c.orthographicSize * c.aspect, c.transform.position.y);
 
 		topC.size = bottomC.size = new Vector2(c.orthographicSize * c.aspect * 2, 1);
-		rightC.size = leftC.size = new Vector2(c.orthographicSize * 2, 1);
+		rightC.size = leftC.size = new Vector2(1, c.orthographicSize * 2);
+
 
 	}
+
 	public static void UpdateTopPoint() {
 		Camera c = Camera.main;
 		TopRightCameraPointWorld = new Vector2(c.orthographicSize * c.aspect, c.orthographicSize);

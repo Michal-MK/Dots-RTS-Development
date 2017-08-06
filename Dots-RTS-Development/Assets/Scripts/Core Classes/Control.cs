@@ -24,19 +24,22 @@ public class Control : MonoBehaviour {
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
 
 	public static bool isPaused = false;
-	private static float time;
+	public static bool canPause = true;
+
+	private float time;
+	private bool isInGame = false;
 
 	public static GameObject menuPanel;
+	public static CampaignLevel currentCampaignLevel;
+	public static ProfileManager pM;
+
 
 	public static int DebugSceneIndex = 0;
 
-	public static CampaignLevel currentCampaignLevel;
 
-	private bool isInGame = false;
-
+	#region Prefab
 	public GameObject profileVis;
-	public static ProfileManager pM;
-
+	#endregion
 
 	#region Post-Game data
 	private static bool isWinner = true;
@@ -45,7 +48,7 @@ public class Control : MonoBehaviour {
 	#endregion
 
 	#region Initializers
-	private static Control script;
+	public static Control script;
 	private void Awake() {
 		if (script == null) {
 			script = this;
@@ -67,13 +70,13 @@ public class Control : MonoBehaviour {
 	}
 
 	private void Start() {
+
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 
 		int activeScene = SceneManager.GetActiveScene().buildIndex;
 
 		if (activeScene == 5 || activeScene == 3) {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-			time = 0;
 			isInGame = true;
 			StartCoroutine(GameState());
 		}
@@ -83,18 +86,11 @@ public class Control : MonoBehaviour {
 				pM.ListProfiles();
 			}
 		}
-		//if (ProfileManager.currentProfile == null && activeScene != 5) {
-		//	if (SceneManager.GetActiveScene().name == "Profiles") {
-		//		DebugSceneIndex = 0;
-		//	}
-		//	else {
-		//		DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-		//	}
-		//	if(SceneManager.GetActiveScene().name != "Profiles"){
-		//		SceneManager.LoadScene("Profiles");
-		//	}
-		//}
+		if (ProfileManager.currentProfile == null && activeScene == 0) {
+			SceneManager.LoadScene("Profiles");
+		}
 	}
+
 
 	private void OnDestroy() {
 		SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
@@ -103,13 +99,12 @@ public class Control : MonoBehaviour {
 
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
-		if (ProfileManager.currentProfile == null && newS.buildIndex == 0) {
-			DebugSceneIndex = newS.buildIndex;
-			SceneManager.LoadScene("Profiles");
-
-		}
-
 		if (newS.buildIndex == 0) {
+			if (ProfileManager.currentProfile == null) {
+				DebugSceneIndex = 0;
+				SceneManager.LoadScene("Profiles");
+				return;
+			}
 			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.currentProfile.profileName);
 			currentCampaignLevel = null;
 			isInGame = false;
@@ -119,7 +114,6 @@ public class Control : MonoBehaviour {
 		if (newS.buildIndex == 1) {
 			currentCampaignLevel = null;
 			isInGame = false;
-
 		}
 
 		if (newS.buildIndex == 2) {
@@ -135,14 +129,14 @@ public class Control : MonoBehaviour {
 		}
 
 
-		if(newS.buildIndex == 4) {
+		if (newS.buildIndex == 4) {
 			isInGame = false;
-
+			currentCampaignLevel = null;
 		}
 
 		if (newS.buildIndex == 5) {
 			isInGame = true;
-
+			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 		}
 
 
@@ -166,20 +160,15 @@ public class Control : MonoBehaviour {
 			else {
 				dom.text = "";
 			}
-			time.text = "Fought for: " + gameTime;
+			time.text = "Fought for:\n" + gameTime;
 		}
 
 		if (SceneManager.GetActiveScene().name == "Profiles") {
-
-			if (pM == null) {
-				print("Azzz");
-				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
-				pM.ListProfiles();
-			}
+			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
+			pM.ListProfiles();
 		}
 
 		Time.timeScale = 1;
-		time = 0;
 	}
 
 	private void LateUpdate() {
@@ -198,7 +187,9 @@ public class Control : MonoBehaviour {
 						Upgrade_Manager.isUpgrading = false;
 					}
 					else {
-						Pause();
+						if (canPause) {
+							Pause();
+						}
 					}
 				}
 			}
@@ -207,9 +198,6 @@ public class Control : MonoBehaviour {
 
 	public IEnumerator GameState() {
 		isInGame = true;
-
-		print("Start");
-		print((SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) && isInGame);
 
 		while ((SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) && isInGame) {
 			yield return new WaitForSeconds(1);
@@ -222,13 +210,11 @@ public class Control : MonoBehaviour {
 					}
 				}
 			}
-			print(activeAIs);
+			//print(activeAIs);
 			if (activeAIs == 0) {
-				yield return new WaitForSeconds(2);
 				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
 					YouWon();
 				}
-				isInGame = false;
 			}
 
 			int playerCells = 0;
@@ -238,13 +224,11 @@ public class Control : MonoBehaviour {
 					playerCells++;
 				}
 			}
-			print(playerCells);
+			//print(playerCells);
 			if (playerCells == 0) {
-				yield return new WaitForSeconds(2);
 				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
 					GameOver();
 				}
-				isInGame = false;
 			}
 		}
 	}
@@ -261,13 +245,14 @@ public class Control : MonoBehaviour {
 		menuPanel.SetActive(false);
 	}
 
-	public static void GameOver() {
+	public void GameOver() {
 		SceneManager.LoadScene(6);
 		isWinner = false;
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+		isInGame = false;
 	}
 
-	public static void YouWon() {
+	public void YouWon() {
 		SceneManager.LoadScene(6);
 		isWinner = true;
 		int neutrals = 0;
@@ -284,9 +269,10 @@ public class Control : MonoBehaviour {
 		}
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 
-		if(currentCampaignLevel != null) {
+		if (currentCampaignLevel != null) {
 			currentCampaignLevel.MarkLevelAsPassed(time);
 		}
+		isInGame = false;
 	}
 }
 

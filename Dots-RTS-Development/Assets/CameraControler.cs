@@ -30,7 +30,7 @@ public class CameraControler : MonoBehaviour {
 	void Start() {
 		defaultPos = transform.position;
 		defaultSize = c.orthographicSize;
-		print(defaultSize);
+		//print(defaultSize);
 
 		camVertSize = c.orthographicSize;
 		camHorSize = c.orthographicSize * c.aspect;

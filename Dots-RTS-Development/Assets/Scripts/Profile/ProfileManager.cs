@@ -11,7 +11,7 @@ public class ProfileManager {
 	public delegate void profileDeleted(ProfileInfo sender);
 
 	private GameObject profileVisual;
-	private Transform parent;
+	private Transform parentTransform;
 	public static Profile currentProfile;
 	public bool isProfileSelected = false;
 
@@ -25,7 +25,7 @@ public class ProfileManager {
 	/// <param name="listParent">Transform under which to sort Items</param>
 	public ProfileManager(GameObject visualRepresentation, Transform listParent) {
 		profileVisual = visualRepresentation;
-		parent = listParent;
+		parentTransform = listParent;
 		b = GameObject.Find("NoProfiles").GetComponent<Button>();
 		b.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
@@ -47,7 +47,7 @@ public class ProfileManager {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "\\Profiles\\");
 		FileInfo[] files = dir.GetFiles("*.gp");
 		BinaryFormatter bf = new BinaryFormatter();
-		foreach(ProfileInfo pF in parent.GetComponentsInChildren<ProfileInfo>()) {
+		foreach(ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
 			GameObject.Destroy(pF.gameObject);
 		}
 
@@ -62,7 +62,7 @@ public class ProfileManager {
 			using (FileStream fs = File.Open(f.FullName, FileMode.Open)) {
 				try {
 					Profile p = (Profile)bf.Deserialize(fs);
-					ProfileInfo pI = GameObject.Instantiate(profileVisual, parent).GetComponent<ProfileInfo>();
+					ProfileInfo pI = GameObject.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
 					pI.name = f.FullName;
 					pI.InitializeProfile(p, p.profileName);
 				}
@@ -73,7 +73,7 @@ public class ProfileManager {
 		}
 	}
 
-	private void ShowProfileCreation() {
+	public void ShowProfileCreation() {
 		b.gameObject.SetActive(false);
 		profileCreation.SetActive(true);
 		Button creationB = GameObject.Find("CreateProfileButton").GetComponent<Button>();

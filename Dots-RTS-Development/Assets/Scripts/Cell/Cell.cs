@@ -74,8 +74,12 @@ public class Cell : MonoBehaviour {
 			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
 		}
 		else {
-			mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
-
+			if (elementCount < 1000) {
+				mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+			}
+			else {
+				mappedValue = 4;
+			}
 		}
 
 		transform.localScale = new Vector3(mappedValue, mappedValue, 1);

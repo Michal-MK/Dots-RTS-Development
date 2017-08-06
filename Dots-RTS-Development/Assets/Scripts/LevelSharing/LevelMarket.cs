@@ -68,7 +68,7 @@ public class LevelMarket : MonoBehaviour {
 				s.downloadButton = download;
 				s.gameObject.name = contents[i];
 				s.levelNameAndAuthorTM.text = saveInfo[0];
-				s.levelNameAndAuthorTM.text += " by " + saveInfo[1];
+				s.levelNameAndAuthorTM.text += " by <color=#2A8357FF>" + saveInfo[1];
 				s.timeTM.text = saveInfo[2];
 			}
 			catch {
