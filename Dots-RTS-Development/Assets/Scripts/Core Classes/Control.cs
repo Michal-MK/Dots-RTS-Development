@@ -172,7 +172,7 @@ public class Control : MonoBehaviour {
 		if (SceneManager.GetActiveScene().name == "Profiles") {
 
 			if (pM == null) {
-				print("Azzz");
+				//print("Azzz");
 				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 				pM.ListProfiles();
 			}

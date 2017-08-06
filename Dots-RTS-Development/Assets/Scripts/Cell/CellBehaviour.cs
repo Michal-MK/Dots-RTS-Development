@@ -35,7 +35,6 @@ public class CellBehaviour : Cell {
 			regenPeriod = 0.3f;
 		}
 
-		cellRadius = col.radius * transform.localScale.x;
 		UpdateCellInfo();
 	}
 
@@ -309,24 +308,4 @@ public class CellBehaviour : Cell {
 
 	}
 
-	public void CreateCircle(Vector3 _position, float _r, int segments) {
-
-		circle.positionCount = segments + 1;
-		circle.useWorldSpace = true;
-
-		float x;
-		float y;
-		float z = 0f;
-
-		float angle = 20f;
-
-		for (int i = 0; i < (segments + 1); i++) {
-			x = Mathf.Sin(Mathf.Deg2Rad * angle) * _r;
-			y = Mathf.Cos(Mathf.Deg2Rad * angle) * _r;
-
-			circle.SetPosition(i, new Vector3(_position.x + x, _position.y + y, z));
-
-			angle += (360f / segments);
-		}
-	}
 }

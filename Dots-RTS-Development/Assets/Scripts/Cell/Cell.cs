@@ -62,7 +62,8 @@ public class Cell : MonoBehaviour {
 
 	private void Start() {
 		UpdateCellInfo();
-	}
+        cellRadius = col.radius * transform.localScale.x;
+    }
 	//Function to update visuals of the cell
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
 
@@ -179,12 +180,33 @@ public class Cell : MonoBehaviour {
 		}
 		appliedDebuffs.Remove(Upgrade.Upgrades.DOT);
 	}
-	
 
-	/// <summary>
-	/// The elements that are available in selected cell.
-	/// </summary>
-	public int elementCount {
+    public void CreateCircle(Vector3 _position, float _r, int segments) {
+
+        circle.positionCount = segments + 1;
+        circle.useWorldSpace = true;
+
+        float x;
+        float y;
+        float z = 0f;
+
+        float angle = 20f;
+
+        for (int i = 0; i < (segments + 1); i++) {
+            x = Mathf.Sin(Mathf.Deg2Rad * angle) * _r;
+            y = Mathf.Cos(Mathf.Deg2Rad * angle) * _r;
+
+            circle.SetPosition(i, new Vector3(_position.x + x, _position.y + y, z));
+
+            angle += (360f / segments);
+        }
+    }
+
+
+    /// <summary>
+    /// The elements that are available in selected cell.
+    /// </summary>
+    public int elementCount {
 		get { return _elementCount; }
 		set { _elementCount = value; UpdateCellInfo(true); }
 	}

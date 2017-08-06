@@ -243,7 +243,7 @@ public class LevelEditorCore : MonoBehaviour {
 
         }
         else {
-            print("setToDefault");
+            //print("setToDefault");
             gameSize = defaultGameSize;
         }
     }

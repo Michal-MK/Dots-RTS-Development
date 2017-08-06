@@ -9,7 +9,7 @@ public class UpgradeSlot : MonoBehaviour, IPointerClickHandler {
 
 	// Use this for initialization
 	void Start() {
-		slot = int.Parse(transform.name);
+        slot = int.Parse(transform.name);
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
