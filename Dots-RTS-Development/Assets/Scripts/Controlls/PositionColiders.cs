@@ -19,16 +19,13 @@ public class PositionColiders : MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start() {
-		yield return new WaitForEndOfFrame();
 		Camera c = Camera.main;
-		background.position = c.transform.position + Vector3.forward * 10;
-		transform.position = c.transform.position;
 
-		SpriteRenderer bg = background.GetComponent<SpriteRenderer>();
-		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * c.aspect, c.orthographicSize * 2);
+		yield return new WaitForEndOfFrame();
 
-
+		ResizeBackground();
 		yield return new WaitForSeconds(0.5f);
+
 		top.transform.position = new Vector3(c.transform.position.x, c.transform.position.y + c.orthographicSize);
 		bottom.transform.position = new Vector3(c.transform.position.x, c.transform.position.y - c.orthographicSize);
 		right.transform.position = new Vector3(c.transform.position.x + c.orthographicSize * c.aspect, c.transform.position.y);
@@ -37,6 +34,16 @@ public class PositionColiders : MonoBehaviour {
 		topC.size = bottomC.size = new Vector2(c.orthographicSize * c.aspect * 2, 1);
 		rightC.size = leftC.size = new Vector2(1, c.orthographicSize * 2);
 
+
+	}
+
+	public void ResizeBackground() {
+		Camera c = Camera.main;
+		background.position = c.transform.position + Vector3.forward * 10;
+		transform.position = c.transform.position;
+
+		SpriteRenderer bg = background.GetComponent<SpriteRenderer>();
+		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * c.aspect, c.orthographicSize * 2);
 
 	}
 

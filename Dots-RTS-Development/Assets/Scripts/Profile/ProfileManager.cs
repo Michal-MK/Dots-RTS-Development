@@ -44,7 +44,7 @@ public class ProfileManager {
 	}
 
 	public void ListProfiles() {
-		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "\\Profiles\\");
+		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
 		BinaryFormatter bf = new BinaryFormatter();
 		foreach(ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
@@ -106,8 +106,8 @@ public class ProfileManager {
 		p.contributedLevels = 0;
 		p.totalCreatedLevels = 0;
 		p.onLevelBaseGame = 1;
-		p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
-
+		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
+		p.onLevelImage = null;
 		using (FileStream fs = new FileStream(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp", FileMode.Create)) {
 			bf.Serialize(fs, p);
 		}

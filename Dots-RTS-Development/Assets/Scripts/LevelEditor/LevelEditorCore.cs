@@ -255,6 +255,7 @@ public class LevelEditorCore : MonoBehaviour {
                 gameSize = 250;
             }
             Camera.main.orthographicSize = val;
+			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground();
             TeamSetup.MakeLines();
         }
     }
