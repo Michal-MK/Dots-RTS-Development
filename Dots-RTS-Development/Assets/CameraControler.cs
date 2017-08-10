@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class CameraControler : MonoBehaviour {
 	public Camera c;
 	public RectTransform background;
-	public RectTransform upgradeHotbar;
 
 	private Vector3 defaultPos;
 	private float defaultSize;
@@ -46,16 +45,19 @@ public class CameraControler : MonoBehaviour {
 		SpriteRenderer bg = GameObject.Find("Background").GetComponent<SpriteRenderer>();
 
 		camVertDiff = (newPos.y + c.orthographicSize) - (bg.transform.position.y + bg.size.y / 2);
-		print("Diff to TOP " + camVertDiff);
+		//print("Diff to TOP " + camVertDiff);
 
 		camHorDiff = (newPos.x + c.orthographicSize * c.aspect) - (bg.transform.position.x + bg.size.x / 2);
-		print("Diff to RIGHT " + camHorDiff);
+		//print("Diff to RIGHT " + camHorDiff);
 
 		camHorDiffL = (newPos.x - c.orthographicSize * c.aspect) - (bg.transform.position.x - bg.size.x / 2);
-		print("Diff to LEFT " + camHorDiffL);
+		//print("Diff to LEFT " + camHorDiffL);
 
 		camVertDiffB = (newPos.y - c.orthographicSize) - (bg.transform.position.y - bg.size.y / 2);
-		print("Diff to BOTTOM " + camVertDiffB);
+		//print("Diff to BOTTOM " + camVertDiffB);
+
+
+
 
 
 		//RightSide
@@ -75,16 +77,28 @@ public class CameraControler : MonoBehaviour {
 			newPos = new Vector3(newPos.x, newPos.y - camVertDiffB, newPos.z);
 		}
 
-		Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.3f));
-		Vector3 pointD = c.ViewportToWorldPoint(new Vector3(0.5f, 0));
+		Vector3 percentage = c.WorldToViewportPoint(newPos);
+		print(percentage.y);
 
-		float d = Vector3.Distance(pointU, pointD);
+		if (percentage.y <= 0.1f) {
+			print("A");
+			Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.3f));
+			Vector3 pointD = c.ViewportToWorldPoint(new Vector3(0.5f, 0));
 
-		if (newPos.y < -bg.size.y / 10) {
-			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z); /* - (new Vector3(0, upgradeHotbar.sizeDelta.y));*/
+			float d = Vector3.Distance(pointU, pointD);
+
+			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z);
+		}
+		else if (percentage.y > 0.96f) {
+			print("B");
+			transform.position = new Vector3(newPos.x, newPos.y, newPos.z);
+
 		}
 		else {
-			transform.position = newPos;
+			print("C");
+			Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.65f));
+			float d = Vector3.Distance(c.transform.position, pointU);
+			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z);
 		}
 	}
 
