@@ -38,6 +38,7 @@ public class PositionColiders : MonoBehaviour {
 	}
 
 	public void ResizeBackground() {
+		print("Hello");
 		Camera c = Camera.main;
 		background.position = c.transform.position + Vector3.forward * 10;
 		transform.position = c.transform.position;

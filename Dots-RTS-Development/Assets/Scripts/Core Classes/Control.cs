@@ -171,6 +171,7 @@ public class Control : MonoBehaviour {
 		Time.timeScale = 1;
 	}
 
+
 	private void LateUpdate() {
 		if (isInGame) {
 			time += Time.deltaTime;

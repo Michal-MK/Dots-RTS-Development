@@ -6,13 +6,15 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(LineRenderer), typeof(CircleCollider2D))]
 public class Cell : MonoBehaviour {
 
-	public int _elementCount;                                                                  //Current amount of elements inside the cell
-	public float _regenP;                                                                      //How fast will the cell regenerate
-	public int _maxElementCount;                                                               //How much can the cell hold
-	public Vector2 _position;                                                                  //Cells position
+	public int _elementCount;																	//Current amount of elements inside the cell
+	public float _regenP;																		//How fast will the cell regenerate
+	public int _maxElementCount;																//How much can the cell hold
+	public Vector2 _position;																	//Cells position
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
-	public enmTeam _team;                                                                       //Cell's team
+	public enmTeam _team;																		//Cell's team
+
+	private float _radius;
 	public Upgrade.Upgrades providedDebuff;
 
 	public List<Upgrade.Upgrades> appliedDebuffs = new List<Upgrade.Upgrades>();
@@ -31,7 +33,6 @@ public class Cell : MonoBehaviour {
 		ENEMY8,
 	}
 
-	private float _radius;
 
 	public static Color32 allyColour = new Color32(0, 255, 0, 255);                                         //Default ally colour
 	public static Color32 neutralColour = new Color32(255, 255, 255, 255);                                  //Default neutral colour
@@ -54,10 +55,6 @@ public class Cell : MonoBehaviour {
 	public LineRenderer lineToMouse;
 	public CircleCollider2D col;
 	public Rigidbody2D rg;
-
-
-	//Not implemented yet
-	public Upgrade_Manager um;
 
 
 	private void Start() {

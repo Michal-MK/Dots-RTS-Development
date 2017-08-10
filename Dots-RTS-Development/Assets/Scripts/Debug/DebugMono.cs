@@ -134,10 +134,20 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 
 	void Update() {
+		//if(Input.GetKey(KeyCode.LeftShift)) {
+		//	if (Input.GetKeyDown(KeyCode.W)) {
+		//		Time.timeScale -= 0.2f;
+		//		print(Time.timeScale);
+		//	}
+		//	if (Input.GetKeyDown(KeyCode.S)) {
+		//		Time.timeScale += 0.2f;
+		//		print(Time.timeScale);
+		//	}
+		//}
 		if (Input.GetMouseButtonUp(0)) {
 			assign = true;
-			RenderLine();
-		}
+		RenderLine();
+	}
 
 		try {
 			sprite.color = Vector4.MoveTowards(sprite.color, target, Time.deltaTime);

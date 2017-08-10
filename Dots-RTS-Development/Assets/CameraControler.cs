@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraControler : MonoBehaviour {
 	public Camera c;
 	public RectTransform background;
+	public RectTransform upgradeHotbar;
 
 	private Vector3 defaultPos;
 	private float defaultSize;
-	private float camVertSize;
-	private float camHorSize;
+
 	private float bgVertSize;
 	private float bgHorSize;
 	private float camHorDiff;
@@ -30,25 +32,30 @@ public class CameraControler : MonoBehaviour {
 	void Start() {
 		defaultPos = transform.position;
 		defaultSize = c.orthographicSize;
-		//print(defaultSize);
-
-		camVertSize = c.orthographicSize;
-		camHorSize = c.orthographicSize * c.aspect;
-		bgVertSize = background.sizeDelta.y / 2;
-		bgHorSize = background.sizeDelta.x / 2;
 	}
 
 	private void OnBeginUpgrading(Upgrade_Manager sender) {
+		c = Camera.main;
+
 		c.orthographicSize = defaultSize;
-		print(c.orthographicSize);
+
 		c.orthographicSize *= 0.5f;
-		print(c.orthographicSize);
+
 		Vector3 newPos = sender.transform.position + (Vector3.back * 10);
 
-		camVertDiff = (newPos.y + c.orthographicSize) - (background.position.y + bgVertSize);
-		camHorDiff = (newPos.x + c.orthographicSize * c.aspect) - (background.position.x + bgHorSize);
-		camHorDiffL = (newPos.x - c.orthographicSize * c.aspect) - (background.position.x - bgHorSize);
-		camVertDiffB = (newPos.y - c.orthographicSize) - (background.position.y - bgVertSize);
+		SpriteRenderer bg = GameObject.Find("Background").GetComponent<SpriteRenderer>();
+
+		camVertDiff = (newPos.y + c.orthographicSize) - (bg.transform.position.y + bg.size.y / 2);
+		print("Diff to TOP " + camVertDiff);
+
+		camHorDiff = (newPos.x + c.orthographicSize * c.aspect) - (bg.transform.position.x + bg.size.x / 2);
+		print("Diff to RIGHT " + camHorDiff);
+
+		camHorDiffL = (newPos.x - c.orthographicSize * c.aspect) - (bg.transform.position.x - bg.size.x / 2);
+		print("Diff to LEFT " + camHorDiffL);
+
+		camVertDiffB = (newPos.y - c.orthographicSize) - (bg.transform.position.y - bg.size.y / 2);
+		print("Diff to BOTTOM " + camVertDiffB);
 
 
 		//RightSide
@@ -68,9 +75,18 @@ public class CameraControler : MonoBehaviour {
 			newPos = new Vector3(newPos.x, newPos.y - camVertDiffB, newPos.z);
 		}
 
-		transform.position = newPos;
-	}
+		Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.3f));
+		Vector3 pointD = c.ViewportToWorldPoint(new Vector3(0.5f, 0));
 
+		float d = Vector3.Distance(pointU, pointD);
+
+		if (newPos.y < -bg.size.y / 10) {
+			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z); /* - (new Vector3(0, upgradeHotbar.sizeDelta.y));*/
+		}
+		else {
+			transform.position = newPos;
+		}
+	}
 
 	private void OnQuitUpgrading(Upgrade_Manager sender) {
 		c.orthographicSize = defaultSize;

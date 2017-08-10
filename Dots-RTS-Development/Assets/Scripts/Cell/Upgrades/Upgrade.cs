@@ -23,4 +23,17 @@ public class Upgrade : MonoBehaviour {
 		{Upgrades.DOT, 8 },
 
 	};
+
+
+	public int GetCost(Upgrades upgrade) {
+		foreach(KeyValuePair<Upgrades,int> kvp in UPGRADE_COST) {
+			if(kvp.Key == upgrade) {
+				return kvp.Value;
+			}
+		}
+		Debug.LogWarning("No Upgrade found! Dictionary may be incomplete.");
+		return -1;
+	}
+
+
 }

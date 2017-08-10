@@ -53,3 +53,6 @@ TagManager:
   - name: Upgrades
     uniqueID: 2601665663
     locked: 0
+  - name: CameraCanvas
+    uniqueID: 338829331
+    locked: 0

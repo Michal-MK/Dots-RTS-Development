@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using WindowsInput;
 
 public class Buttons : MainMenuUI  {
 	
@@ -15,12 +16,13 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void PauseGameorEscape() {
-		if (!Control.isPaused) {
-			Control.Pause();
-		}
-		else {
-			Control.UnPause();
-		}
+		InputSimulator.SimulateKeyPress(VirtualKeyCode.ESCAPE);
+		//if (!Control.isPaused) {
+		//	Control.Pause();
+		//}
+		//else {
+		//	Control.UnPause();
+		//}
 	}
 
 	public void CreateNewProfile() {

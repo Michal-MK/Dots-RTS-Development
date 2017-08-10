@@ -727,15 +727,15 @@ public class Enemy_AI : MonoBehaviour {
 		}
 		//If the biggest cell has more than "x" elements 80% return it
 		if (elementRecordAI > 10) {
-			if (UnityEngine.Random.Range(0, 10) < 8) {
+			if (UnityEngine.Random.Range(0, 10) < 4) {
 				return _aiCells[recordIndex];
 			}
 			else {
 				//If a target that can be overtaken exists still try to attack
-				for (int i = 0; i < _targets.Count; i++) {
+				for (int i = 0; i < _allies.Count; i++) {
 					for (int j = 0; j < _targets.Count; j++) {
-						if (_aiCells[i].elementCount > (_targets[j].elementCount * 0.5f) - 1) {
-							if (UnityEngine.Random.Range(0, 10) < 8) {
+						if ((_aiCells[i].elementCount * 0.5f) > ((_targets[j].elementCount * 0.5f) + 1)) {
+							if (UnityEngine.Random.Range(0, 10) < 6) {
 								return _aiCells[i];
 							}
 							else {

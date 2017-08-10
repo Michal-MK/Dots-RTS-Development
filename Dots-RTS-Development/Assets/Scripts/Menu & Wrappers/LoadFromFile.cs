@@ -15,7 +15,8 @@ public class LoadFromFile : MonoBehaviour {
 		
 
 		if (File.Exists(PlayerPrefs.GetString("LoadLevelFilePath"))) {
-			gameObject.SendMessage("FoundAFile");
+			gameObject.SendMessage("FoundAFile",SendMessageOptions.DontRequireReceiver);
+			Debug.LogWarning("FoundAFile does not have a receiver.");
 		}
 		else {
 			gameObject.SendMessage("NoFileFound");
@@ -32,10 +33,10 @@ public class LoadFromFile : MonoBehaviour {
 			Camera.main.orthographicSize = save.gameSize;
 		}
 
-        Dictionary<int, float>.KeyCollection diffKeys = save.difficulty.Keys;
-        foreach (int key in diffKeys) {
-            save.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
-        }
+		Dictionary<int, float>.KeyCollection diffKeys = save.difficulty.Keys;
+		foreach (int key in diffKeys) {
+			save.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+		}
 		
 		for (int j = 0; j < save.cells.Count; j++) {
 

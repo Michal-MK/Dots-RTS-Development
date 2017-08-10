@@ -26,7 +26,6 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 		for (int i = 0; i < slots.Length; i++) {
 			slots[i] = slotHolder.GetChild(i).GetComponent<BoxCollider2D>();
 		}
-		//print(slots[2].gameObject.name);
 	}
 
 	/// <summary>
@@ -51,6 +50,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	public void UninstallUpgrade(int slot) {
 		upgrades[slot] = Upgrade.Upgrades.NONE;
 	}
+
 	/// <summary>
 	/// Uninstalls upgrade by type
 	/// </summary>
@@ -74,6 +74,21 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	}
 
 	/// <summary>
+	/// 	Does the cell have this type of upgrade already?
+	/// </summary>
+	/// <param name="type"></param>
+	/// <returns>Amount of upgrades of type "type" in this cell.</returns>
+	public int HasUpgrade(Upgrade.Upgrades type) {
+		int _count = 0;
+		for (int i = 0; i < upgrades.Length; i++) {
+			if (upgrades[i] == type) {
+				_count++;
+			}
+		}
+		return _count;
+	}
+
+	/// <summary>
 	/// Can player install additional upgrades?
 	/// </summary>
 	public bool HasFreeSlots() {
@@ -90,7 +105,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 		if (eventData.clickCount % 2 == 0) {
 			print("Double");
 			isUpgrading = true;
-			OnUpgradeBegin(this);
+			OnUpgradeBegin(this); //Sent to Camera, 
 			slotRender.color = new Color32(255, 255, 255, 30);
 
 			/*Display menu with upgrades, zoom camer onto the cell.*/
@@ -100,7 +115,6 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	private void Update() {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (isUpgrading) {
-				print("HEEEELO");
 				OnUpgradeQuit(this);
 			}
 		}
