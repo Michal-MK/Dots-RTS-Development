@@ -149,6 +149,7 @@ public class CellBehaviour : Cell {
 			if (TeamChanged != null) {
 				TeamChanged(this, cellTeam, elementTeam);
 			}
+            isSelected = false;
 			elementCount = -elementCount;
 			cellTeam = elementTeam;
 		}
