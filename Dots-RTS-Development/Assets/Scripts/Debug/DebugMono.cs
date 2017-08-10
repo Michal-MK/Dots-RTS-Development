@@ -28,7 +28,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 	void Start() {
 		try {
 			line = GetComponent<LineRenderer>();
-			print("Got");
+			//print("Got");
 			RenderLine();
 		}
 		catch {
@@ -42,7 +42,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 			rect = GetComponent<RectTransform>();
 			panel = transform.parent.GetComponent<RectTransform>();
 			Vector4 colour = image.color;
-			print(colour);
+			//print(colour);
 		}
 		catch {
 
@@ -53,7 +53,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 
 
 		foreach (string s in strings) {
-			print(s);
+			//print(s);
 		}
 
 		for (int j = strings.Length - 1; j > 0; j--) {
@@ -69,9 +69,9 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 				}
 			}
 		}
-		print("---------------------------");
+		//print("---------------------------");
 		foreach (string s in strings) {
-			print(s);
+			//print(s);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 	public void OnPointerClick(PointerEventData eventData) // 3
 	{
 		print(eventData.clickCount);
-		print("I was clicked");
+		//print("I was clicked");
 		target = Color.blue;
 	}
 
@@ -175,7 +175,7 @@ public class DebugMono : MonoBehaviour, IPointerClickHandler
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
-		print("Exited");
+		//print("Exited");
 		target = Color.red;
 	}
 
