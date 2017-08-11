@@ -22,18 +22,22 @@ public class TeamSetup : MonoBehaviour {
         AllAiDifficultyWriter.RedoText();
         sampleLineRenderer = setSampleLineRenderer;
         for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
-            GameObject newTeamBox = Instantiate(teamGOPrefab, this.transform);
+            GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
             newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
             mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
             mySpawns[i].team = (int)LevelEditorCore.teamList[i];
             mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
             mySpawns[i].panel = roundTable;
-            mySpawns[i].r = roundTable.sizeDelta.x / 2;
+            mySpawns[i].r = (roundTable.sizeDelta.x / 2.2f) * (Screen.width / 1280f);
         }
         float diffAngle = (2 * Mathf.PI) / mySpawns.Count;
         float nextAngle = 0;
+        //  print((roundTable.sizeDelta.x / 2) - 50);
+        //*(Screen.width / 1280)
+
         for (int i = 0; i < mySpawns.Count; i++) {
-            mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * 200, Mathf.Sin(nextAngle) * 200, 0) + roundTable.position;
+            mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * (roundTable.sizeDelta.x / 2.6f), Mathf.Sin(nextAngle) * (roundTable.sizeDelta.x / 2.6f), 0) * (Screen.width / 1280f) + roundTable.position;
+           // mySpawns[i].transform.position = mySpawns[i].transform.position * (Screen.width / 1280f);
             nextAngle += diffAngle;
             mySpawns[i].AllThingsSet();
         }
