@@ -34,7 +34,7 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 		Vector2 mouseDelta = (mousePos - oldMousePos);
 		Vector2 mouseOffset = ((Vector2)rect.position - mousePos);
 
-        if (Vector2.Distance(panel.position, mousePos + mouseOffset + mouseDelta) < (r - rect.sizeDelta.x)) {
+        if (Vector2.Distance(panel.position, mousePos + mouseOffset + mouseDelta) < (r + rect.sizeDelta.x)) {
             rect.position = mousePos + mouseOffset + mouseDelta;
         }
 		oldMousePos = mousePos;
