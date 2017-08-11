@@ -1,24 +1,25 @@
+//using System;
+using System.Windows.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CellBehaviour : Cell {
+public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, IPointerDownHandler {
 
-	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();
-	/// <summary>
-	/// Called when cell Changes team after collision with an element.
-	/// </summary>
+	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();									//Global list of selected cells
 	public static event Control.TeamChangeEventHandler TeamChanged;
+	public static CellBehaviour lastEnteredCell = null;
 
-	public bool isSelected = false;                                                                                 //Is cell selected for attack?
+	public bool isSelected = false;                                                                                 //Is cell in global selection ?
 
 	public Coroutine generateCoroutine;
 
 	public GameObject cellObj;
 	public GameObject elementObj;
 
-	public Upgrade_Manager UM;
 
+	//Add cell to global list
 	private void Awake() {
 		Control.cells.Add(this);
 	}
@@ -34,11 +35,10 @@ public class CellBehaviour : Cell {
 		if (regenPeriod == 0) {
 			regenPeriod = 0.3f;
 		}
-
 		UpdateCellInfo();
 	}
 
-
+	#region Cell Selection/Deselection
 	//Checks the list whether the cell is already selected ? removes it : adds it
 	public static void ModifySelection(CellBehaviour cell) {
 		for (int i = 0; i < cellsInSelection.Count; i++) {
@@ -51,6 +51,32 @@ public class CellBehaviour : Cell {
 		cellsInSelection.Add(cell);
 		cell.SetSelected();
 	}
+
+	//Selects or deselects a cell
+	public void SetSelected() {
+		if (isSelected) {
+			isSelected = false;
+			elementNrDisplay.color = new Color32(255, 255, 255, 255);
+			cellSelected.enabled = false;
+		}
+		else {
+			isSelected = true;
+			elementNrDisplay.color = new Color32(255, 0, 0, 255);
+			cellSelected.enabled = true;
+		}
+	}
+
+	//Resets Cell colour and clears the selection list
+	public static void ClearSelection() {
+		//print("Clearing");
+		for (int i = 0; i < cellsInSelection.Count; i++) {
+			cellsInSelection[i].isSelected = false;
+			cellsInSelection[i].elementNrDisplay.color = new Color(1, 1, 1);
+			cellsInSelection[i].cellSelected.enabled = false;
+		}
+		cellsInSelection.Clear();
+	}
+	#endregion
 
 	//Wrapper for cell atacking
 	public static void AttackWrapper(CellBehaviour target, enmTeam team) {
@@ -72,18 +98,6 @@ public class CellBehaviour : Cell {
 			}
 		}
 		ClearSelection();
-	}
-
-	//Resets Cell colour and clears the selection list
-	public static void ClearSelection() {
-		//print("Clearing");
-		for (int i = 0; i < cellsInSelection.Count; i++) {
-			cellsInSelection[i].isSelected = false;
-			cellsInSelection[i].elementNrDisplay.color = new Color(1, 1, 1);
-			cellsInSelection[i].circle.enabled = false;
-			cellsInSelection[i].circle.positionCount = 0;
-		}
-		cellsInSelection.Clear();
 	}
 
 	#region Attack Handling
@@ -134,12 +148,12 @@ public class CellBehaviour : Cell {
 				}
 			}
 			if (!isAffected) {
-				if(additionalArg == Upgrade.Upgrades.SLOW_REGENERATION) {
+				if (additionalArg == Upgrade.Upgrades.SLOW_REGENERATION) {
 					regenPeriod *= 2;
 					appliedDebuffs.Add(additionalArg);
 				}
 				if (additionalArg == Upgrade.Upgrades.DOT) {
-					StartCoroutine(DoT(1,4));
+					StartCoroutine(DoT(1, 4));
 					appliedDebuffs.Add(additionalArg);
 				}
 			}
@@ -149,7 +163,9 @@ public class CellBehaviour : Cell {
 			if (TeamChanged != null) {
 				TeamChanged(this, cellTeam, elementTeam);
 			}
-            isSelected = false;
+			if (isSelected) {
+				ModifySelection(this);
+			}
 			elementCount = -elementCount;
 			cellTeam = elementTeam;
 		}
@@ -158,10 +174,10 @@ public class CellBehaviour : Cell {
 
 
 	public Vector3 ElementSpawnPoint() {
-		float angle = Random.Range(0, 2 * Mathf.PI);
+		float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
 		float x = Mathf.Sin(angle);
 		float y = Mathf.Cos(angle);
-		return new Vector3(transform.position.x + x * cellRadius * 0.70f, transform.position.y + y * cellRadius* 0.70f);
+		return new Vector3(transform.position.x + x * cellRadius * 0.70f, transform.position.y + y * cellRadius * 0.70f);
 	}
 	#endregion
 
@@ -184,64 +200,37 @@ public class CellBehaviour : Cell {
 			}
 
 			if (elementCount > maxElements) {
-				//print("Attempthing to decay if not decaying already: " + elementCount + " is greater than " + maxElements);
 				Decay(0.5f);
 			}
 			if (isSelected) {
-				circle.enabled = true;
-				//circle.positionCount = 0;
-				CreateCircle(transform.position, cellRadius, 30);
+				cellSelected.enabled = true;
 			}
 			else {
-				circle.enabled = false;
-				circle.positionCount = 0;
+				cellSelected.enabled = false;
 			}
 		}
 	}
 
-
-	//Selects or deselects a cell
-	public void SetSelected() {
-		if (isSelected) {
-			isSelected = false;
-			elementNrDisplay.color = new Color32(255, 255, 255, 255);
-			circle.enabled = false;
-
-		}
-		else {
-			isSelected = true;
-			elementNrDisplay.color = new Color32(255, 0, 0, 255);
-			circle.enabled = true;
-			CreateCircle(transform.position, cellRadius, 30);
-
-		}
-	}
 	Vector3 oldPos = Vector3.zero;
 	private void FixedUpdate() {
-		//Does not work for some reason..
-		//if(rg.velocity != Vector2.zero) {
-		//	UpdateCellInfo(false);
-		//}
 		if (oldPos == Vector3.zero) {
 			oldPos = transform.position;
 		}
+
 		Vector3 vel = transform.position - oldPos;
 
-		if(vel != Vector3.zero) {
+		if (vel != Vector3.zero) {
 			UpdateCellInfo(false);
 		}
 	}
 
+	private void Update() {
+		if (Input.GetMouseButtonUp(0) && lastEnteredCell == this) {
+			AttackWrapper(lastEnteredCell, lastEnteredCell.cellTeam);
+		}
+	}
+
 	private void OnMouseOver() {
-		if (Input.GetMouseButtonDown(1)) {
-			print("Edit");
-
-		}
-		//Legacy Attack behaviour
-		if (Input.GetMouseButtonUp(0)) {
-			AttackWrapper(this, cellTeam);
-		}
-
 		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed, opposite buttons decrease the values
 		//Adjust max cell size
 		if (Input.GetKeyDown(KeyCode.Keypad8)) {
@@ -273,40 +262,71 @@ public class CellBehaviour : Cell {
 		#endregion
 	}
 
-	private void OnMouseEnter() {
-		//Legacy Attack behaviour
-		if (Input.GetMouseButton(0)) {
-			if (cellTeam == enmTeam.ALLIED) {
-				ModifySelection(this);
-				//print("Added " + gameObject.name);
-			}
+	//Old Attack code
+	//private void OnMouseOver() {
+	//	Legacy Attack behaviour
+	//		if (Input.GetMouseButtonUp(0)) {
+	//		print("OnMouseOver " + gameObject.name);
+	//			AttackWrapper(this, cellTeam);
+	//}
+	//}
+	//
+	//private void OnMouseEnter() {
+	//print("Entering cell");
+	//Legacy Attack behaviour
+	//if (Input.GetMouseButton(0)) {
+	//	if (cellTeam == enmTeam.ALLIED) {
+	//		ModifySelection(this);
+	//print("Added " + gameObject.name);
+	//}
+	//}
+	//}
+	//
+	//Hides Upgrade Slots
+	//private void OnMouseExit() {
+	//print("Exitting Cell");
+	//base.UpdateCellInfo();
+	//}
+	//
+	//
+	//Determine action depending on clicked cell's team.
+	//private void OnMouseDown() {
+	//print("Clicking on Cell");
+	//if (cellTeam == enmTeam.ALLIED) {
+	//	ModifySelection(this);
+	//	//print("Added " + gameObject.name);
+	//}
+	//}
+	//
+	//private void OnMouseUp() {
+	//print("Releasing button over cell");
+	////print(gameObject.name);
+	//if (cellTeam != enmTeam.ALLIED) {
+	//	AttackWrapper(this, cellTeam);
+	//}
+	//else {
+	//	EmpowerCell(this);
+	//}
+	//circle.positionCount = 0;
+	//}
+
+	public void OnPointerEnter(PointerEventData eventData) {
+
+		Background.onReleaseClear = false;
+		lastEnteredCell = this;
+
+		if (Input.GetMouseButton(0) && cellTeam == enmTeam.ALLIED) {
+			ModifySelection(this);
 		}
 	}
 
-	//Hides Upgrade Slots
-	private void OnMouseExit() {
-		base.UpdateCellInfo();
+	public void OnPointerClick(PointerEventData eventData) {
+		ClearSelection();
 	}
 
-
-	//Determine action depending on clicked cell's team.
-	private void OnMouseDown() {
+	public void OnPointerDown(PointerEventData eventData) {
 		if (cellTeam == enmTeam.ALLIED) {
 			ModifySelection(this);
-			//print("Added " + gameObject.name);
 		}
 	}
-
-	private void OnMouseUp() {
-		//print(gameObject.name);
-		if (cellTeam != enmTeam.ALLIED) {
-			AttackWrapper(this, cellTeam);
-		}
-		else {
-			EmpowerCell(this);
-		}
-		circle.positionCount = 0;
-
-	}
-
 }

@@ -1,12 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+public class Background : MonoBehaviour, IPointerEnterHandler {
 
-public class Background : MonoBehaviour {
+	public static bool onReleaseClear = true;
 
-	private void OnMouseOver() {
-		if (Input.GetMouseButtonUp(0)) {
-			CellBehaviour.ClearSelection();
+	public void OnPointerEnter(PointerEventData eventData) {
+		if (Input.GetMouseButton(0)) {
+			onReleaseClear = true;
+			CellBehaviour.lastEnteredCell = null;
+		}
+	}
+
+	private void Update() {
+		if (onReleaseClear) {
+			if (Input.GetMouseButtonUp(0)) {
+				CellBehaviour.ClearSelection();
+			}
 		}
 	}
 }

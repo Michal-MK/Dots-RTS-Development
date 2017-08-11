@@ -10,11 +10,12 @@ public class Cell : MonoBehaviour {
 	public float _regenP;																		//How fast will the cell regenerate
 	public int _maxElementCount;																//How much can the cell hold
 	public Vector2 _position;																	//Cells position
+	public enmTeam _team;																		//Cell's team
+	private float _radius;
+
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
-	public enmTeam _team;																		//Cell's team
 
-	private float _radius;
 	public Upgrade.Upgrades providedDebuff;
 
 	public List<Upgrade.Upgrades> appliedDebuffs = new List<Upgrade.Upgrades>();
@@ -55,6 +56,8 @@ public class Cell : MonoBehaviour {
 	public LineRenderer lineToMouse;
 	public CircleCollider2D col;
 	public Rigidbody2D rg;
+	public SpriteRenderer cellSelected;
+	public Upgrade_Manager uManager;
 
 
 	private void Start() {
@@ -64,25 +67,25 @@ public class Cell : MonoBehaviour {
 
 	//Function to update visuals of the cell
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
-
-		float mappedValue;
-		if (elementCount < 10) {
-			mappedValue = 1;
-		}
-		else if (elementCount >= 10 && elementCount <= maxElements) {
-			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
-		}
-		else {
-			if (elementCount < 1000) {
-				mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
-			}
-			else {
-				mappedValue = 4;
-			}
-		}
-
-		transform.localScale = new Vector3(mappedValue, mappedValue, 1);
-		cellRadius = col.radius * transform.localScale.x;
+		StartCoroutine(ScaleCell());
+		//float mappedValue;
+		//if (elementCount < 10) {
+		//	mappedValue = 1;
+		//}
+		//else if (elementCount >= 10 && elementCount <= maxElements) {
+		//	mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
+		//}
+		//else {
+		//	if (elementCount < 1000) {
+		//		mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+		//	}
+		//	else {
+		//		mappedValue = 4;
+		//	}
+		//}
+		//Vector3.MoveTowards(transform.localScale,new Vector3(mappedValue,mappedValue),)
+		//transform.localScale = new Vector3(mappedValue, mappedValue, 1);
+		//cellRadius = col.radius * transform.localScale.x;
 
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
@@ -132,6 +135,32 @@ public class Cell : MonoBehaviour {
 			}
 
 		}
+	}
+
+	private IEnumerator ScaleCell() {
+		float mappedValue;
+		if (elementCount < 10) {
+			mappedValue = 1;
+		}
+		else if (elementCount >= 10 && elementCount <= maxElements) {
+			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
+		}
+		else {
+			if (elementCount < 1000) {
+				mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+			}
+			else {
+				mappedValue = 4;
+			}
+		}
+		//CreateCircle(transform.position, cellRadius, 4);
+		for (float f = 0; f < mappedValue; f += regenPeriod * Time.fixedDeltaTime) {
+			transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(mappedValue, mappedValue), f);
+			//CreateCircle(transform.position, mappedValue, 20);
+			yield return null;
+		}
+		cellRadius = col.radius * transform.localScale.x;
+		//CreateCircle(transform.position,cellRadius, 4);
 	}
 
 	//Keeps generateing new elements for the cell
@@ -190,7 +219,6 @@ public class Cell : MonoBehaviour {
 
 		float x;
 		float y;
-		float z = 0f;
 
 		float angle = 20f;
 
@@ -198,7 +226,7 @@ public class Cell : MonoBehaviour {
 			x = Mathf.Sin(Mathf.Deg2Rad * angle) * _r;
 			y = Mathf.Cos(Mathf.Deg2Rad * angle) * _r;
 
-			circle.SetPosition(i, new Vector3(_position.x + x, _position.y + y, z));
+			circle.SetPosition(i, new Vector3(_position.x + x, _position.y + y));
 
 			angle += (360f / segments);
 		}
