@@ -35,7 +35,12 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		if (regenPeriod == 0) {
 			regenPeriod = 0.3f;
 		}
+		if(cellRadius == 0) {
+			cellRadius = col.radius * transform.localScale.x;
+			print(cellRadius);
+		}
 		UpdateCellInfo();
+		StartCoroutine(ScaleCell());
 	}
 
 	#region Cell Selection/Deselection
@@ -184,15 +189,10 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 
 	//Overriden function to include regeneration call
 	public override void UpdateCellInfo(bool calledFromBase = false) {
-		circle.sortingLayerName = "Cells";
-		circle.sortingOrder = 0;
-
 
 		base.UpdateCellInfo();
 
 		if (calledFromBase == false) {
-
-			circle.sortingOrder = 0;
 
 			if (!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >= 2)) {
 

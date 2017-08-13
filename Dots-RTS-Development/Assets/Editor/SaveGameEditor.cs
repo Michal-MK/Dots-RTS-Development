@@ -7,7 +7,7 @@ using UnityEditor;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
-public class EditorGUILayoutToggle : EditorWindow {
+public class SaveGameEditor : EditorWindow {
 
 	int difficulty = 1;
 	string levelName = "";
@@ -15,15 +15,17 @@ public class EditorGUILayoutToggle : EditorWindow {
 
 	[MenuItem("Campaign/SaveLevel")]
 	static void Init() {
-		EditorGUILayoutToggle window = (EditorGUILayoutToggle)GetWindow(typeof(EditorGUILayoutToggle), true, "My Empty Window");
+		SaveGameEditor window = (SaveGameEditor)GetWindow(typeof(SaveGameEditor), true, "Campaign Level Saving");
+		
 		canvas = GameObject.Find("Canvas");
 		window.Show();
 		canvas.SetActive(false);
 	}
 
 	void OnGUI() {
+
 		GUILayout.Label("Level Name");
-		name = GUILayout.TextField(name, 50);
+		levelName = GUILayout.TextField(levelName, 50);
 		difficulty = EditorGUILayout.IntField(new GUIContent("Level Difficulty"), difficulty);
 		EditorGUILayout.LabelField("Current Level", GetCurLevel(difficulty));
 
@@ -43,18 +45,22 @@ public class EditorGUILayoutToggle : EditorWindow {
 				}
 			}
 			if (numAllies == 0 || numEnemies == 0) {
+				Debug.Log("A");
 				return;
 			}
 
 
-			if (string.IsNullOrEmpty(name)) {
+			if (string.IsNullOrEmpty(levelName)) {
+				Debug.Log("B");
 				return;
 			}
 
 			if (difficulty < 0 && difficulty > 5) {
+				Debug.Log("C");
 				return;
 			}
 			#endregion
+
 
 			BinaryFormatter formatter = new BinaryFormatter();
 			string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + GetCurLevel(difficulty);
@@ -72,7 +78,6 @@ public class EditorGUILayoutToggle : EditorWindow {
 					serCell.team = (int)c.cellTeam;
 					serCell.regenerationPeriod = c.regenPeriod;
 					//serCell.installedUpgrades = new S_Upgrades { upgrade = c.um.ApplyUpgrades() };
-
 					save.game.cells.Add(serCell);
 				}
 
@@ -84,6 +89,7 @@ public class EditorGUILayoutToggle : EditorWindow {
 				save.preview = fileName + ".png";
 				formatter.Serialize(file, save);
 				file.Close();
+				Debug.Log(save.game.levelInfo.levelName);
 			}
 		}
 	}

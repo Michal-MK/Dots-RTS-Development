@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(LineRenderer), typeof(CircleCollider2D))]
+[RequireComponent(typeof(CircleCollider2D))]
 public class Cell : MonoBehaviour {
 
-	public int _elementCount;																	//Current amount of elements inside the cell
-	public float _regenP;																		//How fast will the cell regenerate
-	public int _maxElementCount;																//How much can the cell hold
-	public Vector2 _position;																	//Cells position
-	public enmTeam _team;																		//Cell's team
+	public int _elementCount;                                                                   //Current amount of elements inside the cell
+	public float _regenP;                                                                       //How fast will the cell regenerate
+	public int _maxElementCount;                                                                //How much can the cell hold
+	private Vector2 _position;                                                                   //Cells position
+	public enmTeam _team;                                                                       //Cell's team
 	private float _radius;
+	
+
 
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
-
+	public bool isScaling = false;
 	public Upgrade.Upgrades providedDebuff;
 
 	public List<Upgrade.Upgrades> appliedDebuffs = new List<Upgrade.Upgrades>();
@@ -34,21 +36,20 @@ public class Cell : MonoBehaviour {
 		ENEMY8,
 	}
 
+	#region Team Colours
+	public static Color32 allyColour = new Color32(0, 255, 0, 255);											//Default ally colour
+	public static Color32 neutralColour = new Color32(255, 255, 255, 255);									//Default neutral colour
+	public static Color32 enemy1Colour = new Color32(255, 0, 0, 255);										//Default enemy1 colour
+	public static Color32 enemy2Colour = new Color32(80, 0, 255, 255);										//Default enemy2 colour
+	public static Color32 enemy3Colour = new Color32(220, 255, 0, 255);										//Default enemy3 colour
+	public static Color32 enemy4Colour = new Color32(120, 60, 0, 255);										//Default enemy4 colour
+	public static Color32 enemy5Colour = new Color32(150, 140, 0, 255);										//Default enemy5 colour
+	public static Color32 enemy6Colour = new Color32(255, 0, 255, 255);										//Default enemy6 colour
+	public static Color32 enemy7Colour = new Color32(0, 0, 0, 255);											//Default enemy7 colour
+	public static Color32 enemy8Colour = new Color32(255, 150, 200, 255);                                   //Default enemy8 colour
+	#endregion
 
-	public static Color32 allyColour = new Color32(0, 255, 0, 255);                                         //Default ally colour
-	public static Color32 neutralColour = new Color32(255, 255, 255, 255);                                  //Default neutral colour
-
-	public static Color32 enemy1Colour = new Color32(255, 0, 0, 255);                                        //Default enemy1 colour
-	public static Color32 enemy2Colour = new Color32(80, 0, 255, 255);                                       //Default enemy2 colour
-	public static Color32 enemy3Colour = new Color32(220, 255, 0, 255);                                      //Default enemy3 colour
-	public static Color32 enemy4Colour = new Color32(120, 60, 0, 255);                                       //Default enemy4 colour
-	public static Color32 enemy5Colour = new Color32(150, 140, 0, 255);                                      //Default enemy5 colour
-	public static Color32 enemy6Colour = new Color32(255, 0, 255, 255);                                      //Default enemy6 colour
-	public static Color32 enemy7Colour = new Color32(0, 0, 0, 255);                                          //Default enemy7 colour
-	public static Color32 enemy8Colour = new Color32(255, 150, 200, 255);                                    //Default enemy8 colour
-
-
-	//Prefab references
+	#region Prefab References
 	public SpriteRenderer cellSprite;
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
@@ -58,7 +59,7 @@ public class Cell : MonoBehaviour {
 	public Rigidbody2D rg;
 	public SpriteRenderer cellSelected;
 	public Upgrade_Manager uManager;
-
+	#endregion
 
 	private void Start() {
 		UpdateCellInfo();
@@ -67,25 +68,6 @@ public class Cell : MonoBehaviour {
 
 	//Function to update visuals of the cell
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
-		StartCoroutine(ScaleCell());
-		//float mappedValue;
-		//if (elementCount < 10) {
-		//	mappedValue = 1;
-		//}
-		//else if (elementCount >= 10 && elementCount <= maxElements) {
-		//	mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
-		//}
-		//else {
-		//	if (elementCount < 1000) {
-		//		mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
-		//	}
-		//	else {
-		//		mappedValue = 4;
-		//	}
-		//}
-		//Vector3.MoveTowards(transform.localScale,new Vector3(mappedValue,mappedValue),)
-		//transform.localScale = new Vector3(mappedValue, mappedValue, 1);
-		//cellRadius = col.radius * transform.localScale.x;
 
 		elementNrDisplay.text = elementCount.ToString();
 		textRenderer.sortingLayerName = "Cells";
@@ -137,30 +119,31 @@ public class Cell : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator ScaleCell() {
-		float mappedValue;
-		if (elementCount < 10) {
-			mappedValue = 1;
-		}
-		else if (elementCount >= 10 && elementCount <= maxElements) {
-			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
-		}
-		else {
-			if (elementCount < 1000) {
-				mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+	public IEnumerator ScaleCell() {
+		while (true) {
+			//yield return new WaitForSeconds(0.1f);
+			yield return new WaitForEndOfFrame();
+			float mappedValue;
+			if (elementCount < 10) {
+				mappedValue = 1;
+			}
+			else if (elementCount >= 10 && elementCount <= maxElements) {
+				mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
 			}
 			else {
-				mappedValue = 4;
+				if (elementCount < 1000) {
+					mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+				}
+				else {
+					mappedValue = 4;
+				}
 			}
+			for (float f = 0; f <= 0.1f; f += 0.05f) {
+				transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(mappedValue, mappedValue), f);
+				yield return null;
+			}
+			cellRadius = col.radius * transform.localScale.x;
 		}
-		//CreateCircle(transform.position, cellRadius, 4);
-		for (float f = 0; f < mappedValue; f += regenPeriod * Time.fixedDeltaTime) {
-			transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(mappedValue, mappedValue), f);
-			//CreateCircle(transform.position, mappedValue, 20);
-			yield return null;
-		}
-		cellRadius = col.radius * transform.localScale.x;
-		//CreateCircle(transform.position,cellRadius, 4);
 	}
 
 	//Keeps generateing new elements for the cell
@@ -171,7 +154,7 @@ public class Cell : MonoBehaviour {
 			if (elementCount < maxElements) {
 				elementCount++;
 				elementNrDisplay.text = elementCount.ToString();
-				SendMessage("UpdateCellInfo",false,SendMessageOptions.DontRequireReceiver);
+				SendMessage("UpdateCellInfo", false, SendMessageOptions.DontRequireReceiver);
 				//UpdateCellInfo();
 			}
 		}
@@ -212,8 +195,8 @@ public class Cell : MonoBehaviour {
 		appliedDebuffs.Remove(Upgrade.Upgrades.DOT);
 	}
 
+	[System.Obsolete("CreateCircle is no longer supported and will be removed.",false)]
 	public void CreateCircle(Vector3 _position, float _r, int segments) {
-
 		circle.positionCount = segments + 1;
 		circle.useWorldSpace = true;
 

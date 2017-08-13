@@ -11,8 +11,7 @@ public class MainMenuUI : MonoBehaviour {
 	#endregion
 
 	#region Editor Refs
-	//private GameObject gameSettingsP;
-	//private GameObject saveGameP;
+
 	#endregion
 
 	#region LevelSelect Refs
@@ -35,17 +34,13 @@ public class MainMenuUI : MonoBehaviour {
 	}
 
 	private void SceneChanged(Scene oldS, Scene newS) {
-		if(newS.buildIndex == 2) {
+		if (newS.buildIndex == 2) {
 			rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 			rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
 			centralToMainMenu = GameObject.Find("Return_To_Menu");
 			campaignButton = GameObject.Find("Campaign_Button");
 			customButton = GameObject.Find("Custom_Button");
 		}
-		//if(newS.buildIndex == 1) {
-		//	gameSettingsP = transform.Find("GameSettingsPanel").gameObject;
-		//	saveGameP = transform.Find("SavePanel").gameObject;
-		//}
 	}
 
 	// Turns OFF the game

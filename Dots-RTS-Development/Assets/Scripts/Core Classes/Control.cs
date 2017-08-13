@@ -75,7 +75,7 @@ public class Control : MonoBehaviour {
 
 		int activeScene = SceneManager.GetActiveScene().buildIndex;
 
-		if (activeScene == 5 || activeScene == 3) {
+		if (/*activeScene == 5 || */activeScene == 3) {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 			isInGame = true;
 			StartCoroutine(GameState());

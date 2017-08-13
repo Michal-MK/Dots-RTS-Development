@@ -33,10 +33,10 @@ public class CampaignLevel : MonoBehaviour {
 
 		}
 
-		Texture2D tex = new Texture2D(190, 80);
-		tex.LoadImage(File.ReadAllBytes(levelInfo.preview));
+		//Texture2D tex = new Texture2D(190, 80);
+		//tex.LoadImage(File.ReadAllBytes(levelInfo.preview));
 
-		preview.texture = tex;
+		preview.texture = null;
 
 		if (levelInfo.isCleared) {
 			passedImg.enabled = true;
