@@ -24,7 +24,7 @@ class ElementBehaviour : Element {
 	//Calculates the error between desired and current velocity
 	private Vector3 Seek(CellBehaviour target) {
 		float d = Vector3.Distance(target.transform.position, gameObject.transform.position);
-		//print(d + " " + target._radius);
+		//print(d + " " + target.cellRadius);
 		if (d < target.cellRadius) {
 			//Execute this code after collision with target.
 			if (team > 0) {
