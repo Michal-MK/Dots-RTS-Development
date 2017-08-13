@@ -20,6 +20,8 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
     float timeOfLastTap;
     float doubleTapMaxTime = 0.5f;
 
+    public float myAngle;
+
     public void AllThingsSet() {
 		//myParrent = transform.parent.GetComponent<TeamSetup>();
 		rect = gameObject.GetComponent<RectTransform>();
