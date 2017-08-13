@@ -159,18 +159,20 @@ public class Cell : MonoBehaviour {
 			}
 		}
 	}
+
 	//Wrapper for Decaying
-	public void Decay(float decayRate) {
+	public void Decay(float decayRate, CellBehaviour superClass) {
 		if (!isDecaying) {
 			isDecaying = true;
-			StartCoroutine(DecayElements(decayRate));
+			StartCoroutine(DecayElements(decayRate,superClass));
 		}
 	}
 
 	//Elements start decaying when they go over the cap(max Elements).
-	private IEnumerator DecayElements(float decayRate) {
+	private IEnumerator DecayElements(float decayRate, CellBehaviour superClass) {
 		float d = decayRate;
-		StopCoroutine(GenerateElements());
+		superClass.StopCoroutine(superClass.generateCoroutine);
+		print("Stopped");
 		while (isDecaying) {
 			yield return new WaitForSeconds(d);
 			elementCount--;

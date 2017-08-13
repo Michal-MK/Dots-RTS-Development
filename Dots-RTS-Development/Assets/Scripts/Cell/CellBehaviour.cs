@@ -37,7 +37,6 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		}
 		if(cellRadius == 0) {
 			cellRadius = col.radius * transform.localScale.x;
-			print(cellRadius);
 		}
 		UpdateCellInfo();
 		StartCoroutine(ScaleCell());
@@ -193,14 +192,14 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		base.UpdateCellInfo();
 
 		if (calledFromBase == false) {
+			//print(!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >=2));
 
 			if (!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >= 2)) {
-
-				StartCoroutine(GenerateElements());
+				generateCoroutine = StartCoroutine(GenerateElements());
 			}
 
 			if (elementCount > maxElements) {
-				Decay(0.5f);
+				Decay(0.5f,this);
 			}
 			if (isSelected) {
 				cellSelected.enabled = true;
