@@ -52,29 +52,6 @@ public class MainMenuUI : MonoBehaviour {
 #endif
 	}
 
-
-
-	//Switch scene accroding to its build index
-	public void SwitchScene(int sceneIndex) {
-
-		if (SceneManager.GetActiveScene().buildIndex == 1) {
-			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-		}
-		if (sceneIndex == 1) {
-			PlayerPrefs.SetString("LoadLevelFilePath", null);
-		}
-		Control.cells.Clear();
-		SceneManager.LoadScene(sceneIndex);
-
-	}
-	public void SwitchScene(string Name) {
-		if (SceneManager.GetActiveScene().buildIndex == 1) {
-			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-		}
-		Control.cells.Clear();
-		SceneManager.LoadScene(Name);
-	}
-
 	public void DisplaySelection(bool isCampaign) {
 		if (isCampaign) {
 			//isDisplayingCampaign = true;

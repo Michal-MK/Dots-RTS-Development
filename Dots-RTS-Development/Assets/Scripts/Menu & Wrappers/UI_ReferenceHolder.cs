@@ -43,20 +43,23 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	#endregion
 
+	#region Upgrade Store
+	public static Button buyButton;
+	public static TextMeshProUGUI upgradeNameHolder;
+	public static TextMeshProUGUI upgradeDescHolder;
+	public static TextMeshProUGUI upgradeCostHolder;
+	public static TextMeshProUGUI upgradesOwnedHolder;
 	#endregion
-
+	#endregion
 
 	void Start() {
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-		if(SceneManager.GetActiveScene().buildIndex == 5) {
-			print("A");
-			maxSizeSlider = GameObject.Find("Slider").GetComponent<Slider>();
-		}
 	}
 
 
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
+
 		switch (newS.buildIndex) {
 			case 0: {
 
@@ -79,12 +82,19 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case 5: {
-				print("A");
 				maxSizeSlider = GameObject.Find("Slider").GetComponent<Slider>();
 				return;
 			}
 			case 6: {
 
+				return;
+			}
+			case 8: {
+				buyButton = GameObject.Find("Buy").GetComponent<Button>();
+				upgradeNameHolder = GameObject.Find("Upgrade_Name").GetComponent<TextMeshProUGUI>();
+				upgradeDescHolder = GameObject.Find("Upgrade_Desc").GetComponent<TextMeshProUGUI>();
+				upgradeCostHolder = GameObject.Find("Upgrade_Cost_Money").GetComponent<TextMeshProUGUI>();
+				upgradesOwnedHolder = GameObject.Find("Already_Owned_Count").GetComponent<TextMeshProUGUI>();
 				return;
 			}
 		}

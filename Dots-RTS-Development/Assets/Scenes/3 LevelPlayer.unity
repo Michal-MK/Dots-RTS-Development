@@ -375,9 +375,9 @@ RectTransform:
   m_LocalScale: {x: 1.049389, y: 1.049389, z: 1.049389}
   m_Children:
   - {fileID: 1655809469}
+  - {fileID: 735550378}
   - {fileID: 543502279}
   - {fileID: 1896628191}
-  - {fileID: 735550378}
   m_Father: {fileID: 521256896}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 543502281}
   - component: {fileID: 543502280}
   m_Layer: 5
-  m_Name: MainMenu
+  m_Name: LevelSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -814,7 +814,7 @@ RectTransform:
   m_Children:
   - {fileID: 930668628}
   m_Father: {fileID: 314293186}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.3}
   m_AnchorMax: {x: 1, y: 0.4}
@@ -829,7 +829,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 543502278}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d86a9b9d2027874eb1352e8a26d9933, type: 3}
+  m_Script: {fileID: 11500000, guid: aff88e1dbcede5541a7676780a4ce335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &543502281
@@ -1136,7 +1136,7 @@ RectTransform:
   m_Children:
   - {fileID: 644619216}
   m_Father: {fileID: 314293186}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.6}
@@ -2546,7 +2546,7 @@ GameObject:
   - component: {fileID: 1896628193}
   - component: {fileID: 1896628192}
   m_Layer: 5
-  m_Name: LevelSelect
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2564,7 +2564,7 @@ RectTransform:
   m_Children:
   - {fileID: 162232821}
   m_Father: {fileID: 314293186}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.1}
   m_AnchorMax: {x: 1, y: 0.2}
@@ -2579,7 +2579,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1896628190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d86a9b9d2027874eb1352e8a26d9933, type: 3}
+  m_Script: {fileID: 11500000, guid: aff88e1dbcede5541a7676780a4ce335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1896628193

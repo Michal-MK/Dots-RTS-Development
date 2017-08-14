@@ -108,6 +108,7 @@ public class ProfileManager {
 		p.onLevelBaseGame = 1;
 		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 		p.onLevelImage = null;
+
 		using (FileStream fs = new FileStream(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp", FileMode.Create)) {
 			bf.Serialize(fs, p);
 		}
@@ -123,7 +124,7 @@ public class ProfileManager {
 		}
 	}
 
-	public static Profile GetCurrentProfile {
+	public static Profile getCurrentProfile {
 		get { return currentProfile; }
 	}
 
@@ -138,5 +139,10 @@ public class Profile {
 	public int totalCreatedLevels;
 	public DateTime creationTime;
 	public string profileName;
-
+	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>() {
+		{Upgrade.Upgrades.CRITICAL_CHANCE,0},
+		{Upgrade.Upgrades.DOT, 0 },
+		{Upgrade.Upgrades.DOUBLE_DAMAGE, 0 },
+		{Upgrade.Upgrades.SLOW_REGENERATION, 0 },
+	};
 }
