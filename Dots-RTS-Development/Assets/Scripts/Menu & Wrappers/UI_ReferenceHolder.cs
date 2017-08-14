@@ -54,10 +54,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	void Start() {
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-		//if(SceneManager.GetActiveScene().buildIndex == 5) {
-		//	print("A");
-		//	maxSizeSlider = GameObject.Find("Slider").GetComponent<Slider>();
-		//}
 	}
 
 
@@ -86,7 +82,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case 5: {
-				print("A");
 				maxSizeSlider = GameObject.Find("Slider").GetComponent<Slider>();
 				return;
 			}

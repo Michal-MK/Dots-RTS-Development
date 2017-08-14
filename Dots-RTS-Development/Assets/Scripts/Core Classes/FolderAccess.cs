@@ -27,9 +27,8 @@ class FolderAccess {
 		return GetAsociatedScript<SaveFileInfo>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + level + ".pwl");
 	}
 
-	public static string[] GetUpgradeDesc(int upgrade) {
-		Debug.Log(upgrade);
-		using (XmlReader xml = XmlReader.Create(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "UpgradeData" + Path.DirectorySeparatorChar + "UpgradeDesc.xml")) {
+	public static string[] GetUpgradeInfo(int upgrade) {
+		using (XmlReader xml = XmlReader.Create(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml")) {
 			while (xml.Read()) {
 				if (xml.NodeType == XmlNodeType.Element) {
 					if (xml.GetAttribute("id") == upgrade.ToString()) {

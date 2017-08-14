@@ -183,7 +183,6 @@ GameObject:
   - component: {fileID: 366245815}
   - component: {fileID: 366245814}
   - component: {fileID: 366245819}
-  - component: {fileID: 366245820}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -275,17 +274,6 @@ MonoBehaviour:
   save: {fileID: 1374150506547576, guid: adf3324806054cf42a9693ac0bc1b68a, type: 2}
   scrollViewContent: {fileID: 1101510208}
   download: {fileID: 1384063732}
---- !u!114 &366245820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 366245813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595daf893cd5f4943bda440f5f1b4caa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &415261740
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +285,7 @@ GameObject:
   - component: {fileID: 415261744}
   - component: {fileID: 415261743}
   - component: {fileID: 415261742}
+  - component: {fileID: 415261745}
   m_Layer: 5
   m_Name: ReturnToMenu
   m_TagString: Untagged
@@ -362,7 +351,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 366245820}
+      - m_Target: {fileID: 415261745}
         m_MethodName: SwitchScene
         m_Mode: 3
         m_Arguments:
@@ -408,6 +397,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 415261740}
+--- !u!114 &415261745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 415261740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aff88e1dbcede5541a7676780a4ce335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &475380201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,7 +1797,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 503599458}
   m_HandleRect: {fileID: 503599457}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
