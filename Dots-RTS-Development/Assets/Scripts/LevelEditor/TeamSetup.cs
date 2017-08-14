@@ -12,12 +12,17 @@ public class TeamSetup : MonoBehaviour {
 	public static Dictionary<int, int> clanDict = new Dictionary<int, int>();
 	//LineRenderer lineRenderer;
 	public RectTransform roundTable;
+    static RectTransform stRoundTable;
+
 	public GameObject setSampleLineRenderer;
     static GameObject sampleLineRenderer;
 	static List<GameObject> myLines = new List<GameObject>();
 
+    static float diffAngle;
+
 	// Use this for initialization
 	void OnEnable() {
+        stRoundTable = roundTable;
         //lineRenderer = gameObject.GetComponent<LineRenderer>();
         AllAiDifficultyWriter.RedoText();
         sampleLineRenderer = setSampleLineRenderer;
@@ -30,14 +35,15 @@ public class TeamSetup : MonoBehaviour {
             mySpawns[i].panel = roundTable;
             mySpawns[i].r = (roundTable.sizeDelta.x / 2.2f) * (Screen.width / 1280f);
         }
-        float diffAngle = (2 * Mathf.PI) / mySpawns.Count;
+        diffAngle = (2 * Mathf.PI) / mySpawns.Count;
         float nextAngle = 0;
         //  print((roundTable.sizeDelta.x / 2) - 50);
         //*(Screen.width / 1280)
 
         for (int i = 0; i < mySpawns.Count; i++) {
-            mySpawns[i].transform.position = new Vector3(Mathf.Cos(nextAngle) * (roundTable.sizeDelta.x / 2.6f), Mathf.Sin(nextAngle) * (roundTable.sizeDelta.x / 2.6f), 0) * (Screen.width / 1280f) + roundTable.position;
-           // mySpawns[i].transform.position = mySpawns[i].transform.position * (Screen.width / 1280f);
+            mySpawns[i].transform.position = AngleToPos(nextAngle);
+            // mySpawns[i].transform.position = mySpawns[i].transform.position * (Screen.width / 1280f);
+            mySpawns[i].myAngle = (nextAngle);
             nextAngle += diffAngle;
             mySpawns[i].AllThingsSet();
         }
@@ -116,6 +122,7 @@ public class TeamSetup : MonoBehaviour {
         BindTwo(firstTeam, secondTeam);
         BindTwo(secondTeam, firstTeam);
 		CheckAndAddOtherTeams(firstTeam, secondTeam);
+       // MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(firstTeam)], mySpawns[MySpawnsIndexFromTeam(secondTeam)]);
         MakeLines();
 
 	}
@@ -239,6 +246,14 @@ public class TeamSetup : MonoBehaviour {
 			}
 
 		}
+        foreach (List<int> actualClan in ActualClans) {
+            actualClan.Sort();
+            for (int i = 0; i < actualClan.Count - 1; i++) {
+                MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(actualClan[i])], mySpawns[MySpawnsIndexFromTeam(actualClan[i + 1])]);
+            }
+            
+        }
+
 		//Debug.Log("number of clans: " + ActualClans.Count);
 		for (int c = 0; c < ActualClans.Count; c++) {
 
@@ -255,6 +270,30 @@ public class TeamSetup : MonoBehaviour {
 
 
 	}
+    public static void MoveTeamBoxToLeftOf(TeamBox moved, TeamBox target) {
+        //Calculate angle of target TeamBox
+        float newAngleOfMoved = target.myAngle + diffAngle;
+        if (Mathf.Round(newAngleOfMoved * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
+            newAngleOfMoved -= 2 * Mathf.PI;
+        }
+        if (mySpawns.Count > 2) {
+            TeamBox extra = mySpawns[MySpawnsIndexFromAngle(newAngleOfMoved)];
+            extra.transform.position = AngleToPos(moved.myAngle);
+            extra.myAngle = moved.myAngle;
+            extra.AllThingsSet();
+        }
+        moved.transform.position = AngleToPos(newAngleOfMoved);
+        moved.myAngle = newAngleOfMoved;
+        moved.AllThingsSet();
+
+
+
+    }
+
+    static Vector2 AngleToPos(float angle) {
+        return new Vector2(Mathf.Cos(angle) * (stRoundTable.sizeDelta.x / 2.6f), Mathf.Sin(angle) * (stRoundTable.sizeDelta.x / 2.6f)) * (Screen.width / 1280f) + (Vector2)stRoundTable.position;
+    }
+
 	public static int MySpawnsIndexFromTeam(int team) {
 		int output = -1;
 		for (int i = 0; i <	mySpawns.Count; i++) {
@@ -269,4 +308,22 @@ public class TeamSetup : MonoBehaviour {
 		}
 		return output;
 	}
+    public static int MySpawnsIndexFromAngle(float RawAngle) {
+        float angle = RawAngle;
+        if (Mathf.Round(angle * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
+            angle -= 2 * Mathf.PI;
+        }
+        int output = -1;
+        for (int i = 0; i < mySpawns.Count; i++) {
+            TeamBox spawn = mySpawns[i];
+            if (Mathf.Round(spawn.myAngle * 10) / 10 == Mathf.Round(angle * 10) / 10) {
+                output = i;
+                break;
+            }
+        }
+        if (output == -1) {
+            Debug.LogError("Nothing in mySpawns has angle " + angle);
+        }
+        return output;
+    }
 }
