@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Upgrades>
+	<u1 id="1">
+		<name lang="en">Damage over time</name>
+		<desc>This is an upgrade Damage over time</desc>
+		<cost>4</cost>
+	</u1>
+	<u2 id="2">
+		<name lang="en">Double Damage</name>
+		<desc>This is an upgrade Double damage</desc>
+		<cost>8</cost>
+	</u2>
+	<u3 id="3">
+		<name lang="en">Slow Regen</name>
+		<desc>This is an upgrade Slow Regeneration</desc>
+		<cost>11</cost>
+	</u3>
+</Upgrades>

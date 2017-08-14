@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 
 	public static bool isUpgrading = false;
+	public static int selectedUpgrade = -1;
 
 	public static event Control.EnteredUpgradeMode OnUpgradeBegin;
 	public static event Control.QuitUpgradeMode OnUpgradeQuit;
@@ -23,10 +24,36 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	public BoxCollider2D[] slots = new BoxCollider2D[8];
 
 	private void Start() {
-		for (int i = 0; i < slots.Length; i++) {
-			slots[i] = slotHolder.GetChild(i).GetComponent<BoxCollider2D>();
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex != 8) {
+			for (int i = 0; i < slots.Length; i++) {
+				slots[i] = slotHolder.GetChild(i).GetComponent<BoxCollider2D>();
+
+			}
 		}
 	}
+	/// <summary>
+	/// Buy selected upgrade from the store
+	/// </summary>
+	public void BuyUpgrade() {
+		GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
+		//Preform some highlights
+
+		//Subtract total money + add the upgrade to proflie
+		int cost = -1;
+		if (Upgrade.UPGRADE_COST.TryGetValue((Upgrade.Upgrades)selectedUpgrade, out cost)) {
+			foreach(KeyValuePair<Upgrade.Upgrades, int> col in ProfileManager.getCurrentProfile.acquiredUpgrades) {
+				if(col.Key == (Upgrade.Upgrades)selectedUpgrade) {
+					ProfileManager.getCurrentProfile.currency -= cost;
+					Upgrade.UPGRADE_COST[col.Key] += 1;
+				}
+			}
+		}
+		else {
+			Debug.LogError("No Upgrade of type"+ (Upgrade.Upgrades)selectedUpgrade + " found.");
+			return;
+		}
+	}
+
 
 	/// <summary>
 	/// Adds upgrades from a seav file of othetwise defined source
@@ -113,7 +140,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	}
 
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (Input.GetKeyDown(KeyCode.Escape) && UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex != 8) {
 			if (isUpgrading) {
 				OnUpgradeQuit(this);
 			}
