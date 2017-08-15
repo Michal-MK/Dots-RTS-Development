@@ -5981,7 +5981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.222}
+  m_Color: {r: 0.6392157, g: 0.641, b: 0.6392157, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -8393,8 +8393,7 @@ MonoBehaviour:
     type: 2}
   xGO: {fileID: 2110841584}
   roundTable: {fileID: 1981271694}
-  setSampleLineRenderer: {fileID: 1773737143993352, guid: fda673e1ada641a488a72f21fa081e51,
-    type: 2}
+  clanBG: {fileID: 1619488810868036, guid: 7ddb62ee2ecd1d64185cc489003617a3, type: 2}
 --- !u!1 &1360804930
 GameObject:
   m_ObjectHideFlags: 0

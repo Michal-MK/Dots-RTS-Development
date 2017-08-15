@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +12,8 @@ public class TeamSetup : MonoBehaviour {
 	public RectTransform roundTable;
     static RectTransform stRoundTable;
 
-	public GameObject setSampleLineRenderer;
-    static GameObject sampleLineRenderer;
-	static List<GameObject> myLines = new List<GameObject>();
+    public GameObject clanBG;
+    List<GameObject> bgList = new List<GameObject>();
 
     static float diffAngle;
 
@@ -25,7 +22,6 @@ public class TeamSetup : MonoBehaviour {
         stRoundTable = roundTable;
         //lineRenderer = gameObject.GetComponent<LineRenderer>();
         AllAiDifficultyWriter.RedoText();
-        sampleLineRenderer = setSampleLineRenderer;
         for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
             GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
             newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
@@ -54,7 +50,6 @@ public class TeamSetup : MonoBehaviour {
 			Destroy(mySpawns[i].gameObject);
 		}
 		mySpawns.Clear();
-		DestroyAllInList(myLines);
 	}
 
 	// Update is called once per frame
@@ -62,6 +57,7 @@ public class TeamSetup : MonoBehaviour {
 		float lowestDisFound = Mathf.Infinity;
 		int indexClosest = 99;
         it.transform.position = it.initialPos;
+        
         for (int i = 0; i < mySpawns.Count; i++) {			//Debug.Log(i);
 			float dist = Vector2.Distance(mySpawns[i].initialPos, pos);
 			if (dist < lowestDisFound) {
@@ -218,10 +214,10 @@ public class TeamSetup : MonoBehaviour {
 			Destroy(list[i]);
 		}
 	}
-	public static void MakeLines() {
+	public void MakeLines() {
 
-		DestroyAllInList(myLines);
-		List<List<int>> ActualClans = new List<List<int>>();
+        DestroyAllInList(bgList);
+		List<List<int>> actualClans = new List<List<int>>();
 
 		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
 		foreach (int j in keys) {
@@ -231,9 +227,10 @@ public class TeamSetup : MonoBehaviour {
 			List<int> clanJ = IntToList(value);
 			clanJ.Add(j);
 			clanJ.Sort();
+           
 
 			bool newClan = true;
-			foreach (List<int> clan in ActualClans) {
+			foreach (List<int> clan in actualClans) {
 				//print(" one clan with [0] = " + clan[0]);
 				if (clanJ.Contains(clan[0])) {
 					newClan = false;
@@ -242,56 +239,83 @@ public class TeamSetup : MonoBehaviour {
 
 			}
 			if (newClan) {
-				ActualClans.Add(clanJ);
+				actualClans.Add(clanJ);
 			}
 
 		}
-        foreach (List<int> actualClan in ActualClans) {
-            actualClan.Sort();
-            for (int i = 0; i < actualClan.Count - 1; i++) {
-                MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(actualClan[i])], mySpawns[MySpawnsIndexFromTeam(actualClan[i + 1])]);
+        List<TeamBox> newList = new List<TeamBox>(mySpawns);
+
+        float angle = 0;
+
+
+        for (int i = 0; i < actualClans.Count; i++) {
+            GameObject bg = Instantiate(clanBG, stRoundTable);
+            bgList.Add(bg);
+            Image img = bg.GetComponent<Image>();
+            img.color = ColourTheTeamButtons.GetColorBasedOnTeam(i + 2);
+            RectTransform rt = bg.GetComponent<RectTransform>();
+            rt.sizeDelta = stRoundTable.sizeDelta;
+            rt.SetAsFirstSibling();
+            float lastTeamBoxAngle = 0;
+           
+            foreach (int j in actualClans[i]) {
+
+
+                foreach (TeamBox t in mySpawns) {
+                    if (t.team == j) {
+                        Debug.Log(t.team);
+                        t.transform.position = AngleToPos(angle);
+                        t.myAngle = angle;
+                        t.AllThingsSet();
+                        img.fillAmount += 1f / mySpawns.Count;
+                        lastTeamBoxAngle = Mathf.Rad2Deg * (angle + diffAngle / 2);
+                        newList.Remove(t);
+                    }
+                }
+                angle += diffAngle;
             }
-            
+            rt.rotation = Quaternion.Euler(0, 0,- lastTeamBoxAngle);
+
         }
 
-		//Debug.Log("number of clans: " + ActualClans.Count);
-		for (int c = 0; c < ActualClans.Count; c++) {
+        foreach (List<int> clan in actualClans) {
 
-			LineRenderer r = Instantiate(sampleLineRenderer).GetComponent<LineRenderer>();
-			myLines.Add(r.gameObject);
-            Color32 colour = ColourTheTeamButtons.GetColorBasedOnTeam(c);
-            r.startColor = colour;
-            r.endColor = colour;
-            r.positionCount = ActualClans[c].Count;
-			for (int i = 0; i < ActualClans[c].Count; i++) {
-				r.SetPosition(i, (Vector2)Camera.main.ScreenToWorldPoint(mySpawns[MySpawnsIndexFromTeam(ActualClans[c][i])].transform.position));
-			}
-		}
+            
+        }
+        foreach (TeamBox t in newList) {
+            t.transform.position = AngleToPos(angle);
+            t.myAngle = angle;
+            t.AllThingsSet();
+            angle += diffAngle;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        //Debug.Log("number of clans: " + ActualClans.Count);
+  //      for (int c = 0; c < actualClans.Count; c++) {
+
+		//	LineRenderer r = Instantiate(sampleLineRenderer).GetComponent<LineRenderer>();
+		//	myLines.Add(r.gameObject);
+  //          Color32 colour = ColourTheTeamButtons.GetColorBasedOnTeam(c);
+  //          r.startColor = colour;
+  //          r.endColor = colour;
+  //          r.positionCount = actualClans[c].Count;
+		//	for (int i = 0; i < actualClans[c].Count; i++) {
+		//		r.SetPosition(i, (Vector2)Camera.main.ScreenToWorldPoint(mySpawns[MySpawnsIndexFromTeam(actualClans[c][i])].transform.position));
+		//	}
+		//}
 
 
 	}
-    public static void MoveTeamBoxToLeftOf(TeamBox moved, TeamBox target) {
-        //Calculate angle of target TeamBox
-        float newAngleOfMoved = target.myAngle + diffAngle;
-        if (Mathf.Round(newAngleOfMoved * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
-            newAngleOfMoved -= 2 * Mathf.PI;
-        }
-        if (mySpawns.Count > 2) {
-            TeamBox extra = mySpawns[MySpawnsIndexFromAngle(newAngleOfMoved)];
-            extra.transform.position = AngleToPos(moved.myAngle);
-            extra.myAngle = moved.myAngle;
-            extra.AllThingsSet();
-        }
-        moved.transform.position = AngleToPos(newAngleOfMoved);
-        moved.myAngle = newAngleOfMoved;
-        moved.AllThingsSet();
-
-
-
-    }
 
     static Vector2 AngleToPos(float angle) {
-        return new Vector2(Mathf.Cos(angle) * (stRoundTable.sizeDelta.x / 2.6f), Mathf.Sin(angle) * (stRoundTable.sizeDelta.x / 2.6f)) * (Screen.width / 1280f) + (Vector2)stRoundTable.position;
+        return new Vector2(Mathf.Sin(angle) * (stRoundTable.sizeDelta.x / 2.6f),  Mathf.Cos(angle) * (stRoundTable.sizeDelta.x / 2.6f)) * (Screen.width / 1280f) + (Vector2)stRoundTable.position;
     }
 
 	public static int MySpawnsIndexFromTeam(int team) {

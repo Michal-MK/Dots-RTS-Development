@@ -5,20 +5,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler {
+public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler {
 
 	// Use this for initialization
 	public TeamSetup myParrent;
 	public Vector3 initialPos;
+
 	public int team;
 	RectTransform rect;
 	public RectTransform panel;
-	Vector2 oldMousePos = Vector2.zero;
-	bool cease;
+
+    Vector2 oldMousePos = Vector2.zero;
+
 	public float r;
 	public static GameObject dragged;
-    float timeOfLastTap;
-    float doubleTapMaxTime = 0.5f;
 
     public float myAngle;
 
@@ -44,14 +44,7 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
-		oldMousePos = eventData.position;
-		dragged = gameObject;
-       
-        if (Time.time - timeOfLastTap < doubleTapMaxTime) {
-            PrepareDiffInputBox();
-            
-        }
-        timeOfLastTap = Time.time;
+		oldMousePos = eventData.position;        
     }
     void PrepareDiffInputBox () {
         
@@ -72,8 +65,13 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 
 
 	public void OnPointerUp(PointerEventData eventData) {
-		TeamBox t = eventData.pointerPress.GetComponent<TeamBox>();
-		dragged = null;
-		myParrent.TeamBoxPosChange(eventData.pointerPress.transform.position, t);
+		myParrent.TeamBoxPosChange(eventData.pointerPress.transform.position, eventData.pointerPress.GetComponent<TeamBox>());
 	}
+
+    public void OnPointerClick(PointerEventData eventData) {
+       // print(eventData.clickCount);
+        if (eventData.clickCount == 2) {
+            PrepareDiffInputBox();
+        }
+    }
 }
