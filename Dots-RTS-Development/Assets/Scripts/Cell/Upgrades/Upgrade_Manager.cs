@@ -35,23 +35,26 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	/// Buy selected upgrade from the store
 	/// </summary>
 	public void BuyUpgrade() {
-		GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
+		//GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
 		//Preform some highlights
 
 		//Subtract total money + add the upgrade to proflie
-		int cost = -1;
-		if (Upgrade.UPGRADE_COST.TryGetValue((Upgrade.Upgrades)selectedUpgrade, out cost)) {
-			foreach(KeyValuePair<Upgrade.Upgrades, int> col in ProfileManager.getCurrentProfile.acquiredUpgrades) {
-				if(col.Key == (Upgrade.Upgrades)selectedUpgrade) {
-					ProfileManager.getCurrentProfile.currency -= cost;
-					Upgrade.UPGRADE_COST[col.Key] += 1;
+		int cost = Upgrade.GetCost((Upgrade.Upgrades)selectedUpgrade);
+
+		foreach (KeyValuePair<Upgrade.Upgrades, int> col in ProfileManager.getCurrentProfile.acquiredUpgrades) {
+			if (col.Key == (Upgrade.Upgrades)selectedUpgrade) {
+				if (cost <= ProfileManager.getCurrentProfile.ownedCoins) {
+					ProfileManager.getCurrentProfile.ownedCoins -= cost;
+					ProfileManager.getCurrentProfile.acquiredUpgrades[col.Key] += 1;
+					ProfileManager.SerializeChanges();
+					UI_ReferenceHolder.profileMoney.text = ProfileManager.getCurrentProfile.ownedCoins + " coins";
+				}
+				else {
+					print("Not enough Coins missing " + (cost - ProfileManager.getCurrentProfile.ownedCoins));
 				}
 			}
 		}
-		else {
-			Debug.LogError("No Upgrade of type"+ (Upgrade.Upgrades)selectedUpgrade + " found.");
-			return;
-		}
+
 	}
 
 

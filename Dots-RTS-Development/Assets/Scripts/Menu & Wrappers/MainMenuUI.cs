@@ -5,44 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour {
 
-
-	#region Menu Refs
-
-	#endregion
-
-	#region Editor Refs
-
-	#endregion
-
-	#region LevelSelect Refs
-	//private bool isDisplayingCampaign;
-	private RectTransform rectCampaign;
-	private RectTransform rectCustom;
-	private GameObject centralToMainMenu;
-	private GameObject campaignButton;
-	private GameObject customButton;
-	#endregion
-
-	#region LevelShare Refs
-
-	#endregion
-
-
-
-	private void Awake() {
-		SceneManager.activeSceneChanged += SceneChanged;
-	}
-
-	private void SceneChanged(Scene oldS, Scene newS) {
-		if (newS.buildIndex == 2) {
-			rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
-			rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
-			centralToMainMenu = GameObject.Find("Return_To_Menu");
-			campaignButton = GameObject.Find("Campaign_Button");
-			customButton = GameObject.Find("Custom_Button");
-		}
-	}
-
 	// Turns OFF the game
 	public void ExitGame() {
 #if UNITY_EDITOR
@@ -55,27 +17,28 @@ public class MainMenuUI : MonoBehaviour {
 	public void DisplaySelection(bool isCampaign) {
 		if (isCampaign) {
 			//isDisplayingCampaign = true;
-			rectCustom.anchoredPosition = new Vector3(2048, 0);
-			rectCampaign.anchoredPosition = new Vector3(0, 0);
+			UI_ReferenceHolder.rectCustom.anchoredPosition = new Vector3(2048, 0);
+			UI_ReferenceHolder.rectCampaign.anchoredPosition = new Vector3(0, 0);
 
 		}
 		else {
 			//isDisplayingCampaign = false;
-			rectCampaign.anchoredPosition = new Vector3(-2048, 0);
-			rectCustom.anchoredPosition = new Vector3(0, 0);
+			UI_ReferenceHolder.rectCampaign.anchoredPosition = new Vector3(-2048, 0);
+			UI_ReferenceHolder.rectCustom.anchoredPosition = new Vector3(0, 0);
 		}
-		centralToMainMenu.SetActive(false);
-		campaignButton.SetActive(false);
-		customButton.SetActive(false);
+		UI_ReferenceHolder.centralToMainMenu.SetActive(false);
+		UI_ReferenceHolder.campaignButton.SetActive(false);
+		UI_ReferenceHolder.customButton.SetActive(false);
+		UI_ReferenceHolder.buyUpgradesSceneButton.SetActive(false);
 
 	}
 
 	public void ReturnToDefaultScreen() {
-		rectCampaign.anchoredPosition = new Vector3(-2048, 0);
-		rectCustom.anchoredPosition = new Vector3(2048, 0);
-		centralToMainMenu.SetActive(true);
-		campaignButton.SetActive(true);
-		customButton.SetActive(true);
-
+		UI_ReferenceHolder.rectCampaign.anchoredPosition = new Vector3(-2048, 0);
+		UI_ReferenceHolder.rectCustom.anchoredPosition = new Vector3(2048, 0);
+		UI_ReferenceHolder.centralToMainMenu.SetActive(true);
+		UI_ReferenceHolder.campaignButton.SetActive(true);
+		UI_ReferenceHolder.customButton.SetActive(true);
+		UI_ReferenceHolder.buyUpgradesSceneButton.SetActive(true);
 	}
 }

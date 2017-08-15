@@ -9,23 +9,23 @@ public class Upgrade : MonoBehaviour {
 
 	public enum Upgrades {
 		NONE,
-		DOUBLE_DAMAGE,
-		CRITICAL_CHANCE,
-		SLOW_REGENERATION,
 		DOT,
+		DOUBLE_DAMAGE,
+		SLOW_REGENERATION,
+		CRITICAL_CHANCE,
 	}
 
 	public static Dictionary<Upgrades, int> UPGRADE_COST = new Dictionary<Upgrades, int>() {
 		{Upgrades.NONE , 0 },
-		{Upgrades.CRITICAL_CHANCE, 10 },
-		{Upgrades.DOUBLE_DAMAGE, 20 },
-		{Upgrades.SLOW_REGENERATION, 8 },
-		{Upgrades.DOT, 8 },
+		{Upgrades.CRITICAL_CHANCE, 15 },
+		{Upgrades.DOUBLE_DAMAGE, 8 },
+		{Upgrades.SLOW_REGENERATION, 11 },
+		{Upgrades.DOT, 4 },
 
 	};
 
 
-	public int GetCost(Upgrades upgrade) {
+	public static int GetCost(Upgrades upgrade) {
 		foreach(KeyValuePair<Upgrades,int> kvp in UPGRADE_COST) {
 			if(kvp.Key == upgrade) {
 				return kvp.Value;

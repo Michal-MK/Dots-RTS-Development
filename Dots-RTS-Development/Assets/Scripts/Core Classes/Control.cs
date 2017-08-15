@@ -45,6 +45,7 @@ public class Control : MonoBehaviour {
 	private static bool isWinner = true;
 	private static bool domination = false;
 	private static string gameTime;
+	private static int totalCoinsAwarded;
 	#endregion
 
 	#region Initializers
@@ -143,31 +144,28 @@ public class Control : MonoBehaviour {
 		if (newS.buildIndex == 6) {
 			isInGame = false;
 
-			TextMeshProUGUI res = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
-			TextMeshProUGUI dom = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
-			TextMeshProUGUI time = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
-
 			if (isWinner) {
-				res.text = "You Won!";
+				UI_ReferenceHolder.resultingJudgdement.text = "You Won!";
 			}
 			else {
-				res.text = "You Lost!";
+				UI_ReferenceHolder.resultingJudgdement.text = "You Lost!";
 			}
 
 			if (domination) {
-				dom.text = "Dominated all cells";
+				UI_ReferenceHolder.didDominate.text = "Dominated all cells";
 			}
 			else {
-				dom.text = "";
+				UI_ReferenceHolder.didDominate.text = "";
 			}
-			time.text = "Fought for:\n" + gameTime;
+			UI_ReferenceHolder.totalTimeToClear.text = "Fought for:\n" + gameTime;
+
+			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + "<size=40>coins";
 		}
 
 		if (SceneManager.GetActiveScene().name == "Profiles") {
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}
-
 		Time.timeScale = 1;
 	}
 
@@ -254,6 +252,7 @@ public class Control : MonoBehaviour {
 	}
 
 	public void YouWon() {
+		totalCoinsAwarded = 1;
 		SceneManager.LoadScene(6);
 		isWinner = true;
 		int neutrals = 0;
@@ -263,6 +262,7 @@ public class Control : MonoBehaviour {
 			}
 		}
 		if (neutrals == 0) {
+			totalCoinsAwarded += 1;
 			domination = true;
 		}
 		else {
@@ -274,6 +274,9 @@ public class Control : MonoBehaviour {
 			currentCampaignLevel.MarkLevelAsPassed(time);
 		}
 		isInGame = false;
+		print(ProfileManager.getCurrentProfile.ownedCoins);
+		ProfileManager.getCurrentProfile.ownedCoins += totalCoinsAwarded;
+		ProfileManager.SerializeChanges();
 	}
 }
 

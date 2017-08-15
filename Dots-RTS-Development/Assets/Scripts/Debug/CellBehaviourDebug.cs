@@ -62,7 +62,7 @@ public class CellBehaviourDebug : CellBehaviour {
 		}
 	}
 
-	private IEnumerator ScaleCell() {
+	new private IEnumerator ScaleCell() {
 		float mappedValue;
 		if (elementCount < 10) {
 			mappedValue = 1;

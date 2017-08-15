@@ -32,52 +32,39 @@ class FolderAccess {
 			while (xml.Read()) {
 				if (xml.NodeType == XmlNodeType.Element) {
 					if (xml.GetAttribute("id") == upgrade.ToString()) {
-						XmlReader inner = xml.ReadSubtree();
-						bool foundDesc = false;
-						bool foundName = false;
-						bool foundCost = false;
-						string[] upgradeInfo = new string[3];
+						using (XmlReader inner = xml.ReadSubtree()) {
 
-						while (inner.Read()) {
-							if (foundName) {
-								upgradeInfo[0] = inner.Value;
-							}
-							if (foundDesc) {
-								upgradeInfo[1] = inner.Value;
-							}
-							if (foundCost) {
-								upgradeInfo[2] = inner.Value;
-								return upgradeInfo;
-							}
-
-							if (inner.LocalName == "name" && string.IsNullOrEmpty(upgradeInfo[0])) {
-								foundName = true;
-							}
-							else {
-								foundName = false;
-							}
-							if (inner.LocalName == "desc" && string.IsNullOrEmpty(upgradeInfo[1])) {
-								foundDesc = true;
-							}
-							else {
-								foundDesc = false;
-							}
-							if (inner.LocalName == "cost" && string.IsNullOrEmpty(upgradeInfo[2])) {
-								foundCost = true;
-							}
-							else {
-								foundCost = false;
+							bool foundDesc = false;
+							bool foundName = false;
+							string[] upgradeInfo = new string[3];
+	
+							while (inner.Read()) {
+								if (foundName) {
+									upgradeInfo[0] = inner.Value;
+								}
+								if (foundDesc) {
+									upgradeInfo[1] = inner.Value;
+									upgradeInfo[2] = Upgrade.GetCost((Upgrade.Upgrades)upgrade).ToString();
+									return upgradeInfo;
+								}
+								if (inner.LocalName == "name" && string.IsNullOrEmpty(upgradeInfo[0])) {
+									foundName = true;
+								}
+								else {
+									foundName = false;
+								}
+								if (inner.LocalName == "desc" && string.IsNullOrEmpty(upgradeInfo[1])) {
+									foundDesc = true;
+								}
+								else {
+									foundDesc = false;
+								}
 							}
 						}
-						inner.Close();
-						inner.Dispose();
-						xml.Close();
-						xml.Dispose();
-						break;
 					}
 				}
 			}
-			throw new System.Exception();
+			throw new System.Exception("No Upgrade of type " + (Upgrade.Upgrades)upgrade + " found!");
 		}
 	}
 }

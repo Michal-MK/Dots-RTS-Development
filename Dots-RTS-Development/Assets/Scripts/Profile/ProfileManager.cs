@@ -31,8 +31,8 @@ public class ProfileManager {
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
 		ProfileInfo.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
-		Debug.Log(b.gameObject.name + b.gameObject.activeInHierarchy);
-		Debug.Log(profileCreation.gameObject.name + profileCreation.gameObject.activeInHierarchy);
+		//Debug.Log(b.gameObject.name + b.gameObject.activeInHierarchy);
+		//Debug.Log(profileCreation.gameObject.name + profileCreation.gameObject.activeInHierarchy);
 	}
 
 	private void ProfileInfo_OnProfileDeleted(ProfileInfo sender) {
@@ -102,14 +102,15 @@ public class ProfileManager {
 
 		p.profileName = name;
 		p.creationTime = DateTime.Now;
-		p.currency = 0;
+		p.ownedCoins = 0;
 		p.contributedLevels = 0;
 		p.totalCreatedLevels = 0;
 		p.onLevelBaseGame = 1;
 		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 		p.onLevelImage = null;
+		p.path = Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp";
 
-		using (FileStream fs = new FileStream(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp", FileMode.Create)) {
+		using (FileStream fs = new FileStream(p.path, FileMode.Create)) {
 			bf.Serialize(fs, p);
 		}
 		profileCreation.SetActive(false);
@@ -128,13 +129,21 @@ public class ProfileManager {
 		get { return currentProfile; }
 	}
 
+	public static void SerializeChanges() {
+		BinaryFormatter bf = new BinaryFormatter();
+		using(FileStream fs = new FileStream(getCurrentProfile.path,FileMode.Open)) {
+			bf.Serialize(fs,getCurrentProfile);
+		}
+	}
+
 }
 
 [Serializable]
 public class Profile {
+	public string path;
 	public byte[] onLevelImage;
 	public int onLevelBaseGame;
-	public int currency;
+	public int ownedCoins;
 	public int contributedLevels;
 	public int totalCreatedLevels;
 	public DateTime creationTime;
