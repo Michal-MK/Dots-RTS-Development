@@ -48,6 +48,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 					ProfileManager.getCurrentProfile.acquiredUpgrades[col.Key] += 1;
 					ProfileManager.SerializeChanges();
 					UI_ReferenceHolder.profileMoney.text = ProfileManager.getCurrentProfile.ownedCoins + " coins";
+					return;
 				}
 				else {
 					print("Not enough Coins missing " + (cost - ProfileManager.getCurrentProfile.ownedCoins));

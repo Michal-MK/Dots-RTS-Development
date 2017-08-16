@@ -23,8 +23,8 @@ class FolderAccess {
 		}
 	}
 
-	public static SaveFileInfo GetCampaignLevel(int difficulty, int level) {
-		return GetAsociatedScript<SaveFileInfo>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + level + ".pwl");
+	public static SaveDataCampaign GetCampaignLevel(int difficulty, int level) {
+		return GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar +"Level_"+ level + ".pwl");
 	}
 
 	public static string[] GetUpgradeInfo(int upgrade) {

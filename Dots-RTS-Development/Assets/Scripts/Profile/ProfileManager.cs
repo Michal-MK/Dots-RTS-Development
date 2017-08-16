@@ -40,7 +40,7 @@ public class ProfileManager {
 	}
 
 	public void ProfileSelection() {
-		SceneManager.LoadScene("Profiles");
+		SceneManager.LoadScene(7);
 	}
 
 	public void ListProfiles() {
@@ -64,6 +64,7 @@ public class ProfileManager {
 					Profile p = (Profile)bf.Deserialize(fs);
 					ProfileInfo pI = GameObject.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
 					pI.name = f.FullName;
+					pI.self = pI.gameObject;
 					pI.InitializeProfile(p, p.profileName);
 				}
 				catch (Exception e) {
@@ -108,9 +109,9 @@ public class ProfileManager {
 		p.onLevelBaseGame = 1;
 		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 		p.onLevelImage = null;
-		p.path = Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp";
+		p.pathToFile = Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp";
 
-		using (FileStream fs = new FileStream(p.path, FileMode.Create)) {
+		using (FileStream fs = new FileStream(p.pathToFile, FileMode.Create)) {
 			bf.Serialize(fs, p);
 		}
 		profileCreation.SetActive(false);
@@ -131,7 +132,7 @@ public class ProfileManager {
 
 	public static void SerializeChanges() {
 		BinaryFormatter bf = new BinaryFormatter();
-		using(FileStream fs = new FileStream(getCurrentProfile.path,FileMode.Open)) {
+		using(FileStream fs = new FileStream(getCurrentProfile.pathToFile,FileMode.Open)) {
 			bf.Serialize(fs,getCurrentProfile);
 		}
 	}
@@ -140,14 +141,23 @@ public class ProfileManager {
 
 [Serializable]
 public class Profile {
-	public string path;
+	public string pathToFile;
+
 	public byte[] onLevelImage;
 	public int onLevelBaseGame;
 	public int ownedCoins;
+
 	public int contributedLevels;
 	public int totalCreatedLevels;
+
 	public DateTime creationTime;
+
 	public string profileName;
+
+
+	public int completedCampaignLevels;
+	public int completedCustomLevels;
+
 	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>() {
 		{Upgrade.Upgrades.CRITICAL_CHANCE,0},
 		{Upgrade.Upgrades.DOT, 0 },

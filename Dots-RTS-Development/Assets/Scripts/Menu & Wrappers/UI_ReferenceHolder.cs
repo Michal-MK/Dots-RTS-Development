@@ -52,6 +52,15 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region ProfileRefs
+	public static GameObject PS_Canvas;
+	public static GameObject PO_Canvas;
+	public static TextMeshProUGUI PO_Name;
+	public static TextMeshProUGUI PO_OnLevel;
+	public static RawImage PO_OnLevelImage;
+	public static TextMeshProUGUI PO_CurrentCoins;
+	public static TextMeshProUGUI PO_GamesPlayed;
+	public static Transform PO_AcquiredUpgrades;
+	public static ProfileInfo PO_DeleteProfile;
 
 	#endregion
 
@@ -75,15 +84,15 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
 		switch (newS.buildIndex) {
-			case 0: {
+			case 0: { //Main Menu
 
 				return;
 			}
-			case 1: {
+			case 1: { // Editor
 
 				return;
 			}
-			case 2: {
+			case 2: { // LevelSelect
 				rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 				rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
 				centralToMainMenu = GameObject.Find("Return_To_Menu");
@@ -92,26 +101,39 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				buyUpgradesSceneButton = GameObject.Find("Buy_Upgrades");
 				return;
 			}
-			case 3: {
+			case 3: { //PlayScene
 
 				return;
 			}
-			case 4: {
+			case 4: { //Level Sharing
 
 				return;
 			}
-			case 5: {
+			case 5: { // DebugScene
 				maxSizeSlider = GameObject.Find("Slider").GetComponent<Slider>();
 				return;
 			}
-			case 6: {
+			case 6: { // PostGame Scene
 				resultingJudgdement = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
 				didDominate = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
 				totalTimeToClear = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
 				totalCoinsAwarded = GameObject.Find("Total_Coins_Awarded").GetComponent<TextMeshProUGUI>();
 				return;
 			}
-			case 8: {
+			case 7: {
+				PS_Canvas = GameObject.Find("PS_Canvas");
+				PO_Canvas = GameObject.Find("PO_Canvas");
+				PO_OnLevel = GameObject.Find("PO_OnLevel").GetComponent<TextMeshProUGUI>();
+				PO_OnLevelImage = GameObject.Find("PO_OnLevelImage").GetComponent<RawImage>();
+				PO_Name = GameObject.Find("PO_Name").GetComponent<TextMeshProUGUI>();
+				PO_GamesPlayed = GameObject.Find("PO_GamesPlayed").GetComponent<TextMeshProUGUI>();
+				PO_CurrentCoins = GameObject.Find("PO_CurrentCoins").GetComponent<TextMeshProUGUI>();
+				PO_AcquiredUpgrades = GameObject.Find("PO_AcquiredUpgrades").transform;
+				PO_DeleteProfile = GameObject.Find("PO_DeleteProfile").GetComponent<ProfileInfo>();
+				PO_Canvas.SetActive(false);
+				return;
+			}
+			case 8: { //Upgrade Shop
 				buyButton = GameObject.Find("Buy").GetComponent<Button>();
 				upgradeNameHolder = GameObject.Find("Upgrade_Name").GetComponent<TextMeshProUGUI>();
 				upgradeDescHolder = GameObject.Find("Upgrade_Desc").GetComponent<TextMeshProUGUI>();

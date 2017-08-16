@@ -81,14 +81,14 @@ public class Control : MonoBehaviour {
 			isInGame = true;
 			StartCoroutine(GameState());
 		}
-		if (SceneManager.GetActiveScene().name == "Profiles") {
+		if (SceneManager.GetActiveScene().buildIndex == 7) {
 			if (pM == null) {
 				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 				pM.ListProfiles();
 			}
 		}
 		if (ProfileManager.currentProfile == null && activeScene == 0) {
-			SceneManager.LoadScene("Profiles");
+			SceneManager.LoadScene(7);
 		}
 	}
 
@@ -101,12 +101,13 @@ public class Control : MonoBehaviour {
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 		if (newS.buildIndex == 0) {
-			if (ProfileManager.currentProfile == null) {
+			print(ProfileManager.getCurrentProfile.profileName);
+			if (ProfileManager.getCurrentProfile == null) {
 				DebugSceneIndex = 0;
-				SceneManager.LoadScene("Profiles");
+				SceneManager.LoadScene(7);
 				return;
 			}
-			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.currentProfile.profileName);
+			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
 			currentCampaignLevel = null;
 			isInGame = false;
 
@@ -162,7 +163,7 @@ public class Control : MonoBehaviour {
 			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + "<size=40>coins";
 		}
 
-		if (SceneManager.GetActiveScene().name == "Profiles") {
+		if (SceneManager.GetActiveScene().buildIndex == 7) {
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}
@@ -270,9 +271,15 @@ public class Control : MonoBehaviour {
 		}
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 
+		//Did we play a campaign level ?
 		if (currentCampaignLevel != null) {
 			currentCampaignLevel.MarkLevelAsPassed(time);
+			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
 		}
+		else {
+			ProfileManager.getCurrentProfile.completedCustomLevels += 1;
+		}
+
 		isInGame = false;
 		print(ProfileManager.getCurrentProfile.ownedCoins);
 		ProfileManager.getCurrentProfile.ownedCoins += totalCoinsAwarded;
