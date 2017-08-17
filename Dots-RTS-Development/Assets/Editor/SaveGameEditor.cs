@@ -84,7 +84,7 @@ public class SaveGameEditor : EditorWindow {
 				save.game.difficulty = LevelEditorCore.aiDifficultyDict;
 				save.game.gameSize = LevelEditorCore.gameSize;
 				save.game.levelInfo = new LevelInfo(levelName, LevelEditorCore.authorName, DateTime.Now);
-				save.isCleared = false;
+				save.game.clans = TeamSetup.clanDict;
 				ScreenCapture.CaptureScreenshot(fileName + ".png");
 				save.preview = fileName + ".png";
 				formatter.Serialize(file, save);

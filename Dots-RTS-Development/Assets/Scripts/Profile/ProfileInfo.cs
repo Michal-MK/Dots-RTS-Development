@@ -34,6 +34,7 @@ public class ProfileInfo : MonoBehaviour {
 		Profile p = ProfileManager.currentProfile = selected;
 		SaveDataCampaign firstLevel = FolderAccess.GetCampaignLevel(1, 1);
 		Texture2D tex = new Texture2D(160, 90);
+		print(firstLevel.preview);
 		tex.LoadImage(File.ReadAllBytes(firstLevel.preview));
 
 		UI_ReferenceHolder.PO_Name.text = p.profileName;

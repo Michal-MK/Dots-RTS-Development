@@ -14,10 +14,8 @@ public class SaveData {
 
 [Serializable]
 public class SaveDataCampaign {
-    public SaveData game;
-    public string preview;
-    public float timeUnformated;
-    public bool isCleared;
+	public SaveData game;
+	public string preview;
 }
 
 [Serializable]

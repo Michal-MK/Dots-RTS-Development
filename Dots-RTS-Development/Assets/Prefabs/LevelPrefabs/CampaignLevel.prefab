@@ -529,9 +529,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 114245567620258148}
-  passedImg: {fileID: 114013346015551894}
+  passedImg: {fileID: 114390370041811590}
   levelName: {fileID: 114652227412649196}
   clearTime: {fileID: 114176449999396488}
+  self:
+    game:
+      cells: []
+      levelInfo:
+        levelName: 
+        creator: 
+      gameSize: 0
+    preview: 
+    timeUnformated: 0
+    isCleared: 0
   levelPath: 
 --- !u!114 &114926340298687298
 MonoBehaviour:
