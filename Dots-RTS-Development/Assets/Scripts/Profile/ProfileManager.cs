@@ -164,4 +164,6 @@ public class Profile {
 		{Upgrade.Upgrades.DOUBLE_DAMAGE, 0 },
 		{Upgrade.Upgrades.SLOW_REGENERATION, 0 },
 	};
+
+	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels = new Dictionary<SaveDataCampaign, float>();
 }

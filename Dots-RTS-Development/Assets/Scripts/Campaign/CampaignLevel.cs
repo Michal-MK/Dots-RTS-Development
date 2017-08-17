@@ -17,6 +17,10 @@ public class CampaignLevel : MonoBehaviour {
 	public TextMeshProUGUI clearTime;
 	#endregion
 
+	public static CampaignLevel current;
+	public static SaveDataCampaign currentCampaignLevel;
+	public SaveDataCampaign self;
+
 	[HideInInspector]
 	public string levelPath;
 
@@ -25,56 +29,34 @@ public class CampaignLevel : MonoBehaviour {
 		BinaryFormatter bf = new BinaryFormatter();
 
 		SaveDataCampaign levelInfo;
-		//print(levelPath);
 		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
 
 			levelInfo = (SaveDataCampaign)bf.Deserialize(fs);
 			fs.Close();
-
 		}
+		foreach (KeyValuePair<SaveDataCampaign,float> passedLevel in ProfileManager.getCurrentProfile.clearedCampaignLevels) {
+			if(passedLevel.Value != 0f) {
+				passedImg.gameObject.SetActive(true);
+				clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", passedLevel.Value / 60, passedLevel.Value % 60f, passedLevel.Value.ToString().Remove(0, passedLevel.Value.ToString().Length - 2));
+			}
+			else {
+				passedImg.gameObject.SetActive(false);
+				clearTime.text = "TBD";
 
-		//Texture2D tex = new Texture2D(190, 80);
-		//tex.LoadImage(File.ReadAllBytes(levelInfo.preview));
-
-		preview.texture = null;
-
-		if (levelInfo.isCleared) {
-			passedImg.enabled = true;
-			clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", levelInfo.timeUnformated / 60, levelInfo.timeUnformated % 60f, levelInfo.timeUnformated.ToString().Remove(0, levelInfo.timeUnformated.ToString().Length - 2));
-
+			}
 		}
-		else {
-			passedImg.enabled = false;
-			clearTime.text = "TBD";
-		}
-
+		Texture2D tex = new Texture2D(190, 80);
+		tex.LoadImage(File.ReadAllBytes(levelInfo.preview));
+		preview.texture = tex;
 		levelName.text = levelInfo.game.levelInfo.levelName;
 	}
 
 	public void StartLevel() {
-		Control.script.currentCampaignLevel = this;
-		print(Control.script.currentCampaignLevel.levelName.text);
+		currentCampaignLevel = this.self;
+		current = this;
+		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
+		Control.levelState = Control.PlaySceneState.CAMPAIGN;
 		SceneManager.LoadScene("Level_Player");
-	}
-
-	public void MarkLevelAsPassed(float clearTime) {
-		BinaryFormatter bf = new BinaryFormatter();
-
-		SaveDataCampaign levelInfo;
-		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
-
-			levelInfo = (SaveDataCampaign)bf.Deserialize(fs);
-			fs.Close();
-		}
-
-		levelInfo.isCleared = true;
-		levelInfo.timeUnformated = clearTime;
-
-		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
-
-			bf.Serialize(fs, levelInfo);
-			fs.Close();
-		}
 	}
 }
 

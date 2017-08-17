@@ -29,9 +29,13 @@ public class Control : MonoBehaviour {
 	private float time;
 
 	private bool isInGame = false;
-
+	public static PlaySceneState levelState = PlaySceneState.NONE;
+	public enum PlaySceneState {
+		NONE,
+		CAMPAIGN,
+		CUSTOM
+	}
 	public static GameObject menuPanel;
-	public CampaignLevel currentCampaignLevel;
 	public static ProfileManager pM;
 
 
@@ -102,7 +106,7 @@ public class Control : MonoBehaviour {
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
-		if (newS.buildIndex == 0) {
+		if (newS.name == "Main_Menu") {
 			print(ProfileManager.getCurrentProfile.profileName);
 			if (ProfileManager.getCurrentProfile == null) {
 				DebugSceneIndex = 0;
@@ -110,43 +114,33 @@ public class Control : MonoBehaviour {
 				return;
 			}
 			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
-			currentCampaignLevel = null;
-			isInGame = false;
 
 		}
 
-		if (newS.buildIndex == 1) {
-			currentCampaignLevel = null;
-			isInGame = false;
+		if (newS.name == "Level_Editor") {
 		}
 
-		if (newS.buildIndex == 2) {
+		if (newS.name == "Level_Select") {
 			LevelSelectScript.displayedSaves.Clear();
-			currentCampaignLevel = null;
-			isInGame = false;
-
 		}
 
-		if (newS.buildIndex == 3) {
+		if (newS.name == "Level_Player") {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 			StartCoroutine(GameState());
 		}
 
 
-		if (newS.buildIndex == 4) {
-			isInGame = false;
-			currentCampaignLevel = null;
+		if (newS.name == "Level_Sharing") {
 		}
 
-		if (newS.buildIndex == 5) {
-			isInGame = true;
+		if (newS.name == "Debug") {
 			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 		}
 
 
-		if (newS.buildIndex == 6) {
+		if (newS.name == "Post_Game") {
 			isInGame = false;
-			print(currentCampaignLevel);
+
 			if (isWinner) {
 				UI_ReferenceHolder.resultingJudgdement.text = "You Won!";
 			}
@@ -165,7 +159,7 @@ public class Control : MonoBehaviour {
 			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + "<size=40>coins";
 		}
 
-		if (SceneManager.GetActiveScene().buildIndex == 7) {
+		if (newS.name == "Profiles") {
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}
@@ -232,7 +226,6 @@ public class Control : MonoBehaviour {
 					GameOver();
 				}
 			}
-			print(currentCampaignLevel);
 		}
 	}
 
@@ -275,12 +268,15 @@ public class Control : MonoBehaviour {
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 
 		//Did we play a campaign level ?
-		if (currentCampaignLevel != null) {
-			currentCampaignLevel.MarkLevelAsPassed(time);
+		if (CampaignLevel.currentCampaignLevel != null) {
 			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
+			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.currentCampaignLevel] = time;
+			CampaignLevel.currentCampaignLevel = null;
+			CampaignLevel.current = null;
 		}
 		else {
 			ProfileManager.getCurrentProfile.completedCustomLevels += 1;
+			print("Played custom garbage");
 		}
 
 		isInGame = false;
