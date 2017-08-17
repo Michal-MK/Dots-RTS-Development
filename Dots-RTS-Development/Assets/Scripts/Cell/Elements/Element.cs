@@ -11,8 +11,10 @@ public class Element : MonoBehaviour {
 
 	private int damage = 1;
 	public float eSpeed = 10;
+    public float RandomTimeOffset;
 
 	private void Start() {
+        RandomTimeOffset = Random.Range(0, 50);
 		attacker.UpdateCellInfo();
 		debuff = attacker.providedDebuff;
 		transform.position = ElementSpawnPoint();
