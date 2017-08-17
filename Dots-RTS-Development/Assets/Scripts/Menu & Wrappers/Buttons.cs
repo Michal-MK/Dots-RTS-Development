@@ -12,7 +12,7 @@ public class Buttons : MainMenuUI  {
 
 	public void EditMode() {
 		Control.cells.Clear();
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene("Level_Editor");
 	}
 
 	public void PauseGameorEscape() {

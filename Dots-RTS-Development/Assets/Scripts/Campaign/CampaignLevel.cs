@@ -52,8 +52,9 @@ public class CampaignLevel : MonoBehaviour {
 	}
 
 	public void StartLevel() {
-		Control.currentCampaignLevel = this;
-		SceneManager.LoadScene(3);
+		Control.script.currentCampaignLevel = this;
+		print(Control.script.currentCampaignLevel.levelName.text);
+		SceneManager.LoadScene("Level_Player");
 	}
 
 	public void MarkLevelAsPassed(float clearTime) {

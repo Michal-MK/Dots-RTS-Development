@@ -40,7 +40,7 @@ public class ProfileManager {
 	}
 
 	public void ProfileSelection() {
-		SceneManager.LoadScene(7);
+		SceneManager.LoadScene("Profiles");
 	}
 
 	public void ListProfiles() {

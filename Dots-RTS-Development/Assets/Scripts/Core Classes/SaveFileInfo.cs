@@ -63,7 +63,7 @@ public class SaveFileInfo : MonoBehaviour {
 		string s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
 #endif
 		PlayerPrefs.SetString("LoadLevelFilePath", s);
-		SceneManager.LoadScene(3);
+		SceneManager.LoadScene("Level_Player");
 	}
 
 	public void DeleteObject(Transform fileName) {

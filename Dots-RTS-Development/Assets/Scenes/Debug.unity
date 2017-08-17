@@ -5903,7 +5903,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4224754741169344, guid: 08682cefe8d416547868645efaf1da0f, type: 2}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 114014076353882504, guid: 08682cefe8d416547868645efaf1da0f,
         type: 2}
@@ -7047,13 +7047,13 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 467676893}
         m_MethodName: SwitchScene
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Main_Menu
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -8818,7 +8818,7 @@ Transform:
   - {fileID: 1106967123}
   - {fileID: 519378318}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &575970143
 GameObject:
@@ -12130,7 +12130,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4224754741169344, guid: 08682cefe8d416547868645efaf1da0f, type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1007616434861556, guid: 08682cefe8d416547868645efaf1da0f, type: 2}
       propertyPath: m_Name
@@ -13610,7 +13610,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4204711534086136, guid: 832544c7e7bf75b4db0a86944091eae7, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114238875923900244, guid: 832544c7e7bf75b4db0a86944091eae7,
         type: 2}
@@ -14285,7 +14285,7 @@ Transform:
   - {fileID: 1530100203}
   - {fileID: 1524291122}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &972536916
 GameObject:
@@ -16396,13 +16396,13 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1147889584}
         m_MethodName: SwitchScene
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Level_Select
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -16581,7 +16581,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4930410514900000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5cc6ffdc88999d84ebf6db30430568d1, type: 2}
@@ -21040,7 +21040,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1506649982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aff88e1dbcede5541a7676780a4ce335, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d86a9b9d2027874eb1352e8a26d9933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1506649985
@@ -21083,8 +21083,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1506649984}
-        m_MethodName: SwitchScene
-        m_Mode: 3
+        m_MethodName: PauseGameorEscape
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -22835,7 +22835,7 @@ Transform:
   - {fileID: 661291623}
   - {fileID: 275270102}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1645504571
 GameObject:
@@ -23048,7 +23048,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1677028880
 GameObject:
@@ -23461,7 +23461,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

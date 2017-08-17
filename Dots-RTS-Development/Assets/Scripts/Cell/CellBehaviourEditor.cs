@@ -11,7 +11,7 @@ public class CellBehaviourEditor : Cell {
 	public SpriteRenderer organele;
 
 
-
+/*
 	private IEnumerator Start() {
 		yield return new WaitForEndOfFrame();
 		print(UI_ReferenceHolder.maxSizeSlider.gameObject.name);
@@ -30,9 +30,5 @@ public class CellBehaviourEditor : Cell {
 			maxSize.transform.localScale = new Vector3(f, f);
 		}
 	}
-
-	private void Update() {
-		
-	}
-
+	*/
 }

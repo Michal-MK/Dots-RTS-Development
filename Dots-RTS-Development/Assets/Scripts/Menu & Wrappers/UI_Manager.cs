@@ -40,7 +40,7 @@ public class UI_Manager : MonoBehaviour {
 	}
 	IEnumerator ReturnToLevelSelectIn(float seconds) {
 		yield return new WaitForSeconds(seconds);
-		SceneManager.LoadScene(2);
+		SceneManager.LoadScene("Level_Select");
 	}
 
 

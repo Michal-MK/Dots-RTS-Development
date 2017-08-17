@@ -27,10 +27,11 @@ public class Control : MonoBehaviour {
 	public static bool canPause = true;
 
 	private float time;
+
 	private bool isInGame = false;
 
 	public static GameObject menuPanel;
-	public static CampaignLevel currentCampaignLevel;
+	public CampaignLevel currentCampaignLevel;
 	public static ProfileManager pM;
 
 
@@ -88,7 +89,7 @@ public class Control : MonoBehaviour {
 			}
 		}
 		if (ProfileManager.currentProfile == null && activeScene == 0) {
-			SceneManager.LoadScene(7);
+			SceneManager.LoadScene("Profiles");
 		}
 	}
 
@@ -100,11 +101,12 @@ public class Control : MonoBehaviour {
 
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
+
 		if (newS.buildIndex == 0) {
 			print(ProfileManager.getCurrentProfile.profileName);
 			if (ProfileManager.getCurrentProfile == null) {
 				DebugSceneIndex = 0;
-				SceneManager.LoadScene(7);
+				SceneManager.LoadScene("Profiles");
 				return;
 			}
 			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
@@ -144,7 +146,7 @@ public class Control : MonoBehaviour {
 
 		if (newS.buildIndex == 6) {
 			isInGame = false;
-
+			print(currentCampaignLevel);
 			if (isWinner) {
 				UI_ReferenceHolder.resultingJudgdement.text = "You Won!";
 			}
@@ -230,6 +232,7 @@ public class Control : MonoBehaviour {
 					GameOver();
 				}
 			}
+			print(currentCampaignLevel);
 		}
 	}
 
@@ -246,7 +249,7 @@ public class Control : MonoBehaviour {
 	}
 
 	public void GameOver() {
-		SceneManager.LoadScene(6);
+		SceneManager.LoadScene("Post_Game");
 		isWinner = false;
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 		isInGame = false;
@@ -254,7 +257,7 @@ public class Control : MonoBehaviour {
 
 	public void YouWon() {
 		totalCoinsAwarded = 1;
-		SceneManager.LoadScene(6);
+		SceneManager.LoadScene("Post_Game");
 		isWinner = true;
 		int neutrals = 0;
 		foreach (CellBehaviour c in cells) {

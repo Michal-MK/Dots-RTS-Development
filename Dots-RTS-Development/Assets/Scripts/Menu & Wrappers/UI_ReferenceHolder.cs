@@ -41,7 +41,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region DebugRefs
-	public static Slider maxSizeSlider;
 	#endregion
 
 	#region
@@ -110,7 +109,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case 5: { // DebugScene
-				maxSizeSlider = GameObject.Find("Slider").GetComponent<Slider>();
 				return;
 			}
 			case 6: { // PostGame Scene
