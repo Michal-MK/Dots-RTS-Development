@@ -4,40 +4,49 @@ using UnityEngine;
 
 class ElementBehaviour : Element {
 
-	private Vector3 acc;
-	private Vector3 vel;
+	private Vector2 velocity;
+    private float wobbleFreqency = 2;
+    private float wobbleAmplitude = 0.2f;
+    private float SlowDownFrequency = 3f;
 
-	//Calculates steering behaviour for the element 
-	private void FixedUpdate() {
-		Vector3 seek = Seek(target);
-		ApplyForce(seek);
-		gameObject.transform.position += vel;
-		vel += acc;
-		acc = acc * 0;
+    //Calculates steering behaviour for the element 
+    private void FixedUpdate() {
+        if (DistanceToTarget(target) < target.cellRadius) {
+            //Execute this code after collision with target.
+            if (team > 0) {
+                ExecuteAttack();
+            }
+            else {
+                throw new InvalidOperationException();
+            }
+            Destroy(gameObject);
+        }
+
+        velocity = DirectionToTarget(target) * eSpeed;
+
+        velocity = Mathf.Abs(Mathf.Sin(AdjustedTime() * SlowDownFrequency)) * velocity;
+
+        gameObject.transform.position += (Vector3)ApplySidewaysWobble(velocity);
 	}
 
-	//Calculates steering behaviour for the element 
-	private void ApplyForce(Vector3 force) {
-		acc += force;
-	}
-
-	//Calculates the error between desired and current velocity
-	private Vector3 Seek(CellBehaviour target) {
-		float d = Vector3.Distance(target.transform.position, gameObject.transform.position);
-		//print(d + " " + target.cellRadius);
-		if (d < target.cellRadius) {
-			//Execute this code after collision with target.
-			if (team > 0) {
-				ExecuteAttack();
-			}
-			else {
-				throw new InvalidOperationException();
-			}
-			Destroy(gameObject);
-		}
-		Vector3 seekF = target.gameObject.transform.position - gameObject.transform.position;
+	private Vector2 DirectionToTarget(CellBehaviour target) {
+		Vector2 seekF = target.gameObject.transform.position - gameObject.transform.position;
 		seekF.Normalize();
-		seekF = seekF * eSpeed;
-		return seekF - vel;
+		return seekF;
 	}
+    
+    private float DistanceToTarget(CellBehaviour target) {
+        return Vector2.Distance(target.transform.position, gameObject.transform.position);
+    }
+
+    private Vector2 ApplySidewaysWobble(Vector2 IN) {
+        Vector2 Normal = new Vector2(IN.y, -IN.x);
+        Normal = Normal * Mathf.Sin(AdjustedTime() * wobbleFreqency) * wobbleAmplitude;
+
+        return IN + Normal;
+    }
+
+    float AdjustedTime() {
+        return Time.time + RandomTimeOffset;
+    }
 }
