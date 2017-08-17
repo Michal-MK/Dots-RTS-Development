@@ -86,7 +86,8 @@ public class SaveGameEditor : EditorWindow {
 				save.game.levelInfo = new LevelInfo(levelName, LevelEditorCore.authorName, DateTime.Now);
 				save.game.clans = TeamSetup.clanDict;
 				ScreenCapture.CaptureScreenshot(fileName + ".png");
-				save.preview = fileName + ".png";
+				save.preview = Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + (int.Parse(GetCurLevel(difficulty)) - 1) + ".png";
+
 				formatter.Serialize(file, save);
 				file.Close();
 				Debug.Log(save.game.levelInfo.levelName);
