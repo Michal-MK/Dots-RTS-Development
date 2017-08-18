@@ -76,6 +76,8 @@ public class Control : MonoBehaviour {
 
 	private void Start() {
 
+		string[] nome = FolderAccess.GetUpgrade(Upgrade.Upgrades.DOT);
+
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 
 		string activeScene = SceneManager.GetActiveScene().name;

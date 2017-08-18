@@ -197,7 +197,7 @@ public class Cell : MonoBehaviour {
 		appliedDebuffs.Remove(Upgrade.Upgrades.DOT);
 	}
 
-	[System.Obsolete("CreateCircle is no longer supported and will be removed.",false)]
+	[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]
 	public void CreateCircle(Vector3 _position, float _r, int segments) {
 		circle.positionCount = segments + 1;
 		circle.useWorldSpace = true;

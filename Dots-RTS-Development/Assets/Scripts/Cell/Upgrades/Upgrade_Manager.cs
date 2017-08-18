@@ -51,7 +51,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 					return;
 				}
 				else {
-					print("Not enough Coins missing " + (cost - ProfileManager.getCurrentProfile.ownedCoins));
+					print("Not enough Coins, missing " + (cost - ProfileManager.getCurrentProfile.ownedCoins));
 				}
 			}
 		}

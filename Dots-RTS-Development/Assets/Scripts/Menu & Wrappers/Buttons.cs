@@ -25,7 +25,7 @@ public class Buttons : MainMenuUI  {
 
 	public void SetSelectedUpgrade() {
 		int selected = Upgrade_Manager.selectedUpgrade = int.Parse(string.Format(gameObject.name).Remove(0, 8));
-		string[] upgradeInfo = FolderAccess.GetUpgradeInfo(selected);
+		string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
 		if (upgradeInfo != null) {
 			UI_ReferenceHolder.upgradeNameHolder.text = upgradeInfo[0];
 			UI_ReferenceHolder.upgradeDescHolder.text = upgradeInfo[1];

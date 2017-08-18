@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Upgrades>
-	<u1 id="1">
+	
+	<Upgrade id="1">
 		<name>Damage over time</name>
 		<desc>This is an upgrade Damage over time</desc>
-	</u1>
-	<u2 id="2">
+	</Upgrade>
+	
+	<Upgrade id="2">
 		<name>Double Damage</name>
 		<desc>This is an upgrade Double damage</desc>
-	</u2>
-	<u3 id="3">
+	</Upgrade>
+	
+	<Upgrade id="3">
 		<name>Slow Regen</name>
 		<desc>This is an upgrade Slow Regeneration</desc>
-	</u3>
-	<u4 id="4">
+	</Upgrade>
+	
+	<Upgrade id="4">
 		<name>Critical Chance</name>
 		<desc>This is an upgrade Crit Chance</desc>
-	</u4>
+	</Upgrade>
+	
 </Upgrades>
