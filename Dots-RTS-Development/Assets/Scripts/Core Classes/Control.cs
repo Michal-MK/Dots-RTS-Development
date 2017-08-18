@@ -35,7 +35,6 @@ public class Control : MonoBehaviour {
 		CAMPAIGN,
 		CUSTOM
 	}
-	public static GameObject menuPanel;
 	public static ProfileManager pM;
 
 
@@ -79,20 +78,20 @@ public class Control : MonoBehaviour {
 
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 
-		int activeScene = SceneManager.GetActiveScene().buildIndex;
+		string activeScene = SceneManager.GetActiveScene().name;
 
-		if (/*activeScene == 5 || */activeScene == 3) {
-			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+		if (/*activeScene == 5 || */activeScene == "Level_Player") {
 			isInGame = true;
 			StartCoroutine(GameState());
 		}
-		if (SceneManager.GetActiveScene().buildIndex == 7) {
+		if (activeScene == "Profiles") {
 			if (pM == null) {
 				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 				pM.ListProfiles();
 			}
 		}
-		if (ProfileManager.currentProfile == null && activeScene == 0) {
+		if (ProfileManager.currentProfile == null && activeScene == "Main_Menu") {
+			print("a");
 			SceneManager.LoadScene("Profiles");
 		}
 	}
@@ -118,6 +117,7 @@ public class Control : MonoBehaviour {
 		}
 
 		if (newS.name == "Level_Editor") {
+
 		}
 
 		if (newS.name == "Level_Select") {
@@ -125,16 +125,16 @@ public class Control : MonoBehaviour {
 		}
 
 		if (newS.name == "Level_Player") {
-			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 			StartCoroutine(GameState());
 		}
 
 
 		if (newS.name == "Level_Sharing") {
+
 		}
 
 		if (newS.name == "Debug") {
-			menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+
 		}
 
 
@@ -232,13 +232,13 @@ public class Control : MonoBehaviour {
 	public static void Pause() {
 		isPaused = true;
 		Time.timeScale = 0;
-		menuPanel.SetActive(true);
+		UI_ReferenceHolder.menuPanel.SetActive(true);
 	}
 
 	public static void UnPause() {
 		isPaused = false;
 		Time.timeScale = 1;
-		menuPanel.SetActive(false);
+		UI_ReferenceHolder.menuPanel.SetActive(false);
 	}
 
 	public void GameOver() {

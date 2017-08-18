@@ -33,6 +33,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region LevelPlayerRefs
+	public static GameObject menuPanel;
 
 	#endregion
 
@@ -41,6 +42,8 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region DebugRefs
+	//public static GameObject menuPanel;
+
 	#endregion
 
 	#region
@@ -75,6 +78,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	void Start() {
+		SceneManager_activeSceneChanged(SceneManager.GetActiveScene(), SceneManager.GetActiveScene());
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 	}
 
@@ -82,16 +86,16 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
-		switch (newS.buildIndex) {
-			case 0: { //Main Menu
+		switch (newS.name) {
+			case "Main_Menu": { //Main Menu
 
 				return;
 			}
-			case 1: { // Editor
+			case "Level_Editor": { // Editor
 
 				return;
 			}
-			case 2: { // LevelSelect
+			case "Level_Select": { // LevelSelect
 				rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 				rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
 				centralToMainMenu = GameObject.Find("Return_To_Menu");
@@ -100,25 +104,26 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				buyUpgradesSceneButton = GameObject.Find("Buy_Upgrades");
 				return;
 			}
-			case 3: { //PlayScene
+			case "Level_Player": { //PlayScene
+				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+				return;
+			}
+			case "Level_Sharing": { //Level Sharing
 
 				return;
 			}
-			case 4: { //Level Sharing
-
+			case "Debug": { // DebugScene
+				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
 				return;
 			}
-			case 5: { // DebugScene
-				return;
-			}
-			case 6: { // PostGame Scene
+			case "Post_Game": { // PostGame Scene
 				resultingJudgdement = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
 				didDominate = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
 				totalTimeToClear = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
 				totalCoinsAwarded = GameObject.Find("Total_Coins_Awarded").GetComponent<TextMeshProUGUI>();
 				return;
 			}
-			case 7: {
+			case "Profiles": {
 				PS_Canvas = GameObject.Find("PS_Canvas");
 				PO_Canvas = GameObject.Find("PO_Canvas");
 				PO_OnLevel = GameObject.Find("PO_OnLevel").GetComponent<TextMeshProUGUI>();
@@ -131,7 +136,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				PO_Canvas.SetActive(false);
 				return;
 			}
-			case 8: { //Upgrade Shop
+			case "Upgrade_Store": { //Upgrade Shop
 				buyButton = GameObject.Find("Buy").GetComponent<Button>();
 				upgradeNameHolder = GameObject.Find("Upgrade_Name").GetComponent<TextMeshProUGUI>();
 				upgradeDescHolder = GameObject.Find("Upgrade_Desc").GetComponent<TextMeshProUGUI>();
