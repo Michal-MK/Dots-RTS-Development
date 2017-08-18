@@ -88,6 +88,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
+        save.savedAtAspect = Camera.main.aspect;
 		save.difficulty = LevelEditorCore.aiDifficultyDict;
 		save.gameSize = LevelEditorCore.gameSize;
 		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
