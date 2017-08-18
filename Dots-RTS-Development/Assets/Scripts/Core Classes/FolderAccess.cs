@@ -64,7 +64,8 @@ class FolderAccess {
 					}
 				}
 			}
-			throw new System.Exception("No Upgrade of type " + (Upgrade.Upgrades)upgrade + " found!");
+			Debug.LogWarning("No Upgrade of type " + (Upgrade.Upgrades)upgrade + " found!");
+			return null;
 		}
 	}
 }

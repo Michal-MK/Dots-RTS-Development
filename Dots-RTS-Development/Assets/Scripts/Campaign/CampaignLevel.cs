@@ -25,6 +25,11 @@ public class CampaignLevel : MonoBehaviour {
 	public string levelPath;
 
 	private void Start() {
+		if(ProfileManager.getCurrentProfile == null) {
+			Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
+			SceneManager.LoadScene("Profiles");
+			return;
+		}
 
 		BinaryFormatter bf = new BinaryFormatter();
 
@@ -46,7 +51,7 @@ public class CampaignLevel : MonoBehaviour {
 			}
 		}
 		Texture2D tex = new Texture2D(190, 80);
-		tex.LoadImage(File.ReadAllBytes(levelInfo.preview));
+		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + levelInfo.preview));
 		preview.texture = tex;
 		levelName.text = levelInfo.game.levelInfo.levelName;
 	}

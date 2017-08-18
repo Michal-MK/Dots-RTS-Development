@@ -27,6 +27,7 @@ public class SceneSwitcher : MonoBehaviour {
 		}
 
 		Control.cells.Clear();
+		Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 		SceneManager.LoadScene(sceneName);
 	}
 }

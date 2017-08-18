@@ -40,6 +40,7 @@ public class ProfileManager {
 	}
 
 	public void ProfileSelection() {
+		Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 		SceneManager.LoadScene("Profiles");
 	}
 
