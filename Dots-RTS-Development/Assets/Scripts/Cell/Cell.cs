@@ -197,25 +197,15 @@ public class Cell : MonoBehaviour {
 		appliedDebuffs.Remove(Upgrade.Upgrades.DOT);
 	}
 
-	[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]
-	public void CreateCircle(Vector3 _position, float _r, int segments) {
-		circle.positionCount = segments + 1;
-		circle.useWorldSpace = true;
+    //[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]
+    public void EnableCircle(Color? color = null) {
+        if (color == null) {
+            color = Color.yellow;
+        }
+        cellSelected.color = (Color)color;
+        cellSelected.enabled = true;
 
-		float x;
-		float y;
-
-		float angle = 20f;
-
-		for (int i = 0; i < (segments + 1); i++) {
-			x = Mathf.Sin(Mathf.Deg2Rad * angle) * _r;
-			y = Mathf.Cos(Mathf.Deg2Rad * angle) * _r;
-
-			circle.SetPosition(i, new Vector3(_position.x + x, _position.y + y));
-
-			angle += (360f / segments);
-		}
-	}
+    }
 
 
 	/// <summary>

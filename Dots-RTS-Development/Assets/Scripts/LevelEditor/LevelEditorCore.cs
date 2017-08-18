@@ -71,10 +71,13 @@ public class LevelEditorCore : MonoBehaviour {
 
     // The current editor mode
     public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells };
+    public enum PCPanelAttribute { Team, Max, Start, Regen  };
 
     public static Mode editorMode;
 
     public Texture2D[] cursors;
+
+    public static bool dontUpdate;
 
     #region Functions to add or remove a cell from the static list
     public static void AddCell(Cell c) {
@@ -119,7 +122,10 @@ public class LevelEditorCore : MonoBehaviour {
         GameObject.Find("GameSettingsPanel").SetActive(false);
 
         //Set the defaluts by parsing all of the input fields
-        GetPlaceCellPanelValues();
+        GetPlaceCellPanelTeam();
+        GetPlaceCellPanelRegen();
+        GetPlaceCellPanelMax();
+        GetPlaceCellPanelStart();
         GetGameSizeIf();
         GetIOPanelValues();
         AiDiffHandler();
@@ -154,23 +160,44 @@ public class LevelEditorCore : MonoBehaviour {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
-    public void GetPlaceCellPanelValues() {
+    public void GetPlaceCellPanelTeam() {
 
         team = teamButton.team;
+
+        if (panelChange != null && dontUpdate == false) {
+            panelChange(PCPanelAttribute.Team);
+        }
+
+    }
+    public void GetPlaceCellPanelMax() {
 
         if (!int.TryParse(maxInput.text, out max)) {
             max = defaultMax;
         }
+
+        if (panelChange != null && dontUpdate == false) {
+            panelChange(PCPanelAttribute.Max);
+        }
+
+    }
+    public void GetPlaceCellPanelStart() {
+
         if (!int.TryParse(startInput.text, out start)) {
             start = defaultStart;
         }
+        if (panelChange != null && dontUpdate == false) {
+            panelChange(PCPanelAttribute.Start);
+        }
+
+    }
+    public void GetPlaceCellPanelRegen() {
+
         if (!float.TryParse(regenInput.text, out regen)) {
             regen = defaultRegen;
         }
 
-
-        if (panelChange != null) {
-            panelChange();
+        if (panelChange != null && dontUpdate == false) {
+            panelChange(PCPanelAttribute.Regen);
         }
 
     }

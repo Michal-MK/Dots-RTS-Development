@@ -77,19 +77,30 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
     //	}
     //}
 
-    private void RefreshCellFromPanel() {
+    private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
+        
         if (isCellSelected) {
-            elementCount = LevelEditorCore.start;
-            cellTeam = (Cell.enmTeam)LevelEditorCore.team;
-            maxElements = LevelEditorCore.max;
-            regenPeriod = LevelEditorCore.regen;
+            if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
+                elementCount = LevelEditorCore.start;
+            }
+            if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
+                cellTeam = (Cell.enmTeam)LevelEditorCore.team;
+            }
+            if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
+                maxElements = LevelEditorCore.max;
+            }
+            if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
+                regenPeriod = LevelEditorCore.regen;
+            }
+            
+           
+            
         }
     }
 
     private void EditorModeUpdate(LevelEditorCore.Mode mode) {
 
-        circle.enabled = false;
-        circle.positionCount = 0;
+        
         isCellSelected = false;
 
     }
@@ -100,19 +111,18 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
             lookForLongPress = true;
             isCellSelected = !isCellSelected;
             if (isCellSelected) {
-                LevelEditorCore.teamButton.team = ((int)cellTeam);
+                LevelEditorCore.dontUpdate = true;
+                LevelEditorCore.team = ((int)cellTeam);
                 LevelEditorCore.startInput.text = elementCount.ToString();
                 LevelEditorCore.regenInput.text = regenPeriod.ToString();
                 LevelEditorCore.maxInput.text = maxElements.ToString();
-
-                CreateCircle(transform.position, cellRadius, 30);
-                circle.enabled = true;
-                circle.startColor = Color.magenta;
-                circle.endColor = Color.magenta;
+                
+                EnableCircle(Color.magenta);
+                LevelEditorCore.dontUpdate = false;
             }
             else {
-                circle.enabled = false;
 
+                cellSelected.enabled = false;
             }
             
         }
@@ -128,9 +138,8 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
         if (lookForLongPress) {
             if (Time.time - pointerDownAtTime > longPressTreshold) {
                 longPress = true;
-
-                circle.startColor = Color.green;
-                circle.endColor = Color.green;
+                isCellSelected = true;
+                EnableCircle(Color.green);
             }
         }
         if (longPress) {
@@ -141,10 +150,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
     public void OnPointerUp(PointerEventData eventData) {
         if (isCellSelected) {
-            CreateCircle(transform.position, cellRadius, 30);
-            circle.startColor = Color.magenta;
-            circle.endColor = Color.magenta;
-            circle.enabled = true;
+            EnableCircle(Color.magenta);
         }
         lookForLongPress = false;
         longPress = false;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TeamSelectScript : MonoBehaviour {
 
-	public int team;
+	public int _team;
 
 
 	public GameObject placeCellPanel;
@@ -23,7 +23,7 @@ public class TeamSelectScript : MonoBehaviour {
 	public void TeamSelectedButton (int correspondingTeam = 0) {
 		//I want to tell the LECore that the team value has changed, turn off the buttons and turn on the panel
 		team = correspondingTeam;
-		gameObject.SendMessage("GetPlaceCellPanelValues");
+		gameObject.SendMessage("GetPlaceCellPanelTeam");
 		placeCellPanel.SetActive(true);
 		teamButtonsPanel.SetActive(false);
 
@@ -80,4 +80,10 @@ public class TeamSelectScript : MonoBehaviour {
 			}
 		}
 	}
+    
+
+    public int team {
+        get { return _team; }
+        set { _team = value;}
+    }
 }
