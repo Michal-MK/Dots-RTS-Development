@@ -29,6 +29,7 @@ class FolderAccess {
 	public static SaveDataCampaign GetCampaignLevel(int difficulty, int level) {
 		return GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar +"Level_"+ level + ".pwl");
 	}
+
 	[System.Obsolete("Use newer method using LINQ to XML : GetUpgrade_____()",true)]
 	public static string[] GetUpgradeInfo(int upgrade) {
 		using (XmlReader xml = XmlReader.Create(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml")) {
@@ -74,7 +75,6 @@ class FolderAccess {
 
 	private static void RetrieveXmlUpgradeData() {
 		upgradeData = XDocument.Load(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml");
-		GetUpgradeName(Upgrade.Upgrades.DOT);
 	}
 
 	public static string GetUpgradeName(Upgrade.Upgrades type) {
@@ -87,6 +87,19 @@ class FolderAccess {
 									  select upgradeName.Element("name").Value;
 		return strings.First();
 	}
+
+	public static string GetUpgradeFunctionalName(Upgrade.Upgrades type) {
+		if (upgradeData == null) {
+			RetrieveXmlUpgradeData();
+		}
+
+		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
+									  where (int)upgradeName.Attribute("id") == (int)type
+									  select upgradeName.Element("funcName").Value;
+		return strings.First();
+	}
+
+
 	public static string GetUpgradeDesc(Upgrade.Upgrades type) {
 		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();

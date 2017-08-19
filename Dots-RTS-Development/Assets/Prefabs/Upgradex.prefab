@@ -55,6 +55,7 @@ GameObject:
   - component: {fileID: 224608198857096428}
   - component: {fileID: 222725368165232672}
   - component: {fileID: 114283871739475916}
+  - component: {fileID: 114834060088014102}
   m_Layer: 5
   m_Name: Upgradex
   m_TagString: Untagged
@@ -116,6 +117,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114834060088014102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1962269346395320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 622a4cfa0308a4549a585d00cf81aa8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  name: 
+  count: 0
+  typeImage: {fileID: 114393001358789422}
 --- !u!114 &114899631459937588
 MonoBehaviour:
   m_ObjectHideFlags: 1

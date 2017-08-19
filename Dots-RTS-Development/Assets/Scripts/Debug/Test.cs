@@ -1,47 +1,51 @@
-﻿
+﻿using System.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class Test : MonoBehaviour {
+	public Dictionary<Upgrade.Upgrades, int> test = new Dictionary<Upgrade.Upgrades, int>() {
+		{Upgrade.Upgrades.NONE, 0 },
+		{Upgrade.Upgrades.CRITICAL_CHANCE, 0 },
+		{Upgrade.Upgrades.DOT, 0 },
+		{Upgrade.Upgrades.DOUBLE_DAMAGE, 0 },
+		{Upgrade.Upgrades.SLOW_REGENERATION, 0 },
 
-	private async void Awake() {
-		print("S");
-		await Task.WhenAny(Tests(), MyMethodAsync());
-		print("V");
+	};
+
+	private void Start() {
+		StartCoroutine(Testaaa());
+		FillUpgradeint();
 	}
 
-	public async Task Tests() {
-		int i = await GetGoing();
-		print(i);
-	}
-
-	private async Task<int> GetGoing() {
-
-		Transform t = GameObject.Find("Image").transform;
-		int j = 0;
-		for (int i = 0; i < 50000; i++) {
-			t.localScale = Vector3.one * Random.Range(1, 3);
-			//print(transform.localScale);
-			j = i;
+	private IEnumerator Testaaa() {
+		yield return new WaitForSeconds(5);
+		foreach (KeyValuePair<Upgrade.Upgrades, int> item in test) {
+			print(item.Value);
 		}
-		return j;
 	}
 
-	public async Task MyMethodAsync() {
-		Task<int> longRunningTask = LongRunningOperationAsync();
-		// independent work which doesn't need the result of LongRunningOperationAsync can be done here
+	public async Task FillUpgradeint() {
+		List<Task<int>> t = new List<Task<int>>();
+		foreach (KeyValuePair<Upgrade.Upgrades, int> dictItem in test) {
+			print(dictItem.Key + "    " + dictItem.Value);
+			t.Add(MethodA(dictItem.Key));
+			//test[dictItem.Key] = await MethodA(dictItem.Key);
+		}
+		int[] w = await Task.WhenAll(t);
 
-		//and now we call await on the task 
-		int result = await longRunningTask;
-		//use the result 
-		Debug.Log("Waited 2 secs " + result);
+		for (int i = 0; i < test.Count; i++) {
+			test[test.ElementAt(i).Key] = w[i];
+		}
 	}
 
-	public async Task<int> LongRunningOperationAsync() // assume we return an int from this long running operation 
-	{
-		await Task.Delay(2000); //1 seconds delay
-		return 123;
+
+	public async Task<int> MethodA(Upgrade.Upgrades type) {
+		print("Awaiting " + type);
+		await Task.Delay(500);
+		print("Expected output " + (int)type);
+		return (int)type;
 	}
 }

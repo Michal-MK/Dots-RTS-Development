@@ -744,6 +744,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -1054,7 +1058,7 @@ Prefab:
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 479.99997
+      value: 660
       objectReference: {fileID: 0}
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
@@ -1129,6 +1133,15 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114834060088014102, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -1374,6 +1387,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -1898,6 +1915,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -2233,6 +2254,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -2676,6 +2701,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -3250,7 +3279,7 @@ Prefab:
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 359.99997
+      value: 540
       objectReference: {fileID: 0}
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
@@ -3325,6 +3354,15 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114834060088014102, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -3460,6 +3498,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -3478,6 +3520,7 @@ GameObject:
   - component: {fileID: 1164694924}
   - component: {fileID: 1164694923}
   - component: {fileID: 1164694922}
+  - component: {fileID: 1164694925}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -3530,6 +3573,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1164694925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1164694921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2179a5b210e29684b8442d2dbc3d7a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgrade: 0
 --- !u!1 &1204708116
 GameObject:
   m_ObjectHideFlags: 0
@@ -3540,6 +3595,7 @@ GameObject:
   - component: {fileID: 1204708117}
   - component: {fileID: 1204708119}
   - component: {fileID: 1204708118}
+  - component: {fileID: 1204708120}
   m_Layer: 5
   m_Name: PO_AcquiredUpgrades
   m_TagString: Untagged
@@ -3615,6 +3671,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1204708116}
+--- !u!114 &1204708120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1204708116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f29c24bbcb07e478ab6dac04ca2958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1225582424
 Prefab:
   m_ObjectHideFlags: 0
@@ -3740,6 +3807,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -3909,6 +3980,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -4184,6 +4259,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -4685,6 +4764,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -5107,6 +5190,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -5394,6 +5481,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -5685,6 +5776,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -5743,7 +5838,7 @@ Prefab:
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 239.99997
+      value: 419.99997
       objectReference: {fileID: 0}
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
@@ -5822,11 +5917,45 @@ Prefab:
     - target: {fileID: 114899631459937588, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: m_text
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114283871739475916, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: m_Color.a
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114899631459937588, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: m_textInfo.characterCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114899631459937588, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: m_fontSize
+      value: 39.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 114899631459937588, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: m_textInfo.wordCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114899631459937588, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114899631459937588, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114834060088014102, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6040,7 +6169,7 @@ Prefab:
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 119.99997
+      value: 299.99997
       objectReference: {fileID: 0}
     - target: {fileID: 224608198857096428, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
@@ -6100,6 +6229,11 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (0)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114834060088014102, guid: 65c2f0f48ec5f6f44944107d353437bd,
+        type: 2}
+      propertyPath: type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -6234,6 +6368,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -7113,6 +7251,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -7315,6 +7457,10 @@ Prefab:
       propertyPath: m_Name
       value: Upgradex (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
   m_IsPrefabParent: 0
@@ -7448,6 +7594,10 @@ Prefab:
     - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
       propertyPath: m_Name
       value: Upgradex (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962269346395320, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
