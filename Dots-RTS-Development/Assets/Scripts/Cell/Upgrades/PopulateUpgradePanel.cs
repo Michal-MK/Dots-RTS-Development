@@ -28,6 +28,7 @@ public class PopulateUpgradePanel : MonoBehaviour {
 		//StartCoroutine(CYCLES());
 	}
 
+	#region Debug
 	private IEnumerator CYCLES() {
 		Image i = GameObject.Find("Cycle").transform.Find("UpgradeImg").gameObject.GetComponent<Image>();
 		int inte = 0;
@@ -36,9 +37,10 @@ public class PopulateUpgradePanel : MonoBehaviour {
 			print("Sprite " + (Upgrade.Upgrades)inte);
 			i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)inte];
 			inte++;
-			if(inte > 3) {
+			if (inte > 3) {
 				inte = 0;
 			}
 		}
 	}
+	#endregion
 }

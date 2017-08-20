@@ -576,7 +576,7 @@ MonoBehaviour:
   isRegenerating: 0
   isDecaying: 0
   isScaling: 0
-  providedDebuff: 0
+  providedDebuff: -1
   appliedDebuffs: 
   cellSprite: {fileID: 212300405552671422}
   elementNrDisplay: {fileID: 102996459730448940}
@@ -640,7 +640,7 @@ MonoBehaviour:
   cell: {fileID: 114076177898254638}
   slotRender: {fileID: 212507222195416960}
   slotHolder: {fileID: 224204828125027620}
-  upgrades: 0000000000000000000000000000000000000000000000000000000000000000
+  upgrades: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
   slotsGO:
   - {fileID: 1499336614506376}
   - {fileID: 1096905067076210}

@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour {
 
 	public Text errorText;
-	public RectTransform upgradePanel;
-	Vector3 hiddenUpgradesPos;
 
 	private void Awake() {
 		Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
@@ -22,12 +20,12 @@ public class UI_Manager : MonoBehaviour {
 
 
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
-		upgradePanel.anchoredPosition = Vector2.zero;
+		UI_ReferenceHolder.upgradePanel.anchoredPosition = Vector2.zero;
 		//upgrades.GetComponent<Animator>().Play("Show");
 	}
 
 	private void Upgrade_Manager_OnUpgradeQuit(Upgrade_Manager sender) {
-		upgradePanel.anchoredPosition = new Vector2(0, -360);
+		UI_ReferenceHolder.upgradePanel.anchoredPosition = new Vector2(0, -360);
 		//upgrades.GetComponent<Animator>().Play("Hide");
 	}
 

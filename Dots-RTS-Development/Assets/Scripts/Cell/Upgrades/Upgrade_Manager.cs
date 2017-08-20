@@ -16,7 +16,9 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	public SpriteRenderer slotRender;
 	public Transform slotHolder;
 
-	public Upgrade.Upgrades[] upgrades = new Upgrade.Upgrades[8];
+	public Upgrade.Upgrades[] upgrades = new Upgrade.Upgrades[8] {
+		Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,
+	};
 
 	public GameObject[] slotsGO = new GameObject[8];
 
@@ -47,7 +49,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 					ProfileManager.getCurrentProfile.ownedCoins -= cost;
 					ProfileManager.getCurrentProfile.acquiredUpgrades[col.Key] += 1;
 					ProfileManager.SerializeChanges();
-					UI_ReferenceHolder.profileMoney.text = ProfileManager.getCurrentProfile.ownedCoins + " coins";
+					UI_ReferenceHolder.U_profileMoney.text = ProfileManager.getCurrentProfile.ownedCoins + " coins";
 					return;
 				}
 				else {
@@ -129,6 +131,15 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 			}
 		}
 		return false;
+	}
+
+	public int GetFirstFreeSlot() {
+		for (int i = 0; i < upgrades.Length; i++) {
+			if(upgrades[i] == Upgrade.Upgrades.NONE) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {

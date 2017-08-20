@@ -68,7 +68,11 @@ public class SaveFileInfo : MonoBehaviour {
 	}
 
 	public void DeleteObject(Transform fileName) {
-		File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
+#if UNITY_ANDROID
+		File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
+#else
+		File.Delete(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
+#endif
 		LevelSelectScript.displayedSaves.Remove(this);
 		Destroy(gameObject);
 	}
