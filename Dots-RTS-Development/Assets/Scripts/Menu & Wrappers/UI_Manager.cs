@@ -9,8 +9,11 @@ public class UI_Manager : MonoBehaviour {
 	public Text errorText;
 	public RectTransform upgradePanel;
 	Vector3 hiddenUpgradesPos;
+    public GameObject[] thingsToDisable = new GameObject[2];
 
-	private void Awake() {
+
+
+    private void Awake() {
 		Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
 		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 	}
@@ -43,6 +46,11 @@ public class UI_Manager : MonoBehaviour {
 		SceneManager.LoadScene("Level_Select");
 	}
 
+    public void ChangeLayoutToPreview() {
+        for (int i = 0; i < thingsToDisable.Length; i++) {
+            thingsToDisable[i].SetActive(false);
+        }
+    }
 
 
 }

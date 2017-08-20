@@ -1558,6 +1558,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   errorText: {fileID: 959814884}
   upgradePanel: {fileID: 14436869}
+  thingsToDisable:
+  - {fileID: 543502278}
+  - {fileID: 1896628190}
 --- !u!114 &795130073
 MonoBehaviour:
   m_ObjectHideFlags: 0

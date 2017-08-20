@@ -23,6 +23,7 @@ public class LoadFromFile : MonoBehaviour {
 			return;
 		}
 
+
 		BinaryFormatter formatter = new BinaryFormatter();
 
 		FileStream file = File.Open(PlayerPrefs.GetString("LoadLevelFilePath"), FileMode.Open);
@@ -90,7 +91,37 @@ public class LoadFromFile : MonoBehaviour {
 			init.StartAiInitialization(campaignSave.game.clans);
 
 		}
-		else {
+		else if (Control.levelState == Control.PlaySceneState.PREVIEW) {
+            gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
+            customSave = (SaveData)formatter.Deserialize(file);
+            if (customSave.gameSize != 0) {
+                Camera.main.orthographicSize = customSave.gameSize;
+            }
+
+            Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
+            foreach (int key in diffKeys) {
+                customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+            }
+
+            for (int j = 0; j < customSave.cells.Count; j++) {
+
+                CellBehaviour c = Instantiate(cellPrefab).GetComponent<CellBehaviour>();
+
+                c.cellPosition = (Vector3)customSave.cells[j].pos;
+                c.gameObject.transform.position = c.cellPosition;
+                c.elementCount = customSave.cells[j].elementCount;
+                c.maxElements = customSave.cells[j].maxElementCount;
+                c.cellTeam = (Cell.enmTeam)customSave.cells[j].team;
+                c.regenPeriod = customSave.cells[j].regenerationPeriod;
+                //c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+
+                c.enabled = true;
+
+                c.UpdateCellInfo();
+            }
+            init.StartAiInitialization(customSave.clans);
+        }
+        else {
 			throw new System.Exception();
 		}
 		file.Close();

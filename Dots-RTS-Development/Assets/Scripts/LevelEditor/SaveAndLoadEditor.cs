@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class SaveAndLoadEditor : MonoBehaviour {
@@ -28,12 +29,28 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 	}
 
-	public void Save() {
+    public void TryLevel() {
+        string path = Save(true);
+        PlayerPrefs.SetString("LoadLevelFilePath", path);
+        Control.levelState = Control.PlaySceneState.PREVIEW;
+        SceneManager.LoadScene("Level_Player");
+    }
+
+	public string Save(bool temp = false) {
 		fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+        if (temp) {
+            fileName = "testLevel";
+        }
+        string fullpath;
+#if UNITY_ANDROID
+        fullpath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
+#else
+        fullpath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
+#endif
 
-		#region Pre-Save Error checking
+        #region Pre-Save Error checking
 
-		ErrorMessages.text = "";
+        ErrorMessages.text = "";
 
 		int numAllies = 0;
 		int numEnemies = 0;
@@ -47,7 +64,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 		if (numAllies == 0 || numEnemies == 0) {
 			ErrorMessages.text = "Your level is missing an enemy, or you didn't create player's cell!";
-			return;
+			return fullpath;
 		}
 
 		ErrorMessages.text += "You picked the fileName: " + fileName + ". \n";
@@ -68,11 +85,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		#endregion
 
 		BinaryFormatter formatter = new BinaryFormatter();
-#if UNITY_ANDROID
-        FileStream file = File.Create(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage");
-#else
-        FileStream file = File.Create(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage");
-#endif
+        FileStream file = File.Create(fullpath);
         SaveData save = new SaveData();
 
         for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
@@ -96,6 +109,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 		formatter.Serialize(file, save);
 		file.Close();
+        return fullpath;
 	}
 
 	public void Load(string path) {
