@@ -24,12 +24,21 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = Upgrade_Manager.selectedUpgrade = int.Parse(string.Format(gameObject.name).Remove(0, 8));
-		string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
-		if (upgradeInfo != null) {
-			UI_ReferenceHolder.upgradeNameHolder.text = upgradeInfo[0];
-			UI_ReferenceHolder.upgradeDescHolder.text = upgradeInfo[1];
-			UI_ReferenceHolder.upgradeCostHolder.text = upgradeInfo[2] + " coins";
+		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)) -1);
+		if (selected >= Upgrade.TOTAL_UPGRADES) {
+			UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
+			UI_ReferenceHolder.U_upgradeDescHolder.text = "Some desc here. lel";
+			UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
+			UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
+		}
+		else {
+			string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
+			if (upgradeInfo != null) {
+				UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
+				UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
+				UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+			}
 		}
 	}
 }

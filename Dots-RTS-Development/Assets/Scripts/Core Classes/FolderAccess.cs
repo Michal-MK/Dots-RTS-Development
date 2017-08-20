@@ -27,10 +27,10 @@ class FolderAccess {
 	}
 
 	public static SaveDataCampaign GetCampaignLevel(int difficulty, int level) {
-		return GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar +"Level_"+ level + ".pwl");
+		return GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + level + ".pwl");
 	}
 
-	[System.Obsolete("Use newer method using LINQ to XML : GetUpgrade_____()",true)]
+	[System.Obsolete("Use newer method using LINQ to XML : GetUpgrade_____()", true)]
 	public static string[] GetUpgradeInfo(int upgrade) {
 		using (XmlReader xml = XmlReader.Create(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml")) {
 			while (xml.Read()) {
@@ -41,7 +41,7 @@ class FolderAccess {
 							bool foundDesc = false;
 							bool foundName = false;
 							string[] upgradeInfo = new string[3];
-	
+
 							while (inner.Read()) {
 								if (foundName) {
 									upgradeInfo[0] = inner.Value;
@@ -74,11 +74,11 @@ class FolderAccess {
 	}
 
 	private static void RetrieveXmlUpgradeData() {
-		upgradeData = XDocument.Load(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml");
+		upgradeData = XDocument.Load(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml");
 	}
 
 	public static string GetUpgradeName(Upgrade.Upgrades type) {
-		if(upgradeData == null) {
+		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();
 		}
 
@@ -117,17 +117,13 @@ class FolderAccess {
 		}
 
 		IEnumerable<XElement> data = from upgradeName in upgradeData.Descendants("Upgrade")
-									  where (int)upgradeName.Attribute("id") == (int)type
-									  select upgradeName;
+									 where (int)upgradeName.Attribute("id") == (int)type
+									 select upgradeName;
 
 		string[] stringData = new string[2];
 
-		foreach (XElement dato in data) {
-			for (int i = 0; i < dato.Elements().Count(); i++) {
-				stringData[i] = dato.Elements().ElementAt(i).Value;
-			}
-		}
-
+		stringData[0] = data.First().Elements().ElementAt(0).Value;
+		stringData[1] = data.First().Elements().ElementAt(2).Value;
 		return stringData;
 	}
 }

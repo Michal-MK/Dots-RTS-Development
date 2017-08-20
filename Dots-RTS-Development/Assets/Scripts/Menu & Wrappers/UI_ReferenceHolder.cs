@@ -34,6 +34,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	#region LevelPlayerRefs
 	public static GameObject menuPanel;
+	public static RectTransform upgradePanel;
 
 	#endregion
 
@@ -43,10 +44,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	#region DebugRefs
 	//public static GameObject menuPanel;
+	//public static RectTransform upgradePanel;
 
 	#endregion
 
-	#region
+	#region PostGame
 	public static TextMeshProUGUI resultingJudgdement;
 	public static TextMeshProUGUI didDominate;
 	public static TextMeshProUGUI totalTimeToClear;
@@ -67,13 +69,13 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region Upgrade Store
-	public static Button buyButton;
-	public static TextMeshProUGUI upgradeNameHolder;
-	public static TextMeshProUGUI upgradeDescHolder;
-	public static TextMeshProUGUI upgradeCostHolder;
-	public static TextMeshProUGUI upgradesOwnedHolder;
-	public static TextMeshProUGUI profileMoney;
-	public static TextMeshProUGUI profileNameUpgradeStore;
+	public static Button U_buyButton;
+	public static TextMeshProUGUI U_upgradeNameHolder;
+	public static TextMeshProUGUI U_upgradeDescHolder;
+	public static TextMeshProUGUI U_upgradeCostHolder;
+	public static TextMeshProUGUI U_upgradesOwnedHolder;
+	public static TextMeshProUGUI U_profileMoney;
+	public static TextMeshProUGUI U_profileNameUpgradeStore;
 	#endregion
 	#endregion
 
@@ -106,6 +108,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case "Level_Player": { //PlayScene
 				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+				upgradePanel = GameObject.Find("Upgrade_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case "Level_Sharing": { //Level Sharing
@@ -114,6 +117,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case "Debug": { // DebugScene
 				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+				upgradePanel = GameObject.Find("Upgrade_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case "Post_Game": { // PostGame Scene
@@ -137,13 +141,13 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case "Upgrade_Store": { //Upgrade Shop
-				buyButton = GameObject.Find("Buy").GetComponent<Button>();
-				upgradeNameHolder = GameObject.Find("Upgrade_Name").GetComponent<TextMeshProUGUI>();
-				upgradeDescHolder = GameObject.Find("Upgrade_Desc").GetComponent<TextMeshProUGUI>();
-				upgradeCostHolder = GameObject.Find("Upgrade_Cost_Money").GetComponent<TextMeshProUGUI>();
-				upgradesOwnedHolder = GameObject.Find("Already_Owned_Count").GetComponent<TextMeshProUGUI>();
-				profileNameUpgradeStore = GameObject.Find("Profile_Name").GetComponent<TextMeshProUGUI>();
-				profileMoney = GameObject.Find("Coins_To_Spend").GetComponent<TextMeshProUGUI>();
+				U_buyButton = GameObject.Find("Buy").GetComponent<Button>();
+				U_upgradeNameHolder = GameObject.Find("Upgrade_Name").GetComponent<TextMeshProUGUI>();
+				U_upgradeDescHolder = GameObject.Find("Upgrade_Desc").GetComponent<TextMeshProUGUI>();
+				U_upgradeCostHolder = GameObject.Find("Upgrade_Cost_Money").GetComponent<TextMeshProUGUI>();
+				U_upgradesOwnedHolder = GameObject.Find("Already_Owned_Count").GetComponent<TextMeshProUGUI>();
+				U_profileNameUpgradeStore = GameObject.Find("Profile_Name").GetComponent<TextMeshProUGUI>();
+				U_profileMoney = GameObject.Find("Coins_To_Spend").GetComponent<TextMeshProUGUI>();
 
 				return;
 			}

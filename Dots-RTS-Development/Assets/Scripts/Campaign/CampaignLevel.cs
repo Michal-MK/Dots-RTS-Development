@@ -18,8 +18,7 @@ public class CampaignLevel : MonoBehaviour {
 	#endregion
 
 	public static CampaignLevel current;
-	public static SaveDataCampaign currentCampaignLevel;
-	public SaveDataCampaign self;
+	public SaveDataCampaign currentSaveData;
 
 	[HideInInspector]
 	public string levelPath;
@@ -57,7 +56,6 @@ public class CampaignLevel : MonoBehaviour {
 	}
 
 	public void StartLevel() {
-		currentCampaignLevel = this.self;
 		current = this;
 		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
 		Control.levelState = Control.PlaySceneState.CAMPAIGN;

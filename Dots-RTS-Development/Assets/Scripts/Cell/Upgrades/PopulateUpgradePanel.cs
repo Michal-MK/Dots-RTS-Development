@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,22 @@ public class PopulateUpgradePanel : MonoBehaviour {
 				}
 			}
 		}
+		//StartCoroutine(CYCLES());
 	}
 
+	#region Debug
+	private IEnumerator CYCLES() {
+		Image i = GameObject.Find("Cycle").transform.Find("UpgradeImg").gameObject.GetComponent<Image>();
+		int inte = 0;
+		while (true) {
+			yield return new WaitForSeconds(0.5f);
+			print("Sprite " + (Upgrade.Upgrades)inte);
+			i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)inte];
+			inte++;
+			if (inte > 3) {
+				inte = 0;
+			}
+		}
+	}
+	#endregion
 }

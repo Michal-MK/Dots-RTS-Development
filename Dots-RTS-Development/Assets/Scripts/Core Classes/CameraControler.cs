@@ -21,11 +21,14 @@ public class CameraControler : MonoBehaviour {
 
 
 
-	void Awake() {
+	private void Awake() {
 		Upgrade_Manager.OnUpgradeBegin += OnBeginUpgrading;
 		Upgrade_Manager.OnUpgradeQuit += OnQuitUpgrading;
 	}
-
+	private void OnDisable() {
+		Upgrade_Manager.OnUpgradeBegin -= OnBeginUpgrading;
+		Upgrade_Manager.OnUpgradeQuit -= OnQuitUpgrading;
+	}
 
 
 	void Start() {

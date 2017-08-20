@@ -29,11 +29,11 @@ public class LevelSelectScript : MonoBehaviour {
 
 
 	private void Start() {
-		if (SceneManager.GetActiveScene().buildIndex == 2) {
+		if (SceneManager.GetActiveScene().name == "Level_Select") {
 			ListCustomSaves();
 			ListCampaignLevels(1);
 		}
-		if (SceneManager.GetActiveScene().buildIndex == 1) {
+		if (SceneManager.GetActiveScene().name == "Level_Editor" ) {
 			ListCustomSaves();
 		}
 	}
