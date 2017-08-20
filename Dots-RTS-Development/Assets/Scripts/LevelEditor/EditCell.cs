@@ -78,10 +78,13 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
     //}
 
     private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
-        
+        //print("What<");
+        //print(isCellSelected);
         if (isCellSelected) {
+            //print("What!!!");
             if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
                 elementCount = LevelEditorCore.start;
+                //print("What!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
             if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
                 cellTeam = (Cell.enmTeam)LevelEditorCore.team;
@@ -102,7 +105,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
         
         isCellSelected = false;
-
+        cellSelected.enabled = false;
     }
 
     public void OnPointerDown(PointerEventData eventData) {
@@ -125,6 +128,13 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
                 cellSelected.enabled = false;
             }
             
+        }
+        if (LevelEditorCore.editorMode == LevelEditorCore.Mode.AssignUpgrades) {
+            isCellSelected = true;
+            EnableCircle(Color.magenta);
+            Camera.main.transform.position = transform.position + Vector3.back * 10;
+            Camera.main.orthographicSize = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2f;
+            LevelEditorCore.BringUpUpgradePanel();
         }
 
 
