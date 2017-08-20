@@ -12,6 +12,8 @@ public class LevelEditorCore : MonoBehaviour {
     //When EditMode Changes, passes the new mode
     public static event Control.EditModeChanged modeChange;
 
+    static Vector3 defaultCameraPosition;
+
     public static List<Cell> cellList = new List<Cell>();
     public static List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
     /// <summary>
@@ -31,6 +33,7 @@ public class LevelEditorCore : MonoBehaviour {
     public static InputField levelNameInput;
     public static InputField authorNameInput;
 
+    public static GameObject upgradePanel;
 
     /// <summary>
     /// Current parsed values, imparsable gets turned into default
@@ -70,7 +73,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 
     // The current editor mode
-    public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells };
+    public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells, AssignUpgrades };
     public enum PCPanelAttribute { Team, Max, Start, Regen  };
 
     public static Mode editorMode;
@@ -116,12 +119,16 @@ public class LevelEditorCore : MonoBehaviour {
         levelNameInput = GameObject.Find("Level Name IF").GetComponent<InputField>();
         authorNameInput = GameObject.Find("Author's name IF").GetComponent<InputField>();
 
+        //UpgradePanel
+        upgradePanel = GameObject.Find("Upgrade_Panel");
+
         //Disable the panels;
         aiDifficultySingleInput.gameObject.SetActive(false);
         GameObject.Find("SavePanel").SetActive(false);
         GameObject.Find("GameSettingsPanel").SetActive(false);
 
         //Set the defaluts by parsing all of the input fields
+        defaultCameraPosition = Camera.main.transform.position;
         GetPlaceCellPanelTeam();
         GetPlaceCellPanelRegen();
         GetPlaceCellPanelMax();
@@ -157,6 +164,11 @@ public class LevelEditorCore : MonoBehaviour {
     public void EditCellsButton() {
         editorMode = Mode.EditCells;
         modeChange(Mode.EditCells);
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+    public void UpgradesButton() {
+        editorMode = Mode.AssignUpgrades;
+        modeChange(Mode.AssignUpgrades);
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
@@ -274,6 +286,11 @@ public class LevelEditorCore : MonoBehaviour {
             gameSize = defaultGameSize;
         }
     }
+
+    public static void BringUpUpgradePanel() {
+        RectTransform rc = upgradePanel.GetComponent<RectTransform>();
+        //rc.sizeDelta = new Vector2(rc.sizeDelta.x, 0);
+    }
     //This is called with the panelChange event;
     public static void RefreshCameraSize(float val) {
         if (val != Camera.main.orthographicSize) {
@@ -281,6 +298,7 @@ public class LevelEditorCore : MonoBehaviour {
                 sizeInput.text = "250";
                 gameSize = 250;
             }
+            Camera.main.transform.position = defaultCameraPosition;
             Camera.main.orthographicSize = val;
 			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground();
         }
