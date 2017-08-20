@@ -24,12 +24,19 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = Upgrade_Manager.selectedUpgrade = int.Parse(string.Format(gameObject.name).Remove(0, 8));
-		string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
-		if (upgradeInfo != null) {
-			UI_ReferenceHolder.upgradeNameHolder.text = upgradeInfo[0];
-			UI_ReferenceHolder.upgradeDescHolder.text = upgradeInfo[1];
-			UI_ReferenceHolder.upgradeCostHolder.text = upgradeInfo[2] + " coins";
+		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)) -1);
+		if (selected >= Upgrade.TOTAL_UPGRADES) {
+			UI_ReferenceHolder.upgradeNameHolder.text = "Nothing Yet";
+			UI_ReferenceHolder.upgradeDescHolder.text = "Some desc here. lel";
+			UI_ReferenceHolder.upgradeCostHolder.text = "Infinite coins";
+		}
+		else {
+			string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
+			if (upgradeInfo != null) {
+				UI_ReferenceHolder.upgradeNameHolder.text = upgradeInfo[0];
+				UI_ReferenceHolder.upgradeDescHolder.text = upgradeInfo[1];
+				UI_ReferenceHolder.upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
+			}
 		}
 	}
 }

@@ -32,7 +32,7 @@ public class ProfileInfo : MonoBehaviour {
 
 	public void ShowProfileInfo() {
 		Profile p = ProfileManager.currentProfile = selected;
-		print("NOlonger null");
+
 		SaveDataCampaign firstLevel = FolderAccess.GetCampaignLevel(1, 1);
 		Texture2D tex = new Texture2D(160, 90);
 		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + firstLevel.preview));

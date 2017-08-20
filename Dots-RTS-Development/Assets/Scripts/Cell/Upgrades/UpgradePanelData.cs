@@ -37,7 +37,7 @@ public class UpgradePanelData : MonoBehaviour {
 	}
 
 	public void UpgradeOverview() {
-		if (count > 0) {
+		if (count == 0) {
 			GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
 		}
 		else {
@@ -45,9 +45,6 @@ public class UpgradePanelData : MonoBehaviour {
 		}
 
 		transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
-
-		if (Upgrade.UPGRADE_GRAPHICS[type] != null) {
-			typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
-		}
+		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 	}
 }

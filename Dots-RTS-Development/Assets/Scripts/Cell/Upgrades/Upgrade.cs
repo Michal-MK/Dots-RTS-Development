@@ -4,39 +4,42 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class Upgrade : MonoBehaviour {
 
 	public Upgrades upgrade;
+	public const int TOTAL_UPGRADES = 4;
 
 	public enum Upgrades {
-		NONE,
+		NONE = -1,
 		DOT,
+		CRITICAL_CHANCE,
 		DOUBLE_DAMAGE,
 		SLOW_REGENERATION,
-		CRITICAL_CHANCE,
 	}
 
 	public static Dictionary<Upgrades, int> UPGRADE_COST = new Dictionary<Upgrades, int>() {
-		{Upgrades.NONE , 0 },
+		{Upgrades.NONE, 0 },
+		{Upgrades.DOT, 4 },
 		{Upgrades.CRITICAL_CHANCE, 15 },
 		{Upgrades.DOUBLE_DAMAGE, 8 },
 		{Upgrades.SLOW_REGENERATION, 11 },
-		{Upgrades.DOT, 4 },
 
 	};
 
 	public static Dictionary<Upgrades, Sprite> UPGRADE_GRAPHICS = new Dictionary<Upgrades, Sprite>() {
-		{Upgrades.NONE, null },
-		{Upgrades.CRITICAL_CHANCE, null },
+		{Upgrades.NONE, null } ,
 		{Upgrades.DOT, null },
+		{Upgrades.CRITICAL_CHANCE, null },
 		{Upgrades.DOUBLE_DAMAGE, null },
 		{Upgrades.SLOW_REGENERATION, null },
 
 	};
 
 	public static async Task<Sprite> GetSprite(Upgrades type) {
-		using (FileStream fs = new FileStream(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png", FileMode.Open, FileAccess.Read, FileShare.Read, 4069, true)) {
+		using (FileStream fs = new FileStream(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png", FileMode.Open, FileAccess.Read, FileShare.Read, 4069, true)) {
+			//print("Got Image for " + type + " on path " + Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png");
 			byte[] result = new byte[fs.Length];
 			await fs.ReadAsync(result, 0, (int)fs.Length);
 			Texture2D tex = new Texture2D(1024, 1024);
@@ -46,17 +49,20 @@ public class Upgrade : MonoBehaviour {
 	}
 
 	public static async Task FillUpgradeSpriteDict() {
-		List<Task<Sprite>> t = new List<Task<Sprite>>();
-		foreach (KeyValuePair<Upgrades,Sprite> dictItem in UPGRADE_GRAPHICS) {
-			if (dictItem.Key != Upgrades.NONE) {
-				t.Add(GetSprite(dictItem.Key));
+
+		Task<Sprite>[] t = new Task<Sprite>[TOTAL_UPGRADES];
+
+		for (int i = 0; i < UPGRADE_GRAPHICS.Count; i++) {
+			if (i < TOTAL_UPGRADES) {
+				//print((Upgrades)i);
+				t[i] = GetSprite((Upgrades)i);
 			}
 		}
 
 		Sprite[] sprites = await Task.WhenAll(t);
 
-		for (int i = 1; i < UPGRADE_GRAPHICS.Count - 1; i++) {
-			UPGRADE_GRAPHICS[UPGRADE_GRAPHICS.ElementAt(i).Key] = sprites[i]; 
+		for (int i = 0; i < sprites.Length; i++) {
+			UPGRADE_GRAPHICS[(Upgrades)i] = sprites[i];
 		}
 	}
 
