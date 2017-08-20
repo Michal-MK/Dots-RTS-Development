@@ -105,11 +105,9 @@ public class Control : MonoBehaviour {
 
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
-
 		if (newS.name == "Main_Menu") {
-			print(ProfileManager.getCurrentProfile.profileName);
 			if (ProfileManager.getCurrentProfile == null) {
-				DebugSceneIndex = 0;
+				DebugSceneIndex = 1;
 				SceneManager.LoadScene("Profiles");
 				return;
 			}
@@ -196,7 +194,7 @@ public class Control : MonoBehaviour {
 	public IEnumerator GameState() {
 		isInGame = true;
 
-		while ((SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) && isInGame) {
+		while (SceneManager.GetActiveScene().name == "Level_Player" && isInGame) {
 			yield return new WaitForSeconds(1);
 			int activeAIs = 0;
 
@@ -207,9 +205,9 @@ public class Control : MonoBehaviour {
 					}
 				}
 			}
-			//print(activeAIs);
 			if (activeAIs == 0) {
-				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
+				yield return new WaitForSeconds(2);
+				if (SceneManager.GetActiveScene().name == "Level_Player") {
 					YouWon();
 				}
 			}
@@ -221,9 +219,9 @@ public class Control : MonoBehaviour {
 					playerCells++;
 				}
 			}
-			//print(playerCells);
 			if (playerCells == 0) {
-				if (SceneManager.GetActiveScene().buildIndex == 5 || SceneManager.GetActiveScene().buildIndex == 3) {
+				yield return new WaitForSeconds(2);
+				if (SceneManager.GetActiveScene().name == "Level_Player") {
 					GameOver();
 				}
 			}
@@ -269,10 +267,10 @@ public class Control : MonoBehaviour {
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 
 		//Did we play a campaign level ?
-		if (CampaignLevel.currentCampaignLevel != null) {
+		if (CampaignLevel.current.currentSaveData != null) {
 			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
-			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.currentCampaignLevel] = time;
-			CampaignLevel.currentCampaignLevel = null;
+			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
+			CampaignLevel.current.currentSaveData = null;
 			CampaignLevel.current = null;
 		}
 		else {
