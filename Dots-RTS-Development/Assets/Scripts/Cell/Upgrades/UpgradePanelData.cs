@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
 public class UpgradePanelData : MonoBehaviour {
 
@@ -35,4 +36,18 @@ public class UpgradePanelData : MonoBehaviour {
 
 	}
 
+	public void UpgradeOverview() {
+		if (count > 0) {
+			GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+		}
+		else {
+			GetComponent<Image>().color = new Color(1, 1, 1, 1);
+		}
+
+		transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+
+		if (Upgrade.UPGRADE_GRAPHICS[type] != null) {
+			typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+		}
+	}
 }

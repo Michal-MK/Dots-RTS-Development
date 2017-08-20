@@ -72,11 +72,10 @@ public class Control : MonoBehaviour {
 		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		}
+
 	}
 
 	private void Start() {
-
-		string[] nome = FolderAccess.GetUpgrade(Upgrade.Upgrades.DOT);
 
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 

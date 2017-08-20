@@ -172,7 +172,7 @@ public class Cell : MonoBehaviour {
 	private IEnumerator DecayElements(float decayRate, CellBehaviour superClass) {
 		float d = decayRate;
 		superClass.StopCoroutine(superClass.generateCoroutine);
-		print("Stopped");
+		//print("Stopped");
 		while (isDecaying) {
 			yield return new WaitForSeconds(d);
 			elementCount--;
