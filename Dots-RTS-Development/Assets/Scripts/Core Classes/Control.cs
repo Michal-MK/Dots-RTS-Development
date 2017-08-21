@@ -91,7 +91,7 @@ public class Control : MonoBehaviour {
 				pM.ListProfiles();
 			}
 		}
-		if (ProfileManager.currentProfile == null && activeScene == "Main_Menu") {
+		if (ProfileManager.getCurrentProfile == null && activeScene == "Main_Menu") {
 			DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			SceneManager.LoadScene("Profiles");
 		}

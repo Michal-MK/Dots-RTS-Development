@@ -62,7 +62,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 
 
 	/// <summary>
-	/// Adds upgrades from a seav file of othetwise defined source
+	/// Adds upgrades from a save file or otherwise defined source
 	/// </summary>
 	public Upgrade.Upgrades[] PreinstallUpgrades {
 		get { return upgrades; }
@@ -155,7 +155,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	}
 
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape) && UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex != 8) {
+		if (Input.GetKeyDown(KeyCode.Escape) && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Upgrade_Store") {
 			if (isUpgrading) {
 				OnUpgradeQuit(this);
 			}

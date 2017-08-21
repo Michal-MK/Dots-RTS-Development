@@ -31,7 +31,7 @@ public class ProfileInfo : MonoBehaviour {
 	}
 
 	public void ShowProfileInfo() {
-		Profile p = ProfileManager.currentProfile = selected;
+		Profile p = ProfileManager.setCurrentProfile = selected;
 
 		SaveDataCampaign firstLevel = FolderAccess.GetCampaignLevel(1, 1);
 		Texture2D tex = new Texture2D(160, 90);

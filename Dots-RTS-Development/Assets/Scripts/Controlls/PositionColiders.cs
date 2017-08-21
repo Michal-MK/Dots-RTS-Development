@@ -14,16 +14,13 @@ public class PositionColiders : MonoBehaviour {
 	public BoxCollider2D bottomC;
 	public BoxCollider2D leftC;
 
-	public static Vector2 TopRightCameraPointWorld = Vector2.zero;
-	public static Vector2 TopRightCanvasPoint = Vector2.zero;
+	//public static Vector2 TopRightCameraPointWorld = Vector2.zero;
+	//public static Vector2 TopRightCanvasPoint = Vector2.zero;
 
 	// Use this for initialization
 	IEnumerator Start() {
 		Camera c = Camera.main;
 
-		yield return new WaitForEndOfFrame();
-
-		ResizeBackground();
 		yield return new WaitForSeconds(0.5f);
 
 		top.transform.position = new Vector3(c.transform.position.x, c.transform.position.y + c.orthographicSize);
@@ -37,19 +34,23 @@ public class PositionColiders : MonoBehaviour {
 
 	}
 
-	public void ResizeBackground() {
-		print("Hello");
+	public void ResizeBackground(float refAspect) {
 		Camera c = Camera.main;
+
+		if (refAspect == 0) {
+			refAspect = c.aspect;
+		}
+		print("Hello");
 		background.position = c.transform.position + Vector3.forward * 10;
 		transform.position = c.transform.position;
 
 		SpriteRenderer bg = background.GetComponent<SpriteRenderer>();
-		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * c.aspect, c.orthographicSize * 2);
+		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * refAspect, c.orthographicSize * 2);
 
 	}
 
-	public static void UpdateTopPoint() {
-		Camera c = Camera.main;
-		TopRightCameraPointWorld = new Vector2(c.orthographicSize * c.aspect, c.orthographicSize);
-	}
+	//public static void UpdateTopPoint() {
+	//	Camera c = Camera.main;
+	//	TopRightCameraPointWorld = new Vector2(c.orthographicSize * c.aspect, c.orthographicSize);
+	//}
 }

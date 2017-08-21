@@ -6,7 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class LoadFromFile : MonoBehaviour {
-
+	public static float refAspect;
 	public GameObject cellPrefab;
 	//public GameObject gameControlllPrefab;
 	public Initialize_AI init;
@@ -35,7 +35,7 @@ public class LoadFromFile : MonoBehaviour {
 			if (customSave.gameSize != 0) {
 				Camera.main.orthographicSize = customSave.gameSize;
 			}
-
+			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(customSave.savedAtAspect);
 			Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
 			foreach (int key in diffKeys) {
 				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
@@ -65,7 +65,7 @@ public class LoadFromFile : MonoBehaviour {
 			if (campaignSave.game.gameSize != 0) {
 				Camera.main.orthographicSize = campaignSave.game.gameSize;
 			}
-
+			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(campaignSave.game.savedAtAspect);
 			Dictionary<int, float>.KeyCollection diffKeys = campaignSave.game.difficulty.Keys;
 			foreach (int key in diffKeys) {
 				campaignSave.game.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);

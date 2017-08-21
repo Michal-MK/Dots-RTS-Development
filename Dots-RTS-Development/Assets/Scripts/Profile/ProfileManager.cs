@@ -12,7 +12,7 @@ public class ProfileManager {
 
 	private GameObject profileVisual;
 	private Transform parentTransform;
-	public static Profile currentProfile;
+	private static Profile currentProfile;
 	public bool isProfileSelected = false;
 
 	private Button b;
@@ -129,6 +129,9 @@ public class ProfileManager {
 
 	public static Profile getCurrentProfile {
 		get { return currentProfile; }
+	}
+	public static Profile setCurrentProfile {
+		set { currentProfile = value; }
 	}
 
 	public static void SerializeChanges() {

@@ -300,7 +300,7 @@ public class LevelEditorCore : MonoBehaviour {
             }
             Camera.main.transform.position = defaultCameraPosition;
             Camera.main.orthographicSize = val;
-			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground();
+			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(Camera.main.aspect);
         }
     }
 
