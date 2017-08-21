@@ -281,10 +281,10 @@ public class Control : MonoBehaviour {
         gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 
         //Did we play a campaign level ?
-        if (CampaignLevel.currentCampaignLevel != null) {
+        if (CampaignLevel.current != null) {
             ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
-            ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.currentCampaignLevel] = time;
-            CampaignLevel.currentCampaignLevel = null;
+            ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
+            CampaignLevel.current = null;
             CampaignLevel.current = null;
         }
         else {

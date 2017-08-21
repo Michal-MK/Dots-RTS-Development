@@ -62,9 +62,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				numEnemies++;
 			}
 		}
-		if (numAllies == 0 || numEnemies == 0) {
-			ErrorMessages.text = "Your level is missing an enemy, or you didn't create player's cell!";
-			return fullpath;
+        if (numAllies == 0 || numEnemies == 0) {
+            ErrorMessages.text = "Your level is missing an enemy, or you didn't create player's cell!";
+            if (temp == false) {
+                return fullpath;
+            }
 		}
 
 		ErrorMessages.text += "You picked the fileName: " + fileName + ". \n";
