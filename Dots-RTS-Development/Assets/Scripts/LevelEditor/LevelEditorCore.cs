@@ -13,6 +13,7 @@ public class LevelEditorCore : MonoBehaviour {
     public static event Control.EditModeChanged modeChange;
 
     static Vector3 defaultCameraPosition;
+    static TeamSetup teamSetup;
 
     public static List<Cell> cellList = new List<Cell>();
     public static List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
@@ -100,7 +101,9 @@ public class LevelEditorCore : MonoBehaviour {
                 return;
             }
         }
+        teamSetup.RemoveFromClan((int)c.cellTeam);
         teamList.Remove(c.cellTeam);
+
     }
     #endregion
 
@@ -125,7 +128,10 @@ public class LevelEditorCore : MonoBehaviour {
         //Disable the panels;
         aiDifficultySingleInput.gameObject.SetActive(false);
         GameObject.Find("SavePanel").SetActive(false);
-        GameObject.Find("GameSettingsPanel").SetActive(false);
+        GameObject GSP = GameObject.Find("GameSettingsPanel");
+        GSP.SetActive(false);
+        teamSetup = GSP.GetComponent<TeamSetup>();
+
 
         //Set the defaluts by parsing all of the input fields
         defaultCameraPosition = Camera.main.transform.position;

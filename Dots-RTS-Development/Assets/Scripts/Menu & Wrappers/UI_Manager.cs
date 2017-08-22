@@ -7,8 +7,13 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour {
 
 	public Text errorText;
+	public RectTransform upgradePanel;
+	Vector3 hiddenUpgradesPos;
+    public GameObject[] thingsToDisable = new GameObject[2];
 
-	private void Awake() {
+
+
+    private void Awake() {
 		Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
 		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 	}
@@ -20,12 +25,12 @@ public class UI_Manager : MonoBehaviour {
 
 
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
-		UI_ReferenceHolder.upgradePanel.anchoredPosition = Vector2.zero;
+		upgradePanel.anchoredPosition = Vector2.zero;
 		//upgrades.GetComponent<Animator>().Play("Show");
 	}
 
 	private void Upgrade_Manager_OnUpgradeQuit(Upgrade_Manager sender) {
-		UI_ReferenceHolder.upgradePanel.anchoredPosition = new Vector2(0, -360);
+		upgradePanel.anchoredPosition = new Vector2(0, -360);
 		//upgrades.GetComponent<Animator>().Play("Hide");
 	}
 
@@ -41,6 +46,11 @@ public class UI_Manager : MonoBehaviour {
 		SceneManager.LoadScene("Level_Select");
 	}
 
+    public void ChangeLayoutToPreview() {
+        for (int i = 0; i < thingsToDisable.Length; i++) {
+            thingsToDisable[i].SetActive(false);
+        }
+    }
 
 
 }

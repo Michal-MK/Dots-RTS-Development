@@ -43,7 +43,7 @@ public class TeamSetup : MonoBehaviour {
             nextAngle += diffAngle;
             mySpawns[i].AllThingsSet();
         }
-        MakeLines();
+        UpdateRoundTableVisuals();
     }
 	public void OnDisable() {
 		for (int i = 0; i < mySpawns.Count; i++) {
@@ -78,7 +78,7 @@ public class TeamSetup : MonoBehaviour {
 
 	}
 
-	void RemoveFromClan(int firstTeam) {
+	public void RemoveFromClan(int firstTeam) {
 		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
 
 		Dictionary<int, int> changes = new Dictionary<int, int>();
@@ -110,7 +110,7 @@ public class TeamSetup : MonoBehaviour {
 		}
 
 		clanDict.Remove(firstTeam);
-		MakeLines();
+		UpdateRoundTableVisuals();
 	}
 
 	void CreateAClan(int firstTeam, int secondTeam) {
@@ -119,7 +119,7 @@ public class TeamSetup : MonoBehaviour {
         BindTwo(secondTeam, firstTeam);
 		CheckAndAddOtherTeams(firstTeam, secondTeam);
        // MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(firstTeam)], mySpawns[MySpawnsIndexFromTeam(secondTeam)]);
-        MakeLines();
+        UpdateRoundTableVisuals();
 
 	}
     void BindTwo(int first, int second) {
@@ -214,7 +214,7 @@ public class TeamSetup : MonoBehaviour {
 			Destroy(list[i]);
 		}
 	}
-	public void MakeLines() {
+	public void UpdateRoundTableVisuals() {
 
         DestroyAllInList(bgList);
 		List<List<int>> actualClans = new List<List<int>>();
