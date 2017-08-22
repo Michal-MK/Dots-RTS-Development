@@ -105,7 +105,20 @@ public class LevelEditorCore : MonoBehaviour {
         teamList.Remove(c.cellTeam);
 
     }
-    #endregion
+	#endregion
+
+	public void CellOutlineToggle(Toggle toggle) {
+		if (toggle.isOn) {
+			foreach (Cell cell in cellList) {
+				cell.gameObject.SendMessage("ToggleCellOutline", true);
+			}
+		}
+		else {
+			foreach (Cell cell in cellList) {
+				cell.gameObject.SendMessage("ToggleCellOutline", false);
+			}
+		}
+	}
 
     private IEnumerator Start() {
         //Find all of the input fields;
