@@ -13,6 +13,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
     private Camera _cam;
     private Vector3 _oldCamPos;
+	public GameObject myMaxSizeOutline;
 
     public bool isCellSelected = false;
 
@@ -25,7 +26,9 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
     bool lookForLongPress;
 
 
-    private void Awake() {
+	
+
+	private void Awake() {
         pointerDownAtTime = Mathf.Infinity;
         LevelEditorCore.modeChange += EditorModeUpdate;
         LevelEditorCore.panelChange += RefreshCellFromPanel;
@@ -84,14 +87,15 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
             //print("What!!!");
             if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
                 elementCount = LevelEditorCore.start;
-                //print("What!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            }
+				
+				//print("What!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			}
             if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
                 cellTeam = (Cell.enmTeam)LevelEditorCore.team;
             }
             if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
                 maxElements = LevelEditorCore.max;
-            }
+			}
             if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
                 regenPeriod = LevelEditorCore.regen;
             }
@@ -144,7 +148,16 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
         }
     }
 
-    private void Update() {
+	void ToggleCellOutline(bool on) {
+		if (on) {
+			myMaxSizeOutline.SetActive(true);
+		}
+		else {
+			myMaxSizeOutline.SetActive(false);
+		}
+	}
+
+	private void Update() {
         if (lookForLongPress) {
             if (Time.time - pointerDownAtTime > longPressTreshold) {
                 longPress = true;
