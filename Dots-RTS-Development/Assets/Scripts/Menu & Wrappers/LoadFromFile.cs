@@ -97,8 +97,8 @@ public class LoadFromFile : MonoBehaviour {
             if (customSave.gameSize != 0) {
                 Camera.main.orthographicSize = customSave.gameSize;
             }
-
-            Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
+			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(customSave.savedAtAspect);
+			Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
             foreach (int key in diffKeys) {
                 customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
             }

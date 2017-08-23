@@ -36,6 +36,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
         SceneManager.LoadScene("Level_Player");
     }
 
+	public void SaveButton() {
+		Save();
+	}
+
 	public string Save(bool temp = false) {
 		fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
         if (temp) {

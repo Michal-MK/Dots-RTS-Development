@@ -14,6 +14,7 @@ public class LevelEditorCore : MonoBehaviour {
 
     static Vector3 defaultCameraPosition;
     static TeamSetup teamSetup;
+	
 
     public static List<Cell> cellList = new List<Cell>();
     public static List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
@@ -52,7 +53,8 @@ public class LevelEditorCore : MonoBehaviour {
     //public static string fileName;
     public static string levelName;
     public static string authorName;
-
+	//view
+	static bool OutlineOn = false;
 
 
 
@@ -87,6 +89,9 @@ public class LevelEditorCore : MonoBehaviour {
     public static void AddCell(Cell c) {
 
         cellList.Add(c);
+		if (OutlineOn) {
+			c.gameObject.SendMessage("ToggleCellOutline", true);
+		}
         if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
             if (!teamList.Contains(c.cellTeam)) {
                 teamList.Add(c.cellTeam);
@@ -108,6 +113,7 @@ public class LevelEditorCore : MonoBehaviour {
 	#endregion
 
 	public void CellOutlineToggle(Toggle toggle) {
+		OutlineOn = toggle.isOn;
 		if (toggle.isOn) {
 			foreach (Cell cell in cellList) {
 				cell.gameObject.SendMessage("ToggleCellOutline", true);
