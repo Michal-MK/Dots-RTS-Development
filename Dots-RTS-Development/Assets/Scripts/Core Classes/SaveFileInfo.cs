@@ -48,8 +48,8 @@ public class SaveFileInfo : MonoBehaviour {
 
 	#region Server Specific
 
-	public void DowloadLevel(Transform filename) {
-		serverAccess.DownloadFileFTP(filename.name);
+	public async void DowloadLevel(Transform filename) {
+		await serverAccess.DownloadFTPAsync(filename.name);
 	}
 
 	#endregion
@@ -77,8 +77,18 @@ public class SaveFileInfo : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-	public void UploadLevel(Transform fileName) {
-		List<string> contents = serverAccess.GetContents();
+	//public void UploadLevel(Transform fileName) {
+	//	List<string> contents = serverAccess.GetContents();
+	//	for (int i = 0; i < contents.Count; i++) {
+	//		if (contents[i] == fileName.name) {
+	//			print("File with this name already exists. Upload cancelled.");
+	//			return;
+	//		}
+	//	}
+	//	serverAccess.UploadFileFTP(fileName.name);
+	//}
+	public async void UploadLevel(Transform fileName) {
+		List<string> contents = await serverAccess.GetContentsAsync();
 		for (int i = 0; i < contents.Count; i++) {
 			if (contents[i] == fileName.name) {
 				print("File with this name already exists. Upload cancelled.");
@@ -88,7 +98,7 @@ public class SaveFileInfo : MonoBehaviour {
 		serverAccess.UploadFileFTP(fileName.name);
 	}
 
-#endregion
+	#endregion
 
 	#region Editor Specific
 

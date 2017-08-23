@@ -43,10 +43,10 @@ public class DownloadButton : MonoBehaviour {
 	public void DownloadLevel() {
 		if (LevelMarket.selectedSave != null) {
 			//s.t.text = "Download Initiated | ";
-			s.DownloadFileFTP(gameObject.name);
-
-			LevelMarket.selectedSave.GetComponent<SaveFileInfo>().indicator.color = Color.green;
 			b.interactable = false;
+			File.Copy(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name,
+						Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name);
+			LevelMarket.selectedSave.GetComponent<SaveFileInfo>().indicator.color = Color.green;
 		}
 	}
 }

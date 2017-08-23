@@ -14,12 +14,14 @@ public class PositionColiders : MonoBehaviour {
 	public BoxCollider2D bottomC;
 	public BoxCollider2D leftC;
 
-	//public static Vector2 TopRightCameraPointWorld = Vector2.zero;
-	//public static Vector2 TopRightCanvasPoint = Vector2.zero;
 
 	// Use this for initialization
 	IEnumerator Start() {
 		Camera c = Camera.main;
+		if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_Editor") {
+			yield return new WaitForEndOfFrame();
+			ResizeBackground(c.aspect);
+		}
 
 		yield return new WaitForSeconds(0.5f);
 
@@ -40,7 +42,6 @@ public class PositionColiders : MonoBehaviour {
 		if (refAspect == 0) {
 			refAspect = c.aspect;
 		}
-		print("Hello");
 		background.position = c.transform.position + Vector3.forward * 10;
 		transform.position = c.transform.position;
 
@@ -48,9 +49,4 @@ public class PositionColiders : MonoBehaviour {
 		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * refAspect, c.orthographicSize * 2);
 
 	}
-
-	//public static void UpdateTopPoint() {
-	//	Camera c = Camera.main;
-	//	TopRightCameraPointWorld = new Vector2(c.orthographicSize * c.aspect, c.orthographicSize);
-	//}
 }
