@@ -20,7 +20,17 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region EditorRefs
-
+	public static GameObject LE_saveLoadTryLevel;
+	public static GameObject LE_placedCellInfoPanel;
+	public static GameObject LE_editorMouseModes;
+	public static GameObject LE_saveInfoPanel;
+	public static GameObject LE_gameSettingsPanel;
+	//
+	public static GameObject LE_toMainMenuPanel;
+	//
+	public static GameObject LE_teamPickerPanel;
+	public static GameObject LE_loadForEditPanel;
+	public static GameObject LE_editorSettingsPanel;
 	#endregion
 
 	#region LevelSelectRefs
@@ -94,7 +104,16 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case "Level_Editor": { // Editor
-
+				Transform c = GameObject.Find("Canvas").transform;
+				LE_editorMouseModes = c.Find("ModeButtons").gameObject;
+				LE_editorSettingsPanel = c.Find("ViewMenuPanel").gameObject;
+				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
+				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
+				LE_placedCellInfoPanel = c.Find("PlaceCellPanel").gameObject;
+				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
+				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
+				LE_teamPickerPanel = c.Find("TeamSelectPanel").gameObject;
+				LE_toMainMenuPanel = c.Find("MenuPanel").gameObject;
 				return;
 			}
 			case "Level_Select": { // LevelSelect

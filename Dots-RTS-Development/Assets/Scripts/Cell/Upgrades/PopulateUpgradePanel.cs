@@ -18,10 +18,10 @@ public class PopulateUpgradePanel : MonoBehaviour {
 				if (owned.Key == data.type) {
 					data.count = owned.Value;
 					data.name = FolderAccess.GetUpgradeName(owned.Key);
-					data.UpgradeOverview();
+					data.UpdateUpgradeOverview();
 				}
 				else if (data.type == Upgrade.Upgrades.NONE) {
-					data.UpgradeOverview();
+					data.UpdateUpgradeOverview();
 				}
 			}
 		}

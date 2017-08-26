@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class AllAiDifficultyWriter : MonoBehaviour {
 
     public static Text myText;
-    // Use this for initialization
-    private void OnEnable() {
-        myText = gameObject.GetComponent<Text>();
-    }
+
     public static void RedoText () {
-        myText.text = "";
+		if(myText == null) {
+			myText = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/AiDiffWriter").GetComponent<Text>();
+		}
+
+		myText.text = "";
         
         foreach (Cell.enmTeam teamEnm in LevelEditorCore.teamList) {
             int team = (int)teamEnm;

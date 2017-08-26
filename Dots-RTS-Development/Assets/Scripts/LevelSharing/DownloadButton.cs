@@ -42,7 +42,6 @@ public class DownloadButton : MonoBehaviour {
 
 	public void DownloadLevel() {
 		if (LevelMarket.selectedSave != null) {
-			//s.t.text = "Download Initiated | ";
 			b.interactable = false;
 			File.Copy(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name,
 						Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name);

@@ -18,7 +18,6 @@ public class Cell : MonoBehaviour {
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
 	public bool isScaling = false;
-	public Upgrade.Upgrades providedDebuff;
 
 	public List<Upgrade.Upgrades> appliedDebuffs = new List<Upgrade.Upgrades>();
 
@@ -186,10 +185,10 @@ public class Cell : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator DoT(float speed, int strength) {
-		Debug.LogWarning("Called using default values, possibly not implemented yet!");
-		for (int i = 0; i < strength; i++) {
-			yield return new WaitForSeconds(speed);
+	public IEnumerator DoT(float timeBetweenTicks, int totalDamageInflicted) {
+		appliedDebuffs.Add(Upgrade.Upgrades.DOT);
+		for (int i = 0; i < totalDamageInflicted; i++) {
+			yield return new WaitForSeconds(timeBetweenTicks);
 			if (elementCount >= 1) {
 				elementCount--;
 			}

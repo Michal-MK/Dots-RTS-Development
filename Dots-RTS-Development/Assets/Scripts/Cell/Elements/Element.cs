@@ -5,7 +5,7 @@ using UnityEngine;
 public class Element : MonoBehaviour {
 
 	public Cell.enmTeam team;
-	public Upgrade.Upgrades debuff;
+	public Upgrade.Upgrades[] debuffs;
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
@@ -16,7 +16,7 @@ public class Element : MonoBehaviour {
 	private void Start() {
         RandomTimeOffset = Random.Range(0, 50);
 		attacker.UpdateCellInfo();
-		debuff = attacker.providedDebuff;
+		debuffs = attacker.uManager.upgrades;
 		transform.position = ElementSpawnPoint();
 	}
 
@@ -27,36 +27,36 @@ public class Element : MonoBehaviour {
 		return new Vector3(transform.position.x + x * attacker.cellRadius * 0.5f, transform.position.y + y * attacker.cellRadius * 0.5f);
 	}
 	public void ExecuteAttack() {
+		Upgrade.Upgrades[] infection = new Upgrade.Upgrades[8] {
+			Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE
+		};
 
 		#region Deterimne type of attack (buff)
-		switch (debuff) {
-			case Upgrade.Upgrades.DOUBLE_DAMAGE: {
-				damage = 2;
-				break;
-			}
-			case Upgrade.Upgrades.SLOW_REGENERATION: {
-				damage = 1;
-				target.DamageCell(team, damage, debuff);
-				return;
-			}
-			case Upgrade.Upgrades.CRITICAL_CHANCE: {
-				if (Random.Range(0f, 1f) > 0.5f) {
-					print("CRitical!!");
-					damage = 2;
+		for (int i = 0; i < debuffs.Length; i++) {
+			switch (debuffs[i]) {
+				case Upgrade.Upgrades.DOUBLE_DAMAGE: {
+					print("Contains Double Damage");
+					damage = damage * 2;
+					break;
 				}
-				else {
-					damage = 1;
+				case Upgrade.Upgrades.SLOW_REGENERATION: {
+					//damage = 1;
+					infection[i] = debuffs[i];
+					break;
 				}
-				break;
-			}
-			case Upgrade.Upgrades.DOT: {
-				damage = 1;
-				target.DamageCell(team, damage, debuff);
-				return;
+				case Upgrade.Upgrades.CRITICAL_CHANCE: {
+					infection[i] = debuffs[i];
+					break;
+				}
+				case Upgrade.Upgrades.DOT: {
+					print("Contains Dot");
+					//damage = 1;
+					infection[i] = debuffs[i];
+					break;
+				}
 			}
 		}
 		#endregion
-
-		target.DamageCell(team, damage);
+		target.DamageCell(team, damage, infection);
 	}
 }

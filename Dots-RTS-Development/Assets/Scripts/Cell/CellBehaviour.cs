@@ -137,32 +137,60 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 
 	#region Element Damage Handling
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
-	public void DamageCell(enmTeam elementTeam, int amoutOfDamage, Upgrade.Upgrades additionalArg = 0) {
+	public void DamageCell(enmTeam elementTeam, int amoutOfDamage, Upgrade.Upgrades[] additionalArgs) {
 
 		if (cellTeam == elementTeam) {
 			elementCount++;
 			UpdateCellInfo();
 			return;
 		}
-		if (additionalArg != 0) {
-			bool isAffected = false;
-			for (int i = 0; i < appliedDebuffs.Count; i++) {
-				if (appliedDebuffs[i] == additionalArg) {
-					isAffected = true;
+
+		int DOTStrength = 0;
+		float critChance = 0;
+		int slowRegenStrength = 0;
+		for (int i = 0; i < additionalArgs.Length; i++) {
+			switch (additionalArgs[i]) {
+				case Upgrade.Upgrades.NONE: {
+					//Nothing to Change
+					break;
 				}
-			}
-			if (!isAffected) {
-				if (additionalArg == Upgrade.Upgrades.SLOW_REGENERATION) {
-					regenPeriod *= 2;
-					appliedDebuffs.Add(additionalArg);
+				case Upgrade.Upgrades.DOT: {
+					DOTStrength += 1;
+					break;
 				}
-				if (additionalArg == Upgrade.Upgrades.DOT) {
-					StartCoroutine(DoT(1, 4));
-					appliedDebuffs.Add(additionalArg);
+				case Upgrade.Upgrades.CRITICAL_CHANCE: {
+					critChance += 0.2f;
+					break;
+				}
+				case Upgrade.Upgrades.DOUBLE_DAMAGE: {
+					//Nothing to Change
+					break;
+				}
+				case Upgrade.Upgrades.SLOW_REGENERATION: {
+					slowRegenStrength += 1;
+					break;
 				}
 			}
 		}
+		if(DOTStrength != 0) {
+			if (!appliedDebuffs.Contains(Upgrade.Upgrades.DOT)) {
+				StartCoroutine(DoT(1, 4 * DOTStrength));
+			}
+		}
+		if(critChance != 0) {
+			if(Random.Range(0,1) <= critChance) {
+				amoutOfDamage *= 2;
+			}
+		}
+		if(slowRegenStrength != 0) {
+			if (!appliedDebuffs.Contains(Upgrade.Upgrades.SLOW_REGENERATION)) {
+				appliedDebuffs.Add(Upgrade.Upgrades.SLOW_REGENERATION);
+				regenPeriod *= 1.33f;
+			}
+		}
+
 		elementCount -= amoutOfDamage;
+
 		if (elementCount < 0) {
 			if (TeamChanged != null) {
 				TeamChanged(this, cellTeam, elementTeam);

@@ -73,8 +73,6 @@ public class Control : MonoBehaviour {
 		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		}
-		//File.Delete("2017-8-14-19-15-51.phage");
-		//File.Delete("2017-8-20-23-37-25.phage");
 	}
 
 	private void Start() {
@@ -112,7 +110,7 @@ public class Control : MonoBehaviour {
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
 		if (newS.name == "Main_Menu") {
-			print(ProfileManager.getCurrentProfile.profileName);
+
 			if (ProfileManager.getCurrentProfile == null) {
 				DebugSceneIndex = 0;
 				SceneManager.LoadScene("Profiles");

@@ -36,15 +36,14 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 	// Use this for initialization
 	void Start() {
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_Player" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Debug") {
-			if(ProfileManager.getCurrentProfile == null) {
+			if (ProfileManager.getCurrentProfile == null) {
 				Control.DebugSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
 				UnityEngine.SceneManagement.SceneManager.LoadScene("Profiles");
 				return;
 			}
 			if (type != Upgrade.Upgrades.NONE) {
-				typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 				count = ProfileManager.getCurrentProfile.acquiredUpgrades[type];
-				transform.Find("UpgradeCount").GetComponent<TextMeshProUGUI>().text = count.ToString();
+				UpdateUpgradeOverview();
 			}
 		}
 	}
@@ -52,36 +51,48 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 
 
 
-	public void UpgradeOverview() {
+	public void UpdateUpgradeOverview() {
 		if (count == 0) {
 			GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
 		}
 		else {
 			GetComponent<Image>().color = new Color(1, 1, 1, 1);
 		}
-
 		transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
 		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		if (eventData.clickCount == 1) {
-			//Subscribe to upgrade slot on cell click to determine position.
-			print("Select Pos to install");
-		}
-		else if (eventData.clickCount == 2) {
-			print("DOUBLEEEEA " + currentCell.HasFreeSlots() + "  " + currentCell.GetFirstFreeSlot());
-			if (currentCell.HasFreeSlots()) {
-				int i = currentCell.GetFirstFreeSlot();
-				if (i != -1) {
-					if (count > 0) {
-						print("INstall Upgrade " + type + " and subtract count by 1");
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Profiles") {
+			print("Clicked");
+			if (eventData.clickCount == 1) {
+				print("Clicked Once");
+				UpgradeSlot.OnSlotClicked += InstallUpgradeTo;
+			}
+			else if (eventData.clickCount == 2) {
+				print("Clicked Twice");
+
+				if (currentCell.HasFreeSlots()) {
+					int i = currentCell.GetFirstFreeSlot();
+					if (i != -1) {
+						if (count > 0) {
+							print("Free slots exist");
+							InstallUpgradeTo(i);
+						}
 					}
-				}
-				else {
-					Debug.Log("No Free Slots Exist.");
+					else {
+						Debug.Log("No Free Slots Exist.");
+					}
 				}
 			}
 		}
+	}
+
+	private void InstallUpgradeTo(int slot) {
+		currentCell.upgrades[slot] = type;
+		count--;
+		UpdateUpgradeOverview();
+		print("INstalled");
+		UpgradeSlot.OnSlotClicked -= InstallUpgradeTo;
 	}
 }

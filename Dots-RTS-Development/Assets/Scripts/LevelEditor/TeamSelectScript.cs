@@ -23,7 +23,7 @@ public class TeamSelectScript : MonoBehaviour {
 	public void TeamSelectedButton (int correspondingTeam = 0) {
 		//I want to tell the LECore that the team value has changed, turn off the buttons and turn on the panel
 		team = correspondingTeam;
-		gameObject.SendMessage("GetPlaceCellPanelTeam");
+		SendMessage("ParseCellTeam_PlaceCellPanel");
 		placeCellPanel.SetActive(true);
 		teamButtonsPanel.SetActive(false);
 
