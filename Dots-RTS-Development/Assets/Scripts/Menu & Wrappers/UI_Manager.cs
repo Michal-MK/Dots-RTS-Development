@@ -11,6 +11,8 @@ public class UI_Manager : MonoBehaviour {
     public GameObject[] thingsToDisable = new GameObject[2];
 
 
+	private static Stack<GameObject> activeWindows = new Stack<GameObject>();
+
 
     private void Awake() {
 		Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
@@ -46,10 +48,38 @@ public class UI_Manager : MonoBehaviour {
 	}
 
     public void ChangeLayoutToPreview() {
+		print("Loool what a meme");
         for (int i = 0; i < thingsToDisable.Length; i++) {
             thingsToDisable[i].SetActive(false);
         }
     }
 
 
+	public static void AddWindow(GameObject window) {
+		activeWindows.Push(window);
+		Control.isPaused = false;
+		Time.timeScale = 1;
+	}
+
+	public static void CloseMostRecent() {
+		if (activeWindows.Count > 0) {
+			GameObject g = activeWindows.Pop();
+			g.SetActive(false);
+		}
+		else {
+			Control.Pause();
+		}
+	}
+
+	public static void CloseAllActive() {
+		foreach (GameObject g in activeWindows) {
+			g.SetActive(false);
+		}
+		activeWindows = new Stack<GameObject>();
+	}
+	public static int getWindowCount {
+		get {
+			return activeWindows.Count;
+		}
+	}
 }

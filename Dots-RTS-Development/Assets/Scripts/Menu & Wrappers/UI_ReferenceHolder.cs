@@ -25,12 +25,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	public static GameObject LE_editorMouseModes;
 	public static GameObject LE_saveInfoPanel;
 	public static GameObject LE_gameSettingsPanel;
-	//
-	public static GameObject LE_toMainMenuPanel;
-	//
 	public static GameObject LE_teamPickerPanel;
 	public static GameObject LE_loadForEditPanel;
 	public static GameObject LE_editorSettingsPanel;
+	//public static GameObject menuPanel;
+
 	#endregion
 
 	#region LevelSelectRefs
@@ -113,7 +112,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
 				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
 				LE_teamPickerPanel = c.Find("TeamSelectPanel").gameObject;
-				LE_toMainMenuPanel = c.Find("MenuPanel").gameObject;
+				menuPanel = c.Find("MenuPanel").gameObject;
 				return;
 			}
 			case "Level_Select": { // LevelSelect

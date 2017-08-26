@@ -179,25 +179,21 @@ public class Control : MonoBehaviour {
 			time += Time.deltaTime;
 		}
 
-		if (SceneManager.GetActiveScene().buildIndex != 1) {
-			if (Input.GetKeyDown(KeyCode.Escape)) {
-				if (isPaused) {
-					UnPause();
-				}
-				else {
-					print(Upgrade_Manager.isUpgrading);
-					if (Upgrade_Manager.isUpgrading) {
-						Upgrade_Manager.isUpgrading = false;
-					}
-					else {
-						if (canPause) {
-							Pause();
-						}
-					}
-				}
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			print(UI_Manager.getWindowCount);
+			if (isPaused) {
+				UnPause();
 			}
+			else {
+				if (Upgrade_Manager.isUpgrading) {
+					Upgrade_Manager.isUpgrading = false;
+				}
+				Pause();
+			}
+
 		}
 	}
+
 
 	public IEnumerator GameState() {
 		isInGame = true;
@@ -237,9 +233,14 @@ public class Control : MonoBehaviour {
 	}
 
 	public static void Pause() {
-		isPaused = true;
-		Time.timeScale = 0;
-		UI_ReferenceHolder.menuPanel.SetActive(true);
+		if (UI_Manager.getWindowCount == 0) {
+			isPaused = true;
+			Time.timeScale = 0;
+			UI_ReferenceHolder.menuPanel.SetActive(true);
+		}
+		else {
+			UI_Manager.CloseMostRecent();
+		}
 	}
 
 	public static void UnPause() {

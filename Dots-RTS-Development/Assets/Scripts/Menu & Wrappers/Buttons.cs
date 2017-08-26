@@ -8,6 +8,12 @@ public class Buttons : MainMenuUI  {
 	
 	public void Continue() {
 		Control.UnPause();
+		Time.timeScale = 1;
+	}
+
+	public void OnNewWindowOpen(GameObject newWindow) {
+		UI_Manager.AddWindow(newWindow);
+		newWindow.SetActive(true);
 	}
 
 	public void EditMode() {
