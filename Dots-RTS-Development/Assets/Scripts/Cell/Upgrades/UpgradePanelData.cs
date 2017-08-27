@@ -30,6 +30,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 	}
 
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
+		print(sender);
 		currentCell = sender;
 	}
 
@@ -64,20 +65,16 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Profiles") {
-			print("Clicked");
 			if (eventData.clickCount == 1) {
-				print("Clicked Once");
 				UpgradeSlot.OnSlotClicked += InstallUpgradeTo;
 			}
 			else if (eventData.clickCount == 2) {
-				print("Clicked Twice");
 
 				if (currentCell.HasFreeSlots()) {
 					int i = currentCell.GetFirstFreeSlot();
 					if (i != -1) {
 						if (count > 0) {
-							print("Free slots exist");
-							InstallUpgradeTo(i);
+							InstallUpgradeTo(null, i);
 						}
 					}
 					else {
@@ -88,11 +85,19 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 		}
 	}
 
-	private void InstallUpgradeTo(int slot) {
+	private void InstallUpgradeTo(UpgradeSlot sender, int slot) {
 		currentCell.upgrades[slot] = type;
 		count--;
 		UpdateUpgradeOverview();
-		print("INstalled");
 		UpgradeSlot.OnSlotClicked -= InstallUpgradeTo;
+		if (sender == null) {
+			SpriteRenderer s = currentCell.transform.Find("UpgradeSlots/" + slot).GetComponent<SpriteRenderer>();
+			s.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+			s.size = Vector2.one * 25;
+		}
+		else {
+			sender.selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+			sender.selfSprite.size = Vector2.one * 25;
+		}
 	}
 }

@@ -26,6 +26,7 @@ public class UI_Manager : MonoBehaviour {
 
 
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
+		AddWindow(UI_ReferenceHolder.upgradePanel.gameObject);
 		UI_ReferenceHolder.upgradePanel.anchoredPosition = Vector2.zero;
 		//upgrades.GetComponent<Animator>().Play("Show");
 	}
@@ -57,6 +58,9 @@ public class UI_Manager : MonoBehaviour {
 
 	public static void AddWindow(GameObject window) {
 		activeWindows.Push(window);
+		if (!window.activeInHierarchy) {
+			window.SetActive(true);
+		}
 		Control.isPaused = false;
 		Time.timeScale = 1;
 	}

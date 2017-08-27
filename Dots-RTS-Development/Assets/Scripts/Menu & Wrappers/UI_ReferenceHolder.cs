@@ -126,7 +126,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case "Level_Player": { //PlayScene
 				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				upgradePanel = GameObject.Find("Upgrade_Panel").GetComponent<RectTransform>();
+				upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case "Level_Sharing": { //Level Sharing
@@ -135,7 +135,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case "Debug": { // DebugScene
 				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				upgradePanel = GameObject.Find("Upgrade_Panel").GetComponent<RectTransform>();
+				upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case "Post_Game": { // PostGame Scene

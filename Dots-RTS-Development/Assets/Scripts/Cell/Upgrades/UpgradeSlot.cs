@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 
 public class UpgradeSlot : MonoBehaviour, IPointerClickHandler {
 	public int slot;
-	public delegate void OnUpgradeSlotClick(int slot);
+	public SpriteRenderer selfSprite;
+	public delegate void OnUpgradeSlotClick(UpgradeSlot sender, int slot);
 	public static event OnUpgradeSlotClick OnSlotClicked;
 
 	void Start() {
@@ -14,6 +15,6 @@ public class UpgradeSlot : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		OnSlotClicked?.Invoke(slot);
+		OnSlotClicked?.Invoke(this,slot);
 	}
 }

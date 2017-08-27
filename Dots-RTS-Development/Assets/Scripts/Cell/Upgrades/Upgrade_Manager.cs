@@ -144,7 +144,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 
 	public void OnPointerClick(PointerEventData eventData) {
 		//Detects double click on cell
-		if (eventData.clickCount % 2 == 0) {
+		if (eventData.clickCount == 2) {
 			print("Double");
 			isUpgrading = true;
 			OnUpgradeBegin(this); //Sent to Camera, 

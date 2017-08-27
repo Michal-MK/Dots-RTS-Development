@@ -122,7 +122,8 @@ public class LoadFromFile : MonoBehaviour {
             init.StartAiInitialization(customSave.clans);
         }
         else {
-			throw new System.Exception();
+			SceneManager.LoadScene("Profiles");
+			//throw new System.Exception();
 		}
 		file.Close();
 		Control.levelState = Control.PlaySceneState.NONE;
