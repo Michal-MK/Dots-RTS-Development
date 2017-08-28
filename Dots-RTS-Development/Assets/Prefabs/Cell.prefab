@@ -578,6 +578,7 @@ MonoBehaviour:
   isDecaying: 0
   isScaling: 0
   appliedDebuffs: 
+  elementSpawn: {fileID: 8300000, guid: ea99fa6e560fe9742b1fc7f2aba33eb9, type: 3}
   cellSprite: {fileID: 212300405552671422}
   elementNrDisplay: {fileID: 102996459730448940}
   textRenderer: {fileID: 23758171399307986}
@@ -587,6 +588,7 @@ MonoBehaviour:
   rg: {fileID: 50465558466341212}
   cellSelected: {fileID: 212208409240746360}
   uManager: {fileID: 114552998691737472}
+  audio: {fileID: 0}
   isSelected: 0
   cellObj: {fileID: 1930486067858668}
   elementObj: {fileID: 1547613517417536, guid: fdd6b23465758b749803e1df238b529a, type: 2}

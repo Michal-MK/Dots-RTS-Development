@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class PopulateUpgradePanel : MonoBehaviour {
 
 
-	private async void Start() {
-		await Upgrade.FillUpgradeSpriteDict();
+	private void Start() {
+		//await Upgrade.FillUpgradeSpriteDict();
 		Populate(transform);
 	}
 

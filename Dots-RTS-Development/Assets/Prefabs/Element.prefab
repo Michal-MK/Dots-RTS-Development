@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  debuff: 0
+  debuffs: 
   attacker: {fileID: 0}
   target: {fileID: 0}
   eSpeed: 10

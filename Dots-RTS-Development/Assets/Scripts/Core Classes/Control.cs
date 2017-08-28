@@ -72,7 +72,7 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	private void Start() {
+	private IEnumerator Start() {
 
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 
@@ -91,9 +91,18 @@ public class Control : MonoBehaviour {
 				pM.ListProfiles();
 			}
 		}
-		if (ProfileManager.getCurrentProfile == null && activeScene == Scenes.MENU) {
-			DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-			SceneManager.LoadScene(Scenes.PROFILES);
+		if (ProfileManager.getCurrentProfile == null) {
+			if (activeScene == Scenes.SPLASH) {
+				yield return new WaitUntil(() => Global.baseLoaded);
+				print("Switching");
+				SceneManager.LoadScene(Scenes.PROFILES);
+			}
+			if (activeScene == Scenes.MENU) {
+				DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
+				yield return new WaitUntil(() => Global.baseLoaded);
+				print("Switching");
+				SceneManager.LoadScene(Scenes.PROFILES);
+			}
 		}
 	}
 

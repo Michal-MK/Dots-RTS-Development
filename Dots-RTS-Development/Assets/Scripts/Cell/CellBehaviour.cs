@@ -80,7 +80,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 	#endregion
 
 	//Wrapper for cell atacking
-	public static void AttackWrapper(CellBehaviour target, enmTeam team) {
+	public void AttackWrapper(CellBehaviour target, enmTeam team) {
 		if (cellsInSelection.Count != 0) {
 			if ((int)team >= 2) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
@@ -114,6 +114,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				e.team = this.cellTeam;
 			}
 			UpdateCellInfo();
+			SoundManager.AddToSoundQueue(elementSpawn);
 		}
 	}
 

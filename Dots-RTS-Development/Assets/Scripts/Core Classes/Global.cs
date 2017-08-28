@@ -1,21 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Global {
+	public static bool baseLoaded = false;
 
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+	static async void Start() {
+		List<Task> tasks = new List<Task>();
+		tasks.Add(Upgrade.FillUpgradeSpriteDict());
 
+		await Task.WhenAll(tasks);
 
-
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-	static void Start() {
-		Debug.Log("Test");
-		if (ProfileManager.getCurrentProfile == null) {
-			SceneManager.LoadScene(Scenes.PROFILES);
-		}
-	}
-
-	void Update() {
-
+		baseLoaded = true;
 	}
 }
 
@@ -30,5 +28,6 @@ namespace UnityEngine.SceneManagement {
 		public const string SHARING = "Level_Sharing";
 		public const string DEBUG = "Debug";
 		public const string POSTG = "Post_Game";
+		public const string SPLASH = "SplashScreen";
 	}
 }
