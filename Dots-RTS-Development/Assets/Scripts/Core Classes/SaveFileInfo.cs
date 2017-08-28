@@ -64,7 +64,7 @@ public class SaveFileInfo : MonoBehaviour {
 #endif
 		Control.levelState = Control.PlaySceneState.CUSTOM;
 		PlayerPrefs.SetString("LoadLevelFilePath", s);
-		SceneManager.LoadScene("Level_Player");
+		SceneManager.LoadScene(Scenes.PLAYER);
 	}
 
 	public void DeleteObject(Transform fileName) {

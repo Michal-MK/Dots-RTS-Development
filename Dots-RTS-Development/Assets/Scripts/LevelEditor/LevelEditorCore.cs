@@ -1,10 +1,7 @@
 using System.Collections;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Linq;
 
 public class LevelEditorCore : MonoBehaviour {
 
@@ -96,7 +93,6 @@ public class LevelEditorCore : MonoBehaviour {
 		aiDifficultySingleInput = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/Single_Ai_Diff_IF").GetComponent<InputField>();
 		sizeInput = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/Game Size/CAM_Size_IF").GetComponent<InputField>();
 
-		//fileNameInput = GameObject.Find("FileNameIF").GetComponent<InputField>();
 		levelNameInput = GameObject.Find("Canvas").transform.Find("SavePanel/LevelName/Level Name IF").GetComponent<InputField>();
 		authorNameInput = GameObject.Find("Canvas").transform.Find("SavePanel/Author's name/Author's name IF").GetComponent<InputField>();
 

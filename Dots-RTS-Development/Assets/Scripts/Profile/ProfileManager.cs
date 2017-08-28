@@ -31,8 +31,6 @@ public class ProfileManager {
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
 		ProfileInfo.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
-		//Debug.Log(b.gameObject.name + b.gameObject.activeInHierarchy);
-		//Debug.Log(profileCreation.gameObject.name + profileCreation.gameObject.activeInHierarchy);
 	}
 
 	private void ProfileInfo_OnProfileDeleted(ProfileInfo sender) {
@@ -41,7 +39,7 @@ public class ProfileManager {
 
 	public void ProfileSelection() {
 		Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-		SceneManager.LoadScene("Profiles");
+		SceneManager.LoadScene(Scenes.PROFILES);
 	}
 
 	public void ListProfiles() {

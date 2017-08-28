@@ -1,4 +1,3 @@
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
@@ -33,7 +32,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		string path = Save(true);
 		PlayerPrefs.SetString("LoadLevelFilePath", path);
 		Control.levelState = Control.PlaySceneState.PREVIEW;
-		SceneManager.LoadScene("Level_Player");
+		SceneManager.LoadScene(Scenes.PLAYER);
 	}
 
 	public void SaveButton() {

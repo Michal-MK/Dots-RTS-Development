@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -122,7 +121,7 @@ public class LoadFromFile : MonoBehaviour {
             init.StartAiInitialization(customSave.clans);
         }
         else {
-			SceneManager.LoadScene("Profiles");
+			SceneManager.LoadScene(Scenes.PROFILES);
 			//throw new System.Exception();
 		}
 		file.Close();

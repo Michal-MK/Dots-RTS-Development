@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,7 +17,7 @@ public class ProfileInfo : MonoBehaviour {
 	#endregion
 
 	public void LoadProfile() {
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(Scenes.MENU);
 	}
 
 	public void InitializeProfile(Profile p, string profileName) {

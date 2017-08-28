@@ -26,7 +26,7 @@ public class CampaignLevel : MonoBehaviour {
 	private void Start() {
 		if(ProfileManager.getCurrentProfile == null) {
 			Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-			SceneManager.LoadScene("Profiles");
+			SceneManager.LoadScene(Scenes.PROFILES);
 			return;
 		}
 
@@ -59,7 +59,7 @@ public class CampaignLevel : MonoBehaviour {
 		current = this;
 		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
 		Control.levelState = Control.PlaySceneState.CAMPAIGN;
-		SceneManager.LoadScene("Level_Player");
+		SceneManager.LoadScene(Scenes.PLAYER);
 	}
 }
 

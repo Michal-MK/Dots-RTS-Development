@@ -45,7 +45,7 @@ public class UI_Manager : MonoBehaviour {
 	}
 	IEnumerator ReturnToLevelSelectIn(float seconds) {
 		yield return new WaitForSeconds(seconds);
-		SceneManager.LoadScene("Level_Select");
+		SceneManager.LoadScene(Scenes.SELECT);
 	}
 
     public void ChangeLayoutToPreview() {

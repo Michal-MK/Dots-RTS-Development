@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour {
+
 	//Switch scene accroding to its build index
 	[System.Obsolete("Use sceneName instead")]
 	public void SwitchScene(int sceneIndex) {
@@ -19,10 +20,10 @@ public class SceneSwitcher : MonoBehaviour {
 
 
 	public void SwitchScene(string sceneName) {
-		if (SceneManager.GetActiveScene().name == "Level_Editor") {
+		if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 		}
-		if (sceneName == "Level_Editor") {
+		if (sceneName == Scenes.EDITOR) {
 			PlayerPrefs.SetString("LoadLevelFilePath", null);
 		}
 

@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
 
 public class LevelSelectScript : MonoBehaviour {
 
@@ -29,11 +27,11 @@ public class LevelSelectScript : MonoBehaviour {
 
 
 	private void Start() {
-		if (SceneManager.GetActiveScene().name == "Level_Select") {
+		if (SceneManager.GetActiveScene().name == Scenes.SELECT) {
 			ListCustomSaves();
 			ListCampaignLevels(1);
 		}
-		if (SceneManager.GetActiveScene().name == "Level_Editor" ) {
+		if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
 			ListCustomSaves();
 		}
 	}

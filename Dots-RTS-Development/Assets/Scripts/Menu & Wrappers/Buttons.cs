@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using WindowsInput;
@@ -31,7 +29,7 @@ public class Buttons : MainMenuUI  {
 
 	public void EditMode() {
 		Control.cells.Clear();
-		SceneManager.LoadScene("Level_Editor");
+		SceneManager.LoadScene(Scenes.EDITOR);
 	}
 
 	public void PauseGameorEscape() {

@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.IO;
 using TMPro;
-using UnityEngine.Events;
 
 public class Control : MonoBehaviour {
 
@@ -81,22 +78,22 @@ public class Control : MonoBehaviour {
 
 		string activeScene = SceneManager.GetActiveScene().name;
 
-		if (/*activeScene == 5 || */activeScene == "Level_Player") {
+		if (activeScene == Scenes.PLAYER) {
 			isInGame = true;
 			if (levelState != PlaySceneState.PREVIEW) {
 				StartCoroutine(GameState());
 			}
 
 		}
-		if (activeScene == "Profiles") {
+		if (activeScene == Scenes.PROFILES) {
 			if (pM == null) {
 				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 				pM.ListProfiles();
 			}
 		}
-		if (ProfileManager.getCurrentProfile == null && activeScene == "Main_Menu") {
+		if (ProfileManager.getCurrentProfile == null && activeScene == Scenes.MENU) {
 			DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-			SceneManager.LoadScene("Profiles");
+			SceneManager.LoadScene(Scenes.PROFILES);
 		}
 	}
 
@@ -109,26 +106,26 @@ public class Control : MonoBehaviour {
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
-		if (newS.name == "Main_Menu") {
+		if (newS.name == Scenes.MENU) {
 
 			if (ProfileManager.getCurrentProfile == null) {
 				DebugSceneIndex = 0;
-				SceneManager.LoadScene("Profiles");
+				SceneManager.LoadScene(Scenes.PROFILES);
 				return;
 			}
 			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
 
 		}
 
-		if (newS.name == "Level_Editor") {
+		if (newS.name == Scenes.EDITOR) {
 
 		}
 
-		if (newS.name == "Level_Select") {
+		if (newS.name == Scenes.SELECT) {
 			LevelSelectScript.displayedSaves.Clear();
 		}
 
-		if (newS.name == "Level_Player") {
+		if (newS.name == Scenes.PLAYER) {
 			print("Scene");
 			if (levelState != PlaySceneState.PREVIEW) {
 				StartCoroutine(GameState());
@@ -136,16 +133,16 @@ public class Control : MonoBehaviour {
 		}
 
 
-		if (newS.name == "Level_Sharing") {
+		if (newS.name == Scenes.SHARING) {
 
 		}
 
-		if (newS.name == "Debug") {
+		if (newS.name == Scenes.DEBUG) {
 
 		}
 
 
-		if (newS.name == "Post_Game") {
+		if (newS.name == Scenes.POSTG) {
 			isInGame = false;
 
 			if (isWinner) {
@@ -166,7 +163,7 @@ public class Control : MonoBehaviour {
 			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + "<size=40>coins";
 		}
 
-		if (newS.name == "Profiles") {
+		if (newS.name == Scenes.PROFILES) {
 			pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
 			pM.ListProfiles();
 		}
@@ -250,7 +247,7 @@ public class Control : MonoBehaviour {
 	}
 
 	public void GameOver() {
-		SceneManager.LoadScene("Post_Game");
+		SceneManager.LoadScene(Scenes.POSTG);
 		isWinner = false;
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 		isInGame = false;
@@ -258,7 +255,7 @@ public class Control : MonoBehaviour {
 
 	public void YouWon() {
 		totalCoinsAwarded = 1;
-		SceneManager.LoadScene("Post_Game");
+		SceneManager.LoadScene(Scenes.POSTG);
 		isWinner = true;
 		int neutrals = 0;
 		foreach (CellBehaviour c in cells) {

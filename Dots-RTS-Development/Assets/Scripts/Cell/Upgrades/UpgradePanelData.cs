@@ -49,9 +49,6 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 		}
 	}
 
-
-
-
 	public void UpdateUpgradeOverview() {
 		if (count == 0) {
 			GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);

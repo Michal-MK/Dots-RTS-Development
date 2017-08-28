@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 public class CellBehaviourEditor : Cell {
 	public bool isBeingEdited;
