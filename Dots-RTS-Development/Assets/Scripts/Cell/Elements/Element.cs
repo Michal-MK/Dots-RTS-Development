@@ -34,21 +34,21 @@ public class Element : MonoBehaviour {
 		#region Deterimne type of attack (buff)
 		for (int i = 0; i < debuffs.Length; i++) {
 			switch (debuffs[i]) {
-				case Upgrade.Upgrades.DOUBLE_DAMAGE: {
+				case Upgrade.Upgrades.ATK_DOUBLE_DAMAGE: {
 					print("Contains Double Damage");
 					damage = damage * 2;
 					break;
 				}
-				case Upgrade.Upgrades.SLOW_REGENERATION: {
+				case Upgrade.Upgrades.ATK_SLOW_REGENERATION: {
 					//damage = 1;
 					infection[i] = debuffs[i];
 					break;
 				}
-				case Upgrade.Upgrades.CRITICAL_CHANCE: {
+				case Upgrade.Upgrades.ATK_CRITICAL_CHANCE: {
 					infection[i] = debuffs[i];
 					break;
 				}
-				case Upgrade.Upgrades.DOT: {
+				case Upgrade.Upgrades.ATK_DOT: {
 					print("Contains Dot");
 					//damage = 1;
 					infection[i] = debuffs[i];

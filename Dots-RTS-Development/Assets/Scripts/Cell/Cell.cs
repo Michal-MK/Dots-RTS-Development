@@ -186,14 +186,14 @@ public class Cell : MonoBehaviour {
 	}
 
 	public IEnumerator DoT(float timeBetweenTicks, int totalDamageInflicted) {
-		appliedDebuffs.Add(Upgrade.Upgrades.DOT);
+		appliedDebuffs.Add(Upgrade.Upgrades.ATK_DOT);
 		for (int i = 0; i < totalDamageInflicted; i++) {
 			yield return new WaitForSeconds(timeBetweenTicks);
 			if (elementCount >= 1) {
 				elementCount--;
 			}
 		}
-		appliedDebuffs.Remove(Upgrade.Upgrades.DOT);
+		appliedDebuffs.Remove(Upgrade.Upgrades.ATK_DOT);
 	}
 
     //[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]

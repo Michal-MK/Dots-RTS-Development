@@ -16,6 +16,19 @@ public class Buttons : MainMenuUI  {
 		newWindow.SetActive(true);
 	}
 
+	public void SwitchUpgradeWindow(string buttonName) {
+		GameObject atk = GameObject.Find("Canvas").transform.Find("ATK_Upgrades").gameObject;
+		GameObject def = GameObject.Find("Canvas").transform.Find("DEF_Upgrades").gameObject;
+		if(buttonName == "ATK") {
+			def.SetActive(false);
+			atk.SetActive(true);
+		}
+		else if (buttonName == "DEF") {
+			def.SetActive(true);
+			atk.SetActive(false);
+		}
+	}
+
 	public void EditMode() {
 		Control.cells.Clear();
 		SceneManager.LoadScene("Level_Editor");
@@ -30,21 +43,43 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)) -1);
-		if (selected >= Upgrade.TOTAL_UPGRADES) {
-			UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
-			UI_ReferenceHolder.U_upgradeDescHolder.text = "Some desc here. lel";
-			UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
-			UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
-		}
-		else {
-			string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
-			if (upgradeInfo != null) {
-				UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
-				UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
-				UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
-				UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
+		print(selected);
+
+		if(selected < 99) {
+			if (selected < Upgrade.TOTAL_OFFENSIVE_UPGRADES) {
+				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
+				if (upgradeInfo != null) {
+					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
+					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
+					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+				}
 			}
+			else {
+				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
+				UI_ReferenceHolder.U_upgradeDescHolder.text = "OFFENSIVE UPGRADE";
+				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
+			}
+		}
+		else if(selected > 99) {
+			if (selected < 100 + Upgrade.TOTAL_DEFENSIVE_UPGRADES) {
+				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
+				if (upgradeInfo != null) {
+					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
+					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
+					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+				}
+			}
+			else {
+				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
+				UI_ReferenceHolder.U_upgradeDescHolder.text = "DEFENSIVE UPGRADE";
+				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
+			}
+
 		}
 	}
 }

@@ -8,10 +8,10 @@ using UnityEngine;
 public class Test : MonoBehaviour {
 	public Dictionary<Upgrade.Upgrades, int> test = new Dictionary<Upgrade.Upgrades, int>() {
 		{Upgrade.Upgrades.NONE, 0 },
-		{Upgrade.Upgrades.CRITICAL_CHANCE, 0 },
-		{Upgrade.Upgrades.DOT, 0 },
-		{Upgrade.Upgrades.DOUBLE_DAMAGE, 0 },
-		{Upgrade.Upgrades.SLOW_REGENERATION, 0 },
+		{Upgrade.Upgrades.ATK_CRITICAL_CHANCE, 0 },
+		{Upgrade.Upgrades.ATK_DOT, 0 },
+		{Upgrade.Upgrades.ATK_DOUBLE_DAMAGE, 0 },
+		{Upgrade.Upgrades.ATK_SLOW_REGENERATION, 0 },
 
 	};
 

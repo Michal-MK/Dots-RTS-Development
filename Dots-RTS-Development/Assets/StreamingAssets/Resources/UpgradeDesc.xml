@@ -2,6 +2,8 @@
 
 <Upgrades>
 
+	<!--Offensive upgrades-->
+	
 	<Upgrade id="0">
 		<name>Damage over time</name>
 		<funcName>U_Damage_over_time</funcName>
@@ -24,6 +26,44 @@
 		<name>Slow Regeneration</name>
 		<funcName>U_Slow_Regen</funcName>
 		<desc>This is an upgrade Slow Regeneration</desc>
+	</Upgrade>
+
+	<!--Defensive upgrades-->
+
+	<Upgrade id="100">
+		<name>Element Resistance</name>
+		<funcName>U_Element_Resist</funcName>
+		<desc>This is an upgrade Element Resistance</desc>
+	</Upgrade>
+	
+	<Upgrade id="101">
+		<name>Reflection</name>
+		<funcName>U_Reflection</funcName>
+		<desc>This is an upgrade Reflection</desc>
+	</Upgrade>
+	
+	<Upgrade id="102">
+		<name>Faster Regeneration</name>
+		<funcName>U_Fast_Regen</funcName>
+		<desc>This is an upgrade Faster Regeneration</desc>
+	</Upgrade>
+	
+	<Upgrade id="103">
+		<name>Camouflage</name>
+		<funcName>U_Camouflage</funcName>
+		<desc>This is an upgrade Camouflage</desc>
+	</Upgrade>
+	
+	<Upgrade id="104">
+		<name>Allied Aid Bonus</name>
+		<funcName>U_Aid_Bonus</funcName>
+		<desc>This is an upgrade Allied Aid Bonus</desc>
+	</Upgrade>
+	
+	<Upgrade id="105">
+		<name>Faster Element Speed</name>
+		<funcName>U_Fast_Elements</funcName>
+		<desc>This is an upgrade Faster Element Speed</desc>
 	</Upgrade>
 		
 </Upgrades>

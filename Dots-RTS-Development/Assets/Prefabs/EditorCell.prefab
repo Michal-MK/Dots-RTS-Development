@@ -535,6 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 4
+  selfSprite: {fileID: 0}
 --- !u!114 &114409544089343134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -547,6 +548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 7
+  selfSprite: {fileID: 0}
 --- !u!114 &114434843814687146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -565,7 +567,6 @@ MonoBehaviour:
   isRegenerating: 0
   isDecaying: 0
   isScaling: 0
-  providedDebuff: 0
   appliedDebuffs: 
   cellSprite: {fileID: 212889015483235864}
   elementNrDisplay: {fileID: 102407273969586368}
@@ -590,6 +591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 3
+  selfSprite: {fileID: 0}
 --- !u!114 &114555311850289316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -602,6 +604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 0
+  selfSprite: {fileID: 0}
 --- !u!114 &114791701018551162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -614,6 +617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 5
+  selfSprite: {fileID: 0}
 --- !u!114 &114884273549824134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -626,6 +630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 2
+  selfSprite: {fileID: 0}
 --- !u!114 &114889160387685830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -671,6 +676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 6
+  selfSprite: {fileID: 0}
 --- !u!114 &114987030713934858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -683,6 +689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 1
+  selfSprite: {fileID: 0}
 --- !u!212 &212061085761532198
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1132,11 +1139,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 66c943d473522524892c54cb15721dfd, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

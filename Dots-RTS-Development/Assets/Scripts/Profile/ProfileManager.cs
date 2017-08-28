@@ -162,12 +162,14 @@ public class Profile {
 	public int completedCampaignLevels;
 	public int completedCustomLevels;
 
-	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>() {
-		{Upgrade.Upgrades.CRITICAL_CHANCE,0},
-		{Upgrade.Upgrades.DOT, 0 },
-		{Upgrade.Upgrades.DOUBLE_DAMAGE, 0 },
-		{Upgrade.Upgrades.SLOW_REGENERATION, 0 },
-	};
+	public Profile() {
+		foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
+			if (u != Upgrade.Upgrades.NONE) {
+				acquiredUpgrades.Add(u, 0);
+			}
+		}
+	}
 
+	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>();
 	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels = new Dictionary<SaveDataCampaign, float>();
 }

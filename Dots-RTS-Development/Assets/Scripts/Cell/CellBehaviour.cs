@@ -154,26 +154,26 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 					//Nothing to Change
 					break;
 				}
-				case Upgrade.Upgrades.DOT: {
+				case Upgrade.Upgrades.ATK_DOT: {
 					DOTStrength += 1;
 					break;
 				}
-				case Upgrade.Upgrades.CRITICAL_CHANCE: {
+				case Upgrade.Upgrades.ATK_CRITICAL_CHANCE: {
 					critChance += 0.2f;
 					break;
 				}
-				case Upgrade.Upgrades.DOUBLE_DAMAGE: {
+				case Upgrade.Upgrades.ATK_DOUBLE_DAMAGE: {
 					//Nothing to Change
 					break;
 				}
-				case Upgrade.Upgrades.SLOW_REGENERATION: {
+				case Upgrade.Upgrades.ATK_SLOW_REGENERATION: {
 					slowRegenStrength += 1;
 					break;
 				}
 			}
 		}
 		if(DOTStrength != 0) {
-			if (!appliedDebuffs.Contains(Upgrade.Upgrades.DOT)) {
+			if (!appliedDebuffs.Contains(Upgrade.Upgrades.ATK_DOT)) {
 				StartCoroutine(DoT(1, 4 * DOTStrength));
 			}
 		}
@@ -183,8 +183,8 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 			}
 		}
 		if(slowRegenStrength != 0) {
-			if (!appliedDebuffs.Contains(Upgrade.Upgrades.SLOW_REGENERATION)) {
-				appliedDebuffs.Add(Upgrade.Upgrades.SLOW_REGENERATION);
+			if (!appliedDebuffs.Contains(Upgrade.Upgrades.ATK_SLOW_REGENERATION)) {
+				appliedDebuffs.Add(Upgrade.Upgrades.ATK_SLOW_REGENERATION);
 				regenPeriod *= 1.33f;
 			}
 		}
