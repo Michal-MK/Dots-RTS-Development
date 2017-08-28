@@ -168,6 +168,7 @@ public class Profile {
 				acquiredUpgrades.Add(u, 0);
 			}
 		}
+		creationTime = DateTime.Now;
 	}
 
 	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>();

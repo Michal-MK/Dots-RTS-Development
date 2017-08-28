@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ColourTheTeamButtons : MonoBehaviour {
 	// Use this for initialization
-	void Start () {
+	void Start() {
 
 		int team = int.Parse(gameObject.name[6].ToString());
 		gameObject.GetComponent<Image>().color = GetColorBasedOnTeam(team);

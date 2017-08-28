@@ -10,41 +10,41 @@ public class TeamSetup : MonoBehaviour {
 	public static Dictionary<int, int> clanDict = new Dictionary<int, int>();
 	//LineRenderer lineRenderer;
 	public RectTransform roundTable;
-    static RectTransform stRoundTable;
+	static RectTransform stRoundTable;
 
-    public GameObject clanBG;
-    List<GameObject> bgList = new List<GameObject>();
+	public GameObject clanBG;
+	List<GameObject> bgList = new List<GameObject>();
 
-    static float diffAngle;
+	static float diffAngle;
 
 	// Use this for initialization
 	void OnEnable() {
-        stRoundTable = roundTable;
-        //lineRenderer = gameObject.GetComponent<LineRenderer>();
-        AllAiDifficultyWriter.RedoText();
-        for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
-            GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
-            newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
-            mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
-            mySpawns[i].team = (int)LevelEditorCore.teamList[i];
-            mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
-            mySpawns[i].panel = roundTable;
-            mySpawns[i].r = (roundTable.sizeDelta.x / 2.2f) * (Screen.width / 1280f);
-        }
-        diffAngle = (2 * Mathf.PI) / mySpawns.Count;
-        float nextAngle = 0;
-        //  print((roundTable.sizeDelta.x / 2) - 50);
-        //*(Screen.width / 1280)
+		stRoundTable = roundTable;
+		//lineRenderer = gameObject.GetComponent<LineRenderer>();
+		AllAiDifficultyWriter.RedoText();
+		for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
+			GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
+			newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
+			mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
+			mySpawns[i].team = (int)LevelEditorCore.teamList[i];
+			mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
+			mySpawns[i].panel = roundTable;
+			mySpawns[i].r = (roundTable.sizeDelta.x / 2.2f) * (Screen.width / 1280f);
+		}
+		diffAngle = (2 * Mathf.PI) / mySpawns.Count;
+		float nextAngle = 0;
+		//  print((roundTable.sizeDelta.x / 2) - 50);
+		//*(Screen.width / 1280)
 
-        for (int i = 0; i < mySpawns.Count; i++) {
-            mySpawns[i].transform.position = AngleToPos(nextAngle);
-            // mySpawns[i].transform.position = mySpawns[i].transform.position * (Screen.width / 1280f);
-            mySpawns[i].myAngle = (nextAngle);
-            nextAngle += diffAngle;
-            mySpawns[i].AllThingsSet();
-        }
-        UpdateRoundTableVisuals();
-    }
+		for (int i = 0; i < mySpawns.Count; i++) {
+			mySpawns[i].transform.position = AngleToPos(nextAngle);
+			// mySpawns[i].transform.position = mySpawns[i].transform.position * (Screen.width / 1280f);
+			mySpawns[i].myAngle = (nextAngle);
+			nextAngle += diffAngle;
+			mySpawns[i].AllThingsSet();
+		}
+		UpdateRoundTableVisuals();
+	}
 	public void OnDisable() {
 		for (int i = 0; i < mySpawns.Count; i++) {
 			Destroy(mySpawns[i].gameObject);
@@ -56,9 +56,9 @@ public class TeamSetup : MonoBehaviour {
 	public void TeamBoxPosChange(Vector2 pos, TeamBox it) {
 		float lowestDisFound = Mathf.Infinity;
 		int indexClosest = 99;
-        it.transform.position = it.initialPos;
-        
-        for (int i = 0; i < mySpawns.Count; i++) {			//Debug.Log(i);
+		it.transform.position = it.initialPos;
+
+		for (int i = 0; i < mySpawns.Count; i++) {          //Debug.Log(i);
 			float dist = Vector2.Distance(mySpawns[i].initialPos, pos);
 			if (dist < lowestDisFound) {
 				lowestDisFound = dist;
@@ -67,14 +67,14 @@ public class TeamSetup : MonoBehaviour {
 		}
 		float distToX = Vector2.Distance(xGO.transform.position, pos);
 		if (distToX < lowestDisFound) {
-            RemoveFromClan(it.team);
-            return;
-        }
-        if (indexClosest == it.team) {
-            return;
+			RemoveFromClan(it.team);
+			return;
 		}
-        RemoveFromClan(it.team);
-        CreateAClan(it.team, indexClosest);
+		if (indexClosest == it.team) {
+			return;
+		}
+		RemoveFromClan(it.team);
+		CreateAClan(it.team, indexClosest);
 
 	}
 
@@ -115,34 +115,34 @@ public class TeamSetup : MonoBehaviour {
 
 	void CreateAClan(int firstTeam, int secondTeam) {
 
-        BindTwo(firstTeam, secondTeam);
-        BindTwo(secondTeam, firstTeam);
+		BindTwo(firstTeam, secondTeam);
+		BindTwo(secondTeam, firstTeam);
 		CheckAndAddOtherTeams(firstTeam, secondTeam);
-       // MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(firstTeam)], mySpawns[MySpawnsIndexFromTeam(secondTeam)]);
-        UpdateRoundTableVisuals();
+		// MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(firstTeam)], mySpawns[MySpawnsIndexFromTeam(secondTeam)]);
+		UpdateRoundTableVisuals();
 
 	}
-    void BindTwo(int first, int second) {
-        int tempAllies = 0;
-        if (clanDict.ContainsKey(first)) {
+	void BindTwo(int first, int second) {
+		int tempAllies = 0;
+		if (clanDict.ContainsKey(first)) {
 
-            clanDict.TryGetValue(first, out tempAllies);
+			clanDict.TryGetValue(first, out tempAllies);
 
-            List<int> content = IntToList(tempAllies);
-            if (!AlreadyIsInList(content, second)) {
-                tempAllies = tempAllies * 10;
-                tempAllies += second;
+			List<int> content = IntToList(tempAllies);
+			if (!AlreadyIsInList(content, second)) {
+				tempAllies = tempAllies * 10;
+				tempAllies += second;
 
-                clanDict.Remove(first);
-                clanDict.Add(first, tempAllies);
-            }
+				clanDict.Remove(first);
+				clanDict.Add(first, tempAllies);
+			}
 
-        }
-        else {
-            tempAllies += second;
-            clanDict.Add(first, tempAllies);
-        }
-    }
+		}
+		else {
+			tempAllies += second;
+			clanDict.Add(first, tempAllies);
+		}
+	}
 
 	public static List<int> IntToList(int input) {
 		List<int> returnList = new List<int>();
@@ -179,11 +179,11 @@ public class TeamSetup : MonoBehaviour {
 		clanDict.TryGetValue(firstTeam, out firstTeamFriends);
 		List<int> firstTeamFriendsList = IntToList(firstTeamFriends);
 
-        int secondTeamFriends;
-        clanDict.TryGetValue(secondTeam, out secondTeamFriends);
-        List<int> secondTeamFriendsList = IntToList(secondTeamFriends);
+		int secondTeamFriends;
+		clanDict.TryGetValue(secondTeam, out secondTeamFriends);
+		List<int> secondTeamFriendsList = IntToList(secondTeamFriends);
 
-        List<int> misses = new List<int>();
+		List<int> misses = new List<int>();
 		for (int y = 0; y < secondTeamFriendsList.Count; y++) {
 			if (!firstTeamFriendsList.Contains(secondTeamFriendsList[y])) {
 				misses.Add(secondTeamFriendsList[y]);
@@ -195,20 +195,20 @@ public class TeamSetup : MonoBehaviour {
 			}
 		}
 
-        misses.Clear();
-        for (int x = 0; x < firstTeamFriendsList.Count; x++) {
-            if (!secondTeamFriendsList.Contains(firstTeamFriendsList[x])) {
-                misses.Add(firstTeamFriendsList[x]);
-                //print("Miss is " + firstTeamFriendsList[x]);
-            }
-        }
-        foreach (int miss in misses) {
-            //Debug.Log("like This: " + miss + " " + secondTeam);
-            if (miss != secondTeam && miss != firstTeam) {
-                CreateAClan(miss, secondTeam);
-            }
-        }
-    }
+		misses.Clear();
+		for (int x = 0; x < firstTeamFriendsList.Count; x++) {
+			if (!secondTeamFriendsList.Contains(firstTeamFriendsList[x])) {
+				misses.Add(firstTeamFriendsList[x]);
+				//print("Miss is " + firstTeamFriendsList[x]);
+			}
+		}
+		foreach (int miss in misses) {
+			//Debug.Log("like This: " + miss + " " + secondTeam);
+			if (miss != secondTeam && miss != firstTeam) {
+				CreateAClan(miss, secondTeam);
+			}
+		}
+	}
 	static void DestroyAllInList(List<GameObject> list) {
 		for (int i = 0; i < list.Count; i++) {
 			Destroy(list[i]);
@@ -216,7 +216,7 @@ public class TeamSetup : MonoBehaviour {
 	}
 	public void UpdateRoundTableVisuals() {
 
-        DestroyAllInList(bgList);
+		DestroyAllInList(bgList);
 		List<List<int>> actualClans = new List<List<int>>();
 
 		Dictionary<int, int>.KeyCollection keys = clanDict.Keys;
@@ -227,7 +227,7 @@ public class TeamSetup : MonoBehaviour {
 			List<int> clanJ = IntToList(value);
 			clanJ.Add(j);
 			clanJ.Sort();
-           
+
 
 			bool newClan = true;
 			foreach (List<int> clan in actualClans) {
@@ -243,69 +243,69 @@ public class TeamSetup : MonoBehaviour {
 			}
 
 		}
-        List<TeamBox> newList = new List<TeamBox>(mySpawns);
+		List<TeamBox> newList = new List<TeamBox>(mySpawns);
 
-        float angle = 0;
-
-
-        for (int i = 0; i < actualClans.Count; i++) {
-            GameObject bg = Instantiate(clanBG, stRoundTable);
-            bgList.Add(bg);
-            Image img = bg.GetComponent<Image>();
-            img.color = ColourTheTeamButtons.GetColorBasedOnTeam(i + 2);
-            RectTransform rt = bg.GetComponent<RectTransform>();
-            rt.sizeDelta = stRoundTable.sizeDelta;
-            rt.SetAsFirstSibling();
-            float lastTeamBoxAngle = 0;
-           
-            foreach (int j in actualClans[i]) {
+		float angle = 0;
 
 
-                foreach (TeamBox t in mySpawns) {
-                    if (t.team == j) {
-                        Debug.Log(t.team);
-                        t.transform.position = AngleToPos(angle);
-                        t.myAngle = angle;
-                        t.AllThingsSet();
-                        img.fillAmount += 1f / mySpawns.Count;
-                        lastTeamBoxAngle = Mathf.Rad2Deg * (angle + diffAngle / 2);
-                        newList.Remove(t);
-                    }
-                }
-                angle += diffAngle;
-            }
-            rt.rotation = Quaternion.Euler(0, 0,- lastTeamBoxAngle);
+		for (int i = 0; i < actualClans.Count; i++) {
+			GameObject bg = Instantiate(clanBG, stRoundTable);
+			bgList.Add(bg);
+			Image img = bg.GetComponent<Image>();
+			img.color = ColourTheTeamButtons.GetColorBasedOnTeam(i + 2);
+			RectTransform rt = bg.GetComponent<RectTransform>();
+			rt.sizeDelta = stRoundTable.sizeDelta;
+			rt.SetAsFirstSibling();
+			float lastTeamBoxAngle = 0;
 
-        }
+			foreach (int j in actualClans[i]) {
 
-        foreach (List<int> clan in actualClans) {
 
-            
-        }
-        foreach (TeamBox t in newList) {
-            t.transform.position = AngleToPos(angle);
-            t.myAngle = angle;
-            t.AllThingsSet();
-            angle += diffAngle;
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        //Debug.Log("number of clans: " + ActualClans.Count);
-  //      for (int c = 0; c < actualClans.Count; c++) {
+				foreach (TeamBox t in mySpawns) {
+					if (t.team == j) {
+						Debug.Log(t.team);
+						t.transform.position = AngleToPos(angle);
+						t.myAngle = angle;
+						t.AllThingsSet();
+						img.fillAmount += 1f / mySpawns.Count;
+						lastTeamBoxAngle = Mathf.Rad2Deg * (angle + diffAngle / 2);
+						newList.Remove(t);
+					}
+				}
+				angle += diffAngle;
+			}
+			rt.rotation = Quaternion.Euler(0, 0, -lastTeamBoxAngle);
+
+		}
+
+		foreach (List<int> clan in actualClans) {
+
+
+		}
+		foreach (TeamBox t in newList) {
+			t.transform.position = AngleToPos(angle);
+			t.myAngle = angle;
+			t.AllThingsSet();
+			angle += diffAngle;
+		}
+
+
+
+
+
+
+
+
+
+		//Debug.Log("number of clans: " + ActualClans.Count);
+		//      for (int c = 0; c < actualClans.Count; c++) {
 
 		//	LineRenderer r = Instantiate(sampleLineRenderer).GetComponent<LineRenderer>();
 		//	myLines.Add(r.gameObject);
-  //          Color32 colour = ColourTheTeamButtons.GetColorBasedOnTeam(c);
-  //          r.startColor = colour;
-  //          r.endColor = colour;
-  //          r.positionCount = actualClans[c].Count;
+		//          Color32 colour = ColourTheTeamButtons.GetColorBasedOnTeam(c);
+		//          r.startColor = colour;
+		//          r.endColor = colour;
+		//          r.positionCount = actualClans[c].Count;
 		//	for (int i = 0; i < actualClans[c].Count; i++) {
 		//		r.SetPosition(i, (Vector2)Camera.main.ScreenToWorldPoint(mySpawns[MySpawnsIndexFromTeam(actualClans[c][i])].transform.position));
 		//	}
@@ -314,17 +314,17 @@ public class TeamSetup : MonoBehaviour {
 
 	}
 
-    static Vector2 AngleToPos(float angle) {
-        return new Vector2(Mathf.Sin(angle) * (stRoundTable.sizeDelta.x / 2.6f),  Mathf.Cos(angle) * (stRoundTable.sizeDelta.x / 2.6f)) * (Screen.width / 1280f) + (Vector2)stRoundTable.position;
-    }
+	static Vector2 AngleToPos(float angle) {
+		return new Vector2(Mathf.Sin(angle) * (stRoundTable.sizeDelta.x / 2.6f), Mathf.Cos(angle) * (stRoundTable.sizeDelta.x / 2.6f)) * (Screen.width / 1280f) + (Vector2)stRoundTable.position;
+	}
 
 	public static int MySpawnsIndexFromTeam(int team) {
 		int output = -1;
-		for (int i = 0; i <	mySpawns.Count; i++) {
+		for (int i = 0; i < mySpawns.Count; i++) {
 			TeamBox spawn = mySpawns[i];
 			if (spawn.team == team) {
 				output = i;
-                break;
+				break;
 			}
 		}
 		if (output == -1) {
@@ -332,22 +332,22 @@ public class TeamSetup : MonoBehaviour {
 		}
 		return output;
 	}
-    public static int MySpawnsIndexFromAngle(float RawAngle) {
-        float angle = RawAngle;
-        if (Mathf.Round(angle * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
-            angle -= 2 * Mathf.PI;
-        }
-        int output = -1;
-        for (int i = 0; i < mySpawns.Count; i++) {
-            TeamBox spawn = mySpawns[i];
-            if (Mathf.Round(spawn.myAngle * 10) / 10 == Mathf.Round(angle * 10) / 10) {
-                output = i;
-                break;
-            }
-        }
-        if (output == -1) {
-            Debug.LogError("Nothing in mySpawns has angle " + angle);
-        }
-        return output;
-    }
+	public static int MySpawnsIndexFromAngle(float RawAngle) {
+		float angle = RawAngle;
+		if (Mathf.Round(angle * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
+			angle -= 2 * Mathf.PI;
+		}
+		int output = -1;
+		for (int i = 0; i < mySpawns.Count; i++) {
+			TeamBox spawn = mySpawns[i];
+			if (Mathf.Round(spawn.myAngle * 10) / 10 == Mathf.Round(angle * 10) / 10) {
+				output = i;
+				break;
+			}
+		}
+		if (output == -1) {
+			Debug.LogError("Nothing in mySpawns has angle " + angle);
+		}
+		return output;
+	}
 }

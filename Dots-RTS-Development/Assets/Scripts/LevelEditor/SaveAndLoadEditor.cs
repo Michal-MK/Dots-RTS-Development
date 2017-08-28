@@ -25,16 +25,16 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	private void Start() {
 		if (!string.IsNullOrEmpty(PlayerPrefs.GetString("LoadLevelFilePath"))) {
 			Load(PlayerPrefs.GetString("LoadLevelFilePath"));
-           // print("thathappened");
+			// print("thathappened");
 		}
 	}
 
-    public void TryLevel() {
-        string path = Save(true);
-        PlayerPrefs.SetString("LoadLevelFilePath", path);
-        Control.levelState = Control.PlaySceneState.PREVIEW;
-        SceneManager.LoadScene("Level_Player");
-    }
+	public void TryLevel() {
+		string path = Save(true);
+		PlayerPrefs.SetString("LoadLevelFilePath", path);
+		Control.levelState = Control.PlaySceneState.PREVIEW;
+		SceneManager.LoadScene("Level_Player");
+	}
 
 	public void SaveButton() {
 		Save();
@@ -42,19 +42,19 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	public string Save(bool temp = false) {
 		fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-        if (temp) {
-            fileName = "testLevel";
-        }
-        string fullpath;
+		if (temp) {
+			fileName = "testLevel";
+		}
+		string fullpath;
 #if UNITY_ANDROID
         fullpath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
 #else
-        fullpath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
+		fullpath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
 #endif
 
-        #region Pre-Save Error checking
+		#region Pre-Save Error checking
 
-        ErrorMessages.text = "";
+		ErrorMessages.text = "";
 
 		int numAllies = 0;
 		int numEnemies = 0;
@@ -66,11 +66,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				numEnemies++;
 			}
 		}
-        if (numAllies == 0 || numEnemies == 0) {
-            ErrorMessages.text = "Your level is missing an enemy, or you didn't create player's cell!";
-            if (temp == false) {
-                return fullpath;
-            }
+		if (numAllies == 0 || numEnemies == 0) {
+			ErrorMessages.text = "Your level is missing an enemy, or you didn't create player's cell!";
+			if (temp == false) {
+				return fullpath;
+			}
 		}
 
 		ErrorMessages.text += "You picked the fileName: " + fileName + ". \n";
@@ -91,10 +91,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		#endregion
 
 		BinaryFormatter formatter = new BinaryFormatter();
-        FileStream file = File.Create(fullpath);
-        SaveData save = new SaveData();
+		FileStream file = File.Create(fullpath);
+		SaveData save = new SaveData();
 
-        for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
+		for (int i = 0; i < LevelEditorCore.cellList.Count; i++) {
 			Cell c = LevelEditorCore.cellList[i];
 
 			S_Cell serCell = new S_Cell();
@@ -107,60 +107,60 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 			save.cells.Add(serCell);
 		}
-        save.savedAtAspect = Camera.main.aspect;
+		save.savedAtAspect = Camera.main.aspect;
 		save.difficulty = LevelEditorCore.aiDifficultyDict;
 		save.gameSize = LevelEditorCore.gameSize;
 		save.levelInfo = new LevelInfo(LevelEditorCore.levelName, LevelEditorCore.authorName, DateTime.Now);
-        save.clans = TeamSetup.clanDict;
+		save.clans = TeamSetup.clanDict;
 		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 		formatter.Serialize(file, save);
 		file.Close();
-        return fullpath;
+		return fullpath;
 	}
 
 	public void Load(string path) {
-        foreach (Cell c in LevelEditorCore.cellList) {
-            Destroy(c.gameObject);
-        }
-        LevelEditorCore.cellList.Clear();
-        TeamSetup.clanDict.Clear();
-        LevelEditorCore.aiDifficultyDict.Clear();
+		foreach (Cell c in LevelEditorCore.cellList) {
+			Destroy(c.gameObject);
+		}
+		LevelEditorCore.cellList.Clear();
+		TeamSetup.clanDict.Clear();
+		LevelEditorCore.aiDifficultyDict.Clear();
 
 
-        BinaryFormatter formatter = new BinaryFormatter();
+		BinaryFormatter formatter = new BinaryFormatter();
 		//File.WriteAllBytes(Application.persistentDataPath + "/Saves/ " + fileName + ".phage", loadStreamingAsset.bytes);
 		FileStream file = File.Open(path, FileMode.Open);
 		SaveData save = (SaveData)formatter.Deserialize(file);
-        LevelEditorCore.gameSize = save.gameSize;
+		LevelEditorCore.gameSize = save.gameSize;
 
-        LevelEditorCore.aiDifficultyDict = save.difficulty;
+		LevelEditorCore.aiDifficultyDict = save.difficulty;
 
-        if (save.difficulty != null) {
-            LevelEditorCore.aiDifficultyDict = save.difficulty;
-        }
-        else {
-            LevelEditorCore.aiDifficultyDict =new Dictionary<int, float>();
-            //print("diff null");
-        }
-        if (save.clans != null) {
-            TeamSetup.clanDict = save.clans;
-        }
-        else {
-            TeamSetup.clanDict = new Dictionary<int, int>();
-            //print("clan null");
-        }
+		if (save.difficulty != null) {
+			LevelEditorCore.aiDifficultyDict = save.difficulty;
+		}
+		else {
+			LevelEditorCore.aiDifficultyDict = new Dictionary<int, float>();
+			//print("diff null");
+		}
+		if (save.clans != null) {
+			TeamSetup.clanDict = save.clans;
+		}
+		else {
+			TeamSetup.clanDict = new Dictionary<int, int>();
+			//print("clan null");
+		}
 
 
-        //Dictionary<int, float>.KeyCollection keys = LevelEditorCore.aiDifficultyDict.Keys;
-        //foreach (int j in keys) {
-        //    //print(j + " Key");
-        //   float diffOfJ;
-        //    LevelEditorCore.aiDifficultyDict.TryGetValue(j, out diffOfJ);
-        //    string s = ("teaj " + j + " is " + diffOfJ + " difficult");
-        //    print(s);
+		//Dictionary<int, float>.KeyCollection keys = LevelEditorCore.aiDifficultyDict.Keys;
+		//foreach (int j in keys) {
+		//    //print(j + " Key");
+		//   float diffOfJ;
+		//    LevelEditorCore.aiDifficultyDict.TryGetValue(j, out diffOfJ);
+		//    string s = ("teaj " + j + " is " + diffOfJ + " difficult");
+		//    print(s);
 
-        //}
-        file.Close();
+		//}
+		file.Close();
 
 		for (int j = 0; j < save.cells.Count; j++) {
 

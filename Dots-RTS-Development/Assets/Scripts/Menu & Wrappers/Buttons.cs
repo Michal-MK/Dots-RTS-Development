@@ -79,7 +79,6 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
 			}
-
 		}
 	}
 }

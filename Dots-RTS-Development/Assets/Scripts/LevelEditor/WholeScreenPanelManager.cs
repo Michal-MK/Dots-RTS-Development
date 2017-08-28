@@ -15,7 +15,7 @@ public class WholeScreenPanelManager : MonoBehaviour {
 
 
 	private void Start() {
-		
+		Debug.LogWarning("Is this script used in any way ?");
 
 		gSPanel = GameObject.Find("GameSettingsPanel");
 		iOPanel = GameObject.Find("IOHugePanel");

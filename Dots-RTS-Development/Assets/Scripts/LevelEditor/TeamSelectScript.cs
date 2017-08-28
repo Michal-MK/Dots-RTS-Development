@@ -13,14 +13,14 @@ public class TeamSelectScript : MonoBehaviour {
 	public Text teamSBText;
 	public Image teamSB_IMG;
 	// This means the player wants to choose a new team
-	public void TeamSBPress () {
+	public void TeamSBPress() {
 		//I want to hide the panel, turn on team buttons
 		placeCellPanel.SetActive(false);
 		teamButtonsPanel.SetActive(true);
 	}
-	
+
 	// This mean he is done selecting
-	public void TeamSelectedButton (int correspondingTeam = 0) {
+	public void TeamSelectedButton(int correspondingTeam = 0) {
 		//I want to tell the LECore that the team value has changed, turn off the buttons and turn on the panel
 		team = correspondingTeam;
 		SendMessage("ParseCellTeam_PlaceCellPanel");
@@ -80,10 +80,10 @@ public class TeamSelectScript : MonoBehaviour {
 			}
 		}
 	}
-    
 
-    public int team {
-        get { return _team; }
-        set { _team = value;}
-    }
+
+	public int team {
+		get { return _team; }
+		set { _team = value; }
+	}
 }
