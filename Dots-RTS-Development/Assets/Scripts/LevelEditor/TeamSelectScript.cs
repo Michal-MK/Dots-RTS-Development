@@ -6,14 +6,14 @@ public class TeamSelectScript : MonoBehaviour {
 	public int _team;
 
 
-	public GameObject placeCellPanel;
+	//public GameObject placeCellPanel;
 	public GameObject teamButtonsPanel;
 	public Text teamSBText;
 	public Image teamSB_IMG;
 	// This means the player wants to choose a new team
 	public void TeamSBPress() {
 		//I want to hide the panel, turn on team buttons
-		placeCellPanel.SetActive(false);
+		//placeCellPanel.SetActive(false);
 		teamButtonsPanel.SetActive(true);
 	}
 
@@ -22,7 +22,7 @@ public class TeamSelectScript : MonoBehaviour {
 		//I want to tell the LECore that the team value has changed, turn off the buttons and turn on the panel
 		team = correspondingTeam;
 		SendMessage("ParseCellTeam_PlaceCellPanel");
-		placeCellPanel.SetActive(true);
+		//placeCellPanel.SetActive(true);
 		teamButtonsPanel.SetActive(false);
 
 	}
