@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 
 public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, IPointerDownHandler {
 
-	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();									//Global list of selected cells
-	public static event Control.TeamChangeEventHandler TeamChanged;
+	public static List<CellBehaviour> cellsInSelection = new List<CellBehaviour>();                                 //Global list of selected cells
+	public static event Control.TeamChanged TeamChanged;
 	public static CellBehaviour lastEnteredCell = null;
 
 	public bool isSelected = false;                                                                                 //Is cell in global selection ?
@@ -32,11 +32,12 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		if (regenPeriod == 0) {
 			regenPeriod = 0.3f;
 		}
-		if(cellRadius == 0) {
+		if (cellRadius == 0) {
 			cellRadius = col.radius * transform.localScale.x;
 		}
 		UpdateCellInfo();
 		StartCoroutine(ScaleCell());
+		sound = GameObject.Find("GameManager").GetComponent<SoundManager>();
 	}
 
 	#region Cell Selection/Deselection
@@ -114,7 +115,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				e.team = this.cellTeam;
 			}
 			UpdateCellInfo();
-			SoundManager.AddToSoundQueue(elementSpawn);
+			sound.AddToSoundQueue(elementSpawn);
 		}
 	}
 
@@ -129,6 +130,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				e.team = this.cellTeam;
 			}
 			UpdateCellInfo();
+			sound.AddToSoundQueue(elementSpawn);
 		}
 	}
 	#endregion
@@ -170,17 +172,17 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				}
 			}
 		}
-		if(DOTStrength != 0) {
+		if (DOTStrength != 0) {
 			if (!appliedDebuffs.Contains(Upgrade.Upgrades.ATK_DOT)) {
 				StartCoroutine(DoT(1, 4 * DOTStrength));
 			}
 		}
-		if(critChance != 0) {
-			if(Random.Range(0,1) <= critChance) {
+		if (critChance != 0) {
+			if (Random.Range(0, 1) <= critChance) {
 				amoutOfDamage *= 2;
 			}
 		}
-		if(slowRegenStrength != 0) {
+		if (slowRegenStrength != 0) {
 			if (!appliedDebuffs.Contains(Upgrade.Upgrades.ATK_SLOW_REGENERATION)) {
 				appliedDebuffs.Add(Upgrade.Upgrades.ATK_SLOW_REGENERATION);
 				regenPeriod *= 1.33f;
@@ -225,7 +227,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 			}
 
 			if (elementCount > maxElements) {
-				Decay(0.5f,this);
+				Decay(0.5f, this);
 			}
 			if (isSelected) {
 				cellSelected.enabled = true;

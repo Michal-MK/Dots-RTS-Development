@@ -47,6 +47,7 @@ public class Cell : MonoBehaviour {
 	public static Color32 enemy8Colour = new Color32(255, 150, 200, 255);                                   //Default enemy8 colour
 	#endregion
 
+	protected SoundManager sound;
 
 	public AudioClip elementSpawn;
 
@@ -60,7 +61,6 @@ public class Cell : MonoBehaviour {
 	public Rigidbody2D rg;
 	public SpriteRenderer cellSelected;
 	public Upgrade_Manager uManager;
-	public AudioSource audio;
 	#endregion
 
 	private void Start() {

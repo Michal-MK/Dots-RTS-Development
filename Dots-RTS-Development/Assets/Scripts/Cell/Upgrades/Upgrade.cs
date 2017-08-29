@@ -106,8 +106,13 @@ public class Upgrade : MonoBehaviour {
 				tex.LoadImage(result);
 				return Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 1024), Vector2.one * 0.5f);
 			}
-		}catch(FileNotFoundException e) {
-			return GameObject.Find("DefaultUpgradeSprite").GetComponent<SpriteRenderer>().sprite;
+		} catch (FileNotFoundException e) {
+			try {
+				return GameObject.Find("DefaultUpgradeSprite").GetComponent<SpriteRenderer>().sprite;
+			}
+			catch {
+				return null;
+			}
 		}
 	}
 

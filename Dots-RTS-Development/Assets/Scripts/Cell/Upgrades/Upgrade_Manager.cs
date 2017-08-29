@@ -1,8 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 
@@ -26,7 +26,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	public BoxCollider2D[] slots = new BoxCollider2D[8];
 
 	private void Start() {
-		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex != 8) {
+		if (SceneManager.GetActiveScene().name != Scenes.SHOP) {
 			for (int i = 0; i < slots.Length; i++) {
 				slots[i] = slotHolder.GetChild(i).GetComponent<BoxCollider2D>();
 
@@ -37,7 +37,8 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	/// Buy selected upgrade from the store
 	/// </summary>
 	public void BuyUpgrade() {
-		//GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
+		GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
+		Animator anim = GameObject.Find("Warning").GetComponent<Animator>();
 		//Preform some highlights
 
 		//Subtract total money + add the upgrade to proflie
@@ -53,7 +54,8 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 					return;
 				}
 				else {
-					print("Not enough Coins, missing " + (cost - ProfileManager.getCurrentProfile.ownedCoins));
+					anim.GetComponent<TextMeshProUGUI>().text = "You are missing\n" + (cost - ProfileManager.getCurrentProfile.ownedCoins) + " coins.";
+					anim.Play("Show");
 				}
 			}
 		}

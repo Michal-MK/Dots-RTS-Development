@@ -596,18 +596,6 @@ public class Enemy_AI : MonoBehaviour {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	//This is where the AI magic happens
 	public IEnumerator PreformAction() {
 		//yield return new WaitForEndOfFrame();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class SoundManager : MonoBehaviour {
-	public static List<AudioSource> sources = new List<AudioSource>();
+	public List<AudioSource> sources = new List<AudioSource>();
 	public bool play;
 
 
@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour {
 		play = false;
 	}
 
-	public static void AddToSoundQueue(AudioClip newClip) {
+	public void AddToSoundQueue(AudioClip newClip) {
 		print("attempt");
 		bool added = false;
 		foreach (AudioSource s in sources) {
@@ -28,7 +28,8 @@ public class SoundManager : MonoBehaviour {
 				added = true;
 				s.clip = newClip;
 				s.Play();
-				print("ERROR");
+				StartCoroutine(RemoveClipAfterFinish(s));
+				return;
 			}
 		}
 		if (!added) {
@@ -37,7 +38,7 @@ public class SoundManager : MonoBehaviour {
 
 	}
 
-	public static IEnumerator RemoveClipAfterFinish(AudioSource s) {
+	public IEnumerator RemoveClipAfterFinish(AudioSource s) {
 		yield return new WaitUntil(() => !s.isPlaying);
 		s.clip = null;
 		print("Removed");
