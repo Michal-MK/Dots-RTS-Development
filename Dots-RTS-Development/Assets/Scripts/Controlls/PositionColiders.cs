@@ -45,7 +45,11 @@ public class PositionColiders : MonoBehaviour {
 		transform.position = c.transform.position;
 
 		SpriteRenderer bg = background.GetComponent<SpriteRenderer>();
-		bg.size = new Vector2(c.transform.position.x + c.orthographicSize * 2 * refAspect, c.orthographicSize * 2);
+		BoxCollider2D col = background.GetComponent<BoxCollider2D>();
+		Vector2 newSize = new Vector2(c.transform.position.x + c.orthographicSize * 2 * refAspect, c.orthographicSize * 2);
 
+		bg.size = newSize;
+		background.sizeDelta = newSize;
+		col.size = newSize;		
 	}
 }

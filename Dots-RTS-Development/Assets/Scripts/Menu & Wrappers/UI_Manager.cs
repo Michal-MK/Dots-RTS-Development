@@ -68,7 +68,12 @@ public class UI_Manager : MonoBehaviour {
 	public static void CloseMostRecent() {
 		if (activeWindows.Count > 0) {
 			GameObject g = activeWindows.Pop();
-			g.SetActive(false);
+			if (g != null) {
+				g.SetActive(false);
+			}
+			else {
+				Control.Pause();
+			}
 		}
 		else {
 			Control.Pause();
