@@ -5,12 +5,13 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System;
 
-public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
+public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnterHandler,IPointerExitHandler {
 
 	public Upgrade.Upgrades type;
 	new public string name;
 	public int count;
 	public Image typeImage;
+	private TextMeshProUGUI desc;
 
 	private Upgrade_Manager currentCell;
 
@@ -30,7 +31,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 	}
 
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
-		print(sender);
+		//print(sender);
 		currentCell = sender;
 	}
 
@@ -46,6 +47,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 				count = ProfileManager.getCurrentProfile.acquiredUpgrades[type];
 				UpdateUpgradeOverview();
 			}
+			desc = transform.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();
 		}
 	}
 
@@ -96,5 +98,13 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler {
 			sender.selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 			sender.selfSprite.size = Vector2.one * 25;
 		}
+	}
+
+	public void OnPointerEnter(PointerEventData eventData) {
+		desc.text = FolderAccess.GetUpgradeName(type);
+	}
+
+	public void OnPointerExit(PointerEventData eventData) {
+		desc.text = "";
 	}
 }

@@ -85,7 +85,12 @@ class FolderAccess {
 		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
 									  where (int)upgradeName.Attribute("id") == (int)type
 									  select upgradeName.Element("name").Value;
-		return strings.First();
+		try {
+			return strings.First();
+		}
+		catch (System.InvalidOperationException) {
+			return "Missing entry for " + type;
+		}
 	}
 
 	public static string GetUpgradeFunctionalName(Upgrade.Upgrades type) {
@@ -96,7 +101,12 @@ class FolderAccess {
 		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
 									  where (int)upgradeName.Attribute("id") == (int)type
 									  select upgradeName.Element("funcName").Value;
-		return strings.First();
+		try {
+			return strings.First();
+		}
+		catch (System.InvalidOperationException) {
+			return "Missing entry for " + type;
+		}
 	}
 
 
@@ -108,7 +118,12 @@ class FolderAccess {
 		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
 									  where (int)upgradeName.Attribute("id") == (int)type
 									  select upgradeName.Element("desc").Value;
-		return strings.First();
+		try {
+			return strings.First();
+		}
+		catch (System.InvalidOperationException) {
+			return "Missing entry for " + type;
+		}
 	}
 
 	public static string[] GetUpgrade(Upgrade.Upgrades type) {
