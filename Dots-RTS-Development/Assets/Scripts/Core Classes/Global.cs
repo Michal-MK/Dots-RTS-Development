@@ -5,7 +5,7 @@ using UnityEngine;
 public class Global {
 	public static bool baseLoaded = false;
 
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	static async void Start() {
 		List<Task> tasks = new List<Task>();
 		tasks.Add(Upgrade.FillUpgradeSpriteDict());

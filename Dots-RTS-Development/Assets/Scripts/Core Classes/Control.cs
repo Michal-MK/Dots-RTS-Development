@@ -94,13 +94,11 @@ public class Control : MonoBehaviour {
 		if (ProfileManager.getCurrentProfile == null) {
 			if (activeScene == Scenes.SPLASH) {
 				yield return new WaitUntil(() => Global.baseLoaded);
-				print("Switching");
 				SceneManager.LoadScene(Scenes.PROFILES);
 			}
 			if (activeScene == Scenes.MENU) {
 				DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 				yield return new WaitUntil(() => Global.baseLoaded);
-				print("Switching");
 				SceneManager.LoadScene(Scenes.PROFILES);
 			}
 		}
@@ -135,7 +133,6 @@ public class Control : MonoBehaviour {
 		}
 
 		if (newS.name == Scenes.PLAYER) {
-			print("Scene");
 			if (levelState != PlaySceneState.PREVIEW) {
 				StartCoroutine(GameState());
 			}
@@ -186,17 +183,12 @@ public class Control : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			print(UI_Manager.getWindowCount);
 			if (isPaused) {
 				UnPause();
 			}
 			else {
-				if (Upgrade_Manager.isUpgrading) {
-					Upgrade_Manager.isUpgrading = false;
-				}
 				Pause();
 			}
-
 		}
 	}
 
@@ -204,7 +196,7 @@ public class Control : MonoBehaviour {
 	public IEnumerator GameState() {
 		isInGame = true;
 
-		while (SceneManager.GetActiveScene().name == "Level_Player" && isInGame) {
+		while (SceneManager.GetActiveScene().name == Scenes.PLAYER && isInGame) {
 			yield return new WaitForSeconds(1);
 			int activeAIs = 0;
 
@@ -217,7 +209,7 @@ public class Control : MonoBehaviour {
 			}
 			if (activeAIs == 0) {
 				yield return new WaitForSeconds(2);
-				if (SceneManager.GetActiveScene().name == "Level_Player") {
+				if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
 					YouWon();
 				}
 			}
@@ -231,7 +223,7 @@ public class Control : MonoBehaviour {
 			}
 			if (playerCells == 0) {
 				yield return new WaitForSeconds(2);
-				if (SceneManager.GetActiveScene().name == "Level_Player") {
+				if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
 					GameOver();
 				}
 			}

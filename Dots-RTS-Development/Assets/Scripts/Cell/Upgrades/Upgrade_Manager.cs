@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,6 +8,10 @@ using UnityEngine.SceneManagement;
 public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 
 	public static bool isUpgrading = false;
+	private static Upgrade_Manager currentCell;
+	/// <summary>
+	/// Selected item in the upgrade shop.
+	/// </summary>
 	public static int selectedUpgrade = -1;
 
 	public static event Control.EnteredUpgradeMode OnUpgradeBegin;
@@ -61,7 +66,6 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 		}
 
 	}
-
 
 	/// <summary>
 	/// Adds upgrades from a save file or otherwise defined source
@@ -145,21 +149,26 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
+		//print("Click " + gameObject.name);
 		//Detects double click on cell
 		if (eventData.clickCount == 2) {
-			print("Double");
-			isUpgrading = true;
-			OnUpgradeBegin(this); //Sent to Camera, 
-			slotRender.color = new Color32(255, 255, 255, 30);
-
-			/*Display menu with upgrades, zoom camer onto the cell.*/
+			if (OnUpgradeBegin != null) {
+				if(currentCell != null) {
+					OnUpgradeQuit(currentCell);
+				}
+				isUpgrading = true;
+				currentCell = this;
+				OnUpgradeBegin(currentCell); //Sent to Camera,UpgradePanelData 
+			}
 		}
 	}
 
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape) && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Upgrade_Store") {
-			if (isUpgrading) {
-				OnUpgradeQuit(this);
+		if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name != Scenes.SHOP) {
+			if (isUpgrading && currentCell != null) {
+				isUpgrading = false;
+				OnUpgradeQuit(currentCell);
+				currentCell = null;
 			}
 		}
 	}

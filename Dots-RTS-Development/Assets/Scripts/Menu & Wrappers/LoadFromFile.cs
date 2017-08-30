@@ -53,6 +53,8 @@ public class LoadFromFile : MonoBehaviour {
 				c.regenPeriod = customSave.cells[j].regenerationPeriod;
 				//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
+				c.gameObject.name = "Cell " + j + " " + c.cellTeam;
+
 				c.enabled = true;
 
 				c.UpdateCellInfo();

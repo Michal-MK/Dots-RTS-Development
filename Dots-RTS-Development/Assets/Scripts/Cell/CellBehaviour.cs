@@ -348,6 +348,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
+		//print("Click " + gameObject.name);
 		ClearSelection();
 	}
 

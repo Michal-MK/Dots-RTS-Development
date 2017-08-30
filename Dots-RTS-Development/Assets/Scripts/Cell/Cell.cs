@@ -16,7 +16,6 @@ public class Cell : MonoBehaviour {
 
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
-	public bool isScaling = false;
 
 	public List<Upgrade.Upgrades> appliedDebuffs = new List<Upgrade.Upgrades>();
 
@@ -55,8 +54,6 @@ public class Cell : MonoBehaviour {
 	public SpriteRenderer cellSprite;
 	public TextMesh elementNrDisplay;
 	public MeshRenderer textRenderer;
-	public LineRenderer circle;
-	public LineRenderer lineToMouse;
 	public CircleCollider2D col;
 	public Rigidbody2D rg;
 	public SpriteRenderer cellSelected;

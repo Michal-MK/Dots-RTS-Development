@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using System;
-
+using UnityEngine.SceneManagement;
 public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnterHandler,IPointerExitHandler {
 
 	public Upgrade.Upgrades type;
@@ -15,32 +13,53 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 
 	private Upgrade_Manager currentCell;
 
+	private static bool isSubscribed = false;
+
 	private void Awake() {
-		Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
-		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+		if (!isSubscribed) {
+			print("Subscribed Panel");
+			Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
+			isSubscribed = true;
+		}
 	}
 
-	private void OnDisable() {
+	private void OnDestroy() {
+		print("Unsubbed Panel");
 		Upgrade_Manager.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
 		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+		isSubscribed = false;
 
 	}
 
 	private void Upgrade_Manager_OnUpgradeQuit(Upgrade_Manager sender) {
+		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+
+
+		print("Upgrade Quit " + sender.gameObject.name);
+		sender.slotRender.color = new Color(1, 1, 1, 0);
+		foreach (BoxCollider2D col in sender.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
+			col.enabled = false;
+		}
+		Upgrade_Manager.isUpgrading = false;
 		currentCell = null;
 	}
 
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
-		//print(sender);
+		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+
+		print("Upgrade Begin " + sender.gameObject.name);
 		currentCell = sender;
+		currentCell.slotRender.color = new Color(1, 1, 1, 0.2f);
+		foreach (BoxCollider2D col in currentCell.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
+			col.enabled = true;
+		}
 	}
 
-	// Use this for initialization
 	void Start() {
-		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_Player" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Debug") {
+		if (SceneManager.GetActiveScene().name == Scenes.PLAYER || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
 			if (ProfileManager.getCurrentProfile == null) {
-				Control.DebugSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-				UnityEngine.SceneManagement.SceneManager.LoadScene("Profiles");
+				Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
+				SceneManager.LoadScene(Scenes.PROFILES);
 				return;
 			}
 			if (type != Upgrade.Upgrades.NONE) {
@@ -51,6 +70,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 		}
 	}
 
+	//Updates upgrade image visuals
 	public void UpdateUpgradeOverview() {
 		if (count == 0) {
 			GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
@@ -62,10 +82,12 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 	}
 
+	//Upgrade Instalation Logic
 	public void OnPointerClick(PointerEventData eventData) {
-		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Profiles") {
+		if (SceneManager.GetActiveScene().name != Scenes.PROFILES) {
 			if (eventData.clickCount == 1) {
 				UpgradeSlot.OnSlotClicked += InstallUpgradeTo;
+				currentCell.slotRender.color = new Color(1, 1, 1, 0.8f);
 			}
 			else if (eventData.clickCount == 2) {
 
@@ -84,7 +106,9 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 		}
 	}
 
+	//Stuff to do with instalation, moving numbers around
 	private void InstallUpgradeTo(UpgradeSlot sender, int slot) {
+		print("Triggered");
 		currentCell.upgrades[slot] = type;
 		count--;
 		UpdateUpgradeOverview();
@@ -97,6 +121,10 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 		else {
 			sender.selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 			sender.selfSprite.size = Vector2.one * 25;
+		}
+		currentCell.slotRender.color = new Color(1, 1, 1, 0);
+		foreach (BoxCollider2D col in currentCell.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
+			col.enabled = false;
 		}
 	}
 
