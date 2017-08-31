@@ -15,6 +15,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public static List<Cell> cellList = new List<Cell>();
 	public static List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
+	public static List<Cell> selectedCellList = new List<Cell>();
 	/// <summary>
 	/// All of the input fields, there's only one input panel so this can be static --- epic reasoning
 	/// </summary>
@@ -73,7 +74,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 
 	// The current editor mode
-	public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells, AssignUpgrades };
+	public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells };
 	public enum PCPanelAttribute { Team, Max, Start, Regen };
 
 	public static Mode editorMode;
@@ -119,6 +120,7 @@ public class LevelEditorCore : MonoBehaviour {
 		// Set defalut mode to placeCells
 		//Have to wait for all of the things to initialize before I can call a button press
 		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 		PlaceCellButton();
 	}
 
@@ -149,6 +151,8 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 	#endregion
 
+	
+
 
 	public void CellOutlineToggle(Toggle toggle) {
 		OutlineOn = toggle.isOn;
@@ -164,30 +168,31 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
+
 	private void OnDestroy() {
 		LevelEditorCore.cellList.Clear();
 	}
 
 	public void DestoyCellsButton() {
 		editorMode = Mode.DeleteCells;
-		modeChange(Mode.DeleteCells);
+		modeChange?.Invoke(Mode.DeleteCells);
 		Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
 	}
 	public void PlaceCellButton() {
 		editorMode = Mode.PlaceCells;
-		modeChange(Mode.PlaceCells);
+		modeChange?.Invoke(Mode.PlaceCells);
 		Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
 	}
 	public void EditCellsButton() {
 		editorMode = Mode.EditCells;
-		modeChange(Mode.EditCells);
+		modeChange?.Invoke(Mode.EditCells);
 		Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 	}
-	public void UpgradesButton() {
-		editorMode = Mode.AssignUpgrades;
-		modeChange(Mode.AssignUpgrades);
-		Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-	}
+	//public void UpgradesButton() {
+	//	editorMode = Mode.AssignUpgrades;
+	//	modeChange?.Invoke(Mode.AssignUpgrades);
+	//	Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+	//}
 
 	public void ParseCellTeam_PlaceCellPanel() {
 		team = teamButton.team;
@@ -198,7 +203,6 @@ public class LevelEditorCore : MonoBehaviour {
 
 	}
 	public void ParseMaxElementCount_PlaceCellPanel() {
-		Debug.LogWarning("Since this function has only 1 caller at the start, consider creating one Function?");
 
 
 		if (!int.TryParse(maxInput.text, out max)) {
@@ -211,7 +215,6 @@ public class LevelEditorCore : MonoBehaviour {
 
 	}
 	public void ParseStartingElementCount_PlaceCellPanel() {
-		Debug.LogWarning("Since this function has only 1 caller at the start, consider creating one Function?");
 
 		if (!int.TryParse(startInput.text, out start)) {
 			start = defaultStart;
@@ -222,7 +225,6 @@ public class LevelEditorCore : MonoBehaviour {
 
 	}
 	public void ParseRegenPeriod_PlaceCellPanel() {
-		Debug.LogWarning("Since this function has only 1 caller at the start, consider creating one Function?");
 
 		if (!float.TryParse(regenInput.text, out regen)) {
 			regen = defaultRegen;
@@ -302,10 +304,10 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-	public static void BringUpUpgradePanel() {
-		RectTransform rc = upgradePanel.GetComponent<RectTransform>();
-		//rc.sizeDelta = new Vector2(rc.sizeDelta.x, 0);
-	}
+	//public static void BringUpUpgradePanel() {
+	//	RectTransform rc = upgradePanel.GetComponent<RectTransform>();
+	//	//rc.sizeDelta = new Vector2(rc.sizeDelta.x, 0);
+	//}
 
 	//This is called with the panelChange event;
 	public static void RefreshCameraSize(float val) {
@@ -318,6 +320,56 @@ public class LevelEditorCore : MonoBehaviour {
 			Camera.main.orthographicSize = val;
 			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(Camera.main.aspect);
 		}
+	}
+
+	public static void FitCellsOnScreen(List<Cell> cells) {
+		//find boarders
+		if (cells.Count == 0) {
+			return;
+		}
+		float lowestX = Mathf.Infinity;
+		float highestX = 0;
+		float lowestY = Mathf.Infinity;
+		float highestY = 0;
+		if (cells.Count == 1) {
+			Vector3 pos = cells[0].transform.position;
+			lowestX = pos.x - cells[0].cellRadius;
+			highestX = pos.x + cells[0].cellRadius;
+			lowestY = pos.y - cells[0].cellRadius;
+			highestY = pos.y + cells[0].cellRadius;
+		}
+		else {
+			foreach (Cell cell in cells) {
+				Vector3 cellPos = cell.transform.position;
+				if (cellPos.x < lowestX) {
+					lowestX = cellPos.x - cell.cellRadius;
+					print(cell.cellRadius);
+				}
+				if (cellPos.x > highestX) {
+					highestX = cellPos.x + cell.cellRadius;
+				}
+				if (cellPos.y < lowestY) {
+					lowestY = cellPos.y - cell.cellRadius;
+				}
+				if (cellPos.y > highestY) {
+					highestY = cellPos.y + cell.cellRadius;
+				}
+			}
+		}
+		Camera.main.transform.position = new Vector3(Mathf.Lerp(lowestX, highestX, 0.5f), Mathf.Lerp(lowestY, highestY, 0.5f), -10);
+		float aspect = Camera.main.aspect;
+		if (highestX - lowestX > highestY - lowestY) {
+			float delta = highestX - lowestX;
+			float adjustedWidth = delta / aspect;
+			Camera.main.orthographicSize = adjustedWidth * 0.5f;
+		}
+		else  {
+			float delta = highestY - lowestY;
+			Camera.main.orthographicSize = delta * 0.5f;
+		}
+
+
+
 	}
 
 	public static int team {

@@ -6,16 +6,16 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	//public LevelEditorCore core;
 
 
-	public static event Control.EnteredCellEditMode changedASelectionOfCell;
+	//public static event Control.EnteredCellEditMode changedASelectionOfCell;
 
-	private Camera _cam;
-	private Vector3 _oldCamPos;
+	//private Camera _cam;
+	//private Vector3 _oldCamPos;
 	public GameObject myMaxSizeOutline;
 
 	public bool isCellSelected = false;
 
-	private float _defaultSize;
-	private float _zoomedSize;
+	//private float _defaultSize;
+	//private float _zoomedSize;
 
 	float pointerDownAtTime;
 	bool longPress;
@@ -38,6 +38,26 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	}
 
+
+	public void FastResize() {
+		float mappedValue;
+		if (elementCount < 10) {
+			mappedValue = 1;
+		}
+		else if (elementCount >= 10 && elementCount <= maxElements) {
+			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
+		}
+		else {
+			if (elementCount < 1000) {
+				mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+			}
+			else {
+				mappedValue = 4;
+			}
+		}
+		transform.localScale = new Vector3(mappedValue, mappedValue);
+		cellRadius = col.radius * transform.localScale.x;
+	}
 	//private void Start() {
 	//	_defaultSize = _cam.orthographicSize;
 	//	_zoomedSize = _defaultSize * 0.25f;
@@ -81,26 +101,28 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		//print(isCellSelected);
 		if (isCellSelected) {
 			if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
+				
 				elementCount = LevelEditorCore.start;
+
+				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
 				cellTeam = (Cell.enmTeam)LevelEditorCore.team;
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
 				maxElements = LevelEditorCore.max;
+				
+				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
 				regenPeriod = LevelEditorCore.regen;
 			}
-
-
-
 		}
 	}
 
 	private void EditorModeUpdate(LevelEditorCore.Mode mode) {
 
-
+		LevelEditorCore.selectedCellList.Remove(gameObject.GetComponent<Cell>());
 		isCellSelected = false;
 		cellSelected.enabled = false;
 	}
@@ -111,6 +133,8 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			lookForLongPress = true;
 			isCellSelected = !isCellSelected;
 			if (isCellSelected) {
+				LevelEditorCore.selectedCellList.Add(gameObject.GetComponent<Cell>());
+				
 				LevelEditorCore.dontUpdate = true;
 				LevelEditorCore.team = ((int)cellTeam);
 				LevelEditorCore.startInput.text = elementCount.ToString();
@@ -122,16 +146,10 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			}
 			else {
 
+				LevelEditorCore.selectedCellList.Remove(gameObject.GetComponent<Cell>());
 				cellSelected.enabled = false;
 			}
 
-		}
-		if (LevelEditorCore.editorMode == LevelEditorCore.Mode.AssignUpgrades) {
-			isCellSelected = true;
-			EnableCircle(Color.magenta);
-			Camera.main.transform.position = transform.position + Vector3.back * 10;
-			Camera.main.orthographicSize = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2f;
-			LevelEditorCore.BringUpUpgradePanel();
 		}
 
 

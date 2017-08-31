@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using WindowsInput;
 
@@ -30,6 +31,15 @@ public class Buttons : MainMenuUI  {
 	public void EditMode() {
 		Control.cells.Clear();
 		SceneManager.LoadScene(Scenes.EDITOR);
+	}
+
+	public void FitCells() {
+		if (GetComponent<Toggle>().isOn) {
+			LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+		}
+		else {
+			LevelEditorCore.RefreshCameraSize(LevelEditorCore.gameSize);
+		}
 	}
 
 	public void PauseGameorEscape() {

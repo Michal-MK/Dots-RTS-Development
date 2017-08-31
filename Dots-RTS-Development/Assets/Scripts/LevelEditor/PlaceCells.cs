@@ -20,8 +20,10 @@ public class PlaceCells : MonoBehaviour {
 
 			//print(LevelEditorCore.start);
 			newCell.SetActive(true);
+			newCell.GetComponent<EditCell>().FastResize();			
 
 			LevelEditorCore.AddCell(c);
+			
 		}
 #endif
 #if (UNITY_ANDROID || UNITY_IOS)
