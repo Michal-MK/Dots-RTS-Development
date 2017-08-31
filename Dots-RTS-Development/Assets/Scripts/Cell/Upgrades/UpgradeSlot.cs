@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UpgradeSlot : MonoBehaviour, IPointerClickHandler {
+public class UpgradeSlot : MonoBehaviour,IPointerClickHandler, IPointerDownHandler {
 	public int slot;
 	public SpriteRenderer selfSprite;
 	public delegate void OnUpgradeSlotClick(UpgradeSlot sender, int slot);
@@ -15,6 +12,12 @@ public class UpgradeSlot : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		OnSlotClicked?.Invoke(this,slot);
+		if (OnSlotClicked != null) {
+			OnSlotClicked(this, slot);
+		}
+
+	}
+	public void OnPointerDown(PointerEventData eventData) {
+		//Has to be implemented for some reason.
 	}
 }

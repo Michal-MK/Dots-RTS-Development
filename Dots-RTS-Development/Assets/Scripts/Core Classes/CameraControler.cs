@@ -5,7 +5,7 @@ public class CameraControler : MonoBehaviour {
 	public RectTransform background;
 
 	private Vector3 defaultPos;
-	private float defaultSize;
+	private float defaultSize = 0;
 
 	private float bgVertSize;
 	private float bgHorSize;
@@ -15,15 +15,21 @@ public class CameraControler : MonoBehaviour {
 	private float camVertDiffB;
 
 
-
+	private static bool isSubscribed = false;
 
 	private void Awake() {
-		Upgrade_Manager.OnUpgradeBegin += OnBeginUpgrading;
-		Upgrade_Manager.OnUpgradeQuit += OnQuitUpgrading;
+		if (!isSubscribed) {
+			print("Subscribed Camera");
+			Upgrade_Manager.OnUpgradeBegin += OnBeginUpgrading;
+			Upgrade_Manager.OnUpgradeQuit += OnQuitUpgrading;
+			isSubscribed = true;
+		}
 	}
-	private void OnDisable() {
+	private void OnDestroy() {
+		print("Unsubbed Cam");
 		Upgrade_Manager.OnUpgradeBegin -= OnBeginUpgrading;
 		Upgrade_Manager.OnUpgradeQuit -= OnQuitUpgrading;
+		isSubscribed = false;
 	}
 
 
@@ -34,8 +40,10 @@ public class CameraControler : MonoBehaviour {
 
 	private void OnBeginUpgrading(Upgrade_Manager sender) {
 		c = Camera.main;
-
-		c.orthographicSize = defaultSize;
+		if (defaultSize == 0) {
+			c.orthographicSize = defaultSize;
+			print(defaultSize);
+		}
 
 		c.orthographicSize *= 0.5f;
 
@@ -77,10 +85,10 @@ public class CameraControler : MonoBehaviour {
 		}
 
 		Vector3 percentage = c.WorldToViewportPoint(newPos);
-		print(percentage.y);
+		//print(percentage.y);
 
 		if (percentage.y <= 0.1f) {
-			print("A");
+			//print("A");
 			Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.3f));
 			Vector3 pointD = c.ViewportToWorldPoint(new Vector3(0.5f, 0));
 
@@ -89,12 +97,12 @@ public class CameraControler : MonoBehaviour {
 			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z);
 		}
 		else if (percentage.y > 0.96f) {
-			print("B");
+			//print("B");
 			transform.position = new Vector3(newPos.x, newPos.y, newPos.z);
 
 		}
 		else {
-			print("C");
+			//print("C");
 			Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.65f));
 			float d = Vector3.Distance(c.transform.position, pointU);
 			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z);
@@ -102,6 +110,7 @@ public class CameraControler : MonoBehaviour {
 	}
 
 	private void OnQuitUpgrading(Upgrade_Manager sender) {
+		//print("Cam Def Size " + defaultSize);
 		c.orthographicSize = defaultSize;
 		transform.position = defaultPos;
 	}

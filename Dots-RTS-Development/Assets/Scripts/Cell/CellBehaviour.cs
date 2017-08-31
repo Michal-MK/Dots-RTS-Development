@@ -58,12 +58,12 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 	public void SetSelected() {
 		if (isSelected) {
 			isSelected = false;
-			elementNrDisplay.color = new Color32(255, 255, 255, 255);
+			elementCountDisplay.color = new Color32(255, 255, 255, 255);
 			cellSelected.enabled = false;
 		}
 		else {
 			isSelected = true;
-			elementNrDisplay.color = new Color32(255, 0, 0, 255);
+			elementCountDisplay.color = new Color32(255, 0, 0, 255);
 			cellSelected.enabled = true;
 		}
 	}
@@ -73,7 +73,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		//print("Clearing");
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
-			cellsInSelection[i].elementNrDisplay.color = new Color(1, 1, 1);
+			cellsInSelection[i].elementCountDisplay.color = new Color(1, 1, 1);
 			cellsInSelection[i].cellSelected.enabled = false;
 		}
 		cellsInSelection.Clear();
@@ -348,6 +348,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
+		//print("Click " + gameObject.name);
 		ClearSelection();
 	}
 

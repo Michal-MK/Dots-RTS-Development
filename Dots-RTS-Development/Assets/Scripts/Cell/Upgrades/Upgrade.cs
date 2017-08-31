@@ -100,7 +100,7 @@ public class Upgrade : MonoBehaviour {
 			using (FileStream fs = new FileStream(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png", FileMode.Open, FileAccess.Read, FileShare.Read, 4069, true)) {
 				//print("Got Image for " + type + " on path " + Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png");
 				byte[] result = new byte[fs.Length];
-				print(result.Length);
+				//print(result.Length);
 				await fs.ReadAsync(result, 0, (int)fs.Length);
 				Texture2D tex = new Texture2D(1024, 1024);
 				tex.LoadImage(result);
@@ -123,12 +123,12 @@ public class Upgrade : MonoBehaviour {
 
 		for (int i = 0; i < values.Length; i++) {
 			if (values[i] < 99 && values[i] >= 0 && values[i] < TOTAL_OFFENSIVE_UPGRADES) {
-				print(values[i] + " Is Ofensive, adding " + (Upgrades)values[i]);
+				//print(values[i] + " Is Ofensive, adding " + (Upgrades)values[i]);
 				t[i] = GetSprite((Upgrades)values[i]);
 			}
 			if(values[i] >= 100 && values[i] < 100 + TOTAL_DEFENSIVE_UPGRADES) {
-				print(values[i] + " Is Defensive, adding " + (Upgrades)values[i]);
-				print(i + " " + values[i]);
+				//print(values[i] + " Is Defensive, adding " + (Upgrades)values[i]);
+				//print(i + " " + values[i]);
 				t[i] = GetSprite((Upgrades)values[i]);
 			}
 		}

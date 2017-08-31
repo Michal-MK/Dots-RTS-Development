@@ -142,6 +142,7 @@ public class Enemy_AI : MonoBehaviour {
 
 	//Triggered when a cell changs team
 	private void RemoveCell(CellBehaviour sender, Cell.enmTeam cellTeam, Cell.enmTeam elementTeam) {
+		print("Remove");
 		//print("Triggered " + gameObject.name + "  " + sender.gameObject.name + "  " + cellTeam + " " + elementTeam);
 		List<DataHolder> data = GetCellInstances(sender);
 

@@ -10,9 +10,9 @@ public class CellBehaviourDebug : CellBehaviour {
 	public override void UpdateCellInfo(bool calledFromBase = false) {
 		ScaleCell();
 
-		elementNrDisplay.text = elementCount.ToString();
-		textRenderer.sortingLayerName = "Cells";
-		textRenderer.sortingOrder = 1;
+		elementCountDisplay.text = elementCount.ToString();
+		elementCountDisplayRenderer.sortingLayerName = "Cells";
+		elementCountDisplayRenderer.sortingOrder = 1;
 
 		//Change Colour depending on the team
 		switch (cellTeam) {

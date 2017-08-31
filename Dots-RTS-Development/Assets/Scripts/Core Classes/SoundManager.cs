@@ -20,11 +20,11 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	public void AddToSoundQueue(AudioClip newClip) {
-		print("attempt");
+		//print("attempt");
 		bool added = false;
 		foreach (AudioSource s in sources) {
 			if(s.clip == null) {
-				print("Added");
+				//print("Added");
 				added = true;
 				s.clip = newClip;
 				s.Play();
@@ -41,6 +41,6 @@ public class SoundManager : MonoBehaviour {
 	public IEnumerator RemoveClipAfterFinish(AudioSource s) {
 		yield return new WaitUntil(() => !s.isPlaying);
 		s.clip = null;
-		print("Removed");
+		//print("Removed");
 	}
 }
