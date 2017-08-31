@@ -17,7 +17,8 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 
 
 	//Add cell to global list
-	private void Awake() {
+	public override void Awake() {
+		base.Awake();
 		Control.cells.Add(this);
 	}
 

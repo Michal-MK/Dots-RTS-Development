@@ -70,7 +70,7 @@ public class Cell : MonoBehaviour {
 	public SpriteRenderer cellSelected;
 	#endregion
 
-	private void Awake() {
+	public virtual void Awake() {
 
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
@@ -83,7 +83,6 @@ public class Cell : MonoBehaviour {
 
 		cellSelected = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
-		//UpdateCellInfo();
 		cellRadius = col.radius * transform.localScale.x;
 	}
 

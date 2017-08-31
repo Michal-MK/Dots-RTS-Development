@@ -10,6 +10,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	//private Camera _cam;
 	//private Vector3 _oldCamPos;
+
 	public GameObject myMaxSizeOutline;
 
 	public bool isCellSelected = false;
@@ -25,13 +26,15 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 
 
-	private void Awake() {
+	public override void Awake() {
+		base.Awake();
 		pointerDownAtTime = Mathf.Infinity;
 		LevelEditorCore.modeChange += EditorModeUpdate;
 		LevelEditorCore.panelChange += RefreshCellFromPanel;
 
 
 	}
+
 	private void OnDisable() {
 		LevelEditorCore.modeChange -= EditorModeUpdate;
 		LevelEditorCore.panelChange -= RefreshCellFromPanel;
@@ -58,6 +61,8 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		transform.localScale = new Vector3(mappedValue, mappedValue);
 		cellRadius = col.radius * transform.localScale.x;
 	}
+
+	#region Comment
 	//private void Start() {
 	//	_defaultSize = _cam.orthographicSize;
 	//	_zoomedSize = _defaultSize * 0.25f;
@@ -96,6 +101,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	//		}
 	//	}
 	//}
+	#endregion
 
 	private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
 		//print(isCellSelected);

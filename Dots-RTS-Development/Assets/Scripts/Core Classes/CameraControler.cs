@@ -64,7 +64,7 @@ public class CameraControler : MonoBehaviour {
 		//print("Diff to BOTTOM " + camVertDiffB);
 
 
-
+		Vector3 percentage = c.WorldToViewportPoint(newPos);
 
 
 		//RightSide
@@ -84,8 +84,8 @@ public class CameraControler : MonoBehaviour {
 			newPos = new Vector3(newPos.x, newPos.y - camVertDiffB, newPos.z);
 		}
 
-		Vector3 percentage = c.WorldToViewportPoint(newPos);
-		//print(percentage.y);
+		//Vector3 percentage = c.WorldToViewportPoint(newPos);
+		print(percentage);
 
 		if (percentage.y <= 0.1f) {
 			//print("A");
