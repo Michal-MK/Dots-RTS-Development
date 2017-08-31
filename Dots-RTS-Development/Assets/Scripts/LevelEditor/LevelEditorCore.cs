@@ -83,6 +83,8 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public static bool dontUpdate;
 
+	public static bool fitCellsOnScreen;
+
 	private IEnumerator Start() {
 		//Find all of the input fields;
 		teamButton = gameObject.GetComponent<TeamSelectScript>();
@@ -171,6 +173,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	private void OnDestroy() {
 		LevelEditorCore.cellList.Clear();
+		selectedCellList.Clear();
 	}
 
 	public void DestoyCellsButton() {
@@ -234,6 +237,17 @@ public class LevelEditorCore : MonoBehaviour {
 			panelChange(PCPanelAttribute.Regen);
 		}
 
+	}
+
+	public static void ResizeToggle(bool on) {
+		if (on) {
+			fitCellsOnScreen = true;
+			FitCellsOnScreen(selectedCellList);
+		}
+		else {
+			fitCellsOnScreen = false;
+			RefreshCameraSize(gameSize);
+		}
 	}
 
 	/// <summary>
@@ -325,12 +339,16 @@ public class LevelEditorCore : MonoBehaviour {
 	public static void FitCellsOnScreen(List<Cell> cells) {
 		//find boarders
 		if (cells.Count == 0) {
+			RefreshCameraSize(gameSize);
 			return;
 		}
 		float lowestX = Mathf.Infinity;
-		float highestX = 0;
+		float highestX = -Mathf.Infinity;
 		float lowestY = Mathf.Infinity;
-		float highestY = 0;
+		float highestY = -Mathf.Infinity;
+		print("CellCount " + cells.Count );
+		float adjustBy = 10;
+
 		if (cells.Count == 1) {
 			Vector3 pos = cells[0].transform.position;
 			lowestX = pos.x - cells[0].cellRadius;
@@ -341,27 +359,39 @@ public class LevelEditorCore : MonoBehaviour {
 		else {
 			foreach (Cell cell in cells) {
 				Vector3 cellPos = cell.transform.position;
-				if (cellPos.x < lowestX) {
+				//print("radius " + cell.cellRadius);
+				if (cellPos.x - cell.cellRadius < lowestX) {
 					lowestX = cellPos.x - cell.cellRadius;
-					print(cell.cellRadius);
+					
 				}
-				if (cellPos.x > highestX) {
+				if (cellPos.x + cell.cellRadius > highestX) {
 					highestX = cellPos.x + cell.cellRadius;
 				}
-				if (cellPos.y < lowestY) {
+				if (cellPos.y - cell.cellRadius < lowestY) {
 					lowestY = cellPos.y - cell.cellRadius;
 				}
-				if (cellPos.y > highestY) {
+				if (cellPos.y + cell.cellRadius > highestY) {
 					highestY = cellPos.y + cell.cellRadius;
 				}
 			}
 		}
+		lowestX -= adjustBy;
+		highestX += adjustBy;
+		lowestY -= adjustBy;
+		highestY += adjustBy;
+		//print("LowX " + lowestX);
+		//print("HighX " + highestX);
+		//print("LowY "+ lowestY);
+		//print("HighY " + highestY);
+
+
+
 		Camera.main.transform.position = new Vector3(Mathf.Lerp(lowestX, highestX, 0.5f), Mathf.Lerp(lowestY, highestY, 0.5f), -10);
 		float aspect = Camera.main.aspect;
-		if (highestX - lowestX > highestY - lowestY) {
+		if ((highestX - lowestX) / aspect >= highestY - lowestY) {
 			float delta = highestX - lowestX;
-			float adjustedWidth = delta / aspect;
-			Camera.main.orthographicSize = adjustedWidth * 0.5f;
+			float heightFromWidth = delta / aspect;
+			Camera.main.orthographicSize = heightFromWidth * 0.5f;
 		}
 		else  {
 			float delta = highestY - lowestY;
