@@ -12,7 +12,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 
 	public Coroutine generateCoroutine;
 
-	public GameObject cellObj;
+	//public GameObject cellObj;
 	public GameObject elementObj;
 
 
@@ -33,9 +33,9 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		if (regenPeriod == 0) {
 			regenPeriod = 0.3f;
 		}
-		//if (cellRadius == 0) {
-		//	cellRadius = col.radius * transform.localScale.x;
-		//}
+		if (cellRadius == 0) {
+			cellRadius = col.radius * transform.localScale.x;
+		}
 
 		//UpdateCellInfo();
 		StartCoroutine(ScaleCell());

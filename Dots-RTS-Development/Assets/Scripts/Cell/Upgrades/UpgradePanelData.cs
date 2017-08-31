@@ -11,7 +11,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 	public Image typeImage;
 	private TextMeshProUGUI desc;
 
-	private Upgrade_Manager currentCell;
+	private static Upgrade_Manager currentCell;
 
 	private static bool isSubscribed = false;
 
@@ -35,7 +35,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 
 
-		//print("Upgrade Quit " + sender.gameObject.name);
+		print("Upgrade Quit " + sender.gameObject.name);
 		sender.slotRender.color = new Color(1, 1, 1, 0);
 		foreach (BoxCollider2D col in sender.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
 			col.enabled = false;
@@ -47,7 +47,8 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
 		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 
-		//print("Upgrade Begin " + sender.gameObject.name);
+		print("Upgrade Begin " + sender.gameObject.name);
+		print("A");
 		currentCell = sender;
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.2f);
 		foreach (BoxCollider2D col in currentCell.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
@@ -86,8 +87,10 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 	public void OnPointerClick(PointerEventData eventData) {
 		if (SceneManager.GetActiveScene().name != Scenes.PROFILES) {
 			if (eventData.clickCount == 1) {
-				UpgradeSlot.OnSlotClicked += InstallUpgradeTo;
-				currentCell.slotRender.color = new Color(1, 1, 1, 0.8f);
+				if (currentCell.HasFreeSlots() && count != 0) {
+					UpgradeSlot.OnSlotClicked += InstallUpgradeTo;
+					currentCell.slotRender.color = new Color(1, 1, 1, 0.8f);
+				}
 			}
 			else if (eventData.clickCount == 2) {
 
