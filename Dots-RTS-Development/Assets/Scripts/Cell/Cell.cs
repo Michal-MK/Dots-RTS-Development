@@ -234,7 +234,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int elementCount {
 		get { return _elementCount; }
-		set { _elementCount = value; /*UpdateCellInfo(true);*/ }
+		set { _elementCount = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -242,7 +242,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public float regenPeriod {
 		get { return _regenP; }
-		set { _regenP = value; /*UpdateCellInfo(true);*/ }
+		set { _regenP = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -250,7 +250,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int maxElements {
 		get { return _maxElementCount; }
-		set { _maxElementCount = value; /*UpdateCellInfo(true);*/ }
+		set { _maxElementCount = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -258,7 +258,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public enmTeam cellTeam {
 		get { return _team; }
-		set { _team = value; /*UpdateCellInfo(true);*/ }
+		set { _team = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
