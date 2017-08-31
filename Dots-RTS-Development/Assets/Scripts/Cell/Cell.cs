@@ -12,7 +12,7 @@ public class Cell : MonoBehaviour {
 	private Vector2 _position;                                                                   //Cells position
 	public enmTeam _team;                                                                       //Cell's team
 	private float _radius;
-	
+
 
 
 	public bool isRegenerating = false;
@@ -35,15 +35,15 @@ public class Cell : MonoBehaviour {
 	}
 
 	#region Team Colours
-	public static Color32 allyColour = new Color32(0, 255, 0, 255);											//Default ally colour
-	public static Color32 neutralColour = new Color32(255, 255, 255, 255);									//Default neutral colour
-	public static Color32 enemy1Colour = new Color32(255, 0, 0, 255);										//Default enemy1 colour
-	public static Color32 enemy2Colour = new Color32(80, 0, 255, 255);										//Default enemy2 colour
-	public static Color32 enemy3Colour = new Color32(220, 255, 0, 255);										//Default enemy3 colour
-	public static Color32 enemy4Colour = new Color32(120, 60, 0, 255);										//Default enemy4 colour
-	public static Color32 enemy5Colour = new Color32(150, 140, 0, 255);										//Default enemy5 colour
-	public static Color32 enemy6Colour = new Color32(255, 0, 255, 255);										//Default enemy6 colour
-	public static Color32 enemy7Colour = new Color32(0, 0, 0, 255);											//Default enemy7 colour
+	public static Color32 allyColour = new Color32(0, 255, 0, 255);                                         //Default ally colour
+	public static Color32 neutralColour = new Color32(255, 255, 255, 255);                                  //Default neutral colour
+	public static Color32 enemy1Colour = new Color32(255, 0, 0, 255);                                       //Default enemy1 colour
+	public static Color32 enemy2Colour = new Color32(80, 0, 255, 255);                                      //Default enemy2 colour
+	public static Color32 enemy3Colour = new Color32(220, 255, 0, 255);                                     //Default enemy3 colour
+	public static Color32 enemy4Colour = new Color32(120, 60, 0, 255);                                      //Default enemy4 colour
+	public static Color32 enemy5Colour = new Color32(150, 140, 0, 255);                                     //Default enemy5 colour
+	public static Color32 enemy6Colour = new Color32(255, 0, 255, 255);                                     //Default enemy6 colour
+	public static Color32 enemy7Colour = new Color32(0, 0, 0, 255);                                         //Default enemy7 colour
 	public static Color32 enemy8Colour = new Color32(255, 150, 200, 255);                                   //Default enemy8 colour
 	#endregion
 
@@ -70,16 +70,22 @@ public class Cell : MonoBehaviour {
 	public SpriteRenderer cellSelected;
 	#endregion
 
-	private void Awake() {
+	public void WorkingAwakeHandler() {
+		Awake();
+		Debug.LogWarning("Awake is not being called on awake for some reason. For now, this is the walkaround");
+	}
 
+	private void Awake() {;
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
 		uManager = GetComponent<Upgrade_Manager>();
 
 		GameObject count = transform.Find("Count").gameObject;
+		//print(count.name);
 		elementCountDisplay = count.GetComponent<TextMeshPro>();
 		elementCountDisplayRenderer = count.GetComponent<MeshRenderer>();
+
 
 		cellSelected = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
@@ -90,6 +96,7 @@ public class Cell : MonoBehaviour {
 	//Function to update visuals of the cell
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
 
+		//print(elementCount.ToString());
 		elementCountDisplay.text = elementCount.ToString();
 		elementCountDisplayRenderer.sortingLayerName = "Cells";
 		elementCountDisplayRenderer.sortingOrder = 1;
@@ -97,45 +104,45 @@ public class Cell : MonoBehaviour {
 		//Change Colour depending on the team
 		switch (cellTeam) {
 			case enmTeam.ALLIED: {
-				cellSprite.color = allyColour;
-				return;
-			}
+					cellSprite.color = allyColour;
+					return;
+				}
 			case enmTeam.NEUTRAL: {
-				cellSprite.color = neutralColour;
-				return;
-			}
+					cellSprite.color = neutralColour;
+					return;
+				}
 			case enmTeam.ENEMY1: {
-				cellSprite.color = enemy1Colour;
-				return;
-			}
+					cellSprite.color = enemy1Colour;
+					return;
+				}
 			case enmTeam.ENEMY2: {
-				cellSprite.color = enemy2Colour;
-				return;
-			}
+					cellSprite.color = enemy2Colour;
+					return;
+				}
 			case enmTeam.ENEMY3: {
-				cellSprite.color = enemy3Colour;
-				return;
-			}
+					cellSprite.color = enemy3Colour;
+					return;
+				}
 			case enmTeam.ENEMY4: {
-				cellSprite.color = enemy4Colour;
-				return;
-			}
+					cellSprite.color = enemy4Colour;
+					return;
+				}
 			case enmTeam.ENEMY5: {
-				cellSprite.color = enemy5Colour;
-				return;
-			}
+					cellSprite.color = enemy5Colour;
+					return;
+				}
 			case enmTeam.ENEMY6: {
-				cellSprite.color = enemy6Colour;
-				return;
-			}
+					cellSprite.color = enemy6Colour;
+					return;
+				}
 			case enmTeam.ENEMY7: {
-				cellSprite.color = enemy7Colour;
-				return;
-			}
+					cellSprite.color = enemy7Colour;
+					return;
+				}
 			case enmTeam.ENEMY8: {
-				cellSprite.color = enemy8Colour;
-				return;
-			}
+					cellSprite.color = enemy8Colour;
+					return;
+				}
 
 		}
 	}
@@ -185,7 +192,7 @@ public class Cell : MonoBehaviour {
 	public void Decay(float decayRate, CellBehaviour superClass) {
 		if (!isDecaying) {
 			isDecaying = true;
-			StartCoroutine(DecayElements(decayRate,superClass));
+			StartCoroutine(DecayElements(decayRate, superClass));
 		}
 	}
 
@@ -218,15 +225,15 @@ public class Cell : MonoBehaviour {
 		appliedDebuffs.Remove(Upgrade.Upgrades.ATK_DOT);
 	}
 
-    //[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]
-    public void EnableCircle(Color? color = null) {
-        if (color == null) {
-            color = Color.yellow;
-        }
-        cellSelected.color = (Color)color;
-        cellSelected.enabled = true;
+	//[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]
+	public void EnableCircle(Color? color = null) {
+		if (color == null) {
+			color = Color.yellow;
+		}
+		cellSelected.color = (Color)color;
+		cellSelected.enabled = true;
 
-    }
+	}
 
 
 	/// <summary>
@@ -234,7 +241,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int elementCount {
 		get { return _elementCount; }
-		set { _elementCount = value; /*UpdateCellInfo(true);*/ }
+		set { _elementCount = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -242,7 +249,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public float regenPeriod {
 		get { return _regenP; }
-		set { _regenP = value; /*UpdateCellInfo(true);*/ }
+		set { _regenP = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -250,7 +257,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int maxElements {
 		get { return _maxElementCount; }
-		set { _maxElementCount = value; /*UpdateCellInfo(true);*/ }
+		set { _maxElementCount = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>
@@ -258,7 +265,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public enmTeam cellTeam {
 		get { return _team; }
-		set { _team = value; /*UpdateCellInfo(true);*/ }
+		set { _team = value; UpdateCellInfo(true); }
 	}
 
 	/// <summary>

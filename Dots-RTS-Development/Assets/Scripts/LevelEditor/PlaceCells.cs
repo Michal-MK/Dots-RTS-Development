@@ -12,15 +12,16 @@ public class PlaceCells : MonoBehaviour {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
 			Cell c = newCell.GetComponent<Cell>();
+			
+			c.WorkingAwakeHandler();
+			//print(LevelEditorCore.start);
+			newCell.SetActive(true);
+			newCell.GetComponent<EditCell>().FastResize();
 
 			c.cellTeam = (Cell.enmTeam)LevelEditorCore.team;
 			c.maxElements = LevelEditorCore.max;
 			c.regenPeriod = LevelEditorCore.regen;
 			c.elementCount = LevelEditorCore.start;
-
-			//print(LevelEditorCore.start);
-			newCell.SetActive(true);
-			newCell.GetComponent<EditCell>().FastResize();			
 
 			LevelEditorCore.AddCell(c);
 			
