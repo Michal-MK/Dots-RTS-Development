@@ -13,8 +13,6 @@ public class PlaceCells : MonoBehaviour {
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
 			Cell c = newCell.GetComponent<Cell>();
 			
-			c.WorkingAwakeHandler();
-			//print(LevelEditorCore.start);
 			newCell.SetActive(true);
 			newCell.GetComponent<EditCell>().FastResize();
 
