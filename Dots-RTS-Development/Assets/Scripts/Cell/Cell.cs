@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class Cell : MonoBehaviour {
@@ -47,20 +48,34 @@ public class Cell : MonoBehaviour {
 	#endregion
 
 	protected SoundManager sound;
-
 	public AudioClip elementSpawn;
 
 	#region Prefab References
-	public SpriteRenderer cellSprite;
-	public TextMesh elementNrDisplay;
-	public MeshRenderer textRenderer;
-	public CircleCollider2D col;
-	public Rigidbody2D rg;
-	public SpriteRenderer cellSelected;
+	protected SpriteRenderer cellSprite;
+	protected CircleCollider2D col;
+	protected Rigidbody2D rg;
+
+	[HideInInspector]
 	public Upgrade_Manager uManager;
+
+	protected TextMeshPro elementCountDisplay;
+	protected MeshRenderer elementCountDisplayRenderer;
+
+	protected SpriteRenderer cellSelected;
 	#endregion
 
 	private void Start() {
+		cellSprite = GetComponent<SpriteRenderer>();
+		col = GetComponent<CircleCollider2D>();
+		rg = GetComponent<Rigidbody2D>();
+		uManager = GetComponent<Upgrade_Manager>();
+
+		GameObject count = transform.Find("Count").gameObject;
+		elementCountDisplay = count.GetComponent<TextMeshPro>();
+		elementCountDisplayRenderer = count.GetComponent<MeshRenderer>();
+
+		cellSelected = transform.Find("Selected").GetComponent<SpriteRenderer>();
+
 		UpdateCellInfo();
 		cellRadius = col.radius * transform.localScale.x;
 	}
@@ -68,9 +83,9 @@ public class Cell : MonoBehaviour {
 	//Function to update visuals of the cell
 	public virtual void UpdateCellInfo(bool calledFromBase = true) {
 
-		elementNrDisplay.text = elementCount.ToString();
-		textRenderer.sortingLayerName = "Cells";
-		textRenderer.sortingOrder = 1;
+		elementCountDisplay.text = elementCount.ToString();
+		elementCountDisplayRenderer.sortingLayerName = "Cells";
+		elementCountDisplayRenderer.sortingOrder = 1;
 
 		//Change Colour depending on the team
 		switch (cellTeam) {
@@ -152,7 +167,7 @@ public class Cell : MonoBehaviour {
 			yield return new WaitForSeconds(regenPeriod);
 			if (elementCount < maxElements) {
 				elementCount++;
-				elementNrDisplay.text = elementCount.ToString();
+				elementCountDisplay.text = elementCount.ToString();
 				SendMessage("UpdateCellInfo", false, SendMessageOptions.DontRequireReceiver);
 				//UpdateCellInfo();
 			}
