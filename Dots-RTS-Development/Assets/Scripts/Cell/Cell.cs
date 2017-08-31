@@ -51,20 +51,27 @@ public class Cell : MonoBehaviour {
 	public AudioClip elementSpawn;
 
 	#region Prefab References
-	protected SpriteRenderer cellSprite;
-	protected CircleCollider2D col;
-	protected Rigidbody2D rg;
+	[HideInInspector]
+	public SpriteRenderer cellSprite;
+	[HideInInspector]
+	public CircleCollider2D col;
+	[HideInInspector]
+	public Rigidbody2D rg;
 
 	[HideInInspector]
 	public Upgrade_Manager uManager;
 
-	protected TextMeshPro elementCountDisplay;
-	protected MeshRenderer elementCountDisplayRenderer;
+	[HideInInspector]
+	public TextMeshPro elementCountDisplay;
+	[HideInInspector]
+	public MeshRenderer elementCountDisplayRenderer;
 
-	protected SpriteRenderer cellSelected;
+	[HideInInspector]
+	public SpriteRenderer cellSelected;
 	#endregion
 
-	private void Start() {
+	private void Awake() {
+
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
@@ -76,7 +83,7 @@ public class Cell : MonoBehaviour {
 
 		cellSelected = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
-		UpdateCellInfo();
+		//UpdateCellInfo();
 		cellRadius = col.radius * transform.localScale.x;
 	}
 
@@ -227,7 +234,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int elementCount {
 		get { return _elementCount; }
-		set { _elementCount = value; UpdateCellInfo(true); }
+		set { _elementCount = value; /*UpdateCellInfo(true);*/ }
 	}
 
 	/// <summary>
@@ -235,7 +242,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public float regenPeriod {
 		get { return _regenP; }
-		set { _regenP = value; UpdateCellInfo(true); }
+		set { _regenP = value; /*UpdateCellInfo(true);*/ }
 	}
 
 	/// <summary>
@@ -243,7 +250,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public int maxElements {
 		get { return _maxElementCount; }
-		set { _maxElementCount = value; UpdateCellInfo(true); }
+		set { _maxElementCount = value; /*UpdateCellInfo(true);*/ }
 	}
 
 	/// <summary>
@@ -251,7 +258,7 @@ public class Cell : MonoBehaviour {
 	/// </summary>
 	public enmTeam cellTeam {
 		get { return _team; }
-		set { _team = value; UpdateCellInfo(true); }
+		set { _team = value; /*UpdateCellInfo(true);*/ }
 	}
 
 	/// <summary>

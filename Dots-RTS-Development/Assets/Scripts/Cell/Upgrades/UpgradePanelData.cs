@@ -17,14 +17,14 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 
 	private void Awake() {
 		if (!isSubscribed) {
-			print("Subscribed Panel");
+			//print("Subscribed Panel");
 			Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
 			isSubscribed = true;
 		}
 	}
 
 	private void OnDestroy() {
-		print("Unsubbed Panel");
+		//print("Unsubbed Panel");
 		Upgrade_Manager.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
 		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 		isSubscribed = false;
@@ -35,7 +35,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 
 
-		print("Upgrade Quit " + sender.gameObject.name);
+		//print("Upgrade Quit " + sender.gameObject.name);
 		sender.slotRender.color = new Color(1, 1, 1, 0);
 		foreach (BoxCollider2D col in sender.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
 			col.enabled = false;
@@ -47,7 +47,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
 		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 
-		print("Upgrade Begin " + sender.gameObject.name);
+		//print("Upgrade Begin " + sender.gameObject.name);
 		currentCell = sender;
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.2f);
 		foreach (BoxCollider2D col in currentCell.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {

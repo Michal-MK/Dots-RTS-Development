@@ -23,6 +23,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 
 	//Set default
 	private void Start() {
+
 		if (maxElements == 0) {
 			maxElements = 50;
 		}
@@ -32,10 +33,11 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		if (regenPeriod == 0) {
 			regenPeriod = 0.3f;
 		}
-		if (cellRadius == 0) {
-			cellRadius = col.radius * transform.localScale.x;
-		}
-		UpdateCellInfo();
+		//if (cellRadius == 0) {
+		//	cellRadius = col.radius * transform.localScale.x;
+		//}
+
+		//UpdateCellInfo();
 		StartCoroutine(ScaleCell());
 		sound = GameObject.Find("GameManager").GetComponent<SoundManager>();
 	}
