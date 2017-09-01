@@ -34,12 +34,8 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void FitCells() {
-		if (GetComponent<Toggle>().isOn) {
-			LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
-		}
-		else {
-			LevelEditorCore.RefreshCameraSize(LevelEditorCore.gameSize);
-		}
+		LevelEditorCore.ResizeToggle(GetComponent<Toggle>().isOn);
+
 	}
 
 	public void PauseGameorEscape() {

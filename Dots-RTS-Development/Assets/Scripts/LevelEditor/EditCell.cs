@@ -56,6 +56,9 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		}
 		transform.localScale = new Vector3(mappedValue, mappedValue);
 		cellRadius = col.radius * transform.localScale.x;
+		if (LevelEditorCore.fitCellsOnScreen) {
+			LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+		}
 	}
 
 	#region Comment
@@ -127,6 +130,10 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		LevelEditorCore.selectedCellList.Remove(gameObject.GetComponent<Cell>());
 		isCellSelected = false;
 		cellSelected.enabled = false;
+		if (LevelEditorCore.fitCellsOnScreen) {
+			LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+		}
+
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
@@ -145,11 +152,17 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 				EnableCircle(Color.magenta);
 				LevelEditorCore.dontUpdate = false;
+				if (LevelEditorCore.fitCellsOnScreen) {
+					LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+				}
 			}
 			else {
 
 				LevelEditorCore.selectedCellList.Remove(gameObject.GetComponent<Cell>());
 				cellSelected.enabled = false;
+				if (LevelEditorCore.fitCellsOnScreen) {
+					LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+				}
 			}
 
 		}
@@ -187,6 +200,13 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	public void OnPointerUp(PointerEventData eventData) {
 		if (isCellSelected) {
 			EnableCircle(Color.magenta);
+			if (!LevelEditorCore.selectedCellList.Contains(this)) {
+				LevelEditorCore.selectedCellList.Add(this);
+				if (LevelEditorCore.fitCellsOnScreen) {
+					LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+				}
+			}
+			
 		}
 		lookForLongPress = false;
 		longPress = false;
