@@ -107,12 +107,7 @@ public class Upgrade : MonoBehaviour {
 				return Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 1024), Vector2.one * 0.5f);
 			}
 		} catch (FileNotFoundException e) {
-			try {
-				return GameObject.Find("DefaultUpgradeSprite").GetComponent<SpriteRenderer>().sprite;
-			}
-			catch {
-				return null;
-			}
+			return await FolderAccess.GetNIYImage();
 		}
 	}
 

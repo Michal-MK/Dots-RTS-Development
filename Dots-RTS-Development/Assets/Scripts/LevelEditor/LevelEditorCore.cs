@@ -170,7 +170,8 @@ public class LevelEditorCore : MonoBehaviour {
 
 
 	private void OnDestroy() {
-		LevelEditorCore.cellList.Clear();
+		cellList.Clear();
+		selectedCellList.Clear();
 	}
 
 	public void DestoyCellsButton() {

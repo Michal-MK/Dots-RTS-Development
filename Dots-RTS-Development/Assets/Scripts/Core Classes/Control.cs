@@ -278,7 +278,6 @@ public class Control : MonoBehaviour {
 			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
 			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
 			CampaignLevel.current = null;
-			CampaignLevel.current = null;
 		}
 		else {
 			ProfileManager.getCurrentProfile.completedCustomLevels += 1;

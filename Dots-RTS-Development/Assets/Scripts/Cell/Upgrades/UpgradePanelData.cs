@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.SceneManagement;
-public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnterHandler,IPointerExitHandler {
+public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
 	public Upgrade.Upgrades type;
 	new public string name;
@@ -132,10 +132,14 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler,IPointerEnte
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		desc.text = FolderAccess.GetUpgradeName(type);
+		if (desc != null) {
+			desc.text = FolderAccess.GetUpgradeName(type);
+		}
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
-		desc.text = "";
+		if (desc != null) {
+			desc.text = "";
+		}
 	}
 }

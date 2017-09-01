@@ -50,9 +50,9 @@ public class Buttons : MainMenuUI  {
 		Control.pM.ShowProfileCreation();
 	}
 
-	public void SetSelectedUpgrade() {
+	public async void SetSelectedUpgrade() {
 		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
-		print(selected);
+		//print(selected);
 
 		if(selected < 99) {
 			if (selected < Upgrade.TOTAL_OFFENSIVE_UPGRADES) {
@@ -62,6 +62,7 @@ public class Buttons : MainMenuUI  {
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
 					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)selected];
 				}
 			}
 			else {
@@ -69,6 +70,7 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradeDescHolder.text = "OFFENSIVE UPGRADE";
 				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
+				GetComponent<Image>().sprite = await FolderAccess.GetNIYImage();
 			}
 		}
 		else if(selected > 99) {
@@ -79,6 +81,7 @@ public class Buttons : MainMenuUI  {
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
 					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)selected];
 				}
 			}
 			else {
@@ -86,6 +89,7 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradeDescHolder.text = "DEFENSIVE UPGRADE";
 				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
+				GetComponent<Image>().sprite = await FolderAccess.GetNIYImage();
 			}
 		}
 	}

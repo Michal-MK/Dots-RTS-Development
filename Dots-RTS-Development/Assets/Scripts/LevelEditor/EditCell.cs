@@ -31,16 +31,12 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		pointerDownAtTime = Mathf.Infinity;
 		LevelEditorCore.modeChange += EditorModeUpdate;
 		LevelEditorCore.panelChange += RefreshCellFromPanel;
-
-
 	}
 
 	private void OnDisable() {
 		LevelEditorCore.modeChange -= EditorModeUpdate;
 		LevelEditorCore.panelChange -= RefreshCellFromPanel;
-
 	}
-
 
 	public void FastResize() {
 		float mappedValue;

@@ -5,10 +5,11 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Threading.Tasks;
 
 class FolderAccess {
 	public static XDocument upgradeData;
+	private static Sprite NIY;
 
 	public static FileInfo[] GetFilesFromDir(string directoryPath, string searchPattern) {
 		DirectoryInfo d = new DirectoryInfo(directoryPath);
@@ -24,6 +25,15 @@ class FolderAccess {
 			file.Close();
 			return data;
 		}
+	}
+
+	public static async Task<Sprite> GetNIYImage() {
+		if (NIY == null) {
+			Texture2D tex = new Texture2D(512, 512);
+			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "NIY.png"));
+			NIY = Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 512), Vector2.one * 0.5f);
+		}
+		return NIY;
 	}
 
 	public static SaveDataCampaign GetCampaignLevel(int difficulty, int level) {

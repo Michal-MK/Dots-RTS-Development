@@ -17,7 +17,7 @@ public class CampaignLevel : MonoBehaviour {
 	public TextMeshProUGUI clearTime;
 	#endregion
 
-	public static CampaignLevel current;
+	public static CampaignLevel current = null;
 	public SaveDataCampaign currentSaveData;
 
 	[HideInInspector]
