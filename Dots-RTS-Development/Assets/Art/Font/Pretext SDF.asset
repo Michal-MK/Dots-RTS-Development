@@ -18,12 +18,12 @@ MonoBehaviour:
   m_fontInfo:
     Name: PRETEXT
     PointSize: 61
-    Scale: 0
+    Scale: 1
     CharacterCount: 97
     LineHeight: 77.3125
     Baseline: 0
     Ascender: 63.0625
-    CapHeight: 0
+    CapHeight: 49.4375
     Descender: -14.1875
     CenterLine: 0
     SuperscriptOffset: 63.0625
@@ -33,7 +33,7 @@ MonoBehaviour:
     UnderlineThickness: 1.22
     strikethrough: 17.772728
     strikethroughThickness: 1.22
-    TabWidth: 0
+    TabWidth: 232.5
     Padding: 5
     AtlasWidth: 512
     AtlasHeight: 512
@@ -42,10 +42,10 @@ MonoBehaviour:
   - id: 32
     x: 6
     y: 517
-    width: 0
-    height: 0
+    width: 23.25
+    height: 77.25
     xOffset: 0
-    yOffset: 0
+    yOffset: 63.0625
     xAdvance: 23.25
     scale: 1
   - id: 33
@@ -998,16 +998,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Ambient: 0.5
-    - _Bevel: 0.5
+    - _Ambient: 0.116
+    - _Bevel: 1
     - _BevelClamp: 0
-    - _BevelOffset: 0
+    - _BevelOffset: -0.058
     - _BevelRoundness: 0
-    - _BevelWidth: 0
+    - _BevelWidth: 0.116
     - _BumpFace: 0
     - _BumpOutline: 0
     - _ColorMask: 15
-    - _Diffuse: 0.5
+    - _Diffuse: 0.753
     - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
@@ -1016,7 +1016,7 @@ Material:
     - _GlowOuter: 0.05
     - _GlowPower: 0.75
     - _GradientScale: 6
-    - _LightAngle: 3.1416
+    - _LightAngle: 0
     - _MaskSoftnessX: 0
     - _MaskSoftnessY: 0
     - _OutlineSoftness: 0
@@ -1024,14 +1024,14 @@ Material:
     - _OutlineUVSpeedY: 0
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
-    - _Reflectivity: 10
+    - _Reflectivity: 9.8
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.6770833
     - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
-    - _SpecularPower: 2
+    - _SpecularPower: 4
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -1056,7 +1056,7 @@ Material:
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0, g: 1, b: 0.08965516, a: 1}
     - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
 --- !u!28 &28474649703281800
 Texture2D:

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,6 +54,8 @@ public class CampaignLevel : MonoBehaviour {
 	}
 
 	public void StartLevel() {
+		transform.parent = null;
+		DontDestroyOnLoad(gameObject);
 		current = this;
 		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
 		Control.levelState = Control.PlaySceneState.CAMPAIGN;

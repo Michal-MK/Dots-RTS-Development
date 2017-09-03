@@ -146,16 +146,20 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case Scenes.PROFILES: { //Profiles
-				PS_Canvas = GameObject.Find("PS_Canvas");
-				PO_Canvas = GameObject.Find("PO_Canvas");
-				PO_OnLevel = GameObject.Find("PO_OnLevel").GetComponent<TextMeshProUGUI>();
-				PO_OnLevelImage = GameObject.Find("PO_OnLevelImage").GetComponent<RawImage>();
-				PO_Name = GameObject.Find("PO_Name").GetComponent<TextMeshProUGUI>();
-				PO_GamesPlayed = GameObject.Find("PO_GamesPlayed").GetComponent<TextMeshProUGUI>();
-				PO_CurrentCoins = GameObject.Find("PO_CurrentCoins").GetComponent<TextMeshProUGUI>();
-				PO_AcquiredUpgrades = GameObject.Find("PO_AcquiredUpgrades").transform;
-				PO_DeleteProfile = GameObject.Find("PO_DeleteProfile").GetComponent<ProfileInfo>();
-				PO_Canvas.SetActive(false);
+				PS_Canvas = GameObject.Find("Canvases").transform.Find("PS_Canvas").gameObject;
+				PO_Canvas = GameObject.Find("Canvases").transform.Find("PO_Canvas").gameObject;
+
+				PO_Name = PO_Canvas.transform.Find("PO_Name").GetComponent<TextMeshProUGUI>();
+
+				PO_OnLevel = PO_Canvas.transform.Find("TopLeft_Panel_CampaignLevel/PO_OnLevel").GetComponent<TextMeshProUGUI>();					/*GameObject.Find("PO_OnLevel").GetComponent<TextMeshProUGUI>();*/
+				PO_OnLevelImage = PO_Canvas.transform.Find("TopLeft_Panel_CampaignLevel/PO_OnLevelImage").GetComponent<RawImage>();					/*GameObject.Find("PO_OnLevelImage").GetComponent<RawImage>();*/
+
+				PO_CurrentCoins = PO_Canvas.transform.Find("TopRight_Panel_GeneralInfo/PO_CurrentCoins").GetComponent<TextMeshProUGUI>();			/*GameObject.Find("PO_CurrentCoins").GetComponent<TextMeshProUGUI>();*/
+				PO_GamesPlayed = PO_Canvas.transform.Find("TopRight_Panel_GeneralInfo/PO_GamesPlayed").GetComponent<TextMeshProUGUI>();				/*GameObject.Find("PO_GamesPlayed").GetComponent<TextMeshProUGUI>();*/
+
+				PO_AcquiredUpgrades = PO_Canvas.transform.Find("BottomLeft_Panel_Uprades/PO_AcquiredUpgrades").transform;                           /*GameObject.Find("PO_AcquiredUpgrades").transform;*/
+
+				PO_DeleteProfile = PO_Canvas.transform.Find("BottomRight_Panel_Buttons/PO_DeleteProfile").GetComponent<ProfileInfo>();				/*GameObject.Find("PO_DeleteProfile").GetComponent<ProfileInfo>();*/
 				return;
 			}
 			case Scenes.SHOP: { //Upgrade Shop

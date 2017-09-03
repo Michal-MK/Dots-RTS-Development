@@ -164,6 +164,7 @@ public class Control : MonoBehaviour {
 			else {
 				UI_ReferenceHolder.didDominate.text = "";
 			}
+
 			UI_ReferenceHolder.totalTimeToClear.text = "Fought for:\n" + gameTime;
 
 			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + "<size=40>coins";
@@ -252,6 +253,7 @@ public class Control : MonoBehaviour {
 		isWinner = false;
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 		isInGame = false;
+		totalCoinsAwarded = 0;
 	}
 
 	public void YouWon() {
@@ -278,6 +280,7 @@ public class Control : MonoBehaviour {
 			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
 			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
 			CampaignLevel.current = null;
+			Destroy(FindObjectOfType<CampaignLevel>().gameObject);
 		}
 		else {
 			ProfileManager.getCurrentProfile.completedCustomLevels += 1;

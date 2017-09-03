@@ -392,7 +392,7 @@ MonoBehaviour:
   m_text: Phage Wars
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a3d0691d7d9b4d846b49ce03cef7aae8, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 7e93147afdfb9de4a80d24314420fd56, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 3b9e69515633c3a49a1baff4ba9e96fd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 173.55
+  m_fontSize: 171.55
   m_fontSizeBase: 160
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -544,7 +544,7 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!4 &672522340
 Transform:
