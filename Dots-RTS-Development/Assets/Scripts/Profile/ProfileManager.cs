@@ -46,8 +46,10 @@ public class ProfileManager {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
 		BinaryFormatter bf = new BinaryFormatter();
-		foreach(ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
-			GameObject.Destroy(pF.gameObject);
+		foreach (ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
+			if (pF != null) {
+				GameObject.Destroy(pF.gameObject);
+			}
 		}
 
 		if (files.Length == 0) {
@@ -105,9 +107,10 @@ public class ProfileManager {
 		p.ownedCoins = 0;
 		p.contributedLevels = 0;
 		p.totalCreatedLevels = 0;
-		p.onLevelBaseGame = 1;
+		p.onLevelBaseGame = new CampaignLevelCode(1,1);
 		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 		p.onLevelImage = null;
+		Debug.Log("ONLEVELIMAGE");
 		p.pathToFile = Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp";
 
 		using (FileStream fs = new FileStream(p.pathToFile, FileMode.Create)) {
@@ -146,7 +149,7 @@ public class Profile {
 	public string pathToFile;
 
 	public byte[] onLevelImage;
-	public int onLevelBaseGame;
+	public CampaignLevelCode onLevelBaseGame;
 	public int ownedCoins;
 
 	public int contributedLevels;

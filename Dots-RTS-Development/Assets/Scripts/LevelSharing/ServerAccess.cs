@@ -126,7 +126,6 @@ public class ServerAccess {
 	public async Task<SaveData> GetLevelInfoAsync(string name) {
 		UnityEngine.Debug.Log(name);
 		string str = await DownloadFTPAsync(name, true);
-		string[] info = new string[3];
 
 		BinaryFormatter bf = new BinaryFormatter();
 		using (FileStream fileS = new FileStream(str, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true)) {

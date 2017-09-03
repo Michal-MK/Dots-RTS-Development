@@ -106,8 +106,8 @@ public class Upgrade : MonoBehaviour {
 				tex.LoadImage(result);
 				return Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 1024), Vector2.one * 0.5f);
 			}
-		} catch (FileNotFoundException e) {
-			return await FolderAccess.GetNIYImage();
+		} catch (FileNotFoundException) {
+			return FolderAccess.GetNIYImage();
 		}
 	}
 

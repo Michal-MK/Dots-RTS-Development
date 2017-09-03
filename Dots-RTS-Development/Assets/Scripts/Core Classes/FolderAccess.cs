@@ -18,16 +18,22 @@ class FolderAccess {
 	}
 
 	public static T GetAsociatedScript<T>(string filePath) {
-		using (FileStream file = new FileStream(filePath, FileMode.Open)) {
-			BinaryFormatter bf = new BinaryFormatter();
+		try {
+			using (FileStream file = new FileStream(filePath, FileMode.Open)) {
+				BinaryFormatter bf = new BinaryFormatter();
 
-			T data = (T)bf.Deserialize(file);
-			file.Close();
-			return data;
+				T data = (T)bf.Deserialize(file);
+				file.Close();
+				return data;
+			}
+		}
+		catch(FileNotFoundException e) {
+			Debug.Log("File " + e.FileName + " not found!");
+			return default(T);
 		}
 	}
 
-	public static async Task<Sprite> GetNIYImage() {
+	public static Sprite GetNIYImage() {
 		if (NIY == null) {
 			Texture2D tex = new Texture2D(512, 512);
 			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "NIY.png"));

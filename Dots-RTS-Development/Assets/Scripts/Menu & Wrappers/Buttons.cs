@@ -46,7 +46,7 @@ public class Buttons : MainMenuUI  {
 		Control.pM.ShowProfileCreation();
 	}
 
-	public async void SetSelectedUpgrade() {
+	public void SetSelectedUpgrade() {
 		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
 		//print(selected);
 
@@ -66,7 +66,7 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradeDescHolder.text = "OFFENSIVE UPGRADE";
 				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
-				GetComponent<Image>().sprite = await FolderAccess.GetNIYImage();
+				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
 			}
 		}
 		else if(selected > 99) {
@@ -85,7 +85,7 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradeDescHolder.text = "DEFENSIVE UPGRADE";
 				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
-				GetComponent<Image>().sprite = await FolderAccess.GetNIYImage();
+				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
 			}
 		}
 	}

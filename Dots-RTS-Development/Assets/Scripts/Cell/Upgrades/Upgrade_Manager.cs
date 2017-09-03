@@ -42,7 +42,7 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	/// Buy selected upgrade from the store
 	/// </summary>
 	public void BuyUpgrade() {
-		GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
+		//GameObject upgrade = GameObject.Find("Upgrade" + selectedUpgrade);
 		Animator anim = GameObject.Find("Warning").GetComponent<Animator>();
 		//Preform some highlights
 

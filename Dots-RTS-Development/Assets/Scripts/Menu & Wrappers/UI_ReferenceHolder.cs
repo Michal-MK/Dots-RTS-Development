@@ -35,10 +35,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#region LevelSelectRefs
 	public static RectTransform rectCampaign;
 	public static RectTransform rectCustom;
-	public static GameObject centralToMainMenu;
-	public static GameObject campaignButton;
-	public static GameObject customButton;
-	public static GameObject buyUpgradesSceneButton;
+	public static GameObject canvasBase;
+	//public static GameObject centralToMainMenu;
+	//public static GameObject campaignButton;
+	//public static GameObject customButton;
+	//public static GameObject buyUpgradesSceneButton;
 	#endregion
 
 	#region LevelPlayerRefs
@@ -118,10 +119,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			case Scenes.SELECT: { // LevelSelect
 				rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 				rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
-				centralToMainMenu = GameObject.Find("Return_To_Menu");
-				campaignButton = GameObject.Find("Campaign_Button");
-				customButton = GameObject.Find("Custom_Button");
-				buyUpgradesSceneButton = GameObject.Find("Buy_Upgrades");
+				canvasBase = GameObject.Find("Canvas_Base");
+				//centralToMainMenu = GameObject.Find("Return_To_Menu");
+				//campaignButton = GameObject.Find("Campaign_Button");
+				//customButton = GameObject.Find("Custom_Button");
+				//buyUpgradesSceneButton = GameObject.Find("Buy_Upgrades");
 				return;
 			}
 			case Scenes.PLAYER: { //PlayScene

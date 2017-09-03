@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
 using TMPro;
+using System;
 
 public class Control : MonoBehaviour {
 
@@ -167,7 +168,7 @@ public class Control : MonoBehaviour {
 
 			UI_ReferenceHolder.totalTimeToClear.text = "Fought for:\n" + gameTime;
 
-			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + "<size=40>coins";
+			UI_ReferenceHolder.totalCoinsAwarded.text = totalCoinsAwarded + " <size=40>coins";
 		}
 
 		if (newS.name == Scenes.PROFILES) {
@@ -177,6 +178,13 @@ public class Control : MonoBehaviour {
 		Time.timeScale = 1;
 	}
 
+	private void Update() {
+		if (Input.GetKey(KeyCode.LeftShift)) {
+			if (Input.GetKeyDown(KeyCode.C)) {
+				StartCoroutine(TakePicture());
+			}
+		}
+	}
 
 	private void LateUpdate() {
 		if (isInGame) {
@@ -189,6 +197,24 @@ public class Control : MonoBehaviour {
 			}
 			else {
 				Pause();
+			}
+		}
+	}
+
+	IEnumerator TakePicture() {
+		if (!File.Exists(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "EnterDirToStoreImages.txt")) {
+			print("NOPE");
+			yield break;
+		}
+		else {
+			if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
+				string path = File.ReadAllText(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "EnterDirToStoreImages.txt");
+				GameObject canvas = GameObject.Find("Canvas");
+				canvas.SetActive(false);
+				yield return new WaitForSeconds(0.1f);
+				ScreenCapture.CaptureScreenshot(path + DateTime.Now.ToFileTime() + ".png");
+				yield return new WaitForSeconds(0.1f);
+				canvas.SetActive(true);
 			}
 		}
 	}
@@ -277,8 +303,10 @@ public class Control : MonoBehaviour {
 
 		//Did we play a campaign level ?
 		if (CampaignLevel.current != null) {
+			CampaignLevelCode c = ProfileManager.getCurrentProfile.onLevelBaseGame;
 			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
 			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
+			ProfileManager.getCurrentProfile.onLevelBaseGame = new CampaignLevelCode(c.difficulty, c.level + 1);
 			CampaignLevel.current = null;
 			Destroy(FindObjectOfType<CampaignLevel>().gameObject);
 		}

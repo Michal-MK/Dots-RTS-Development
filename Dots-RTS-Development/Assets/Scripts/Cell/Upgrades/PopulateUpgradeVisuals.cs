@@ -32,14 +32,14 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		//StartCoroutine(CYCLES());
 	}
 
-	public async void PopulateStore() {
+	public void PopulateStore() {
 		foreach (Image i in transform.Find("ATK_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "ATK_Upgrades" && i.gameObject.name != "Image") {
 				try {
 					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
-				catch (KeyNotFoundException e) {
-					i.sprite = await FolderAccess.GetNIYImage();
+				catch (KeyNotFoundException) {
+					i.sprite = FolderAccess.GetNIYImage();
 				}
 			}
 		}
@@ -48,8 +48,8 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 				try {
 					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
-				catch (KeyNotFoundException e) {
-					i.sprite = await FolderAccess.GetNIYImage();
+				catch (KeyNotFoundException) {
+					i.sprite = FolderAccess.GetNIYImage();
 				}
 			}
 		}

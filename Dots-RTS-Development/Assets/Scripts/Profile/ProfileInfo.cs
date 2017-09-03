@@ -25,20 +25,31 @@ public class ProfileInfo : MonoBehaviour {
 		selected = p;
 		this.profileName.text = profileName;
 		Texture2D tex = new Texture2D(160, 90);
-		tex.LoadImage(p.onLevelImage);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.onLevelBaseGame.difficulty, p.onLevelBaseGame.level);
+		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
 		careerLevel.texture = tex;
 	}
 
 	public void ShowProfileInfo() {
 		Profile p = ProfileManager.setCurrentProfile = selected;
 
-		SaveDataCampaign firstLevel = FolderAccess.GetCampaignLevel(1, 1);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.onLevelBaseGame.difficulty, p.onLevelBaseGame.level);
+		if(campaignLevel == default(SaveDataCampaign)) {
+			print("Something went wrong");
+			UI_ReferenceHolder.PO_Canvas.SetActive(true);
+			UI_ReferenceHolder.PS_Canvas.SetActive(false);
+			return;
+		}
 		Texture2D tex = new Texture2D(160, 90);
-		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + firstLevel.preview));
-
+		try {
+			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
+		}
+		catch {
+			print("File Not Found");
+		}
 		UI_ReferenceHolder.PO_Name.text = p.profileName;
 		UI_ReferenceHolder.PO_CurrentCoins.text = "Coins : " + p.ownedCoins;
-		UI_ReferenceHolder.PO_OnLevel.text = firstLevel.game.levelInfo.levelName;
+		UI_ReferenceHolder.PO_OnLevel.text = campaignLevel.game.levelInfo.levelName;
 		UI_ReferenceHolder.PO_OnLevelImage.texture = tex;
 		UI_ReferenceHolder.PO_GamesPlayed.text = "Custom : " + p.completedCustomLevels + "\nCampaign : " + p.completedCampaignLevels;
 		UI_ReferenceHolder.PO_DeleteProfile.self = this.self;

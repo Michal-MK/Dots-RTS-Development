@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class CampaignLevel : MonoBehaviour {
 
@@ -60,6 +61,28 @@ public class CampaignLevel : MonoBehaviour {
 		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
 		Control.levelState = Control.PlaySceneState.CAMPAIGN;
 		SceneManager.LoadScene(Scenes.PLAYER);
+	}
+}
+
+[Serializable]
+public class CampaignLevelCode {
+	private int Difficulty;
+	private int LevelInDiff;
+	public CampaignLevelCode(int difficulty, int levelInDifficulty) {
+		this.Difficulty = difficulty;
+		this.LevelInDiff = levelInDifficulty;
+	}
+	
+	public int difficulty {
+		get {
+			return Difficulty;
+		}
+	}
+
+	public int level {
+		get {
+			return LevelInDiff;
+		}
 	}
 }
 

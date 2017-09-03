@@ -17,6 +17,7 @@ public class SaveData {
 public class SaveDataCampaign {
 	public SaveData game;
 	public string preview;
+	public CampaignLevelCode code;
 }
 
 [Serializable]
