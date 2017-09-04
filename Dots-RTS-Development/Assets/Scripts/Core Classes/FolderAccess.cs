@@ -43,7 +43,11 @@ class FolderAccess {
 	}
 
 	public static SaveDataCampaign GetCampaignLevel(int difficulty, int level) {
-		return GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + level + ".pwl");
+		SaveDataCampaign cLevel = GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + level + ".pwl");
+		if(cLevel == default(SaveDataCampaign)) {
+			return null;
+		}
+		return cLevel;
 	}
 
 	[System.Obsolete("Use newer method using LINQ to XML : GetUpgrade_____()", true)]

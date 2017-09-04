@@ -46,8 +46,8 @@ public class ProfileManager {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
 		BinaryFormatter bf = new BinaryFormatter();
-		foreach (ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
-			if (pF != null) {
+		if (parentTransform != null) {
+			foreach (ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
 				GameObject.Destroy(pF.gameObject);
 			}
 		}
@@ -107,7 +107,7 @@ public class ProfileManager {
 		p.ownedCoins = 0;
 		p.contributedLevels = 0;
 		p.totalCreatedLevels = 0;
-		p.onLevelBaseGame = new CampaignLevelCode(1,1);
+		p.onLevelBaseGame = new CampaignLevelCode(1, 1);
 		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 		p.onLevelImage = null;
 		Debug.Log("ONLEVELIMAGE");
@@ -119,7 +119,7 @@ public class ProfileManager {
 		profileCreation.SetActive(false);
 		Debug.Log("Created");
 		ListProfiles();
-		
+
 	}
 
 	public Profile SetProfile {
@@ -137,8 +137,8 @@ public class ProfileManager {
 
 	public static void SerializeChanges() {
 		BinaryFormatter bf = new BinaryFormatter();
-		using(FileStream fs = new FileStream(getCurrentProfile.pathToFile,FileMode.Open)) {
-			bf.Serialize(fs,getCurrentProfile);
+		using (FileStream fs = new FileStream(getCurrentProfile.pathToFile, FileMode.Open)) {
+			bf.Serialize(fs, getCurrentProfile);
 		}
 	}
 

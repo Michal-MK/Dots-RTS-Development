@@ -34,23 +34,26 @@ public class ProfileInfo : MonoBehaviour {
 		Profile p = ProfileManager.setCurrentProfile = selected;
 
 		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.onLevelBaseGame.difficulty, p.onLevelBaseGame.level);
-		if(campaignLevel == default(SaveDataCampaign)) {
-			print("Something went wrong");
-			UI_ReferenceHolder.PO_Canvas.SetActive(true);
-			UI_ReferenceHolder.PS_Canvas.SetActive(false);
-			return;
+
+		if(campaignLevel != null) {
+			Texture2D tex = new Texture2D(160, 90);
+			try {
+				tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
+			}
+			catch (FileNotFoundException e) {
+				print("File Not Found " + e.FileName + "--> No Level texture will be shown.");
+			}
+			UI_ReferenceHolder.PO_OnLevel.text = campaignLevel.game.levelInfo.levelName;
+			UI_ReferenceHolder.PO_OnLevelImage.texture = tex;
 		}
-		Texture2D tex = new Texture2D(160, 90);
-		try {
-			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
+		else {
+			print("Loaded level is " + campaignLevel + "!");
+			UI_ReferenceHolder.PO_OnLevel.text = "No level found!";
+
 		}
-		catch {
-			print("File Not Found");
-		}
+
 		UI_ReferenceHolder.PO_Name.text = p.profileName;
 		UI_ReferenceHolder.PO_CurrentCoins.text = "Coins : " + p.ownedCoins;
-		UI_ReferenceHolder.PO_OnLevel.text = campaignLevel.game.levelInfo.levelName;
-		UI_ReferenceHolder.PO_OnLevelImage.texture = tex;
 		UI_ReferenceHolder.PO_GamesPlayed.text = "Custom : " + p.completedCustomLevels + "\nCampaign : " + p.completedCampaignLevels;
 		UI_ReferenceHolder.PO_DeleteProfile.self = this.self;
 		UI_ReferenceHolder.PO_Canvas.SetActive(true);

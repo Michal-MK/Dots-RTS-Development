@@ -17,12 +17,18 @@ public class Control : MonoBehaviour {
 
 	public delegate void EnteredUpgradeMode(Upgrade_Manager sender);
 	public delegate void QuitUpgradeMode(Upgrade_Manager sender);
+
+
+	public delegate void OnRMBPress(Vector2 position);
+
+
 	#endregion
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
 
 	public static bool isPaused = false;
 	public static bool canPause = true;
+	public static event OnRMBPress RMBPressed;
 
 	private float time;
 
@@ -121,7 +127,7 @@ public class Control : MonoBehaviour {
 				SceneManager.LoadScene(Scenes.PROFILES);
 				return;
 			}
-			GameObject.Find("Profile").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
+			GameObject.Find("Profile_Name_Menu").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
 
 		}
 
@@ -183,6 +189,9 @@ public class Control : MonoBehaviour {
 			if (Input.GetKeyDown(KeyCode.C)) {
 				StartCoroutine(TakePicture());
 			}
+		}
+		if (Input.GetMouseButtonDown(1)) {
+			RMBPressed(Input.mousePosition);
 		}
 	}
 
