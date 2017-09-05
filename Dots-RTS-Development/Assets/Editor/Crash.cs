@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class Test : MonoBehaviour {
+public class Crash : MonoBehaviour {
 
 	public void SavePic() {
 		SavePicture(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Pic.Png");
