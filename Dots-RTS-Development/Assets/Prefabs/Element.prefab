@@ -56,7 +56,7 @@ MonoBehaviour:
   debuffs: 
   attacker: {fileID: 0}
   target: {fileID: 0}
-  eSpeed: 10
+  eSpeed: 5
   RandomTimeOffset: 0
 --- !u!212 &212609977845706244
 SpriteRenderer:

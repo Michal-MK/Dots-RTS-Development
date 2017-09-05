@@ -7,6 +7,8 @@ public class Enemy_AI : MonoBehaviour {
 
 
 	public bool isActive = true;
+	public int aICellSelectElementTreshold = 10;
+	public int aICellAidElementTreshold = 10;
 	public float decisionSpeed = 1f;
 
 	public Cell.enmTeam _aiTeam;
@@ -40,9 +42,9 @@ public class Enemy_AI : MonoBehaviour {
 
 	//Sort cells on screen to lists by their team
 	private IEnumerator Start() {
-		for (int i = 0; i < Control.cells.Count; i++) {
+		for (int i = 0; i < PlayManager.cells.Count; i++) {
 
-			CellBehaviour current = Control.cells[i];
+			CellBehaviour current = PlayManager.cells[i];
 
 			if (current.cellTeam == _aiTeam) {
 				_aiCells.Add(current);
@@ -56,26 +58,8 @@ public class Enemy_AI : MonoBehaviour {
 		}
 		yield return null;
 
-		//Loop through all allied Enemy_AIs
-		for (int j = 0; j < alliesOfThisAI.Count; j++) {
-			Enemy_AI currentAI = alliesOfThisAI[j];                                                                                 //print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
+		ConsiderAllies();
 
-			//Loop though all aiCells of the allied Enemy_AI
-			for (int k = 0; k < alliesOfThisAI[j]._aiCells.Count; k++) {
-				CellBehaviour currentCellOfTheAlliedAI = alliesOfThisAI[j]._aiCells[k];                                       //print(currentAlliedCellOfTheAlliedAI.gameObject.name);
-
-				//Loop though all the targets of this AI
-				for (int l = 0; l < _targets.Count; l++) {
-					CellBehaviour myTarget = _targets[l];                                                                         //print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
-
-					//If aiCell of the other AI and target of this AI are the same cell do Stuff
-					if (currentCellOfTheAlliedAI == myTarget) {
-						this._allies.Add(myTarget);
-						this._targets.Remove(myTarget);
-					}
-				}
-			}
-		}
 		StartCoroutine(PreformAction());
 	}
 
@@ -142,11 +126,9 @@ public class Enemy_AI : MonoBehaviour {
 
 	//Triggered when a cell changs team
 	private void RemoveCell(CellBehaviour sender, Cell.enmTeam cellTeam, Cell.enmTeam elementTeam) {
-		print("Remove");
-		//print("Triggered " + gameObject.name + "  " + sender.gameObject.name + "  " + cellTeam + " " + elementTeam);
-		List<DataHolder> data = GetCellInstances(sender);
 
-		//DataDebugging
+		List<DataHolder> data = GetCellInstances(sender);
+		#region DataDebugging
 		//print(data.Count);
 		//for (int i = 0; i < data.Count; i++) {
 		//	print("AI name: " + data[i].AI.name);
@@ -194,10 +176,13 @@ public class Enemy_AI : MonoBehaviour {
 		//		}
 		//	}
 		//}
+		#endregion
 
+		//Loop through all AIs and determine what to do with the removed cell in reference to the current AI
+		//Each cell is loacted somewhere in every AI structure, be it Cell of the AI, its target, its ally, or a neutral cell.
+		//If the cell does't exist in the AI then something went wrong.
 
 		foreach (DataHolder instance in data) {
-
 			if (instance.AI == this) {
 				List<CellBehaviour> aiCells = new List<CellBehaviour>(instance.AI._aiCells);
 				foreach (CellBehaviour c in aiCells) {
@@ -319,8 +304,9 @@ public class Enemy_AI : MonoBehaviour {
 					}
 				}
 			}
-			//Debug.Break();
 		}
+
+		#region Older Iterations on Cell processing on remove
 
 		//foreach (DataHolder instance in data) {
 		//	print("AAAAAAAAAAAAAA  5 * 5");
@@ -514,6 +500,8 @@ public class Enemy_AI : MonoBehaviour {
 		//	ConsiderAllies();
 		//}
 		//Debug.Break();
+
+		#endregion
 	}
 
 
@@ -544,37 +532,19 @@ public class Enemy_AI : MonoBehaviour {
 
 		//Cell is joning team ENEMYX
 		else {
-			//Compare every AI with the AI that the cell belongs to if any AI is an ally of of THE AI add it to their allies if not add it to their targets
+			//Compare every AI with the AI that the cell will belong to. IF the other AI is an ally of this AI ==> add it to their allies ELSE add it to their targets.
 			for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
 				if (Initialize_AI.AIs[i] != null) {
 					if (homeAI._aiTeam == current && current == _aiTeam) {
-						//bool isMyCellAlready = false;
-						//for (int k = 0; k < homeAI._allies.Count; k++) {
-						//	if (sender == homeAI._allies[k]) {
-						//		isMyCellAlready = true;
-						//	}
-						//}
-						//if (!isMyCellAlready) {
-						/*homeAI.*/
 						_aiCells.Add(sender);
 					}
-					//}
 					else {
 						for (int j = 0; j < Initialize_AI.AIs[i].alliesOfThisAI.Count; j++) {
 							Enemy_AI allyOfAnyAI = Initialize_AI.AIs[i].alliesOfThisAI[j];
 
 							if (allyOfAnyAI == homeAI && homeAI._aiTeam == _aiTeam) {
-								//bool isAllyAlredy = false;
-								//for (int k = 0; k < allyOfAnyAI._allies.Count; k++) {
-								//	if (sender == allyOfAnyAI._allies[k]) {
-								//		isAllyAlredy = true;
-								//	}
-								//}
-								//if (!isAllyAlredy) {
-								/*allyOfAnyAI.*/
 								_allies.Add(sender);
 							}
-							//}
 							else {
 								bool isTargetAlready = false;
 								for (int k = 0; k < allyOfAnyAI._targets.Count; k++) {
@@ -595,85 +565,124 @@ public class Enemy_AI : MonoBehaviour {
 			}
 		}
 	}
-
+	private string s = "";
 
 	//This is where the AI magic happens
 	public IEnumerator PreformAction() {
-		//yield return new WaitForEndOfFrame();
-		//ConsiderAllies();
 
 
 		while (isActive) {
-			restart:
+			print("Waiting " + (decisionSpeed) + " seconds.");
+			restart: //If selection fails for a known reason use goto restart;
 			yield return new WaitForSeconds(decisionSpeed);
-			redoAction:
+			redoAction: //If selection fails due to a flaw in the design LEL use goto redoAction;
 
 			bool isAlone = false;
-
-			//AI selection
+			/*AI selection
+			 * If this AI has cells to select from, run a procedure that will chose one cell with which the AI will work this cycle.
+			 * Else this AI will shut down.
+			 */
 			if (_aiCells.Count != 0) {
+				s += "Selecting | ";
 				selectedAiCell = AiCellSelector();
+				//If we have exactly one cell in the pool, we cant select others, no halping each other is possible.
 				if (_aiCells.Count == 1) {
 					isAlone = true;
+					s += "Alone | ";
 				}
+				s += "Not Alone | ";
+
 			}
 			else {
 				isActive = false;
+				s += "No AI cell Selestion, DONE!";
+				print(s);
+				s = "";
 				yield break;
 			}
+
+			if (selectedAiCell == null) {
+				s += "Could not Select Cell";
+				print(s);
+				s = "";
+				goto restart;
+			}
+
+			/* This section will select a cell from each cathegory, only one cathergory will be chosen in the end. */
+
+			//Aid selection
 			if (!isAlone) {
+				s += "Selecting Friend | ";
 				selectedAiCellForAid = AiAidSelector();
 			}
 
 			//Target selection
 			if (_targets.Count != 0) {
+				s += "Selecting Target | ";
 				selectedTargetCell = TargetCellSelector();
 			}
 			else {
+				s += "No TARGET cell Selestion, DONE!";
+				print(s);
+				s = "";
 				yield break;
 			}
 
 			//Neutral cell selection
 			if (_neutrals.Count != 0) {
+				s += "Selecting Neutral | ";
 				selectedNeutralCell = ExpandCellSelector();
 			}
 			else {
+				s += "No Neutrals exist | ";
 				selectedNeutralCell = null;
 			}
-			if (selectedAiCell == null) {
-				//print("No cell found worthy of selection ... skipping turn.");
-				goto restart;
-			}
 
 
+			s += "Calculating choices | ";
 			Decision factor = CalculateBestChoice();
 
 			//If these combinations are met the script will fail.. we have to redo the selection
-			if (selectedNeutralCell == null && factor == Decision.EXPAND || isAlone == true && factor == Decision.HELP) {
+			if (selectedNeutralCell == null && factor == Decision.EXPAND) {
+				s += "Expanding with no free cells, DONE!";
+				print(s);
+				s = "";
+				goto redoAction;
+			}
+			if (isAlone == true && factor == Decision.HELP) {
+				s += "Aiding with no allies, DONE!";
+				print(s);
+				s = "";
 				goto redoAction;
 			}
 			if (selectedTargetCell == null && factor == Decision.ATTACK) {
+				s += "Attacking with no targets, DONE!";
+				print(s);
+				s = "";
 				goto restart;
 			}
 
 
 			if (factor == Decision.EXPAND) {
-
+				s += "Expanding as " + selectedAiCell + " to " + selectedNeutralCell + " END ";
 				Expand(selectedAiCell, selectedNeutralCell);
 
 			}
 			else if (factor == Decision.ATTACK) {
-
+				s += "Attacking as " + selectedAiCell + " cell " + selectedTargetCell + " END ";
 				Attack(selectedAiCell, selectedTargetCell);
 
 			}
 			else {
-
+				s += "Aiding as " + selectedAiCell + " teammates cell " + selectedAiCellForAid + " END ";
 				Defend(selectedAiCell, selectedAiCellForAid);
 			}
+			print(s);
+			s = "";
 		}
 	}
 
+	#region Function to preform ATTACKS, DEFENCES, EXPANSIONS
 	//Expand from - to
 	public void Expand(CellBehaviour selectedCell, CellBehaviour toTarget) {
 		if (_neutrals.Count == 0) {
@@ -692,8 +701,7 @@ public class Enemy_AI : MonoBehaviour {
 	public void Defend(CellBehaviour selectedCell, CellBehaviour target) {
 		selectedCell.EmpowerCell(target);
 	}
-
-
+	#endregion
 
 	public CellBehaviour AiCellSelector() {
 		int elementRecordAI = -1;
@@ -711,32 +719,39 @@ public class Enemy_AI : MonoBehaviour {
 
 			//Just return curent cell
 			if (UnityEngine.Random.Range(0, 10) < 1) {
+				s += "Selected 10% chance | ";
 				return current;
 			}
 		}
 		//If the biggest cell has more than "x" elements 80% return it
-		if (elementRecordAI > 10) {
-			if (UnityEngine.Random.Range(0, 10) < 4) {
+		if (elementRecordAI > aICellSelectElementTreshold) {
+			if (UnityEngine.Random.Range(0, 10) < 6) {
+				s += "Selected cell above threshold | ";
 				return _aiCells[recordIndex];
 			}
 			else {
+				s += "Cells above treshold exist, but were not selected | ";
 				//If a target that can be overtaken exists still try to attack
-				for (int i = 0; i < _allies.Count; i++) {
+				for (int i = 0; i < _aiCells.Count; i++) {
 					for (int j = 0; j < _targets.Count; j++) {
-						if ((_aiCells[i].elementCount * 0.5f) > ((_targets[j].elementCount * 0.5f) + 1)) {
+						if ((_aiCells[i].elementCount * 0.5f) > ((_targets[j].elementCount) + 1)) {
 							if (UnityEngine.Random.Range(0, 10) < 6) {
+								s += "Selected Cell with guaranteed Overtake | ";
 								return _aiCells[i];
 							}
 							else {
+								s += "NO selection in second Chance | ";
 								return null;
 							}
 						}
 					}
 				}
+				s += "NO selection above " + aICellSelectElementTreshold + " treshold REALISM PLS | ";
 				return null;
 			}
 		}
 		else {
+			s += "NO cell (highest "+ elementRecordAI +") above " + aICellSelectElementTreshold + " treshold | ";
 			return null;
 		}
 	}
@@ -848,7 +863,12 @@ public class Enemy_AI : MonoBehaviour {
 		}
 		// 40% return the best cell you found
 		if (UnityEngine.Random.Range(0, 10) < 4) {
-			defendChoiceProbability = 0.4f;
+			if(Mathf.Abs(selectedAiCell.elementCount - _aiCells[recordIndex].elementCount) > aICellAidElementTreshold) {
+				defendChoiceProbability = 0.6f;
+			}
+			else {
+				defendChoiceProbability = 0.2f;
+			}
 			return _aiCells[recordIndex];
 		}
 		//Helping not recommended
@@ -860,55 +880,58 @@ public class Enemy_AI : MonoBehaviour {
 
 
 	private Decision CalculateBestChoice() {
-
+		s += "ATK = " + attackChoiceProbability + "EXP = " + expandChoiceProbability + "DEF = " + defendChoiceProbability + " | ";
+		s += "SELECTED AI = " + selectedAiCell + " TARGET = " + selectedTargetCell + " DEFENSE =  " + selectedAiCellForAid + " EXPAND = " + selectedNeutralCell + " | ";
 		if (attackChoiceProbability > expandChoiceProbability) {
-
-			if ((defendChoiceProbability > expandChoiceProbability) || (defendChoiceProbability > attackChoiceProbability)) {
-
+			s += "ATTACK++ ? | ";
+			if ((defendChoiceProbability > expandChoiceProbability) && (defendChoiceProbability > attackChoiceProbability)) {
+				s += "defense ++ | ";
 				if (UnityEngine.Random.Range(0, 10) < 5) {
-					//print(selectedAiCell.gameObject.name + " Chose Defence with 50%");
+					s += "def 50% | ";
 					return Decision.HELP;
 				}
 				else {
 					if (UnityEngine.Random.Range(0, 10) < 5) {
-						//print(selectedAiCell.gameObject.name + " Chose Attack with 25%");
+						s += "atk 25% | ";
 						return Decision.ATTACK;
 					}
 					else {
-						//print(selectedAiCell.gameObject.name + " Chose Expand with 25%");
+						s += "exp 25% | ";
 						return Decision.EXPAND;
 					}
 				}
 			}
 			else {
-				if (UnityEngine.Random.Range(0, 10) < 7) {
-					//print(selectedAiCell.gameObject.name + " Chose Attack with 70%");
+				s += "attack++ | ";
+				if (UnityEngine.Random.Range(0, 10) < 7.5f) {
+					s += "atk 75% | ";
 					return Decision.ATTACK;
 				}
 				else {
 					if (UnityEngine.Random.Range(0, 10) < 5) {
-						//print(selectedAiCell.gameObject.name + " Chose Defence with 15%");
+						s += "def 12.5% | ";
 						return Decision.HELP;
 					}
 					else {
-						//print(selectedAiCell.gameObject.name + " Chose Expand with 15%");
+						s += "exp 12.5% | ";
 						return Decision.EXPAND;
 					}
 				}
 			}
 		}
 		else {
+			s += "EXPAND++ ? | ";
 			if (UnityEngine.Random.Range(0, 10) < 8) {
-				//print(selectedAiCell.gameObject.name + " Chose Expand with 80%");
+				s += "exp 80% | ";
 				return Decision.EXPAND;
 			}
 			else {
 				if (UnityEngine.Random.Range(0, 10) < 5) {
-					//print(selectedAiCell.gameObject.name + " Chose Attack with 10%");
+					s += "atk 10% | ";
 					return Decision.ATTACK;
 				}
 				else {
-					//print(selectedAiCell.gameObject.name + " Chose Defence with 10%");
+					s += "def 10% | ";
 					return Decision.HELP;
 				}
 			}

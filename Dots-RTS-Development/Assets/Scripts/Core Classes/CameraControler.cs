@@ -19,14 +19,14 @@ public class CameraControler : MonoBehaviour {
 
 	private void Awake() {
 		if (!isSubscribed) {
-			print("Subscribed Camera");
+			//print("Subscribed Camera");
 			Upgrade_Manager.OnUpgradeBegin += OnBeginUpgrading;
 			Upgrade_Manager.OnUpgradeQuit += OnQuitUpgrading;
 			isSubscribed = true;
 		}
 	}
 	private void OnDestroy() {
-		print("Unsubbed Cam");
+		//print("Unsubbed Cam");
 		Upgrade_Manager.OnUpgradeBegin -= OnBeginUpgrading;
 		Upgrade_Manager.OnUpgradeQuit -= OnQuitUpgrading;
 		isSubscribed = false;

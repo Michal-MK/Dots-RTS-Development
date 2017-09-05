@@ -30,7 +30,7 @@ public class LoadFromFile : MonoBehaviour {
 		SaveData customSave;
 		SaveDataCampaign campaignSave;
 
-		if (Control.levelState == Control.PlaySceneState.CUSTOM) {
+		if (PlayManager.levelState == PlayManager.PlaySceneState.CUSTOM) {
 			customSave = (SaveData)formatter.Deserialize(file);
 			if (customSave.gameSize != 0) {
 				Camera.main.orthographicSize = customSave.gameSize;
@@ -62,7 +62,7 @@ public class LoadFromFile : MonoBehaviour {
 			init.StartAiInitialization(customSave.clans);
 		}
 
-		else if (Control.levelState == Control.PlaySceneState.CAMPAIGN) {
+		else if (PlayManager.levelState == PlayManager.PlaySceneState.CAMPAIGN) {
 			campaignSave = (SaveDataCampaign)formatter.Deserialize(file);
 			if (campaignSave.game.gameSize != 0) {
 				Camera.main.orthographicSize = campaignSave.game.gameSize;
@@ -92,7 +92,7 @@ public class LoadFromFile : MonoBehaviour {
 			init.StartAiInitialization(campaignSave.game.clans);
 
 		}
-		else if (Control.levelState == Control.PlaySceneState.PREVIEW) {
+		else if (PlayManager.levelState == PlayManager.PlaySceneState.PREVIEW) {
             gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
             customSave = (SaveData)formatter.Deserialize(file);
             if (customSave.gameSize != 0) {
@@ -127,6 +127,6 @@ public class LoadFromFile : MonoBehaviour {
 			//throw new System.Exception();
 		}
 		file.Close();
-		Control.levelState = Control.PlaySceneState.NONE;
+		PlayManager.levelState = PlayManager.PlaySceneState.NONE;
 	}
 }

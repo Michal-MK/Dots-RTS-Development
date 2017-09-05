@@ -19,7 +19,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 	//Add cell to global list
 	public override void Awake() {
 		base.Awake();
-		Control.cells.Add(this);
+		PlayManager.cells.Add(this);
 	}
 
 	//Set default

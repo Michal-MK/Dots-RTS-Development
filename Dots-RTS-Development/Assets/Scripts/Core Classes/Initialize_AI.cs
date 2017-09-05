@@ -15,7 +15,7 @@ public class Initialize_AI : MonoBehaviour {
 
     //Goes though all the cells and creates an AI for each team.
     public void StartAiInitialization(Dictionary<int, int> clanDict) {
-        foreach (Cell c in Control.cells) {
+        foreach (Cell c in PlayManager.cells) {
             //If cell is enemy create ai for that enemy - Only once
             if ((int)c.cellTeam >= 2) {
                 //print((int)c.cellTeam + "  " + c.gameObject.name);

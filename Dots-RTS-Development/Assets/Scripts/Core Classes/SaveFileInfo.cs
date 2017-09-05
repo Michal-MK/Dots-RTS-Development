@@ -62,7 +62,7 @@ public class SaveFileInfo : MonoBehaviour {
 #else
 		string s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
 #endif
-		Control.levelState = Control.PlaySceneState.CUSTOM;
+		PlayManager.levelState = PlayManager.PlaySceneState.CUSTOM;
 		PlayerPrefs.SetString("LoadLevelFilePath", s);
 		SceneManager.LoadScene(Scenes.PLAYER);
 	}

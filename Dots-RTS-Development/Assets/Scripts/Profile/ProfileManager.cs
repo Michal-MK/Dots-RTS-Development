@@ -54,6 +54,9 @@ public class ProfileManager {
 
 		if (files.Length == 0) {
 			Debug.Log("No Profies Found");
+			if (b == null) {
+				b = GameObject.Find("Content").transform.Find("NoProfiles").GetComponent<Button>();
+			}
 			b.gameObject.SetActive(true);
 			b.onClick.RemoveAllListeners();
 			b.onClick.AddListener(() => ShowProfileCreation());

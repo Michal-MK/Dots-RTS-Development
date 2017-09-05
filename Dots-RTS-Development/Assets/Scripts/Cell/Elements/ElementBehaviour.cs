@@ -30,13 +30,13 @@ class ElementBehaviour : Element {
 	}
 
 	private Vector2 DirectionToTarget(CellBehaviour target) {
-		Vector2 seekF = target.gameObject.transform.position - gameObject.transform.position;
+		Vector2 seekF = target.gameObject.transform.position - transform.position;
 		seekF.Normalize();
 		return seekF;
 	}
     
     private float DistanceToTarget(CellBehaviour target) {
-        return Vector2.Distance(target.transform.position, gameObject.transform.position);
+        return Vector2.Distance(target.transform.position, transform.position);
     }
 
     private Vector2 ApplySidewaysWobble(Vector2 IN) {

@@ -6,10 +6,22 @@ using System.Collections;
 public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerClickHandler {
 	public GameObject panel;
 	public Animator anim;
-	public float anchorDiffPercent;
-	bool moving = true;
 	public RectTransform CSTransform;
-	float second = 0f;
+
+	public float anchorDiffPercent;
+	private bool moving = true;
+	private bool isShown = true;
+
+	private float second = 0f;
+
+	#region Events
+	void Start() {
+		Control.RMBPressed += Control_RMBPressed;
+	}
+	void OnDestroy() {
+		Control.RMBPressed -= Control_RMBPressed;
+	}
+	#endregion
 
 	public void OnDrag(PointerEventData eventData) {
 		float cursorPerCent = eventData.position.y / Screen.height;
@@ -29,17 +41,6 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerC
 			CSTransform.anchorMax = new Vector2(1, 1f);
 		}
 
-	}
-
-	private bool isShown = true;
-	// Use this for initialization
-	void Start() {
-		Control.RMBPressed += Control_RMBPressed;
-		//print(isShown);
-		//anim.SetTrigger("Show");
-	}
-	void OnDestroy() {
-		Control.RMBPressed -= Control_RMBPressed;
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
@@ -76,20 +77,17 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerC
 			CSTransform.anchorMin = new Vector2(0, Mathf.Lerp(initialTopAnchor - anchorDiffPercent, TopAnchor - anchorDiffPercent, second + anchorDiffPercent));
 			CSTransform.anchorMax = new Vector2(1, Mathf.Lerp(initialTopAnchor, TopAnchor, second + anchorDiffPercent));
 			if (second + anchorDiffPercent >= 1) {
-				
+
 				CSTransform.anchorMin = new Vector2(0, TopAnchor - anchorDiffPercent);
 				CSTransform.anchorMax = new Vector2(1, TopAnchor);
 				moving = false;
 			}
 			second += Time.deltaTime;
 		}
-		//anim.SetTrigger("Hide
 #if !UNITY_ANDROID && !UNITY_IOS
 		anim.SetTrigger("Hide");
 #endif
 
 		isShown = false;
 	}
-
-
 }

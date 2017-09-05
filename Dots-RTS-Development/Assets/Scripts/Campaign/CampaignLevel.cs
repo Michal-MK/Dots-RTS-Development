@@ -57,7 +57,7 @@ public class CampaignLevel : MonoBehaviour {
 	public void StartLevel() {
 		current = this;
 		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
-		Control.levelState = Control.PlaySceneState.CAMPAIGN;
+		PlayManager.levelState = PlayManager.PlaySceneState.CAMPAIGN;
 		SceneManager.LoadScene(Scenes.PLAYER);
 		transform.parent = null;
 		DontDestroyOnLoad(gameObject);

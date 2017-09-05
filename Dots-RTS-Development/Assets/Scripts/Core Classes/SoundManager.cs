@@ -33,7 +33,7 @@ public class SoundManager : MonoBehaviour {
 			}
 		}
 		if (!added) {
-			print("Not Enough Sound players");
+			//print("Not Enough Sound players");
 		}
 
 	}

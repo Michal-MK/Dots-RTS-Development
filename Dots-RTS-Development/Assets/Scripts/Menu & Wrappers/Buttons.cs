@@ -29,7 +29,6 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void EditMode() {
-		Control.cells.Clear();
 		SceneManager.LoadScene(Scenes.EDITOR);
 	}
 

@@ -31,7 +31,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	public void TryLevel() {
 		string path = Save(true);
 		PlayerPrefs.SetString("LoadLevelFilePath", path);
-		Control.levelState = Control.PlaySceneState.PREVIEW;
+		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
 		SceneManager.LoadScene(Scenes.PLAYER);
 	}
 

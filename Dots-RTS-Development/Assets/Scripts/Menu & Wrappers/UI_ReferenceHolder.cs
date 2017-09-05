@@ -9,13 +9,13 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#region References
 
 	#region MainMenuRefs
-	public static TextMeshProUGUI gameName;
-	public static TextMeshProUGUI gameVersion;
-	public static GameObject startGameButton;
-	public static GameObject levelEditorButton;
-	public static GameObject onlineLevelsButton;
-	public static TextMeshProUGUI profileName;
-	public static GameObject quotGameButton;
+	public static TextMeshProUGUI MM_gameName;
+	public static TextMeshProUGUI MM_gameVersion;
+	public static GameObject MM_startGameButton;
+	public static GameObject MM_levelEditorButton;
+	public static GameObject MM_onlineLevelsButton;
+	public static TextMeshProUGUI MM_profileName;
+	public static GameObject MM_quitGameButton;
 
 	#endregion
 
@@ -33,18 +33,14 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region LevelSelectRefs
-	public static RectTransform rectCampaign;
-	public static RectTransform rectCustom;
-	public static GameObject canvasBase;
-	//public static GameObject centralToMainMenu;
-	//public static GameObject campaignButton;
-	//public static GameObject customButton;
-	//public static GameObject buyUpgradesSceneButton;
+	public static RectTransform LS_rectCampaign;
+	public static RectTransform LS_rectCustom;
+	public static GameObject LS_canvasBase;
 	#endregion
 
 	#region LevelPlayerRefs
-	public static GameObject menuPanel;
-	public static RectTransform upgradePanel;
+	public static GameObject MULTI_menuPanel;
+	public static RectTransform MULTI_upgradePanel;
 
 	#endregion
 
@@ -59,10 +55,10 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region PostGame
-	public static TextMeshProUGUI resultingJudgdement;
-	public static TextMeshProUGUI didDominate;
-	public static TextMeshProUGUI totalTimeToClear;
-	public static TextMeshProUGUI totalCoinsAwarded;
+	public static TextMeshProUGUI PG_resultingJudgdement;
+	public static TextMeshProUGUI PG_didDominate;
+	public static TextMeshProUGUI PG_totalTimeToClear;
+	public static TextMeshProUGUI PG_totalCoinsAwarded;
 	#endregion
 
 	#region ProfileRefs
@@ -113,13 +109,13 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
 				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
 				LE_teamPickerPanel = c.Find("TeamSelectPanel").gameObject;
-				menuPanel = c.Find("MenuPanel").gameObject;
+				MULTI_menuPanel = c.Find("MenuPanel").gameObject;
 				return;
 			}
 			case Scenes.SELECT: { // LevelSelect
-				rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
-				rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
-				canvasBase = GameObject.Find("Canvas_Base");
+				LS_rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
+				LS_rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
+				LS_canvasBase = GameObject.Find("Canvas_Base");
 				//centralToMainMenu = GameObject.Find("Return_To_Menu");
 				//campaignButton = GameObject.Find("Campaign_Button");
 				//customButton = GameObject.Find("Custom_Button");
@@ -127,8 +123,8 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case Scenes.PLAYER: { //PlayScene
-				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
+				MULTI_menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case Scenes.SHARING: { //Level Sharing
@@ -136,15 +132,15 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				return;
 			}
 			case Scenes.DEBUG: { // DebugScene
-				menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
+				MULTI_menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
+				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case Scenes.POSTG: { // PostGame Scene
-				resultingJudgdement = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
-				didDominate = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
-				totalTimeToClear = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
-				totalCoinsAwarded = GameObject.Find("Total_Coins_Awarded").GetComponent<TextMeshProUGUI>();
+				PG_resultingJudgdement = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
+				PG_didDominate = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
+				PG_totalTimeToClear = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
+				PG_totalCoinsAwarded = GameObject.Find("Total_Coins_Awarded").GetComponent<TextMeshProUGUI>();
 				return;
 			}
 			case Scenes.PROFILES: { //Profiles

@@ -13,7 +13,6 @@ public class SceneSwitcher : MonoBehaviour {
 		if (sceneIndex == 1) {
 			PlayerPrefs.SetString("LoadLevelFilePath", null);
 		}
-		Control.cells.Clear();
 		SceneManager.LoadScene(sceneIndex);
 
 	}
@@ -26,8 +25,6 @@ public class SceneSwitcher : MonoBehaviour {
 		if (sceneName == Scenes.EDITOR) {
 			PlayerPrefs.SetString("LoadLevelFilePath", null);
 		}
-
-		Control.cells.Clear();
 		Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 		SceneManager.LoadScene(sceneName);
 	}
