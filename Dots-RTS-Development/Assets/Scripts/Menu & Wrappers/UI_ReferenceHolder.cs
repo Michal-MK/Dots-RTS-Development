@@ -21,8 +21,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	#region EditorRefs
 	public static GameObject LE_saveLoadTryLevel;
-	public static GameObject LE_placedCellInfoPanel;
-	public static GameObject LE_editorMouseModes;
 	public static GameObject LE_saveInfoPanel;
 	public static GameObject LE_gameSettingsPanel;
 	public static GameObject LE_teamPickerPanel;
@@ -101,11 +99,9 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case Scenes.EDITOR: { // Editor
 				Transform c = GameObject.Find("Canvas").transform;
-				LE_editorMouseModes = c.Find("ModeButtons").gameObject;
 				LE_editorSettingsPanel = c.Find("ViewMenuPanel").gameObject;
 				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
 				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
-				LE_placedCellInfoPanel = c.Find("PlaceCellPanel").gameObject;
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
 				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
 				LE_teamPickerPanel = c.Find("TeamSelectPanel").gameObject;

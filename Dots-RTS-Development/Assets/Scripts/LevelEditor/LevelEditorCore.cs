@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class LevelEditorCore : MonoBehaviour {
 
@@ -9,125 +10,106 @@ public class LevelEditorCore : MonoBehaviour {
 	//When EditMode Changes, passes the new mode
 	public static event Control.EditModeChanged modeChange;
 
-	static Vector3 defaultCameraPosition;
-	static TeamSetup teamSetup;
+	public GameObject CellPrefab;
 
-
-	public static List<Cell> cellList = new List<Cell>();
-	public static List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
-	public static List<Cell> selectedCellList = new List<Cell>();
+	private TeamSetup teamSetup;
+	public List<EditCell> cellList = new List<EditCell>();
+	public List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
+	public List<EditCell> selectedCellList = new List<EditCell>();
 	/// <summary>
-	/// All of the input fields, there's only one input panel so this can be static --- epic reasoning
+	/// All of the input fields
 	/// </summary>
 	//PlaceCellsPanel
-	public static TeamSelectScript teamButton;
-	public static InputField maxInput;
-	public static InputField startInput;
-	public static InputField regenInput;
+	public Transform teamButton;
+
+	#region InputFields
+
+	public InputField maxInput;
+	public InputField startInput;
+	public InputField regenInput;
 	//GameSetttingPanel
-	public static InputField aiDifficultyAllInput;
-	public static InputField aiDifficultySingleInput;
-	public static InputField sizeInput;
+	public InputField aiDifficultyAllInput;
+	public InputField aiDifficultySingleInput;
+	public InputField sizeInput;
 	//IOPanel
 	//public static InputField fileNameInput;
-	public static InputField levelNameInput;
-	public static InputField authorNameInput;
+	public InputField levelNameInput;
+	public InputField authorNameInput;
+	#endregion
 
-	public static GameObject upgradePanel;
+	public GameObject upgradePanel;
 
+	public Texture2D[] cursors;
+
+
+	private bool _isUpdateSentByCell;
 	/// <summary>
 	/// Current parsed values, imparsable gets turned into default
 	/// </summary>
 	//PlaceCellsPanel
-	public static int _team;
-	public static int max;
-	public static int start;
-	public static float regen;
+	private Cell.enmTeam _team;
+	private int _max;
+	private int _start;
+	private float _regen;
 	//GameSettingsPanel
-	public static float aiDificultyAll;
-	public static float _gameSize;
-	public static Dictionary<int, float> aiDifficultyDict = new Dictionary<int, float>();
+	private float aiDificultyAll;
+	private float _gameSize;
+	private Dictionary<int, float> aiDifficultyDict = new Dictionary<int, float>();
 	//IOPanel
 	//public static string fileName;
-	public static string levelName;
-	public static string authorName;
+	private string levelName;
+	private string authorName;
 	//view
-	static bool OutlineOn = false;
-
+	private bool OutlineOn = false;
+	private bool areCellsFitToScreen = false;
 
 
 	/// <summary>
 	/// the set defaults
 	/// </summary>
 	//PlaceCellsPanel
-	public int defaultTeam = 0;
-	public int defaultMax = 50;
-	public int defaultStart = 10;
-	public float defaultRegen = 1f;
+	private Cell.enmTeam defaultTeam = Cell.enmTeam.NEUTRAL;
+	private int defaultMax = 50;
+	private int defaultStart = 10;
+	private float defaultRegen = 1f;
 	//GameSettingsPanel
-	public float defaultDificulty = 2f;
-	public float defaultGameSize = 250f;
+	private float defaultDificulty = 2f;
+	private float defaultGameSize = 250f;
 	//IOPanel
 	//public string defaultFileName = "UserMadeLevel";
-	public string defaultLevelName = "CustomLevel";
-	public string defaultAuthorName = "Anonymous";
+	private string defaultLevelName = "CustomLevel";
+	private string defaultAuthorName = "Anonymous";
 
 
 	// The current editor mode
-	public enum Mode { WaitForModeChange, EditCells, DeleteCells, PlaceCells };
-	public enum PCPanelAttribute { Team, Max, Start, Regen };
+	public enum Mode { PlaceCells, EditCells, DeleteCells };
+	public enum PCPanelAttribute { Start, Max, Regen, Team };
 
-	public static Mode editorMode;
+	private Mode _editorMode;
 
-	public Texture2D[] cursors;
 
-	public static bool dontUpdate;
 
-	public static bool fitCellsOnScreen;
-
-	private IEnumerator Start() {
-		//Find all of the input fields;
-		teamButton = gameObject.GetComponent<TeamSelectScript>();
-		maxInput = GameObject.Find("MAX_Elements_IF").GetComponent<InputField>();
-		startInput = GameObject.Find("START_Elements_IF").GetComponent<InputField>();
-		regenInput = GameObject.Find("REGEN_Elements_IF").GetComponent<InputField>();
-
-		aiDifficultyAllInput = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/AI Difficulty/AI_Diff_IF").GetComponent<InputField>();
-		aiDifficultySingleInput = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/Single_Ai_Diff_IF").GetComponent<InputField>();
-		sizeInput = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/Game Size/CAM_Size_IF").GetComponent<InputField>();
-
-		levelNameInput = GameObject.Find("Canvas").transform.Find("SavePanel/LevelName/Level Name IF").GetComponent<InputField>();
-		authorNameInput = GameObject.Find("Canvas").transform.Find("SavePanel/Author's name/Author's name IF").GetComponent<InputField>();
-
-		//UpgradePanel
-		upgradePanel = GameObject.Find("Upgrade_Panel");
-
-		//Disable the panels;
-		//aiDifficultySingleInput.gameObject.SetActive(false);
-		UI_ReferenceHolder.LE_saveInfoPanel.SetActive(false);
-		UI_ReferenceHolder.LE_gameSettingsPanel.SetActive(false);
+	private void Start() {
 		teamSetup = UI_ReferenceHolder.LE_gameSettingsPanel.GetComponent<TeamSetup>();
 
 
 		//Set the defaluts by parsing all of the input fields
-		defaultCameraPosition = Camera.main.transform.position;
-		ParseCellTeam_PlaceCellPanel();
-		ParseRegenPeriod_PlaceCellPanel();
-		ParseMaxElementCount_PlaceCellPanel();
-		ParseStartingElementCount_PlaceCellPanel();
+		PlaceCellPanelParseFromField(PCPanelAttribute.Start);
+		PlaceCellPanelParseFromField(PCPanelAttribute.Max);
+		PlaceCellPanelParseFromField(PCPanelAttribute.Regen);
+		team = defaultTeam;
 		ParseGameSize_GameSettingsPanel();
 		ParseSaveInfo_SavePanel();
 		AiDiffHandler();
 
 		// Set defalut mode to placeCells
 		//Have to wait for all of the things to initialize before I can call a button press
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		PlaceCellButton();
+		//yield return new WaitForEndOfFrame();
+		editorMode = Mode.PlaceCells;
 	}
 
 	#region Functions to add or remove a cell from the static list
-	public static void AddCell(Cell c) {
+	public void AddCell(EditCell c) {
 
 		cellList.Add(c);
 		if (OutlineOn) {
@@ -140,7 +122,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 
 	}
-	public static void RemoveCell(Cell c) {
+	public void RemoveCell(EditCell c) {
 		cellList.Remove(c);
 		foreach (Cell cell in cellList) {
 			if (cell.cellTeam == c.cellTeam) {
@@ -153,101 +135,132 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 	#endregion
 
-	
-
-
-	public void CellOutlineToggle(Toggle toggle) {
-		OutlineOn = toggle.isOn;
-		if (toggle.isOn) {
-			foreach (Cell cell in cellList) {
-				cell.gameObject.SendMessage("ToggleCellOutline", true);
-			}
-		}
-		else {
-			foreach (Cell cell in cellList) {
-				cell.gameObject.SendMessage("ToggleCellOutline", false);
-			}
-		}
-	}
-
-
-	private void OnDestroy() {
-		LevelEditorCore.cellList.Clear();
-		selectedCellList.Clear();
-	}
-
-	public void DestoyCellsButton() {
-		editorMode = Mode.DeleteCells;
-		modeChange?.Invoke(Mode.DeleteCells);
-		Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
-	}
-	public void PlaceCellButton() {
-		editorMode = Mode.PlaceCells;
-		modeChange?.Invoke(Mode.PlaceCells);
-		Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
-	}
-	public void EditCellsButton() {
-		editorMode = Mode.EditCells;
-		modeChange?.Invoke(Mode.EditCells);
-		Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-	}
-	//public void UpgradesButton() {
-	//	editorMode = Mode.AssignUpgrades;
-	//	modeChange?.Invoke(Mode.AssignUpgrades);
-	//	Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+	//public void CellOutlineToggle(Toggle toggle) {
+	//	OutlineOn = toggle.isOn;
+	//	foreach (EditCell cell in cellList) {
+	//		cell.ToggleCellOutline(toggle.isOn);
+	//	}
 	//}
-
-	public void ParseCellTeam_PlaceCellPanel() {
-		team = teamButton.team;
-
-		if (panelChange != null && dontUpdate == false) {
-			panelChange(PCPanelAttribute.Team);
-		}
-
+	public void ModeButtonWrapper(int mode) {
+		ModeButton((Mode)mode);
 	}
-	public void ParseMaxElementCount_PlaceCellPanel() {
 
+	public void ModeButton(Mode mode) {
+		_editorMode = mode;
+		modeChange?.Invoke(mode);
+		switch (mode) {
+			case Mode.PlaceCells: {
+					Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
 
-		if (!int.TryParse(maxInput.text, out max)) {
-			max = defaultMax;
+					return;
+				}
+			case Mode.EditCells: {
+					Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+					return;
+				}
+			case Mode.DeleteCells: {
+					Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
+					return;
+				}
+			default: {
+					Debug.LogError("Unknown mode passed");
+					return;
+				}
 		}
-
-		if (panelChange != null && dontUpdate == false) {
-			panelChange(PCPanelAttribute.Max);
-		}
-
 	}
-	public void ParseStartingElementCount_PlaceCellPanel() {
 
-		if (!int.TryParse(startInput.text, out start)) {
-			start = defaultStart;
-		}
-		if (panelChange != null && dontUpdate == false) {
-			panelChange(PCPanelAttribute.Start);
-		}
 
+	private void Update() {
+
+#if (UNITY_EDITOR || UNITY_STANDALONE)
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && editorMode == Mode.PlaceCells) {
+			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
+			EditCell c = newCell.GetComponent<EditCell>();
+			c.cellTeam = team;
+			c.maxElements = max;
+			c.regenPeriod = regen;
+			c.elementCount = start;
+			c.core = this;
+			//c.FastResize();
+			AddCell(c);
+
+		}
+#endif
+#if (UNITY_ANDROID || UNITY_IOS)
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && LevelEditorCore.editorMode == LevelEditorCore.Mode.PlaceCells) {
+			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
+			EditCell c = newCell.GetComponent<EditCell>();
+			c.cellTeam = team;
+			c.maxElements = max;
+			c.regenPeriod = regen;
+			c.elementCount = start;
+			c.core = this;
+			c.FastResize();
+			AddCell(c);
+		}
+#endif
 	}
-	public void ParseRegenPeriod_PlaceCellPanel() {
 
-		if (!float.TryParse(regenInput.text, out regen)) {
-			regen = defaultRegen;
+	public void PlaceCellPanelParseFromFieldWrapper(int inputField) {
+		PlaceCellPanelParseFromField((PCPanelAttribute)inputField);
+	}
+
+	public void PlaceCellPanelParseFromField(PCPanelAttribute inputField) {
+		switch (inputField) {
+			case PCPanelAttribute.Start: {
+					if (!int.TryParse(startInput.text, out _start)) {
+						_start = defaultStart;
+					}
+					panelChange?.Invoke(PCPanelAttribute.Start);
+					return;
+				}
+			case PCPanelAttribute.Max: {
+					if (!int.TryParse(maxInput.text, out _max)) {
+						_max = defaultMax;
+					}
+					panelChange?.Invoke(PCPanelAttribute.Max);
+					return;
+				}
+			case PCPanelAttribute.Regen: {
+					if (!float.TryParse(regenInput.text, out _regen)) {
+						_regen = defaultRegen;
+					}
+					panelChange?.Invoke(PCPanelAttribute.Regen);
+					return;
+				}
+			case PCPanelAttribute.Team: {
+					UI_ReferenceHolder.LE_teamPickerPanel.SetActive(true);
+					return;
+				}
+
 		}
+	}
+	public void TeamSelectedButtonWrapper(int thisTeam) {
+		TeamSelectedButton((Cell.enmTeam) thisTeam);
+	}
 
-		if (panelChange != null && dontUpdate == false) {
-			panelChange(PCPanelAttribute.Regen);
-		}
-
+	public void TeamSelectedButton(Cell.enmTeam correspondingTeam) {
+		team = correspondingTeam;
+		UI_ReferenceHolder.LE_teamPickerPanel.SetActive(false);
+	}
+	private void UpdateTeamButtonVisual(Cell.enmTeam thisTeam) {
+		Text description = teamButton.Find("TeamDescription").GetComponent<Text>();
+		description.color = ColourTheTeamButtons.GetContrastColorBasedOnTeam(thisTeam);
+		description.text = ColourTheTeamButtons.GetDescriptionBasedOnTeam(thisTeam);
+		teamButton.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(thisTeam);
 	}
 
 	public static void ResizeToggle(bool on) {
-		if (on) {
-			fitCellsOnScreen = true;
-			FitCellsOnScreen(selectedCellList);
-		}
-		else {
-			fitCellsOnScreen = false;
-			RefreshCameraSize(gameSize);
-		}
+		//if (on) {
+		//	areCellsFitToScreen = true;
+		//	FitCellsOnScreen(selectedCellList);
+		//}
+		//else {
+		//	areCellsFitToScreen = false;
+		//	RefreshCameraSize(gameSize);
+		//}
 	}
 
 	/// <summary>
@@ -324,19 +337,19 @@ public class LevelEditorCore : MonoBehaviour {
 	//}
 
 	//This is called with the panelChange event;
-	public static void RefreshCameraSize(float val) {
+	public void RefreshCameraSize(float val) {
 		if (val != Camera.main.orthographicSize) {
 			if (val < 250) {
 				sizeInput.text = "250";
 				gameSize = 250;
 			}
-			Camera.main.transform.position = defaultCameraPosition;
+			Camera.main.transform.position = Vector3.zero + Vector3.back * 10;
 			Camera.main.orthographicSize = val;
 			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(Camera.main.aspect);
 		}
 	}
 
-	public static void FitCellsOnScreen(List<Cell> cells) {
+	public void FitCellsOnScreen(List<Cell> cells) {
 		//find boarders
 		if (cells.Count == 0) {
 			RefreshCameraSize(gameSize);
@@ -346,7 +359,7 @@ public class LevelEditorCore : MonoBehaviour {
 		float highestX = -Mathf.Infinity;
 		float lowestY = Mathf.Infinity;
 		float highestY = -Mathf.Infinity;
-		print("CellCount " + cells.Count );
+		print("CellCount " + cells.Count);
 		float adjustBy = 10;
 
 		if (cells.Count == 1) {
@@ -362,7 +375,7 @@ public class LevelEditorCore : MonoBehaviour {
 				//print("radius " + cell.cellRadius);
 				if (cellPos.x - cell.cellRadius < lowestX) {
 					lowestX = cellPos.x - cell.cellRadius;
-					
+
 				}
 				if (cellPos.x + cell.cellRadius > highestX) {
 					highestX = cellPos.x + cell.cellRadius;
@@ -393,7 +406,7 @@ public class LevelEditorCore : MonoBehaviour {
 			float heightFromWidth = delta / aspect;
 			Camera.main.orthographicSize = heightFromWidth * 0.5f;
 		}
-		else  {
+		else {
 			float delta = highestY - lowestY;
 			Camera.main.orthographicSize = delta * 0.5f;
 		}
@@ -402,18 +415,51 @@ public class LevelEditorCore : MonoBehaviour {
 
 	}
 
-	public static int team {
+	public Mode editorMode {
+		get { return _editorMode; }
+		set {
+			ModeButton(value);	
+		}
+	}
+
+	public bool isUpdateSentByCell {
+		get { return _isUpdateSentByCell; }
+		set { _isUpdateSentByCell = value; }
+	}
+	public Cell.enmTeam team {
 		get { return _team; }
 		set {
 			_team = value;
-			teamButton.UpdateButtonVisual();
+			UpdateTeamButtonVisual(value);
+			panelChange?.Invoke(PCPanelAttribute.Team);
 		}
 	}
-	public static float gameSize {
+	public float gameSize {
 		get { return _gameSize; }
 		set {
 			_gameSize = value;
 			RefreshCameraSize(value);
+		}
+	}
+	public int start {
+		get { return _start;  }
+		set {
+			_start = value;
+			startInput.text = value.ToString();
+		}
+	}
+	public float regen {
+		get { return _regen; }
+		set {
+			_regen = value;
+			regenInput.text = value.ToString();
+		}
+	}
+	public int max {
+		get { return _max; }
+		set {
+			_max = value;
+			maxInput.text = value.ToString();
 		}
 	}
 }

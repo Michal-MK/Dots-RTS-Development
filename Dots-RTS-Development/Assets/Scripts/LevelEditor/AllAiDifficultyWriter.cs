@@ -12,21 +12,21 @@ public class AllAiDifficultyWriter : MonoBehaviour {
 
 		myText.text = "";
 
-		foreach (Cell.enmTeam teamEnm in LevelEditorCore.teamList) {
-			int team = (int)teamEnm;
-			//print(team);
-			float diff;
-			// print(team);
-			//if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out diff)) {
-			//    print("rip me");
-			//}
-			if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out diff)) {
-				myText.text += "Enemy " + (team - 1) + " does an action every " + diff + " seconds \n";
-			}
-			else {
-				myText.text += "Enemy " + (team - 1) + "'s difficulty is not assinged \n";
-			}
+		//foreach (Cell.enmTeam teamEnm in LevelEditorCore.teamList) {
+		//	int team = (int)teamEnm;
+		//	//print(team);
+		//	float diff;
+		//	// print(team);
+		//	//if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out diff)) {
+		//	//    print("rip me");
+		//	//}
+		//	if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out diff)) {
+		//		myText.text += "Enemy " + (team - 1) + " does an action every " + diff + " seconds \n";
+		//	}
+		//	else {
+		//		myText.text += "Enemy " + (team - 1) + "'s difficulty is not assinged \n";
+		//	}
 
-		}
+		//}
 	}
 }

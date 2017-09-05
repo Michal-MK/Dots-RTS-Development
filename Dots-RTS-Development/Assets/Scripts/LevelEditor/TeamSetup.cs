@@ -22,15 +22,15 @@ public class TeamSetup : MonoBehaviour {
 		stRoundTable = roundTable;
 		//lineRenderer = gameObject.GetComponent<LineRenderer>();
 		AllAiDifficultyWriter.RedoText();
-		for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
-			GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
-			newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
-			mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
-			mySpawns[i].team = (int)LevelEditorCore.teamList[i];
-			mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
-			mySpawns[i].panel = roundTable;
-			mySpawns[i].r = (roundTable.sizeDelta.x / 2.2f) * (Screen.width / 1280f);
-		}
+		//for (int i = 0; i < LevelEditorCore.teamList.Count; i++) {
+		//	GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
+		//	newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam((int)LevelEditorCore.teamList[i]);
+		//	mySpawns.Add(newTeamBox.GetComponent<TeamBox>());
+		//	mySpawns[i].team = (int)LevelEditorCore.teamList[i];
+		//	mySpawns[i].myParrent = gameObject.GetComponent<TeamSetup>();
+		//	mySpawns[i].panel = roundTable;
+		//	mySpawns[i].r = (roundTable.sizeDelta.x / 2.2f) * (Screen.width / 1280f);
+		//}
 		diffAngle = (2 * Mathf.PI) / mySpawns.Count;
 		float nextAngle = 0;
 		//  print((roundTable.sizeDelta.x / 2) - 50);
@@ -50,6 +50,10 @@ public class TeamSetup : MonoBehaviour {
 			Destroy(mySpawns[i].gameObject);
 		}
 		mySpawns.Clear();
+	}
+
+	private void OnDestroy() {
+		clanDict.Clear();
 	}
 
 	// Update is called once per frame
@@ -252,7 +256,7 @@ public class TeamSetup : MonoBehaviour {
 			GameObject bg = Instantiate(clanBG, stRoundTable);
 			bgList.Add(bg);
 			Image img = bg.GetComponent<Image>();
-			img.color = ColourTheTeamButtons.GetColorBasedOnTeam(i + 2);
+			img.color = ColourTheTeamButtons.GetColorBasedOnTeam((Cell.enmTeam)(i + 2));
 			RectTransform rt = bg.GetComponent<RectTransform>();
 			rt.sizeDelta = stRoundTable.sizeDelta;
 			rt.SetAsFirstSibling();

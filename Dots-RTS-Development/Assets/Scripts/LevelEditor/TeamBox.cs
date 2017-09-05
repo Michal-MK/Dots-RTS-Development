@@ -44,18 +44,18 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 	}
 	void PrepareDiffInputBox() {
 
-		LevelEditorCore.aiDifficultySingleInput.gameObject.SetActive(true);
-		LevelEditorCore.aiDifficultySingleInput.transform.position = (Vector2)transform.position + new Vector2(0, rect.sizeDelta.y / 2);
-		float value;
-		if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out value)) {
-			LevelEditorCore.aiDifficultySingleInput.text = value.ToString();
-		}
-		else {
-			LevelEditorCore.aiDifficultySingleInput.text = "";
-		}
-		SingleDiffIF singleDiffIf = LevelEditorCore.aiDifficultySingleInput.gameObject.GetComponent<SingleDiffIF>();
-		singleDiffIf.OnMove(team);
-		singleDiffIf.core = Camera.main.GetComponent<LevelEditorCore>();
+		//LevelEditorCore.aiDifficultySingleInput.gameObject.SetActive(true);
+		//LevelEditorCore.aiDifficultySingleInput.transform.position = (Vector2)transform.position + new Vector2(0, rect.sizeDelta.y / 2);
+		//float value;
+		//if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out value)) {
+		//	LevelEditorCore.aiDifficultySingleInput.text = value.ToString();
+		//}
+		//else {
+		//	LevelEditorCore.aiDifficultySingleInput.text = "";
+		//}
+		//SingleDiffIF singleDiffIf = LevelEditorCore.aiDifficultySingleInput.gameObject.GetComponent<SingleDiffIF>();
+		//singleDiffIf.OnMove(team);
+		//singleDiffIf.core = Camera.main.GetComponent<LevelEditorCore>();
 
 	}
 
