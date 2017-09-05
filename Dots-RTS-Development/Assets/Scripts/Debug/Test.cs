@@ -15,9 +15,9 @@ public class Test : MonoBehaviour {
 
 	};
 
-	private void Start() {
+	private async void Start() {
 		StartCoroutine(Testaaa());
-		FillUpgradeint();
+		await FillUpgradeint();
 	}
 
 	private IEnumerator Testaaa() {

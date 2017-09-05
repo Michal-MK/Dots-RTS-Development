@@ -191,7 +191,9 @@ public class Control : MonoBehaviour {
 			}
 		}
 		if (Input.GetMouseButtonDown(1)) {
-			RMBPressed(Input.mousePosition);
+			if (RMBPressed != null) {
+				RMBPressed(Input.mousePosition);
+			}
 		}
 	}
 
