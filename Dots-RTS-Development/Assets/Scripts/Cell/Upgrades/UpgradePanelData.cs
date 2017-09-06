@@ -43,7 +43,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 				count = ProfileManager.getCurrentProfile.acquiredUpgrades[type];
 				UpdateUpgradeOverview();
 			}
-			desc = transform.parent.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();
+			desc = transform.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();
 		}
 	}
 
@@ -79,7 +79,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		else {
 			GetComponent<Image>().color = new Color(1, 1, 1, 1);
 		}
-		transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+		//transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
 		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 	}
 

@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Global {
 	public static bool baseLoaded = false;
+	public static Dictionary<string, Sprite> spriteDictionary = new Dictionary<string, Sprite>();
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	static async void Start() {
 		List<Task> tasks = new List<Task>();
 		tasks.Add(Upgrade.FillUpgradeSpriteDict());
 
+
+		
+
+
 		await Task.WhenAll(tasks);
 
 		baseLoaded = true;
+
+
 	}
 }
 

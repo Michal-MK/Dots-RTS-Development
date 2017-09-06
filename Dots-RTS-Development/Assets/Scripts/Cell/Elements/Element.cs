@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Element : MonoBehaviour {
@@ -58,5 +56,12 @@ public class Element : MonoBehaviour {
 		}
 		#endregion
 		target.DamageCell(team, damage, infection);
+	}
+
+	public void Refelcted() {
+		CellBehaviour temp = attacker;
+		attacker = target;
+		target = temp;
+		team = target.cellTeam;
 	}
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using WindowsInput;
+using TMPro;
 
 public class Buttons : MainMenuUI  {
 	
@@ -15,16 +16,59 @@ public class Buttons : MainMenuUI  {
 		newWindow.SetActive(true);
 	}
 
-	public void SwitchUpgradeWindow(string buttonName) {
-		GameObject atk = GameObject.Find("Canvas").transform.Find("ATK_Upgrades").gameObject;
-		GameObject def = GameObject.Find("Canvas").transform.Find("DEF_Upgrades").gameObject;
-		if(buttonName == "ATK") {
+	public void SwitchUpgradeWindow(Transform transform) {
+		GameObject atk = GameObject.Find("UPGRADE_Panel").transform.Find("ATK_Upgrades").gameObject;
+		GameObject def = GameObject.Find("UPGRADE_Panel").transform.Find("DEF_Upgrades").gameObject;
+		GameObject util = GameObject.Find("UPGRADE_Panel").transform.Find("UTIL_Upgrades").gameObject;
+		if(transform.name == "ATK") {
 			def.SetActive(false);
 			atk.SetActive(true);
+			util.SetActive(false);
+
 		}
-		else if (buttonName == "DEF") {
+		else if (transform.name == "DEF") {
 			def.SetActive(true);
 			atk.SetActive(false);
+			util.SetActive(false);
+
+		}
+		else if(transform.name == "UTIL") {
+			atk.SetActive(false);
+			def.SetActive(false);
+			util.SetActive(true);
+		}
+		if(SceneManager.GetActiveScene().name == Scenes.PLAYER) {
+			string typeName;
+			Sprite sprite;
+
+			switch (transform.name) {
+				case "ATK": {
+					typeName = "Offensive Upgrades";
+					Global.spriteDictionary.TryGetValue("AttackIcon", out sprite);
+					print(sprite.bounds);
+					break;
+				}
+				case "DEF": {
+					typeName = "Defensive Upgrades";
+					Global.spriteDictionary.TryGetValue("DefenceIcon", out sprite);
+					print(sprite.bounds);
+					break;
+				}
+				case "UTIL": {
+					typeName = "Utility based Upgrades";
+					Global.spriteDictionary.TryGetValue("UtilityIcon", out sprite);
+					break;
+				}
+				default: {
+					typeName = "Unknown Upgrades";
+					sprite = null;
+					break;
+				}
+			}
+
+
+			UI_ReferenceHolder.LP_TypeUpgradeText.text = typeName;
+			UI_ReferenceHolder.LP_TypeUpgradeImage.sprite = sprite;
 		}
 	}
 
