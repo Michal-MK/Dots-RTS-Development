@@ -31,10 +31,8 @@ public class Buttons : MainMenuUI  {
 	public void EditMode() {
 		SceneManager.LoadScene(Scenes.EDITOR);
 	}
-
-	public void FitCells() {
-		LevelEditorCore.ResizeToggle(GetComponent<Toggle>().isOn);
-
+	public void FitCellsToggle(Toggle toggle) {
+		GameObject.Find("Core").GetComponent<LevelEditorCore>().areCellsFitToScreen = toggle.isOn;
 	}
 
 	public void PauseGameorEscape() {

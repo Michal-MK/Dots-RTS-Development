@@ -5,93 +5,125 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class LevelEditorCore : MonoBehaviour {
-
-	public static event Control.PanelValueChanged panelChange;
-	//When EditMode Changes, passes the new mode
+	/// <summary>
+	/// Triggered when value from an input field is parsed
+	/// </summary>
+	public static event Control.PanelValueChanged panelValueParsed;
+	/// <summary>
+	/// Triggered when user changes mouse behaviour
+	/// </summary>
 	public static event Control.EditModeChanged modeChange;
 
-	public GameObject CellPrefab;
 
-	private TeamSetup teamSetup;
+	public GameObject CellPrefab;
+	public Transform teamButton;
+	public GameObject upgradePanel;
+
 	public List<EditCell> cellList = new List<EditCell>();
 	public List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
 	public List<EditCell> selectedCellList = new List<EditCell>();
-	/// <summary>
-	/// All of the input fields
-	/// </summary>
-	//PlaceCellsPanel
-	public Transform teamButton;
+	public Texture2D[] cursors;
+
 
 	#region InputFields
-
+	//CellEdittingPanel
 	public InputField maxInput;
 	public InputField startInput;
 	public InputField regenInput;
+
 	//GameSetttingPanel
 	public InputField aiDifficultyAllInput;
 	public InputField aiDifficultySingleInput;
 	public InputField sizeInput;
-	//IOPanel
-	//public static InputField fileNameInput;
+
+	//ExportPanel
 	public InputField levelNameInput;
 	public InputField authorNameInput;
 	#endregion
 
-	public GameObject upgradePanel;
-
-	public Texture2D[] cursors;
-
-
-	private bool _isUpdateSentByCell;
-	/// <summary>
-	/// Current parsed values, imparsable gets turned into default
-	/// </summary>
-	//PlaceCellsPanel
+	#region Parsed value for each input field
+	//Cell Editting Panel
 	private Cell.enmTeam _team;
 	private int _max;
 	private int _start;
 	private float _regen;
-	//GameSettingsPanel
+
+	//Game Settings Panel
 	private float aiDificultyAll;
 	private float _gameSize;
-	private Dictionary<int, float> aiDifficultyDict = new Dictionary<int, float>();
-	//IOPanel
-	//public static string fileName;
+	public Dictionary<Cell.enmTeam, float> aiDifficultyDict = new Dictionary<Cell.enmTeam, float>();
+
+	//Export Panel
 	private string levelName;
 	private string authorName;
 	//view
 	private bool OutlineOn = false;
-	private bool areCellsFitToScreen = false;
+	private bool _areCellsFitToScreen = false;
+	#endregion
 
-
-	/// <summary>
-	/// the set defaults
-	/// </summary>
-	//PlaceCellsPanel
+	#region Default value for each input field ==> this gets used if input field value can not be parsed correctly
+	//Cell Editting Panel
 	private Cell.enmTeam defaultTeam = Cell.enmTeam.NEUTRAL;
 	private int defaultMax = 50;
 	private int defaultStart = 10;
 	private float defaultRegen = 1f;
-	//GameSettingsPanel
+
+	//Game Settings Panel
 	private float defaultDificulty = 2f;
 	private float defaultGameSize = 250f;
-	//IOPanel
-	//public string defaultFileName = "UserMadeLevel";
+
+	//Export Panel
 	private string defaultLevelName = "CustomLevel";
 	private string defaultAuthorName = "Anonymous";
+	#endregion
 
-
+	#region Enums
 	// The current editor mode
-	public enum Mode { PlaceCells, EditCells, DeleteCells };
-	public enum PCPanelAttribute { Start, Max, Regen, Team };
+	public enum Mode {
+		/// <summary>
+		/// In this mode user can use the mouse only for placing new cells to the scene 
+		/// </summary>
+		PlaceCells,
+		/// <summary>
+		/// In this mode user can use the mouse only for moving the cell of altering its attributes
+		/// </summary>
+		EditCells,
+		/// <summary>
+		/// In this mode user can use the mouse only for removeing the cell by clicking on it
+		/// </summary>
+		DeleteCells
+	};
+	// Input field to prase from
+	public enum PCPanelAttribute {
+		/// <summary>
+		/// Starting element count will be parsed from the input field
+		/// </summary>
+		Start,
+		/// <summary>
+		/// Maximum element count will be parsed from the input field
+		/// </summary>
+		Max,
+		/// <summary>
+		/// Regeneration period will be parsed from the input field
+		/// </summary>
+		Regen,
+		/// <summary>
+		/// Team will be parsed from the next click on the appropriate button.
+		/// </summary>
+		Team
+	};
+	#endregion
 
 	private Mode _editorMode;
-
-
+	private TeamSetup teamSetup;
+	private bool _isUpdateSentByCell;
+	private Cell.enmTeam singleDifficultyInputFieldSpecificTeam;
 
 	private void Start() {
 		teamSetup = UI_ReferenceHolder.LE_gameSettingsPanel.GetComponent<TeamSetup>();
 
+		EditCell.OnCellSelected += EditCell_OnCellSelected;
+		EditCell.OnCellDeselected += EditCell_OnCellDeselected;
 
 		//Set the defaluts by parsing all of the input fields
 		PlaceCellPanelParseFromField(PCPanelAttribute.Start);
@@ -106,6 +138,27 @@ public class LevelEditorCore : MonoBehaviour {
 		//Have to wait for all of the things to initialize before I can call a button press
 		//yield return new WaitForEndOfFrame();
 		editorMode = Mode.PlaceCells;
+	}
+
+	private void OnDestroy() {
+		EditCell.OnCellSelected -= EditCell_OnCellSelected;
+		EditCell.OnCellDeselected -= EditCell_OnCellDeselected;
+	}
+
+	private void EditCell_OnCellDeselected(EditCell sender) {
+		selectedCellList.Remove(sender);
+		if (areCellsFitToScreen) {
+			FitCellsOnScreen(selectedCellList);
+		}
+	}
+
+	private void EditCell_OnCellSelected(EditCell sender) {
+		if (!selectedCellList.Contains(sender)) {
+			selectedCellList.Add(sender);
+		}
+		if (areCellsFitToScreen) {
+			FitCellsOnScreen(selectedCellList);
+		}
 	}
 
 	#region Functions to add or remove a cell from the static list
@@ -129,11 +182,12 @@ public class LevelEditorCore : MonoBehaviour {
 				return;
 			}
 		}
-		teamSetup.RemoveFromClan((int)c.cellTeam);
+		teamSetup.RemoveFromClan(c.cellTeam);
 		teamList.Remove(c.cellTeam);
 
 	}
 	#endregion
+
 
 	//public void CellOutlineToggle(Toggle toggle) {
 	//	OutlineOn = toggle.isOn;
@@ -150,22 +204,22 @@ public class LevelEditorCore : MonoBehaviour {
 		modeChange?.Invoke(mode);
 		switch (mode) {
 			case Mode.PlaceCells: {
-					Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
+				Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
 
-					return;
-				}
+				return;
+			}
 			case Mode.EditCells: {
-					Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-					return;
-				}
+				Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+				return;
+			}
 			case Mode.DeleteCells: {
-					Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
-					return;
-				}
+				Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
+				return;
+			}
 			default: {
-					Debug.LogError("Unknown mode passed");
-					return;
-				}
+				Debug.LogError("Unknown mode passed");
+				return;
+			}
 		}
 	}
 
@@ -210,35 +264,35 @@ public class LevelEditorCore : MonoBehaviour {
 	public void PlaceCellPanelParseFromField(PCPanelAttribute inputField) {
 		switch (inputField) {
 			case PCPanelAttribute.Start: {
-					if (!int.TryParse(startInput.text, out _start)) {
-						_start = defaultStart;
-					}
-					panelChange?.Invoke(PCPanelAttribute.Start);
-					return;
+				if (!int.TryParse(startInput.text, out _start)) {
+					_start = defaultStart;
 				}
+				panelValueParsed?.Invoke(PCPanelAttribute.Start);
+				return;
+			}
 			case PCPanelAttribute.Max: {
-					if (!int.TryParse(maxInput.text, out _max)) {
-						_max = defaultMax;
-					}
-					panelChange?.Invoke(PCPanelAttribute.Max);
-					return;
+				if (!int.TryParse(maxInput.text, out _max)) {
+					_max = defaultMax;
 				}
+				panelValueParsed?.Invoke(PCPanelAttribute.Max);
+				return;
+			}
 			case PCPanelAttribute.Regen: {
-					if (!float.TryParse(regenInput.text, out _regen)) {
-						_regen = defaultRegen;
-					}
-					panelChange?.Invoke(PCPanelAttribute.Regen);
-					return;
+				if (!float.TryParse(regenInput.text, out _regen)) {
+					_regen = defaultRegen;
 				}
+				panelValueParsed?.Invoke(PCPanelAttribute.Regen);
+				return;
+			}
 			case PCPanelAttribute.Team: {
-					UI_ReferenceHolder.LE_teamPickerPanel.SetActive(true);
-					return;
-				}
+				UI_ReferenceHolder.LE_teamPickerPanel.SetActive(true);
+				return;
+			}
 
 		}
 	}
 	public void TeamSelectedButtonWrapper(int thisTeam) {
-		TeamSelectedButton((Cell.enmTeam) thisTeam);
+		TeamSelectedButton((Cell.enmTeam)thisTeam);
 	}
 
 	public void TeamSelectedButton(Cell.enmTeam correspondingTeam) {
@@ -252,24 +306,18 @@ public class LevelEditorCore : MonoBehaviour {
 		teamButton.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(thisTeam);
 	}
 
-	public static void ResizeToggle(bool on) {
-		//if (on) {
-		//	areCellsFitToScreen = true;
-		//	FitCellsOnScreen(selectedCellList);
-		//}
-		//else {
-		//	areCellsFitToScreen = false;
-		//	RefreshCameraSize(gameSize);
-		//}
+
+	public void AiDiffHandlerWrapper() {
+		AiDiffHandler(singleDifficultyInputFieldSpecificTeam);
 	}
 
 	/// <summary>
 	/// Refreshes the Ai difficulty
 	/// </summary>
 	/// <param name="team">the team this applies to, 0 = all</param>
-	public void AiDiffHandler(int team = 0) {
+	public void AiDiffHandler(Cell.enmTeam team = Cell.enmTeam.NEUTRAL) {
 		if (float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
-			foreach (int key in teamList) {
+			foreach (Cell.enmTeam key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
 				}
@@ -278,7 +326,7 @@ public class LevelEditorCore : MonoBehaviour {
 			aiDifficultySingleInput.gameObject.SetActive(false);
 		}
 		else if (!float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
-			foreach (int key in teamList) {
+			foreach (Cell.enmTeam key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
 				}
@@ -299,7 +347,20 @@ public class LevelEditorCore : MonoBehaviour {
 
 			}
 		}
-		AllAiDifficultyWriter.RedoText();
+		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+	}
+	public void EnableSingleDiffInputField(TeamBox t) {
+
+		aiDifficultySingleInput.gameObject.SetActive(true);
+		aiDifficultySingleInput.transform.position = (Vector2)t.transform.position + new Vector2(0, t.myRectTransform.sizeDelta.y / 2);
+		float value;
+		if (aiDifficultyDict.TryGetValue(t.team, out value)) {
+			aiDifficultySingleInput.text = value.ToString();
+		}
+		else {
+			aiDifficultySingleInput.text = "";
+		}
+		singleDifficultyInputFieldSpecificTeam = t.team;
 	}
 
 	public void ParseSaveInfo_SavePanel() {
@@ -349,7 +410,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-	public void FitCellsOnScreen(List<Cell> cells) {
+	public void FitCellsOnScreen(List<EditCell> cells) {
 		//find boarders
 		if (cells.Count == 0) {
 			RefreshCameraSize(gameSize);
@@ -359,7 +420,7 @@ public class LevelEditorCore : MonoBehaviour {
 		float highestX = -Mathf.Infinity;
 		float lowestY = Mathf.Infinity;
 		float highestY = -Mathf.Infinity;
-		print("CellCount " + cells.Count);
+		//print("CellCount " + cells.Count);
 		float adjustBy = 10;
 
 		if (cells.Count == 1) {
@@ -415,10 +476,24 @@ public class LevelEditorCore : MonoBehaviour {
 
 	}
 
+	public bool areCellsFitToScreen {
+		get { return _areCellsFitToScreen; }
+		set {
+			_areCellsFitToScreen = value;
+			if (value == true) {
+				FitCellsOnScreen(selectedCellList);
+			}
+			else {
+				RefreshCameraSize(gameSize);
+			}
+		}
+
+	}
+
 	public Mode editorMode {
 		get { return _editorMode; }
 		set {
-			ModeButton(value);	
+			ModeButton(value);
 		}
 	}
 
@@ -431,7 +506,7 @@ public class LevelEditorCore : MonoBehaviour {
 		set {
 			_team = value;
 			UpdateTeamButtonVisual(value);
-			panelChange?.Invoke(PCPanelAttribute.Team);
+			panelValueParsed?.Invoke(PCPanelAttribute.Team);
 		}
 	}
 	public float gameSize {
@@ -442,7 +517,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 	public int start {
-		get { return _start;  }
+		get { return _start; }
 		set {
 			_start = value;
 			startInput.text = value.ToString();

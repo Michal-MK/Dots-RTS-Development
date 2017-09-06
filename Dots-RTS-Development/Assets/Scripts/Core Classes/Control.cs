@@ -10,7 +10,7 @@ public class Control : MonoBehaviour {
 
 	#region Delegates
 	public delegate void TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current);
-	public delegate void EnteredCellEditMode(EditCell sender);
+	public delegate void CellSelected(EditCell sender);
 	public delegate void PanelValueChanged(LevelEditorCore.PCPanelAttribute attribute);
 	public delegate void EditModeChanged(LevelEditorCore.Mode mode);
 	public delegate void NewSelectionForDownload(SaveFileInfo sender);

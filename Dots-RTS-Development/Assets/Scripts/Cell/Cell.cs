@@ -67,7 +67,7 @@ public class Cell : MonoBehaviour {
 	public MeshRenderer elementCountDisplayRenderer;
 
 	[HideInInspector]
-	public SpriteRenderer cellSelected;
+	public SpriteRenderer cellSelectedRenderer;
 	#endregion
 
 	public virtual void Awake() {
@@ -81,7 +81,7 @@ public class Cell : MonoBehaviour {
 		elementCountDisplay = count.GetComponent<TextMeshPro>();
 		elementCountDisplayRenderer = count.GetComponent<MeshRenderer>();
 
-		cellSelected = transform.Find("Selected").GetComponent<SpriteRenderer>();
+		cellSelectedRenderer = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
 		cellRadius = col.radius * transform.localScale.x;
 	}
@@ -222,8 +222,8 @@ public class Cell : MonoBehaviour {
         if (color == null) {
             color = Color.yellow;
         }
-        cellSelected.color = (Color)color;
-        cellSelected.enabled = true;
+        cellSelectedRenderer.color = (Color)color;
+        cellSelectedRenderer.enabled = true;
 
     }
 

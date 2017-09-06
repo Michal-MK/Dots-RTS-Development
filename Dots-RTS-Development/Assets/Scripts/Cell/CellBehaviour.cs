@@ -62,12 +62,12 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		if (isSelected) {
 			isSelected = false;
 			elementCountDisplay.color = new Color32(255, 255, 255, 255);
-			cellSelected.enabled = false;
+			cellSelectedRenderer.enabled = false;
 		}
 		else {
 			isSelected = true;
 			elementCountDisplay.color = new Color32(255, 0, 0, 255);
-			cellSelected.enabled = true;
+			cellSelectedRenderer.enabled = true;
 		}
 	}
 
@@ -77,7 +77,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
 			cellsInSelection[i].elementCountDisplay.color = new Color(1, 1, 1);
-			cellsInSelection[i].cellSelected.enabled = false;
+			cellsInSelection[i].cellSelectedRenderer.enabled = false;
 		}
 		cellsInSelection.Clear();
 	}
@@ -233,10 +233,10 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				Decay(0.5f, this);
 			}
 			if (isSelected) {
-				cellSelected.enabled = true;
+				cellSelectedRenderer.enabled = true;
 			}
 			else {
-				cellSelected.enabled = false;
+				cellSelectedRenderer.enabled = false;
 			}
 		}
 	}
