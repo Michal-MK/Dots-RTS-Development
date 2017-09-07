@@ -65,8 +65,6 @@ public class Buttons : MainMenuUI  {
 					break;
 				}
 			}
-
-
 			UI_ReferenceHolder.LP_TypeUpgradeText.text = typeName;
 			UI_ReferenceHolder.LP_TypeUpgradeImage.sprite = sprite;
 		}
@@ -112,7 +110,7 @@ public class Buttons : MainMenuUI  {
 				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
 			}
 		}
-		else if(selected > 99) {
+		else if(selected > 99 && selected <= 199) {
 			if (selected < 100 + Upgrade.TOTAL_DEFENSIVE_UPGRADES) {
 				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
 				if (upgradeInfo != null) {
@@ -126,6 +124,25 @@ public class Buttons : MainMenuUI  {
 			else {
 				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
 				UI_ReferenceHolder.U_upgradeDescHolder.text = "DEFENSIVE UPGRADE";
+				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
+				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
+			}
+		}
+		else{
+			if (selected < 200 + Upgrade.TOTAL_UTILITY_UPGRADES) {
+				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrade.Upgrades)selected);
+				if (upgradeInfo != null) {
+					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
+					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
+					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrade.Upgrades)selected).ToString() + " coins";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[(Upgrade.Upgrades)selected].ToString() + " pcs";
+					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)selected];
+				}
+			}
+			else {
+				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
+				UI_ReferenceHolder.U_upgradeDescHolder.text = "UTILITY UPGRADE";
 				UI_ReferenceHolder.U_upgradeCostHolder.text = "Infinite coins";
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
 				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();

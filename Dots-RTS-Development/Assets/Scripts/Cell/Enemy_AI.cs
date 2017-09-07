@@ -850,7 +850,12 @@ public class Enemy_AI : MonoBehaviour {
 			if (current.elementCount < 5) {
 				if (UnityEngine.Random.Range(0, 10) < 5) {
 					if (current != selectedAiCell) {
-						defendChoiceProbability = 0.5f;
+						if (Mathf.Abs(selectedAiCell.elementCount - current.elementCount) > aICellAidElementTreshold) {
+							defendChoiceProbability = 0.5f;
+						}
+						else {
+							defendChoiceProbability = 0.2f;
+						}
 						return current;
 					}
 				}

@@ -7,7 +7,9 @@ public class Element : MonoBehaviour {
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
+	private bool reflected = false;
 	private int damage = 1;
+
 	public float eSpeed = 10;
     public float RandomTimeOffset;
 
@@ -59,9 +61,11 @@ public class Element : MonoBehaviour {
 	}
 
 	public void Refelcted() {
-		CellBehaviour temp = attacker;
-		attacker = target;
-		target = temp;
-		team = target.cellTeam;
+		if (!reflected) {
+			CellBehaviour temp = attacker;
+			attacker = target;
+			target = temp;
+			team = target.cellTeam;
+		}
 	}
 }

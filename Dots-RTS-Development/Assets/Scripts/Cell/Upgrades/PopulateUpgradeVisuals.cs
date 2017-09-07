@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class PopulateUpgradeVisuals : MonoBehaviour {
 
-
 	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.SHOP) {
 			PopulateStore();
@@ -33,6 +32,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 	}
 
 	public void PopulateStore() {
+
 		foreach (Image i in transform.Find("UPGRADE_Panel/ATK_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "ATK_Upgrades" && i.gameObject.name != "Image") {
 				try {
@@ -45,6 +45,16 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		}
 		foreach (Image i in transform.Find("UPGRADE_Panel/DEF_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "DEF_Upgrades" && i.gameObject.name != "Image") {
+				try {
+					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+				}
+				catch (KeyNotFoundException) {
+					i.sprite = FolderAccess.GetNIYImage();
+				}
+			}
+		}
+		foreach (Image i in transform.Find("UPGRADE_Panel/UTIL_Upgrades").GetComponentsInChildren<Image>()) {
+			if (i.gameObject.name != "UTIL_Upgrades" && i.gameObject.name != "Image") {
 				try {
 					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
