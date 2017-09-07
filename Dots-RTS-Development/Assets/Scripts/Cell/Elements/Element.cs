@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Element : MonoBehaviour {
@@ -9,7 +7,9 @@ public class Element : MonoBehaviour {
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
+	private bool reflected = false;
 	private int damage = 1;
+
 	public float eSpeed = 10;
     public float RandomTimeOffset;
 
@@ -58,5 +58,14 @@ public class Element : MonoBehaviour {
 		}
 		#endregion
 		target.DamageCell(team, damage, infection);
+	}
+
+	public void Refelcted() {
+		if (!reflected) {
+			CellBehaviour temp = attacker;
+			attacker = target;
+			target = temp;
+			team = target.cellTeam;
+		}
 	}
 }

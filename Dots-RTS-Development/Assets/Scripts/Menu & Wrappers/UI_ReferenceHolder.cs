@@ -39,7 +39,8 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#region LevelPlayerRefs
 	public static GameObject MULTI_menuPanel;
 	public static RectTransform MULTI_upgradePanel;
-
+	public static TextMeshProUGUI LP_TypeUpgradeText;
+	public static Image LP_TypeUpgradeImage;
 	#endregion
 
 	#region LevelShareRefs
@@ -112,15 +113,13 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				LS_rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 				LS_rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
 				LS_canvasBase = GameObject.Find("Canvas_Base");
-				//centralToMainMenu = GameObject.Find("Return_To_Menu");
-				//campaignButton = GameObject.Find("Campaign_Button");
-				//customButton = GameObject.Find("Custom_Button");
-				//buyUpgradesSceneButton = GameObject.Find("Buy_Upgrades");
 				return;
 			}
 			case Scenes.PLAYER: { //PlayScene
 				MULTI_menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
+				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("UPGRADE_Panel").GetComponent<RectTransform>();
+				LP_TypeUpgradeImage = MULTI_upgradePanel.transform.Find("UPGRADE_Types/TYPE_Holder/TYPE_Image").GetComponent<Image>();
+				LP_TypeUpgradeText = MULTI_upgradePanel.transform.Find("UPGRADE_Types/TYPE_Holder/TYPE_Name").GetComponent<TextMeshProUGUI>();				
 				return;
 			}
 			case Scenes.SHARING: { //Level Sharing

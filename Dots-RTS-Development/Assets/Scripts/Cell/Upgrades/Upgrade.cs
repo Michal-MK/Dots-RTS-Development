@@ -8,12 +8,26 @@ using UnityEngine.UI;
 using System;
 
 public class Upgrade : MonoBehaviour {
-	//[NO_STACKING],[TEMPORARY],[STACKING]
-	public Upgrades upgrade;
-	public const int TOTAL_OFFENSIVE_UPGRADES = 4;
-	public const int TOTAL_DEFENSIVE_UPGRADES = 6;
 
-	public const int TOTAL_UPGRADES = TOTAL_DEFENSIVE_UPGRADES + TOTAL_OFFENSIVE_UPGRADES;
+	public const int TOTAL_OFFENSIVE_UPGRADES = 4;
+	public const int TOTAL_DEFENSIVE_UPGRADES = 5;
+	public const int TOTAL_UTILITY_UPGRADES = 1;
+
+	public const int TOTAL_UPGRADES = TOTAL_DEFENSIVE_UPGRADES + TOTAL_OFFENSIVE_UPGRADES + TOTAL_UTILITY_UPGRADES;
+
+	public enum UpgradeType {
+		OFFENSIVE = 0,
+		DEFENSIVE = 100,
+		UTILITY = 200,
+	}
+
+
+	/*
+	 * Upgrades enum
+	 * 000-099 - Offensive Upgrades
+	 * 100-199 - Defensive Upgrades
+	 * 200-299 - Utility based Upgrades
+	 */
 
 	public enum Upgrades {
 		NONE = -1,
@@ -35,8 +49,6 @@ public class Upgrade : MonoBehaviour {
 		ATK_SLOW_REGENERATION,
 
 
-		//NONE_DEFENCE = 99,
-		/// <summary>
 		/// [STACKING] - Adds a chance to not take damage from incoming element.
 		/// </summary>
 		DEF_ELEMENT_RESIST_CHANCE = 100,
@@ -56,10 +68,12 @@ public class Upgrade : MonoBehaviour {
 		/// [NO_STACKING] - incoming elements of the same team have a chance to contain one extra element.
 		/// </summary>
 		DEF_AID_BONUS_CHANCE,
+
+
 		/// <summary>
 		/// [STACKING] - Increases the speed of elements.
 		/// </summary>
-		DEF_FASTER_ELEMENT_SPEED,
+		UTIL_FASTER_ELEMENT_SPEED = 200,
 
 	}
 
@@ -75,7 +89,8 @@ public class Upgrade : MonoBehaviour {
 		{Upgrades.DEF_FASTER_REGENERATION, 8 },
 		{Upgrades.DEF_CAMOUFLAGE, 6 },
 		{Upgrades.DEF_AID_BONUS_CHANCE, 10 },
-		{Upgrades.DEF_FASTER_ELEMENT_SPEED, 4 },
+
+		{Upgrades.UTIL_FASTER_ELEMENT_SPEED, 4 },
 
 	};
 
@@ -92,7 +107,8 @@ public class Upgrade : MonoBehaviour {
 		{Upgrades.DEF_FASTER_REGENERATION, null },
 		{Upgrades.DEF_CAMOUFLAGE,null },
 		{Upgrades.DEF_AID_BONUS_CHANCE,null },
-		{Upgrades.DEF_FASTER_ELEMENT_SPEED,null },
+
+		{Upgrades.UTIL_FASTER_ELEMENT_SPEED,null },
 	};
 
 	public static async Task<Sprite> GetSprite(Upgrades type) {
@@ -106,7 +122,8 @@ public class Upgrade : MonoBehaviour {
 				tex.LoadImage(result);
 				return Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 1024), Vector2.one * 0.5f);
 			}
-		} catch (FileNotFoundException) {
+		}
+		catch (FileNotFoundException) {
 			return FolderAccess.GetNIYImage();
 		}
 	}
@@ -114,16 +131,11 @@ public class Upgrade : MonoBehaviour {
 	public static async Task FillUpgradeSpriteDict() {
 
 		Task<Sprite>[] t = new Task<Sprite>[TOTAL_UPGRADES];
+
 		int[] values = (int[])Enum.GetValues(typeof(Upgrades));
 
 		for (int i = 0; i < values.Length; i++) {
-			if (values[i] < 99 && values[i] >= 0 && values[i] < TOTAL_OFFENSIVE_UPGRADES) {
-				//print(values[i] + " Is Ofensive, adding " + (Upgrades)values[i]);
-				t[i] = GetSprite((Upgrades)values[i]);
-			}
-			if(values[i] >= 100 && values[i] < 100 + TOTAL_DEFENSIVE_UPGRADES) {
-				//print(values[i] + " Is Defensive, adding " + (Upgrades)values[i]);
-				//print(i + " " + values[i]);
+			if(values[i] != -1) {
 				t[i] = GetSprite((Upgrades)values[i]);
 			}
 		}

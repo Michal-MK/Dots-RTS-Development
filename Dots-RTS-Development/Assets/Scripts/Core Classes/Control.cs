@@ -167,7 +167,6 @@ public class Control : MonoBehaviour {
 		}
 
 		Time.timeScale = 1;
-		//print(Time.timeScale);
 	}
 
 	private void Update() {
