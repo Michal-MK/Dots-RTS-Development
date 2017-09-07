@@ -43,6 +43,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		sound = GameObject.Find("GameManager").GetComponent<SoundManager>();
 	}
 
+
 	#region Cell Selection/Deselection
 	//Checks the list whether the cell is already selected ? removes it : adds it
 	public static void ModifySelection(CellBehaviour cell) {
@@ -116,6 +117,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				e.target = target;
 				e.attacker = this;
 				e.team = this.cellTeam;
+				e.eSpeed = elementSpeed;
 			}
 			UpdateCellInfo();
 			sound.AddToSoundQueue(elementSpawn);
@@ -131,6 +133,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				e.target = target;
 				e.attacker = this;
 				e.team = this.cellTeam;
+				e.eSpeed = elementSpeed;
 			}
 			UpdateCellInfo();
 			sound.AddToSoundQueue(elementSpawn);
@@ -140,10 +143,28 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 
 	#region Element Damage Handling
 	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
-	public void DamageCell(enmTeam elementTeam, int amoutOfDamage, Upgrade.Upgrades[] additionalArgs) {
+	public void DamageCell(Element element, int amoutOfDamage, Upgrade.Upgrades[] additionalArgs) {
 
-		if (cellTeam == elementTeam) {
-			elementCount++;
+		#region Element Specific Code for Upgrade management -- Offensive Upgrades
+		if (cellTeam == element.team) {
+			float aidBonus = 0;
+			for (int i = 0; i < uManager.upgrades.Length; i++) {
+				if(uManager.upgrades[i] == Upgrade.Upgrades.DEF_AID_BONUS_CHANCE) {
+					aidBonus += 0.2f;
+				}
+			}
+			if(aidBonus != 0) {
+				if (Random.Range(0f, 1f) < aidBonus) {
+					elementCount += 2;
+				}
+				else {
+					elementCount += 1;
+				}
+			}
+			else {
+				elementCount += 1;
+			}
+			Destroy(element.gameObject);
 			UpdateCellInfo();
 			return;
 		}
@@ -151,6 +172,7 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		int DOTStrength = 0;
 		float critChance = 0;
 		int slowRegenStrength = 0;
+
 		for (int i = 0; i < additionalArgs.Length; i++) {
 			switch (additionalArgs[i]) {
 				case Upgrade.Upgrades.NONE: {
@@ -191,19 +213,53 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 				regenPeriod *= 1.33f;
 			}
 		}
+		#endregion
+
+		#region Cell Specific Code for Upgrade management -- Defensive upgrades
+		float resistChance = 0;
+		float reflectChance = 0;
+		for (int i = 0; i < uManager.upgrades.Length; i++) {
+			if (uManager.upgrades[i] != Upgrade.Upgrades.NONE && (int)uManager.upgrades[i] >= 100 && (int)uManager.upgrades[i] < 200) {
+				switch (uManager.upgrades[i]) {
+					case Upgrade.Upgrades.DEF_ELEMENT_RESIST_CHANCE: {
+						resistChance += 0.1f;
+						break;
+					}
+					case Upgrade.Upgrades.DEF_REFLECTION: {
+						reflectChance += 0.1f;
+						break;
+					}
+				}
+			}
+		}
+		if (reflectChance != 0) {
+			if (Random.Range(0f, 1f) < reflectChance) {
+				element.Refelcted();
+				return;
+			}
+		}
+		if (resistChance != 0) {
+			if (Random.Range(0f, 1f) < resistChance) {
+				amoutOfDamage -= 1;
+				Mathf.Clamp(amoutOfDamage, 0, float.MaxValue);
+			}
+		}
+
+		#endregion
 
 		elementCount -= amoutOfDamage;
 
 		if (elementCount < 0) {
 			if (TeamChanged != null) {
-				TeamChanged(this, cellTeam, elementTeam);
+				TeamChanged(this, cellTeam, element.team);
 			}
 			if (isSelected) {
 				ModifySelection(this);
 			}
 			elementCount = -elementCount;
-			cellTeam = elementTeam;
+			cellTeam = element.team;
 		}
+		Destroy(element.gameObject);
 		UpdateCellInfo();
 	}
 

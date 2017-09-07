@@ -7,7 +7,7 @@ public class Element : MonoBehaviour {
 	public CellBehaviour attacker;
 	public CellBehaviour target;
 
-	private bool reflected = false;
+	protected bool reflected = false;
 	private int damage = 1;
 
 	public float eSpeed = 10;
@@ -35,7 +35,6 @@ public class Element : MonoBehaviour {
 		for (int i = 0; i < debuffs.Length; i++) {
 			switch (debuffs[i]) {
 				case Upgrade.Upgrades.ATK_DOUBLE_DAMAGE: {
-					print("Contains Double Damage");
 					damage = damage * 2;
 					break;
 				}
@@ -49,7 +48,6 @@ public class Element : MonoBehaviour {
 					break;
 				}
 				case Upgrade.Upgrades.ATK_DOT: {
-					print("Contains Dot");
 					//damage = 1;
 					infection[i] = debuffs[i];
 					break;
@@ -57,15 +55,22 @@ public class Element : MonoBehaviour {
 			}
 		}
 		#endregion
-		target.DamageCell(team, damage, infection);
+		target.DamageCell(this, damage, infection);
 	}
 
 	public void Refelcted() {
+		print("Reflected");
 		if (!reflected) {
 			CellBehaviour temp = attacker;
 			attacker = target;
 			target = temp;
-			team = target.cellTeam;
+			team = attacker.cellTeam;
+			//StartCoroutine(FlagAsReflectedOnLeave);
+			reflected = true;
 		}
 	}
+	//private System.Collections.IEnumerator FlagAsReflectedOnLeave() {
+
+	//}
+
 }

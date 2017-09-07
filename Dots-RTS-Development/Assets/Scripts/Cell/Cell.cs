@@ -11,7 +11,8 @@ public class Cell : MonoBehaviour {
 	public int _maxElementCount;                                                                //How much can the cell hold
 	private Vector2 _position;                                                                   //Cells position
 	public enmTeam _team;                                                                       //Cell's team
-	private float _radius;
+	private float _radius;																		//Radius of the collider
+	private float _elementSpeed = 5;															//Speed of spawned elements by this cell
 	
 
 
@@ -266,6 +267,14 @@ public class Cell : MonoBehaviour {
 	public float cellRadius {
 		get { return _radius; }
 		set { _radius = value; }
+	}
+
+	/// <summary>
+	/// The speed of elements spawned by this cell
+	/// </summary>
+	public float elementSpeed {
+		get { return _elementSpeed; }
+		set { _elementSpeed = value; }
 	}
 
 	/// <summary>

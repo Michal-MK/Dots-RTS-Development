@@ -17,9 +17,9 @@ public class Control : MonoBehaviour {
 
 	public delegate void EnteredUpgradeMode(Upgrade_Manager sender);
 	public delegate void QuitUpgradeMode(Upgrade_Manager sender);
+	public delegate void InstallUpgradeHandler(Upgrade.Upgrades type, Upgrade_Manager cell);
 
-
-	public delegate void OnRMBPress(Vector2 position);
+	public delegate void OnMouseButtonPressed(Vector2 position);
 
 
 	#endregion
@@ -28,7 +28,7 @@ public class Control : MonoBehaviour {
 
 	public static bool isPaused = false;
 	public static bool canPause = true;
-	public static event OnRMBPress RMBPressed;
+	public static event OnMouseButtonPressed RMBPressed;
 
 	private float time;
 
@@ -54,16 +54,6 @@ public class Control : MonoBehaviour {
 		else if (script != this) {
 			Destroy(gameObject);
 		}
-
-		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves")) {
-			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves");
-		}
-		if (!Directory.Exists(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves")) {
-			Directory.CreateDirectory(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
-		}
-		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
-			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
-		}
 	}
 
 	private IEnumerator Start() {
@@ -72,9 +62,6 @@ public class Control : MonoBehaviour {
 
 		string activeScene = SceneManager.GetActiveScene().name;
 
-		if (activeScene == Scenes.PLAYER) {
-
-		}
 		if (activeScene == Scenes.PROFILES) {
 			if (pM == null) {
 				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
@@ -82,13 +69,13 @@ public class Control : MonoBehaviour {
 			}
 		}
 		if (ProfileManager.getCurrentProfile == null) {
+			yield return new WaitUntil(() => Global.baseLoaded);
+
 			if (activeScene == Scenes.SPLASH) {
-				yield return new WaitUntil(() => Global.baseLoaded);
 				SceneManager.LoadScene(Scenes.PROFILES);
 			}
 			if (activeScene == Scenes.MENU) {
 				DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-				yield return new WaitUntil(() => Global.baseLoaded);
 				SceneManager.LoadScene(Scenes.PROFILES);
 			}
 		}

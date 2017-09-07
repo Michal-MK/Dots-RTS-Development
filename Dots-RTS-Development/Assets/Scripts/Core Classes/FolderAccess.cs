@@ -146,6 +146,10 @@ class FolderAccess {
 		}
 	}
 
+	/// <summary>
+	///  Returns name and description of an upgrade in a form of string[], [0] = Upgrade name, [1] = Upgrade description
+	/// </summary>
+	/// <param name="type">The upgrade to get information about</param>
 	public static string[] GetUpgrade(Upgrade.Upgrades type) {
 		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();

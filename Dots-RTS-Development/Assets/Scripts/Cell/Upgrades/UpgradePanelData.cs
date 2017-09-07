@@ -13,6 +13,8 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	private static Upgrade_Manager currentCell;
 
+	public static event Control.InstallUpgradeHandler OnUpgradeInstalled;
+
 	private static bool isSubscribed = false;
 	private static bool isListeningForSlot = true;
 
@@ -79,7 +81,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		else {
 			GetComponent<Image>().color = new Color(1, 1, 1, 1);
 		}
-		//transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+		transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
 		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 	}
 
@@ -107,7 +109,6 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	//Stuff to do with instalation, moving numbers around
 	private void InstallUpgradeTo(UpgradeSlot sender, int slot) {
 		UpgradeSlot.OnSlotClicked -= InstallUpgradeTo;
-
 		currentCell.InstallUpgrade(slot, type);
 		count--;
 		UpdateUpgradeOverview();

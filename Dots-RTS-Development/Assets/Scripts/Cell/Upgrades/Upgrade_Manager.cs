@@ -81,6 +81,18 @@ public class Upgrade_Manager : MonoBehaviour, IPointerClickHandler {
 	/// </summary>
 	public void InstallUpgrade(int slot, Upgrade.Upgrades upgrade) {
 		upgrades[slot] = upgrade;
+		if((int)upgrade >= 200) {
+			switch (upgrade) {
+				case Upgrade.Upgrades.UTIL_FASTER_ELEMENT_SPEED: {
+					cell.elementSpeed += 3;
+					return;
+				}
+				case Upgrade.Upgrades.UTIL_FASTER_REGENERATION: {
+					cell.regenPeriod -= 0.4f;
+					return;
+				}
+			}
+		}
 	}
 
 	/// <summary>

@@ -7,6 +7,7 @@ class ElementBehaviour : Element {
     private float wobbleFreqency = 2;
     private float wobbleAmplitude = 0.2f;
     private float SlowDownFrequency = 3f;
+	private bool destroyOnNextAttack = false;
 
     //Calculates steering behaviour for the element 
     private void FixedUpdate() {
@@ -18,7 +19,12 @@ class ElementBehaviour : Element {
             else {
                 throw new InvalidOperationException();
             }
-            Destroy(gameObject);
+			if (reflected) {
+				if (destroyOnNextAttack) {
+					Destroy(gameObject);
+				}
+				destroyOnNextAttack = true;
+			}
         }
 
         velocity = DirectionToTarget(target) * eSpeed;

@@ -20,6 +20,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 			foreach (KeyValuePair<Upgrade.Upgrades, int> owned in ProfileManager.getCurrentProfile.acquiredUpgrades) {
 				if (owned.Key == data.type) {
 					data.count = owned.Value;
+					print(data.count);
 					data.name = FolderAccess.GetUpgradeName(owned.Key);
 					data.UpdateUpgradeOverview();
 				}

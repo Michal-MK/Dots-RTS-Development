@@ -111,9 +111,7 @@ public class ProfileManager {
 		p.contributedLevels = 0;
 		p.totalCreatedLevels = 0;
 		p.onLevelBaseGame = new CampaignLevelCode(1, 1);
-		//p.onLevelImage = File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty1" + Path.DirectorySeparatorChar + "Level_1.png");
 		p.onLevelImage = null;
-		Debug.Log("ONLEVELIMAGE");
 		p.pathToFile = Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp";
 
 		using (FileStream fs = new FileStream(p.pathToFile, FileMode.Create)) {
@@ -123,12 +121,6 @@ public class ProfileManager {
 		Debug.Log("Created");
 		ListProfiles();
 
-	}
-
-	public Profile SetProfile {
-		set {
-			currentProfile = value;
-		}
 	}
 
 	public static Profile getCurrentProfile {
@@ -166,15 +158,15 @@ public class Profile {
 	public int completedCampaignLevels;
 	public int completedCustomLevels;
 
+	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>();
+	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels = new Dictionary<SaveDataCampaign, float>();
+
 	public Profile() {
 		foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
 			if (u != Upgrade.Upgrades.NONE) {
-				acquiredUpgrades.Add(u, 0);
+				acquiredUpgrades.Add(u, 8);
 			}
 		}
 		creationTime = DateTime.Now;
 	}
-
-	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>();
-	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels = new Dictionary<SaveDataCampaign, float>();
 }
