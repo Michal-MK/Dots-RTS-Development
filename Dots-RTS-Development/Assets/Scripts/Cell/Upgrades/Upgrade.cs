@@ -10,8 +10,8 @@ using System;
 public class Upgrade : MonoBehaviour {
 
 	public const int TOTAL_OFFENSIVE_UPGRADES = 4;
-	public const int TOTAL_DEFENSIVE_UPGRADES = 5;
-	public const int TOTAL_UTILITY_UPGRADES = 1;
+	public const int TOTAL_DEFENSIVE_UPGRADES = 4;
+	public const int TOTAL_UTILITY_UPGRADES = 2;
 
 	public const int TOTAL_UPGRADES = TOTAL_DEFENSIVE_UPGRADES + TOTAL_OFFENSIVE_UPGRADES + TOTAL_UTILITY_UPGRADES;
 
@@ -32,24 +32,24 @@ public class Upgrade : MonoBehaviour {
 	public enum Upgrades {
 		NONE = -1,
 		/// <summary>
-		/// [NO_STACKING] - Inflicts variable amount of damage over set time.
+		/// [NO_STACKING] - Inflicts variable amount of damage over set time.		IMPLEMENTED
 		/// </summary>
 		ATK_DOT,
 		/// <summary>
-		/// [STACKING] - Adds a chance to double element damage.
+		/// [STACKING] - Adds a chance to double element damage.		IMPLEMENTED
 		/// </summary>
 		ATK_CRITICAL_CHANCE,
 		/// <summary>
-		/// [NO_STACKING] - 100% chance to double element damage.
+		/// [NO_STACKING] - 100% chance to double element damage.		IMPLEMENTED
 		/// </summary>
 		ATK_DOUBLE_DAMAGE,
 		/// <summary>
-		/// Undecided - Slows cell regenaration by a factor of 1.25.
+		/// Undecided - Slows cell regenaration by a factor of 1.25.		IMPLEMENTED
 		/// </summary>
 		ATK_SLOW_REGENERATION,
 
-
-		/// [STACKING] - Adds a chance to not take damage from incoming element.
+		/// <summary>
+		/// [STACKING] - Adds a chance to not take damage from incoming element.		IMPLEMENTED NOT FULLY TESTED
 		/// </summary>
 		DEF_ELEMENT_RESIST_CHANCE = 100,
 		/// <summary>
@@ -57,15 +57,11 @@ public class Upgrade : MonoBehaviour {
 		/// </summary>
 		DEF_REFLECTION,
 		/// <summary>
-		/// [STACKING] - Increases cell regeneration rate.
-		/// </summary>
-		DEF_FASTER_REGENERATION,
-		/// <summary>
-		/// [NO_STACKING]. [TEMPORARY] - Removes this cell from possible targets of enemy AI, lasts for set amount of time.
+		/// [NO_STACKING]. [TEMPORARY] - Removes this cell from possible targets of enemy AI, lasts for set amount of time.		IMPLEMENTED NOT FULLY TESTED
 		/// </summary>
 		DEF_CAMOUFLAGE,
 		/// <summary>
-		/// [NO_STACKING] - incoming elements of the same team have a chance to contain one extra element.
+		/// [NO_STACKING] - incoming elements of the same team have a chance to contain one extra element.		IMPLEMENTED NOT FULLY TESTED
 		/// </summary>
 		DEF_AID_BONUS_CHANCE,
 
@@ -74,6 +70,10 @@ public class Upgrade : MonoBehaviour {
 		/// [STACKING] - Increases the speed of elements.
 		/// </summary>
 		UTIL_FASTER_ELEMENT_SPEED = 200,
+		/// <summary>
+		/// [STACKING] - Increases cell regeneration rate.		IMPLEMENETED NOT FULLY TESTED IMBALANCED
+		/// </summary>
+		UTIL_FASTER_REGENERATION,
 
 	}
 
@@ -86,7 +86,7 @@ public class Upgrade : MonoBehaviour {
 
 		{Upgrades.DEF_ELEMENT_RESIST_CHANCE, 5 },
 		{Upgrades.DEF_REFLECTION, 12 },
-		{Upgrades.DEF_FASTER_REGENERATION, 8 },
+		{Upgrades.UTIL_FASTER_REGENERATION, 8 },
 		{Upgrades.DEF_CAMOUFLAGE, 6 },
 		{Upgrades.DEF_AID_BONUS_CHANCE, 10 },
 
@@ -104,7 +104,7 @@ public class Upgrade : MonoBehaviour {
 		//{Upgrades.NONE_DEFENCE, null },
 		{Upgrades.DEF_ELEMENT_RESIST_CHANCE,null },
 		{Upgrades.DEF_REFLECTION, null},
-		{Upgrades.DEF_FASTER_REGENERATION, null },
+		{Upgrades.UTIL_FASTER_REGENERATION, null },
 		{Upgrades.DEF_CAMOUFLAGE,null },
 		{Upgrades.DEF_AID_BONUS_CHANCE,null },
 

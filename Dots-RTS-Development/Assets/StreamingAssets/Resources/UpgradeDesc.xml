@@ -43,18 +43,12 @@
 	</Upgrade>
 	
 	<Upgrade id="102">
-		<name>Faster Regeneration</name>
-		<funcName>U_Fast_Regen</funcName>
-		<desc>This is an upgrade Faster Regeneration</desc>
-	</Upgrade>
-	
-	<Upgrade id="103">
 		<name>Camouflage</name>
 		<funcName>U_Camouflage</funcName>
 		<desc>This is an upgrade Camouflage</desc>
 	</Upgrade>
 	
-	<Upgrade id="104">
+	<Upgrade id="103">
 		<name>Allied Aid Bonus</name>
 		<funcName>U_Aid_Bonus</funcName>
 		<desc>This is an upgrade Allied Aid Bonus</desc>
@@ -67,5 +61,11 @@
 		<funcName>U_Fast_Elements</funcName>
 		<desc>This is an upgrade Faster Element Speed</desc>
 	</Upgrade>
-		
+
+	<Upgrade id="201">
+		<name>Faster Regeneration</name>
+		<funcName>U_Fast_Regen</funcName>
+		<desc>This is an upgrade Faster Regeneration</desc>
+	</Upgrade>
+	
 </Upgrades>
