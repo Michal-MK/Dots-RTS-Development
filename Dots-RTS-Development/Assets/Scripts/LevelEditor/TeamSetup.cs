@@ -23,13 +23,14 @@ public class TeamSetup : MonoBehaviour {
 
 
 
-
 	void OnEnable() {
-		roundTableR = (roundTable.anchorMax.x - roundTable.anchorMin.x) *( panel.anchorMax.x - panel.anchorMin.x ) * Screen.currentResolution.width * 0.5f;
-		
-		print(Screen.currentResolution.width);
+		print(GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor); 
+		roundTableR = ((roundTable.rect.width * 0.5f)) - teamGOPrefab.GetComponent<RectTransform>().sizeDelta.x;
+
 		for (int i = 0; i < core.teamList.Count; i++) {
+
 			GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
+			//print(newTeamBox.transform.localPosition);
 			newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(core.teamList[i]);
 			teamBoxes.Add(newTeamBox.GetComponent<TeamBox>());
 			teamBoxes[i].team = core.teamList[i];
@@ -40,12 +41,19 @@ public class TeamSetup : MonoBehaviour {
 		float nextAngle = 0;
 
 		for (int i = 0; i < teamBoxes.Count; i++) {
-			teamBoxes[i].transform.position = AngleToPos(nextAngle);
+			teamBoxes[i].transform.localPosition = AngleToPos(nextAngle);
+
 			teamBoxes[i].myAngle = (nextAngle);
 			nextAngle += diffAngle;
 			teamBoxes[i].AllThingsSet();
 		}
 		UpdateRoundTableVisuals();
+
+		//PASS
+		foreach (KeyValuePair<Cell.enmTeam,AllyHolder> item in clanDict) {
+			print(item.Key + " " + item.Value);
+		}
+
 	}
 	public void OnDisable() {
 		for (int i = 0; i < teamBoxes.Count; i++) {
@@ -54,53 +62,60 @@ public class TeamSetup : MonoBehaviour {
 		teamBoxes.Clear();
 	}
 
-	private void OnDestroy() {
-		clanDict.Clear();
-	}
-
-	// Update is called once per frame
-	public void TeamBoxPosChange(Vector2 pos, TeamBox it) {
-		float lowestDisFound = Mathf.Infinity;
+	public void TeamBoxPosChange(Vector2 pos, TeamBox teamBox) {
+		float lowestDistFound = Mathf.Infinity;
 		Cell.enmTeam indexClosest = Cell.enmTeam.NEUTRAL;
-		it.transform.position = it.initialPos;
+		teamBox.transform.position = teamBox.initialPos;
 
 		for (int i = 0; i < teamBoxes.Count; i++) {          //Debug.Log(i);
 			float dist = Vector2.Distance(teamBoxes[i].initialPos, pos);
-			if (dist < lowestDisFound) {
-				lowestDisFound = dist;
+			if (dist < lowestDistFound) {
+				lowestDistFound = dist;
 				indexClosest = teamBoxes[i].team;
 			}
 		}
 		float distToX = Vector2.Distance(leaveClanButtonGo.transform.position, pos);
-		if (distToX < lowestDisFound) {
-			RemoveFromClan(it.team);
+		if (distToX < lowestDistFound) {
+			RemoveFromClan(teamBox.team);
 			return;
 		}
-		if (indexClosest == it.team) {
+		if (indexClosest == teamBox.team) {
 			return;
 		}
-		RemoveFromClan(it.team);
-		CreateAClan(it.team, indexClosest);
-
+		RemoveFromClan(teamBox.team);
+		CreateAClan(teamBox.team, indexClosest);
 	}
 
 	public void RemoveFromClan(Cell.enmTeam firstTeam) {
+		print("Removing a clan " + firstTeam);
+
 		Dictionary<Cell.enmTeam, AllyHolder>.KeyCollection keys = clanDict.Keys;
 
 		Dictionary<Cell.enmTeam, AllyHolder> changes = new Dictionary<Cell.enmTeam, AllyHolder>();
 
 		foreach (Cell.enmTeam j in keys) {
-			//print(j + " Key");
+			print(j + " Key");
+
 			AllyHolder alliesOfJ;
 			clanDict.TryGetValue(j, out alliesOfJ);
-			List<Cell.enmTeam> alliesOfJList = alliesOfJ.allies;
-			if (alliesOfJList.Contains(firstTeam)) {
-				alliesOfJList.Remove(firstTeam);
-				changes.Add(j, alliesOfJ);
+			if (alliesOfJ.allies.Contains(firstTeam)) {
+				alliesOfJ.allies.Remove(firstTeam);
 
+				changes.Add(j, alliesOfJ);
 			}
 
 		}
+
+		//Dictionary<Cell.enmTeam, AllyHolder>.KeyCollection keysDebug = changes.Keys;
+		//foreach (Cell.enmTeam team in keysDebug) {
+		//	AllyHolder holder = new AllyHolder();
+		//	clanDict.TryGetValue(team, out holder);
+		//	string s = " ";
+		//	foreach (Cell.enmTeam ally in holder.allies) {
+		//		s += (ally + " ");
+		//	}
+		//	print("Change: " + team + " has allies" + s);
+		//}
 
 		Dictionary<Cell.enmTeam, AllyHolder>.KeyCollection changesKeys = changes.Keys;
 		foreach (Cell.enmTeam k in changesKeys) {
@@ -113,13 +128,13 @@ public class TeamSetup : MonoBehaviour {
 				clanDict.Add(k, value);
 			}
 		}
-
 		clanDict.Remove(firstTeam);
 		UpdateRoundTableVisuals();
+
 	}
 
 	void CreateAClan(Cell.enmTeam firstTeam, Cell.enmTeam secondTeam) {
-
+		print("Creating a clan " + firstTeam + " " + secondTeam);
 		BindTwo(firstTeam, secondTeam);
 		BindTwo(secondTeam, firstTeam);
 		CheckAndAddOtherTeams(firstTeam, secondTeam);
@@ -147,28 +162,6 @@ public class TeamSetup : MonoBehaviour {
 		}
 	}
 
-	//public static List<int> IntToList(int input) {
-	//	List<int> returnList = new List<int>();
-	//	string sInput = input.ToString();
-	//	for (int i = 0; i < sInput.Length; i++) {
-	//		int value = int.Parse(sInput[i].ToString());
-	//		returnList.Add(value);
-	//	}
-
-	//	return returnList;
-	//}
-	//public static int ListToInt(List<int> list) {
-	//	int output = 0;
-	//	if (list.Count == 0) {
-	//		return 0;
-	//	}
-	//	foreach (int i in list) {
-	//		output = output * 10;
-	//		output += i;
-	//	}
-	//	return output;
-	//}
-
 	bool AlreadyIsInAllyHolder(AllyHolder list, Cell.enmTeam value) {
 		for (int i = 0; i < list.allies.Count; i++) {
 			if (list.allies[i] == value) {
@@ -180,16 +173,14 @@ public class TeamSetup : MonoBehaviour {
 	void CheckAndAddOtherTeams(Cell.enmTeam firstTeam, Cell.enmTeam secondTeam) {
 		AllyHolder firstTeamFriends;
 		clanDict.TryGetValue(firstTeam, out firstTeamFriends);
-		List<Cell.enmTeam> firstTeamFriendsList = firstTeamFriends.allies;
 
 		AllyHolder secondTeamFriends;
 		clanDict.TryGetValue(secondTeam, out secondTeamFriends);
-		List<Cell.enmTeam> secondTeamFriendsList = secondTeamFriends.allies;
 
 		List<Cell.enmTeam> misses = new List<Cell.enmTeam>();
-		for (int y = 0; y < secondTeamFriendsList.Count; y++) {
-			if (!firstTeamFriendsList.Contains(secondTeamFriendsList[y])) {
-				misses.Add(secondTeamFriendsList[y]);
+		for (int y = 0; y < secondTeamFriends.allies.Count; y++) {
+			if (!firstTeamFriends.allies.Contains(secondTeamFriends.allies[y])) {
+				misses.Add(secondTeamFriends.allies[y]);
 			}
 		}
 		foreach (Cell.enmTeam miss in misses) {
@@ -199,9 +190,9 @@ public class TeamSetup : MonoBehaviour {
 		}
 
 		misses.Clear();
-		for (int x = 0; x < firstTeamFriendsList.Count; x++) {
-			if (!secondTeamFriendsList.Contains(firstTeamFriendsList[x])) {
-				misses.Add(firstTeamFriendsList[x]);
+		for (int x = 0; x < firstTeamFriends.allies.Count; x++) {
+			if (!secondTeamFriends.allies.Contains(firstTeamFriends.allies[x])) {
+				misses.Add(firstTeamFriends.allies[x]);
 				//print("Miss is " + firstTeamFriendsList[x]);
 			}
 		}
@@ -219,6 +210,18 @@ public class TeamSetup : MonoBehaviour {
 	}
 	public void UpdateRoundTableVisuals() {
 
+		Dictionary<Cell.enmTeam, AllyHolder>.KeyCollection keysDebug = clanDict.Keys;
+		foreach (Cell.enmTeam team in keysDebug) {
+			AllyHolder holder = new AllyHolder();
+			clanDict.TryGetValue(team, out holder);
+			string s = " ";
+			foreach (Cell.enmTeam ally in holder.allies) {
+				s += (ally + " ");
+			}
+			print("Team: " + team + " has allies" + s);
+		}
+
+
 		DestroyAllInList(bgList);
 		List<List<Cell.enmTeam>> actualClans = new List<List<Cell.enmTeam>>();
 
@@ -227,7 +230,7 @@ public class TeamSetup : MonoBehaviour {
 			//print(j + " Key");
 			AllyHolder value;
 			clanDict.TryGetValue(j, out value);
-			List<Cell.enmTeam> clanJ = value.allies;
+			List<Cell.enmTeam> clanJ = new List<Cell.enmTeam>(value.allies);
 			clanJ.Add(j);
 			clanJ.Sort();
 
@@ -257,7 +260,9 @@ public class TeamSetup : MonoBehaviour {
 			Image img = bg.GetComponent<Image>();
 			img.color = ColourTheTeamButtons.GetColorBasedOnTeam((Cell.enmTeam)(i + 2));
 			RectTransform rt = bg.GetComponent<RectTransform>();
-			rt.sizeDelta = roundTable.sizeDelta;
+			rt.anchorMax = Vector2.one;
+			rt.anchorMin = Vector2.zero;
+			rt.localPosition = Vector3.zero;
 			rt.SetAsFirstSibling();
 			float lastTeamBoxAngle = 0;
 
@@ -266,8 +271,8 @@ public class TeamSetup : MonoBehaviour {
 
 				foreach (TeamBox t in teamBoxes) {
 					if (t.team == j) {
-						Debug.Log(t.team);
-						t.transform.position = AngleToPos(angle);
+						//Debug.Log(t.team);
+						t.transform.localPosition = AngleToPos(angle);
 						t.myAngle = angle;
 						t.AllThingsSet();
 						img.fillAmount += 1f / teamBoxes.Count;
@@ -286,7 +291,7 @@ public class TeamSetup : MonoBehaviour {
 
 		}
 		foreach (TeamBox t in newList) {
-			t.transform.position = AngleToPos(angle);
+			t.transform.localPosition = AngleToPos(angle);
 			t.myAngle = angle;
 			t.AllThingsSet();
 			angle += diffAngle;
@@ -296,7 +301,7 @@ public class TeamSetup : MonoBehaviour {
 	}
 
 	Vector2 AngleToPos(float angle) {
-		return new Vector2(Mathf.Sin(angle) * (roundTableR), Mathf.Cos(angle) * (roundTableR)) + (Vector2)roundTable.position;
+		return new Vector2(Mathf.Sin(angle) * (roundTableR), Mathf.Cos(angle) * (roundTableR));
 	}
 
 

@@ -17,10 +17,6 @@ public class AllAiDifficultyWriter : MonoBehaviour {
 		foreach (Cell.enmTeam teamEnm in teams) {
 			//print(team);
 			float diff;
-			// print(team);
-			//if (LevelEditorCore.aiDifficultyDict.TryGetValue(team, out diff)) {
-			//    print("rip me");
-			//}
 			if (diffDict.TryGetValue(teamEnm, out diff)) {
 				myText.text += teamEnm + " does an action every " + diff + " seconds \n";
 			}

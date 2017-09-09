@@ -116,25 +116,29 @@ public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
 	public void OnPointerUp(PointerEventData eventData) {
 		
 
-		
-		if (lookForLongPress == false) {
-			isCellSelected = true;
-		}
-		else {
-			isCellSelected = !isCellSelected;
-		}
-		if (isCellSelected) {
-			core.isUpdateSentByCell = true;
-			core.team = cellTeam;
-			core.start = elementCount;
-			core.regen = regenPeriod;
-			core.max = maxElements;
-			core.isUpdateSentByCell = false;
-			EnableCircle(Color.magenta);
-		}
+		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
+			if (lookForLongPress == false) {
+				isCellSelected = true;
+			}
+			else {
+				isCellSelected = !isCellSelected;
+			}
+			if (isCellSelected) {
+				core.isUpdateSentByCell = true;
+				core.team = cellTeam;
+				core.start = elementCount;
+				core.regen = regenPeriod;
+				core.max = maxElements;
+				core.isUpdateSentByCell = false;
+				EnableCircle(Color.magenta);
+			}
 
+			
+
+		}
 		longPress = false;
 		lookForLongPress = false;
+
 	}
 
 	public bool isCellSelected {

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class GlobalMonoBehaviour : MonoBehaviour {
 
 	private void Start() {
-		print("Started");
 		StartCoroutine(GetSpritesFromResources("AttackIcon"));
 		StartCoroutine(GetSpritesFromResources("DefenceIcon"));
 		StartCoroutine(GetSpritesFromResources("UtilityIcon"));

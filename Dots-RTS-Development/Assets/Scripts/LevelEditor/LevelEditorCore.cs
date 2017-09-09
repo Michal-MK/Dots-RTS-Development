@@ -171,6 +171,8 @@ public class LevelEditorCore : MonoBehaviour {
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
 			if (!teamList.Contains(c.cellTeam)) {
 				teamList.Add(c.cellTeam);
+				aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
+				AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 			}
 		}
 
@@ -184,7 +186,8 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		teamSetup.RemoveFromClan(c.cellTeam);
 		teamList.Remove(c.cellTeam);
-
+		aiDifficultyDict.Remove(c.cellTeam);
+		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 	}
 	#endregion
 
@@ -238,6 +241,7 @@ public class LevelEditorCore : MonoBehaviour {
 			c.core = this;
 			//c.FastResize();
 			AddCell(c);
+			c.FastResize();
 
 		}
 #endif
@@ -253,6 +257,7 @@ public class LevelEditorCore : MonoBehaviour {
 			c.core = this;
 			c.FastResize();
 			AddCell(c);
+		c.FastResize();
 		}
 #endif
 	}
@@ -323,7 +328,7 @@ public class LevelEditorCore : MonoBehaviour {
 				}
 				aiDifficultyDict.Add(key, aiDificultyAll);
 			}
-			aiDifficultySingleInput.gameObject.SetActive(false);
+			
 		}
 		else if (!float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
 			foreach (Cell.enmTeam key in teamList) {
@@ -332,13 +337,14 @@ public class LevelEditorCore : MonoBehaviour {
 				}
 				aiDifficultyDict.Add(key, defaultDificulty);
 			}
-			aiDifficultySingleInput.gameObject.SetActive(false);
+			
 		}
 		else {
 			float singleDiff;
 			if (float.TryParse(aiDifficultySingleInput.text, out singleDiff)) {
 				aiDifficultyDict.Remove(team);
 				aiDifficultyDict.Add(team, singleDiff);
+
 
 			}
 			else {
@@ -347,6 +353,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 			}
 		}
+		aiDifficultySingleInput.gameObject.SetActive(false);
 		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 	}
 	public void EnableSingleDiffInputField(TeamBox t) {
