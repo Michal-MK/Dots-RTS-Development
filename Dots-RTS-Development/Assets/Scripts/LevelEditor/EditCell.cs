@@ -2,23 +2,28 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
+public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 
 	public static event Control.CellSelected OnCellSelected;
 	public static event Control.CellSelected OnCellDeselected;
 
-
 	public LevelEditorCore core;
 
-	public GameObject myMaxSizeOutline;
+	#region Prefabreferences
+	public SpriteRenderer maxCellRadius;
+
+	#endregion
+
 
 	private bool _isCellSelected = false;
 
+	#region Press legth detection
 	private float pointerDownAtTime;
 	private bool longPress;
 	private float longPressTreshold = 0.8f;
 	private bool lookForLongPress;
+	#endregion
 
 	public override void Awake() {
 		base.Awake();
@@ -50,15 +55,19 @@ public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
 		}
 		transform.localScale = new Vector3(mappedValue, mappedValue);
 		cellRadius = col.radius * transform.localScale.x;
+		if (LevelEditorCore.getOutilneState) {
+			ToggleCellOutline(true);
+		}
 	}
+
 
 
 	private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
 		//print(isCellSelected);
 		if (isCellSelected && core.isUpdateSentByCell == false) {
 			if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
-			
-				elementCount = core.start;
+
+				elementCount = core.startingElementCount;
 
 				FastResize();
 			}
@@ -66,12 +75,12 @@ public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
 				cellTeam = core.team;
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
-				maxElements = core.max;
+				maxElements = core.maxElementCount;
 
 				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
-				regenPeriod = core.regen;
+				regenPeriod = core.regenarationPeriod;
 			}
 		}
 	}
@@ -93,10 +102,13 @@ public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
 
 	public void ToggleCellOutline(bool on) {
 		if (on) {
-			myMaxSizeOutline.SetActive(true);
+			maxCellRadius.enabled = true;
+
+			maxCellRadius.size = new Vector2((2 * col.radius * (3 - transform.localScale.x)), (2 * col.radius * (3 - transform.localScale.x)));
+			Debug.LogWarning("I smell hardcoded BS!");
 		}
 		else {
-			myMaxSizeOutline.SetActive(false);
+			maxCellRadius.enabled = false;
 		}
 	}
 
@@ -108,13 +120,13 @@ public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
 				lookForLongPress = false;
 			}
 		}
-		if (longPress ) {
+		if (longPress) {
 			gameObject.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 10;
 		}
 	}
 
 	public void OnPointerUp(PointerEventData eventData) {
-		
+
 
 		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
 			if (lookForLongPress == false) {
@@ -126,14 +138,14 @@ public class EditCell : Cell ,IPointerDownHandler, IPointerUpHandler {
 			if (isCellSelected) {
 				core.isUpdateSentByCell = true;
 				core.team = cellTeam;
-				core.start = elementCount;
-				core.regen = regenPeriod;
-				core.max = maxElements;
+				core.startingElementCount = elementCount;
+				core.regenarationPeriod = regenPeriod;
+				core.maxElementCount = maxElements;
 				core.isUpdateSentByCell = false;
 				EnableCircle(Color.magenta);
 			}
 
-			
+
 
 		}
 		longPress = false;

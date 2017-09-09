@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Globalization;
 
 public class LevelEditorCore : MonoBehaviour {
 	/// <summary>
@@ -54,10 +55,10 @@ public class LevelEditorCore : MonoBehaviour {
 	public Dictionary<Cell.enmTeam, float> aiDifficultyDict = new Dictionary<Cell.enmTeam, float>();
 
 	//Export Panel
-	private string levelName;
-	private string authorName;
+	public string levelName;
+	public string authorName;
 	//view
-	private bool OutlineOn = false;
+	private static bool _outlineOn = false;
 	private bool _areCellsFitToScreen = false;
 	#endregion
 
@@ -69,12 +70,12 @@ public class LevelEditorCore : MonoBehaviour {
 	private float defaultRegen = 1f;
 
 	//Game Settings Panel
-	private float defaultDificulty = 2f;
-	private float defaultGameSize = 250f;
+	public float defaultDificulty = 2f;
+	public float defaultGameSize = 250f;
 
 	//Export Panel
-	private string defaultLevelName = "CustomLevel";
-	private string defaultAuthorName = "Anonymous";
+	public string defaultLevelName = "CustomLevel";
+	public string defaultAuthorName = "Anonymous";
 	#endregion
 
 	#region Enums
@@ -165,7 +166,7 @@ public class LevelEditorCore : MonoBehaviour {
 	public void AddCell(EditCell c) {
 
 		cellList.Add(c);
-		if (OutlineOn) {
+		if (_outlineOn) {
 			c.gameObject.SendMessage("ToggleCellOutline", true);
 		}
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
@@ -192,12 +193,13 @@ public class LevelEditorCore : MonoBehaviour {
 	#endregion
 
 
-	//public void CellOutlineToggle(Toggle toggle) {
-	//	OutlineOn = toggle.isOn;
-	//	foreach (EditCell cell in cellList) {
-	//		cell.ToggleCellOutline(toggle.isOn);
-	//	}
-	//}
+	public void CellOutlineToggle(Toggle toggle) {
+		_outlineOn = toggle.isOn;
+		foreach (EditCell cell in cellList) {
+			cell.ToggleCellOutline(toggle.isOn);
+		}
+	}
+
 	public void ModeButtonWrapper(int mode) {
 		ModeButton((Mode)mode);
 	}
@@ -235,11 +237,10 @@ public class LevelEditorCore : MonoBehaviour {
 			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
 			EditCell c = newCell.GetComponent<EditCell>();
 			c.cellTeam = team;
-			c.maxElements = max;
-			c.regenPeriod = regen;
-			c.elementCount = start;
+			c.maxElements = maxElementCount;
+			c.regenPeriod = regenarationPeriod;
+			c.elementCount = startingElementCount;
 			c.core = this;
-			//c.FastResize();
 			AddCell(c);
 			c.FastResize();
 
@@ -270,6 +271,7 @@ public class LevelEditorCore : MonoBehaviour {
 		switch (inputField) {
 			case PCPanelAttribute.Start: {
 				if (!int.TryParse(startInput.text, out _start)) {
+					print(startInput.text);
 					_start = defaultStart;
 				}
 				panelValueParsed?.Invoke(PCPanelAttribute.Start);
@@ -277,13 +279,15 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			case PCPanelAttribute.Max: {
 				if (!int.TryParse(maxInput.text, out _max)) {
+					print(maxInput.text);
 					_max = defaultMax;
 				}
 				panelValueParsed?.Invoke(PCPanelAttribute.Max);
 				return;
 			}
 			case PCPanelAttribute.Regen: {
-				if (!float.TryParse(regenInput.text, out _regen)) {
+				if (!float.TryParse(regenInput.text,NumberStyles.Float,CultureInfo.InvariantCulture, out _regen)) {
+					print(regenInput.text);
 					_regen = defaultRegen;
 				}
 				panelValueParsed?.Invoke(PCPanelAttribute.Regen);
@@ -321,7 +325,7 @@ public class LevelEditorCore : MonoBehaviour {
 	/// </summary>
 	/// <param name="team">the team this applies to, 0 = all</param>
 	public void AiDiffHandler(Cell.enmTeam team = Cell.enmTeam.NEUTRAL) {
-		if (float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
+		if (float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
 			foreach (Cell.enmTeam key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
@@ -330,7 +334,7 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			
 		}
-		else if (!float.TryParse(aiDifficultyAllInput.text, out aiDificultyAll) && team == 0) {
+		else if (!float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
 			foreach (Cell.enmTeam key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
@@ -341,7 +345,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		else {
 			float singleDiff;
-			if (float.TryParse(aiDifficultySingleInput.text, out singleDiff)) {
+			if (float.TryParse(aiDifficultySingleInput.text,NumberStyles.Float, CultureInfo.InvariantCulture, out singleDiff)) {
 				aiDifficultyDict.Remove(team);
 				aiDifficultyDict.Add(team, singleDiff);
 
@@ -362,7 +366,15 @@ public class LevelEditorCore : MonoBehaviour {
 		aiDifficultySingleInput.transform.position = (Vector2)t.transform.position + new Vector2(0, t.myRectTransform.sizeDelta.y / 2);
 		float value;
 		if (aiDifficultyDict.TryGetValue(t.team, out value)) {
+			print(value);
+			string s = value.ToString();
+			s.Replace(',', '.');
+			print(s);
 			aiDifficultySingleInput.text = value.ToString();
+			print(aiDifficultySingleInput.text);
+			if(aiDifficultySingleInput.text != s) {
+				print("BUG");
+			}
 		}
 		else {
 			aiDifficultySingleInput.text = "";
@@ -389,12 +401,12 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public void ParseGameSize_GameSettingsPanel() {
 		float f = 250;
-		if (float.TryParse(sizeInput.text, out f) && f > 250) {
+		if (float.TryParse(sizeInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out f) && f > 250) {
+			print(f);
 			gameSize = f;
 
 		}
 		else {
-			//print("setToDefault");
 			gameSize = defaultGameSize;
 		}
 	}
@@ -428,7 +440,13 @@ public class LevelEditorCore : MonoBehaviour {
 		float lowestY = Mathf.Infinity;
 		float highestY = -Mathf.Infinity;
 		//print("CellCount " + cells.Count);
-		float adjustBy = 10;
+		float adjustBy = 0;
+
+		foreach (EditCell cell in cellList) {
+			if(cell.cellRadius * 0.33f > adjustBy) {
+				adjustBy = cell.cellRadius * 0.33f;
+			}
+		}
 
 		if (cells.Count == 1) {
 			Vector3 pos = cells[0].transform.position;
@@ -460,12 +478,6 @@ public class LevelEditorCore : MonoBehaviour {
 		highestX += adjustBy;
 		lowestY -= adjustBy;
 		highestY += adjustBy;
-		//print("LowX " + lowestX);
-		//print("HighX " + highestX);
-		//print("LowY "+ lowestY);
-		//print("HighY " + highestY);
-
-
 
 		Camera.main.transform.position = new Vector3(Mathf.Lerp(lowestX, highestX, 0.5f), Mathf.Lerp(lowestY, highestY, 0.5f), -10);
 		float aspect = Camera.main.aspect;
@@ -478,9 +490,6 @@ public class LevelEditorCore : MonoBehaviour {
 			float delta = highestY - lowestY;
 			Camera.main.orthographicSize = delta * 0.5f;
 		}
-
-
-
 	}
 
 	public bool areCellsFitToScreen {
@@ -508,6 +517,7 @@ public class LevelEditorCore : MonoBehaviour {
 		get { return _isUpdateSentByCell; }
 		set { _isUpdateSentByCell = value; }
 	}
+
 	public Cell.enmTeam team {
 		get { return _team; }
 		set {
@@ -516,6 +526,7 @@ public class LevelEditorCore : MonoBehaviour {
 			panelValueParsed?.Invoke(PCPanelAttribute.Team);
 		}
 	}
+
 	public float gameSize {
 		get { return _gameSize; }
 		set {
@@ -523,25 +534,31 @@ public class LevelEditorCore : MonoBehaviour {
 			RefreshCameraSize(value);
 		}
 	}
-	public int start {
+
+	public int startingElementCount {
 		get { return _start; }
 		set {
 			_start = value;
 			startInput.text = value.ToString();
 		}
 	}
-	public float regen {
+
+	public float regenarationPeriod {
 		get { return _regen; }
 		set {
 			_regen = value;
 			regenInput.text = value.ToString();
 		}
 	}
-	public int max {
+
+	public int maxElementCount {
 		get { return _max; }
 		set {
 			_max = value;
 			maxInput.text = value.ToString();
 		}
+	}
+	public static bool getOutilneState {
+		get { return _outlineOn; }
 	}
 }

@@ -36,9 +36,10 @@ public class LoadFromFile : MonoBehaviour {
 				Camera.main.orthographicSize = customSave.gameSize;
 			}
 			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(customSave.savedAtAspect);
-			Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
-			foreach (int key in diffKeys) {
-				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
+			foreach (Cell.enmTeam key in diffKeys) {
+				print("Possible error");
+				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
 			}
 
 			for (int j = 0; j < customSave.cells.Count; j++) {
@@ -68,9 +69,9 @@ public class LoadFromFile : MonoBehaviour {
 				Camera.main.orthographicSize = campaignSave.game.gameSize;
 			}
 			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(campaignSave.game.savedAtAspect);
-			Dictionary<int, float>.KeyCollection diffKeys = campaignSave.game.difficulty.Keys;
-			foreach (int key in diffKeys) {
-				campaignSave.game.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = campaignSave.game.difficulty.Keys;
+			foreach (Cell.enmTeam key in diffKeys) {
+				campaignSave.game.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
 			}
 
 			for (int j = 0; j < campaignSave.game.cells.Count; j++) {
@@ -99,9 +100,9 @@ public class LoadFromFile : MonoBehaviour {
                 Camera.main.orthographicSize = customSave.gameSize;
             }
 			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(customSave.savedAtAspect);
-			Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
-            foreach (int key in diffKeys) {
-                customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
+            foreach (Cell.enmTeam key in diffKeys) {
+                customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
             }
 
             for (int j = 0; j < customSave.cells.Count; j++) {

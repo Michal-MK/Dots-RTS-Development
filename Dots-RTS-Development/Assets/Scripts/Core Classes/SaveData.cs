@@ -6,7 +6,7 @@ using UnityEngine;
 public class SaveData {
 	public List<S_Cell> cells = new List<S_Cell>();
 	public LevelInfo levelInfo;
-	public Dictionary<int,float> difficulty;
+	public Dictionary<Cell.enmTeam, float> difficulty;
 	public float gameSize;
     public float savedAtAspect;
     public Dictionary<Cell.enmTeam,AllyHolder> clans;

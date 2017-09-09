@@ -100,7 +100,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case Scenes.EDITOR: { // Editor
 				Transform c = GameObject.Find("Canvas").transform;
-				LE_editorSettingsPanel = c.Find("ViewMenuPanel").gameObject;
+				LE_editorSettingsPanel = c.Find("EditorSettingsPanel").gameObject;
 				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
 				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;

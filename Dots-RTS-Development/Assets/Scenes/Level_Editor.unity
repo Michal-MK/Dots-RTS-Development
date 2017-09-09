@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 45178065}
   - component: {fileID: 45178064}
   m_Layer: 5
-  m_Name: ViewMenuPanel
+  m_Name: EditorSettingsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2397,6 +2397,7 @@ GameObject:
   - component: {fileID: 337587425}
   - component: {fileID: 337587427}
   - component: {fileID: 337587426}
+  - component: {fileID: 337587428}
   m_Layer: 5
   m_Name: SavePanel
   m_TagString: Untagged
@@ -2459,6 +2460,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 337587424}
+--- !u!114 &337587428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337587424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b56a0b4ae0563f4b9915e9139f480e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ErrorMessages: {fileID: 0}
+  core: {fileID: 982779531}
+  teams: {fileID: 1338730052}
+  prefab: {fileID: 0}
 --- !u!1 &337644529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2826,7 +2842,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 982779531}
         m_MethodName: ParseSaveInfo_SavePanel
         m_Mode: 1
         m_Arguments:
@@ -3528,7 +3544,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 982779531}
         m_MethodName: CellOutlineToggle
         m_Mode: 2
         m_Arguments:
@@ -5155,7 +5171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &752672286
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5180,7 +5196,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 752672285}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: 
@@ -6898,6 +6914,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b56a0b4ae0563f4b9915e9139f480e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ErrorMessages: {fileID: 0}
+  core: {fileID: 0}
+  teams: {fileID: 0}
+  prefab: {fileID: 0}
 --- !u!114 &982779531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6926,6 +6946,12 @@ MonoBehaviour:
   sizeInput: {fileID: 1070205308}
   levelNameInput: {fileID: 414643540}
   authorNameInput: {fileID: 1152457044}
+  levelName: 
+  authorName: 
+  defaultDificulty: 2
+  defaultGameSize: 250
+  defaultLevelName: CustomLevel
+  defaultAuthorName: Anonymous
 --- !u!4 &982779532
 Transform:
   m_ObjectHideFlags: 0
@@ -7809,7 +7835,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 982779531}
         m_MethodName: ParseSaveInfo_SavePanel
         m_Mode: 1
         m_Arguments:
@@ -9366,7 +9392,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1338730051
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11440,7 +11466,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 337587428}
         m_MethodName: SaveButton
         m_Mode: 1
         m_Arguments:

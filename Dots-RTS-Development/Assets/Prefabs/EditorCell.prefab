@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 212889015483235864}
   - component: {fileID: 58687791029425176}
   - component: {fileID: 114434843814687146}
+  - component: {fileID: 114107005942328118}
   m_Layer: 0
   m_Name: EditorCell
   m_TagString: Untagged
@@ -80,7 +81,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1297242512348122
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +232,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224514208190974210}
   - component: {fileID: 212340395696583466}
-  - component: {fileID: 114889160387685830}
   m_Layer: 0
   m_Name: UpgradeSlots
   m_TagString: Untagged
@@ -310,7 +310,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 50
+  m_Radius: 51.2
 --- !u!61 &61123142742778102
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -523,7 +523,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 4
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212915814570583508}
+--- !u!114 &114107005942328118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1238293250153330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2854a4b3f414745a517ca90445cb5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cell: {fileID: 0}
+  slotRender: {fileID: 212340395696583466}
+  slotHolder: {fileID: 224514208190974210}
+  upgrades: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  slotsGO:
+  - {fileID: 1635664793847042}
+  - {fileID: 1062698569394874}
+  - {fileID: 1695235686982616}
+  - {fileID: 1200474612705198}
+  - {fileID: 1994277885048544}
+  - {fileID: 1781095766960132}
+  - {fileID: 1394090797487706}
+  - {fileID: 1334536235846758}
+  slots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114135265498969988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -648,7 +681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 7
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212285782467714768}
 --- !u!114 &114434843814687146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -667,16 +700,16 @@ MonoBehaviour:
   isRegenerating: 0
   isDecaying: 0
   appliedDebuffs: 
-  elementSpawn: {fileID: 0}
+  elementSpawn: {fileID: 8300000, guid: ea99fa6e560fe9742b1fc7f2aba33eb9, type: 3}
   cellSprite: {fileID: 212889015483235864}
   col: {fileID: 58687791029425176}
   rg: {fileID: 0}
   uManager: {fileID: 0}
   elementCountDisplay: {fileID: 0}
   elementCountDisplayRenderer: {fileID: 0}
-  cellSelected: {fileID: 212217092730989418}
-  myMaxSizeOutline: {fileID: 1279974603049402}
-  isCellSelected: 0
+  cellSelectedRenderer: {fileID: 0}
+  core: {fileID: 0}
+  maxCellRadius: {fileID: 212650380036462722}
 --- !u!114 &114434905858793014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -689,7 +722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 3
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212134248134075734}
 --- !u!114 &114555311850289316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -702,7 +735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 0
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212513107819345434}
 --- !u!114 &114791701018551162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -715,7 +748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 5
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212568308973590028}
 --- !u!114 &114884273549824134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -728,40 +761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 2
-  selfSprite: {fileID: 0}
---- !u!114 &114889160387685830
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1854024761700054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b2854a4b3f414745a517ca90445cb5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cell: {fileID: 0}
-  slotRender: {fileID: 0}
-  slotHolder: {fileID: 0}
-  upgrades: 0000000000000000000000000000000000000000000000000000000000000000
-  slotsGO:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  slots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  selfSprite: {fileID: 212383758580138158}
 --- !u!114 &114928255416859242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 6
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212061085761532198}
 --- !u!114 &114987030713934858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -787,7 +787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 1
-  selfSprite: {fileID: 0}
+  selfSprite: {fileID: 212620244889957952}
 --- !u!212 &212061085761532198
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1244,8 +1244,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 0.5}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 113.77778, y: 113.77778}
+  m_DrawMode: 1
+  m_Size: {x: 0, y: 0}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1499,7 +1499,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1238293250153330}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224362289514552452}
@@ -1512,7 +1512,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -106.84424, y: 103.53548}
+  m_AnchoredPosition: {x: -127.17619, y: 7.657196}
   m_SizeDelta: {x: 102.4, y: 102.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224631813019261850
@@ -1559,7 +1559,7 @@ RectTransform:
   m_GameObject: {fileID: 1279974603049402}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224618942173852342}
   m_RootOrder: 4
