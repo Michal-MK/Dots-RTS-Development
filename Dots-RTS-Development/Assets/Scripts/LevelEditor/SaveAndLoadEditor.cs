@@ -20,7 +20,19 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		string path = Save(true);
 		PlayerPrefs.SetString("LoadLevelFilePath", path);
 		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
+		print(PlayManager.levelState);
+
+		DontDestroyOnLoad(core.gameObject);
+		DontDestroyOnLoad(teams.gameObject);
+		DontDestroyOnLoad(this.gameObject);
+
+		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 		SceneManager.LoadScene(Scenes.PLAYER);
+	}
+
+	private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
+		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
 	}
 
 	public void SaveButton() {

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PositionColiders : MonoBehaviour {
+public class PlayFieldSetup : MonoBehaviour {
 
 	public RectTransform background;
 	public GameObject top;

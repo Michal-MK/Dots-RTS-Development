@@ -7,7 +7,7 @@ using TMPro;
 public class Buttons : MainMenuUI  {
 	
 	public void Continue() {
-		Control.UnPause();
+		Control.script.UnPause();
 		Time.timeScale = 1;
 	}
 
@@ -145,6 +145,26 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
 				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
 			}
+		}
+	}
+
+
+	public void HighlightSelectedToggle() {
+		Color32 defaultColor = new Color32(255, 196, 4, 255);
+		if (gameObject.GetComponent<Toggle>().isOn) {
+			transform.Find("Text").GetComponent<TextMeshProUGUI>().color = Color.red;
+		}
+		else {
+			transform.Find("Text").GetComponent<TextMeshProUGUI>().color = defaultColor;
+		}
+	}
+
+	public void ShowHidePanel() {
+		if (transform.parent.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
+			transform.parent.GetComponent<Animator>().SetTrigger("Hide");
+		}
+		else {
+			transform.parent.GetComponent<Animator>().SetTrigger("Show");
 		}
 	}
 }

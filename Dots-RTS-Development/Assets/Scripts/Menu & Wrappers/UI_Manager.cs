@@ -7,20 +7,20 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour {
 
 	public Text errorText;
-	Vector3 hiddenUpgradesPos;
     public GameObject[] thingsToDisable = new GameObject[2];
-
 
 	private static Stack<GameObject> activeWindows = new Stack<GameObject>();
 
-
-    private void Awake() {
-		Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
-		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+	private void Awake() {
+		if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
+			Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
+			Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+		}
 	}
 	private void OnDisable() {
 		Upgrade_Manager.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
 		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+		activeWindows.Clear();
 	}
 
 
@@ -48,8 +48,8 @@ public class UI_Manager : MonoBehaviour {
 		SceneManager.LoadScene(Scenes.SELECT);
 	}
 
+
     public void ChangeLayoutToPreview() {
-		print("Loool what a meme");
         for (int i = 0; i < thingsToDisable.Length; i++) {
             thingsToDisable[i].SetActive(false);
         }
@@ -65,18 +65,18 @@ public class UI_Manager : MonoBehaviour {
 		Time.timeScale = 1;
 	}
 
-	public static void CloseMostRecent() {
+	public static void CloseMostRecent(int count = 1) {
 		if (activeWindows.Count > 0) {
 			GameObject g = activeWindows.Pop();
 			if (g != null) {
 				g.SetActive(false);
 			}
 			else {
-				Control.Pause();
+				Control.script.Pause();
 			}
 		}
 		else {
-			Control.Pause();
+			Control.script.Pause();
 		}
 	}
 

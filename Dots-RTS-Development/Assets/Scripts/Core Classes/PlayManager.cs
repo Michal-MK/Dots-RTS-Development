@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class PlayManager : MonoBehaviour {
 
-	public static PlaySceneState levelState = PlaySceneState.NONE;
+	public static PlaySceneState levelState;
 	public enum PlaySceneState {
 		NONE,
 		CAMPAIGN,
@@ -28,6 +28,7 @@ public class PlayManager : MonoBehaviour {
 		if (levelState != PlaySceneState.PREVIEW) {
 			StartCoroutine(GameState());
 		}
+		levelState = PlaySceneState.NONE;
 	}
 
 	private void OnDestroy() {

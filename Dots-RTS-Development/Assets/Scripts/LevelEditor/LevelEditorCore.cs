@@ -135,9 +135,7 @@ public class LevelEditorCore : MonoBehaviour {
 		ParseSaveInfo_SavePanel();
 		AiDiffHandler();
 
-		// Set defalut mode to placeCells
-		//Have to wait for all of the things to initialize before I can call a button press
-		//yield return new WaitForEndOfFrame();
+		//Set defalut mode to placeCells
 		editorMode = Mode.PlaceCells;
 	}
 
@@ -146,28 +144,12 @@ public class LevelEditorCore : MonoBehaviour {
 		EditCell.OnCellDeselected -= EditCell_OnCellDeselected;
 	}
 
-	private void EditCell_OnCellDeselected(EditCell sender) {
-		selectedCellList.Remove(sender);
-		if (areCellsFitToScreen) {
-			FitCellsOnScreen(selectedCellList);
-		}
-	}
-
-	private void EditCell_OnCellSelected(EditCell sender) {
-		if (!selectedCellList.Contains(sender)) {
-			selectedCellList.Add(sender);
-		}
-		if (areCellsFitToScreen) {
-			FitCellsOnScreen(selectedCellList);
-		}
-	}
-
 	#region Functions to add or remove a cell from the static list
 	public void AddCell(EditCell c) {
 
 		cellList.Add(c);
-		if (_outlineOn) {
-			c.gameObject.SendMessage("ToggleCellOutline", true);
+		if (getOutilneState) {
+			c.ToggleCellOutline(true);
 		}
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
 			if (!teamList.Contains(c.cellTeam)) {
@@ -180,6 +162,7 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 	public void RemoveCell(EditCell c) {
 		cellList.Remove(c);
+		//If a cell is found with the same team then don't remove the clan.
 		foreach (Cell cell in cellList) {
 			if (cell.cellTeam == c.cellTeam) {
 				return;
@@ -192,45 +175,46 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 	#endregion
 
-
-	public void CellOutlineToggle(Toggle toggle) {
-		_outlineOn = toggle.isOn;
-		foreach (EditCell cell in cellList) {
-			cell.ToggleCellOutline(toggle.isOn);
+	#region Event subscribers
+	private void EditCell_OnCellSelected(EditCell sender) {
+		if (!selectedCellList.Contains(sender)) {
+			selectedCellList.Add(sender);
+		}
+		if (areCellsFitToScreen) {
+			FitCellsOnScreen(selectedCellList);
 		}
 	}
+
+	private void EditCell_OnCellDeselected(EditCell sender) {
+		selectedCellList.Remove(sender);
+		if (areCellsFitToScreen) {
+			FitCellsOnScreen(selectedCellList);
+		}
+	}
+	#endregion
+
+	#region Wrappers
 
 	public void ModeButtonWrapper(int mode) {
 		ModeButton((Mode)mode);
 	}
 
-	public void ModeButton(Mode mode) {
-		_editorMode = mode;
-		modeChange?.Invoke(mode);
-		switch (mode) {
-			case Mode.PlaceCells: {
-				Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
-
-				return;
-			}
-			case Mode.EditCells: {
-				Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-				return;
-			}
-			case Mode.DeleteCells: {
-				Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
-				return;
-			}
-			default: {
-				Debug.LogError("Unknown mode passed");
-				return;
-			}
-		}
+	public void PlaceCellPanelParseFromFieldWrapper(int inputField) {
+		PlaceCellPanelParseFromField((PCPanelAttribute)inputField);
 	}
 
+	public void TeamSelectedButtonWrapper(int thisTeam) {
+		TeamSelectedButton((Cell.enmTeam)thisTeam);
+	}
 
+	public void AiDiffHandlerWrapper() {
+		AiDiffHandler(singleDifficultyInputFieldSpecificTeam);
+	}
+
+	#endregion
+
+	//Cell placing logic
 	private void Update() {
-
 #if (UNITY_EDITOR || UNITY_STANDALONE)
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && editorMode == Mode.PlaceCells) {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -263,10 +247,32 @@ public class LevelEditorCore : MonoBehaviour {
 #endif
 	}
 
-	public void PlaceCellPanelParseFromFieldWrapper(int inputField) {
-		PlaceCellPanelParseFromField((PCPanelAttribute)inputField);
+	//Switches the cusror mode 
+	public void ModeButton(Mode mode) {
+		_editorMode = mode;
+		modeChange?.Invoke(mode);
+		switch (mode) {
+			case Mode.PlaceCells: {
+				Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
+
+				return;
+			}
+			case Mode.EditCells: {
+				Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+				return;
+			}
+			case Mode.DeleteCells: {
+				Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
+				return;
+			}
+			default: {
+				Debug.LogError("Unknown mode passed");
+				return;
+			}
+		}
 	}
 
+	//Parses a value from selected input field
 	public void PlaceCellPanelParseFromField(PCPanelAttribute inputField) {
 		switch (inputField) {
 			case PCPanelAttribute.Start: {
@@ -286,7 +292,7 @@ public class LevelEditorCore : MonoBehaviour {
 				return;
 			}
 			case PCPanelAttribute.Regen: {
-				if (!float.TryParse(regenInput.text,NumberStyles.Float,CultureInfo.InvariantCulture, out _regen)) {
+				if (!float.TryParse(regenInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out _regen)) {
 					print(regenInput.text);
 					_regen = defaultRegen;
 				}
@@ -294,94 +300,15 @@ public class LevelEditorCore : MonoBehaviour {
 				return;
 			}
 			case PCPanelAttribute.Team: {
+				UI_ReferenceHolder.LE_cellInputFields.SetActive(false);
 				UI_ReferenceHolder.LE_teamPickerPanel.SetActive(true);
 				return;
 			}
 
 		}
 	}
-	public void TeamSelectedButtonWrapper(int thisTeam) {
-		TeamSelectedButton((Cell.enmTeam)thisTeam);
-	}
 
-	public void TeamSelectedButton(Cell.enmTeam correspondingTeam) {
-		team = correspondingTeam;
-		UI_ReferenceHolder.LE_teamPickerPanel.SetActive(false);
-	}
-	private void UpdateTeamButtonVisual(Cell.enmTeam thisTeam) {
-		Text description = teamButton.Find("TeamDescription").GetComponent<Text>();
-		description.color = ColourTheTeamButtons.GetContrastColorBasedOnTeam(thisTeam);
-		description.text = ColourTheTeamButtons.GetDescriptionBasedOnTeam(thisTeam);
-		teamButton.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(thisTeam);
-	}
-
-
-	public void AiDiffHandlerWrapper() {
-		AiDiffHandler(singleDifficultyInputFieldSpecificTeam);
-	}
-
-	/// <summary>
-	/// Refreshes the Ai difficulty
-	/// </summary>
-	/// <param name="team">the team this applies to, 0 = all</param>
-	public void AiDiffHandler(Cell.enmTeam team = Cell.enmTeam.NEUTRAL) {
-		if (float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
-			foreach (Cell.enmTeam key in teamList) {
-				if (aiDifficultyDict.ContainsKey(key)) {
-					aiDifficultyDict.Remove(key);
-				}
-				aiDifficultyDict.Add(key, aiDificultyAll);
-			}
-			
-		}
-		else if (!float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
-			foreach (Cell.enmTeam key in teamList) {
-				if (aiDifficultyDict.ContainsKey(key)) {
-					aiDifficultyDict.Remove(key);
-				}
-				aiDifficultyDict.Add(key, defaultDificulty);
-			}
-			
-		}
-		else {
-			float singleDiff;
-			if (float.TryParse(aiDifficultySingleInput.text,NumberStyles.Float, CultureInfo.InvariantCulture, out singleDiff)) {
-				aiDifficultyDict.Remove(team);
-				aiDifficultyDict.Add(team, singleDiff);
-
-
-			}
-			else {
-				aiDifficultyDict.Remove(team);
-				aiDifficultyDict.Add(team, defaultDificulty);
-
-			}
-		}
-		aiDifficultySingleInput.gameObject.SetActive(false);
-		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
-	}
-	public void EnableSingleDiffInputField(TeamBox t) {
-
-		aiDifficultySingleInput.gameObject.SetActive(true);
-		aiDifficultySingleInput.transform.position = (Vector2)t.transform.position + new Vector2(0, t.myRectTransform.sizeDelta.y / 2);
-		float value;
-		if (aiDifficultyDict.TryGetValue(t.team, out value)) {
-			print(value);
-			string s = value.ToString();
-			s.Replace(',', '.');
-			print(s);
-			aiDifficultySingleInput.text = value.ToString();
-			print(aiDifficultySingleInput.text);
-			if(aiDifficultySingleInput.text != s) {
-				print("BUG");
-			}
-		}
-		else {
-			aiDifficultySingleInput.text = "";
-		}
-		singleDifficultyInputFieldSpecificTeam = t.team;
-	}
-
+	//Prses values for saving a level
 	public void ParseSaveInfo_SavePanel() {
 
 		if (string.IsNullOrEmpty(levelNameInput.text) || levelNameInput.text == " ") {
@@ -399,6 +326,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
+	//Parses a value for game size
 	public void ParseGameSize_GameSettingsPanel() {
 		float f = 250;
 		if (float.TryParse(sizeInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out f) && f > 250) {
@@ -409,6 +337,83 @@ public class LevelEditorCore : MonoBehaviour {
 		else {
 			gameSize = defaultGameSize;
 		}
+	}
+
+	public void TeamSelectedButton(Cell.enmTeam correspondingTeam) {
+		team = correspondingTeam;
+		UI_ReferenceHolder.LE_teamPickerPanel.SetActive(false);
+		UI_ReferenceHolder.LE_cellInputFields.SetActive(true);
+	}
+
+	private void UpdateTeamButtonVisual(Cell.enmTeam thisTeam) {
+		Text description = teamButton.Find("TeamDescription").GetComponent<Text>();
+		description.color = ColourTheTeamButtons.GetContrastColorBasedOnTeam(thisTeam);
+		description.text = ColourTheTeamButtons.GetDescriptionBasedOnTeam(thisTeam);
+		teamButton.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(thisTeam);
+	}
+
+	public void CellOutlineToggle(Toggle toggle) {
+		_outlineOn = toggle.isOn;
+		foreach (EditCell cell in cellList) {
+			cell.ToggleCellOutline(toggle.isOn);
+		}
+	}
+
+	/// <summary>
+	/// Refreshes the Ai difficulty
+	/// </summary>
+	/// <param name="team">the team this applies to, 0 = all</param>
+	public void AiDiffHandler(Cell.enmTeam team = Cell.enmTeam.NEUTRAL) {
+		if (float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
+			foreach (Cell.enmTeam key in teamList) {
+				if (aiDifficultyDict.ContainsKey(key)) {
+					aiDifficultyDict.Remove(key);
+				}
+				aiDifficultyDict.Add(key, aiDificultyAll);
+			}
+
+		}
+		else if (!float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
+			foreach (Cell.enmTeam key in teamList) {
+				if (aiDifficultyDict.ContainsKey(key)) {
+					aiDifficultyDict.Remove(key);
+				}
+				aiDifficultyDict.Add(key, defaultDificulty);
+			}
+
+		}
+		else {
+			float singleDiff;
+			if (float.TryParse(aiDifficultySingleInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out singleDiff)) {
+				aiDifficultyDict.Remove(team);
+				aiDifficultyDict.Add(team, singleDiff);
+
+
+			}
+			else {
+				aiDifficultyDict.Remove(team);
+				aiDifficultyDict.Add(team, defaultDificulty);
+
+			}
+		}
+		aiDifficultySingleInput.gameObject.SetActive(false);
+		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+	}
+
+	public void EnableSingleDiffInputField(TeamBox t) {
+
+		aiDifficultySingleInput.gameObject.SetActive(true);
+		aiDifficultySingleInput.transform.position = (Vector2)t.transform.position + new Vector2(0, t.myRectTransform.sizeDelta.y / 2);
+		float value;
+		if (aiDifficultyDict.TryGetValue(t.team, out value)) {
+			aiDifficultySingleInput.contentType = InputField.ContentType.Standard;
+			aiDifficultySingleInput.text = value.ToString();
+			aiDifficultySingleInput.contentType = InputField.ContentType.DecimalNumber;
+		}
+		else {
+			aiDifficultySingleInput.text = "";
+		}
+		singleDifficultyInputFieldSpecificTeam = t.team;
 	}
 
 	//public static void BringUpUpgradePanel() {
@@ -425,12 +430,12 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			Camera.main.transform.position = Vector3.zero + Vector3.back * 10;
 			Camera.main.orthographicSize = val;
-			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(Camera.main.aspect);
+			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(Camera.main.aspect);
 		}
 	}
 
 	public void FitCellsOnScreen(List<EditCell> cells) {
-		//find boarders
+		//find borders
 		if (cells.Count == 0) {
 			RefreshCameraSize(gameSize);
 			return;
@@ -443,7 +448,7 @@ public class LevelEditorCore : MonoBehaviour {
 		float adjustBy = 0;
 
 		foreach (EditCell cell in cellList) {
-			if(cell.cellRadius * 0.33f > adjustBy) {
+			if (cell.cellRadius * 0.33f > adjustBy) {
 				adjustBy = cell.cellRadius * 0.33f;
 			}
 		}
@@ -492,6 +497,8 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
+
+	#region Getters and Setters
 	public bool areCellsFitToScreen {
 		get { return _areCellsFitToScreen; }
 		set {
@@ -561,4 +568,5 @@ public class LevelEditorCore : MonoBehaviour {
 	public static bool getOutilneState {
 		get { return _outlineOn; }
 	}
+	#endregion
 }

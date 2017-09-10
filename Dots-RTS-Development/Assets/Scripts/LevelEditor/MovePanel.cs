@@ -60,6 +60,16 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 
 		}
 	}
+
+	public void ToggleControlsPanel() {
+		if (!Control.isPaused) {
+			StartCoroutine(MoveToAnchor(0));
+		}
+		else {
+			StartCoroutine(MoveToAnchor(anchorDiffPercent));
+		}
+	}
+
 	private void Control_RMBPressed(Vector2 position) {
 		//print("Pressed " + isShown);
 		if (!isShown) {
@@ -70,11 +80,10 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 
 		}
 	}
-	IEnumerator MoveToAnchor(float topAnchor) {
+	public IEnumerator MoveToAnchor(float topAnchor) {
 		float initialTopAnchor = CSTransform.anchorMax.y;
 
-		print("MOVING");
-		 
+	 
 		for (float time = 0; time < 1f; time += Time.fixedDeltaTime) {
 			
 			CSTransform.anchorMin = new Vector2(0, Mathf.SmoothStep(initialTopAnchor - anchorDiffPercent, topAnchor - anchorDiffPercent, time));
@@ -99,5 +108,17 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 		}
 	}
 
+	public void RecenterRectWrapper(float speed) {
+		transform.parent.GetComponent<RectTransform>().position = Vector2.zero;
+		//StartCoroutine(RecenterRect(transform.parent.GetComponent<RectTransform>(),speed));
+	}
+
+	private IEnumerator RecenterRect(RectTransform rect, float speed) {
+		for (float f = 0; f < 1; f += speed) {
+			Vector3 speedVec = Vector3.zero;
+			rect.anchoredPosition = Vector3.SmoothDamp(rect.anchoredPosition, Vector3.zero, ref speedVec, .5f);
+			yield return null;
+		}
+	}
 
 }

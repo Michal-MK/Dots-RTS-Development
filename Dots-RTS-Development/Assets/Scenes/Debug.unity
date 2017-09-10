@@ -3473,6 +3473,11 @@ Prefab:
       propertyPath: background
       value: 
       objectReference: {fileID: 1695733553}
+    - target: {fileID: 114250571848743984, guid: 832544c7e7bf75b4db0a86944091eae7,
+        type: 2}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 1695733553}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 832544c7e7bf75b4db0a86944091eae7, type: 2}
   m_IsPrefabParent: 0

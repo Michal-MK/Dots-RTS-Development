@@ -292,7 +292,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 599.3996
+      value: 599.6117
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -416,7 +416,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 467.04968
+      value: 467.20877
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 314293186}
   - component: {fileID: 314293188}
   - component: {fileID: 314293187}
+  - component: {fileID: 314293189}
   m_Layer: 5
   m_Name: MenuPanel
   m_TagString: Untagged
@@ -921,6 +922,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 314293185}
+--- !u!95 &314293189
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 314293185}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bc4d1b58d99b901408d553496af80ffc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1001 &329377905
 Prefab:
   m_ObjectHideFlags: 0
@@ -961,6 +979,11 @@ Prefab:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114238875923900244, guid: 832544c7e7bf75b4db0a86944091eae7,
+        type: 2}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 2034937579}
+    - target: {fileID: 114250571848743984, guid: 832544c7e7bf75b4db0a86944091eae7,
         type: 2}
       propertyPath: background
       value: 
@@ -1323,7 +1346,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 334.6998
+      value: 334.80585
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -1942,7 +1965,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 996.44934
+      value: 996.82056
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -2659,7 +2682,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 1128.7992
+      value: 1129.2235
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -4172,7 +4195,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 202.3499
+      value: 202.40292
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -4699,7 +4722,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 864.0994
+      value: 864.4176
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -4863,7 +4886,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 1261.1492
+      value: 1261.6265
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -6428,7 +6451,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 731.7495
+      value: 732.01465
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}

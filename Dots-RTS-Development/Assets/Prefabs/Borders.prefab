@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4204711534086136}
-  - component: {fileID: 114238875923900244}
+  - component: {fileID: 114250571848743984}
   m_Layer: 0
   m_Name: Borders
   m_TagString: Untagged
@@ -260,7 +260,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &114238875923900244
+--- !u!114 &114250571848743984
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -268,7 +268,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1337293547799692}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd58a54b5a901c2458cec680ded14d69, type: 3}
+  m_Script: {fileID: 11500000, guid: 1340e6a5786e85b4c9154956e911e797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 0}

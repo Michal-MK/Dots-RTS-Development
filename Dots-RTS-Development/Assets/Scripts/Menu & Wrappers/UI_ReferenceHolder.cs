@@ -26,6 +26,9 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	public static GameObject LE_teamPickerPanel;
 	public static GameObject LE_loadForEditPanel;
 	public static GameObject LE_editorSettingsPanel;
+	public static GameObject LE_cellInputFields;
+	public static MovePanel LE_cellPanel;
+	public static Animator LE_editorSliderPanel;
 	//public static GameObject menuPanel;
 
 	#endregion
@@ -105,8 +108,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
 				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
-				LE_teamPickerPanel = c.Find("TeamSelectPanel").gameObject;
+				LE_cellPanel = c.Find("CellPanel/Handle").GetComponent<MovePanel>();
+				LE_teamPickerPanel = c.Find("CellPanel/TeamSelectPanel").gameObject;
+				LE_cellInputFields = c.Find("CellPanel/CellEdit").gameObject;
 				MULTI_menuPanel = c.Find("MenuPanel").gameObject;
+				LE_editorSliderPanel = c.Find("Another Panel").GetComponent<Animator>();
 				return;
 			}
 			case Scenes.SELECT: { // LevelSelect

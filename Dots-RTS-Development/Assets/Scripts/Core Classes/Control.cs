@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class Control : MonoBehaviour {
 
@@ -170,7 +171,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private void LateUpdate() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (Input.GetKeyDown(KeyCode.Escape) && IsInPausebleScene()) {
 			if (isPaused) {
 				UnPause();
 			}
@@ -179,22 +180,47 @@ public class Control : MonoBehaviour {
 			}
 		}
 	}
+	private IEnumerator DisableAfterAnimation() {
+		Animator anim = UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>();
+		anim.SetTrigger("Hide");
+		yield return new WaitForSecondsRealtime(anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f);
+		if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hide")) {
+			anim.gameObject.SetActive(false);
+			UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0));
+		}
+	}
 
-	public static void Pause() {
+	public void Pause() {
 		if (UI_Manager.getWindowCount == 0) {
 			isPaused = true;
 			Time.timeScale = 0;
-			UI_ReferenceHolder.MULTI_menuPanel.SetActive(true);
+			UI_Manager.AddWindow(UI_ReferenceHolder.MULTI_menuPanel);
+
+			foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
+				img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+			}
+			foreach (TextMeshProUGUI text in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<TextMeshProUGUI>()) {
+				text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+			}
+			UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>().SetTrigger("Show");
+
+			AnimatorStateInfo s = UI_ReferenceHolder.LE_editorSliderPanel.GetCurrentAnimatorStateInfo(0);
+
+			if (!s.IsName("Hide") && !s.IsName("Def")) {
+				UI_ReferenceHolder.LE_editorSliderPanel.SetTrigger("Hide");
+			}
+
+			UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0));
 		}
 		else {
 			UI_Manager.CloseMostRecent();
 		}
 	}
 
-	public static void UnPause() {
+	public void UnPause() {
 		isPaused = false;
 		Time.timeScale = 1;
-		UI_ReferenceHolder.MULTI_menuPanel.SetActive(false);
+		StartCoroutine(DisableAfterAnimation());
 	}
 
 	IEnumerator TakePicture() {
@@ -215,5 +241,14 @@ public class Control : MonoBehaviour {
 		}
 	}
 
+	private bool IsInPausebleScene() {
+		string s = SceneManager.GetActiveScene().name;
+		if (s == Scenes.EDITOR || s == Scenes.PLAYER) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
 

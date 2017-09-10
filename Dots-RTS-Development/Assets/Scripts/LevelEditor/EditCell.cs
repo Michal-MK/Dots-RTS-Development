@@ -73,6 +73,9 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
 				cellTeam = core.team;
+				if(cellTeam != enmTeam.ALLIED && cellTeam != enmTeam.NEUTRAL) {
+					core.AddCell(this);
+				}
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
 				maxElements = core.maxElementCount;
