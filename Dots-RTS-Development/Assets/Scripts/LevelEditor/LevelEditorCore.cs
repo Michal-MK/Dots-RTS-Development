@@ -16,9 +16,8 @@ public class LevelEditorCore : MonoBehaviour {
 	public static event Control.EditModeChanged modeChange;
 
 
-	public GameObject CellPrefab;
+	public GameObject cellPrefab;
 	public Transform teamButton;
-	public GameObject upgradePanel;
 
 	public List<EditCell> cellList = new List<EditCell>();
 	public List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
@@ -111,7 +110,12 @@ public class LevelEditorCore : MonoBehaviour {
 		/// <summary>
 		/// Team will be parsed from the next click on the appropriate button.
 		/// </summary>
-		Team
+		Team,
+		/// <summary>
+		/// Upgrades will be parsed from UI Upgrade slots
+		/// </summary>
+		Upgrades
+		
 	};
 	#endregion
 
@@ -218,7 +222,8 @@ public class LevelEditorCore : MonoBehaviour {
 #if (UNITY_EDITOR || UNITY_STANDALONE)
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && editorMode == Mode.PlaceCells) {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
+			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
+			newCell.name = "Cell " + team;
 			EditCell c = newCell.GetComponent<EditCell>();
 			c.cellTeam = team;
 			c.maxElements = maxElementCount;
@@ -415,11 +420,6 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		singleDifficultyInputFieldSpecificTeam = t.team;
 	}
-
-	//public static void BringUpUpgradePanel() {
-	//	RectTransform rc = upgradePanel.GetComponent<RectTransform>();
-	//	//rc.sizeDelta = new Vector2(rc.sizeDelta.x, 0);
-	//}
 
 	//This is called with the panelChange event;
 	public void RefreshCameraSize(float val) {

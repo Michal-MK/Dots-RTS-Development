@@ -25,10 +25,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	public static GameObject LE_gameSettingsPanel;
 	public static GameObject LE_teamPickerPanel;
 	public static GameObject LE_loadForEditPanel;
-	public static GameObject LE_editorSettingsPanel;
+	//public static GameObject LE_editorSettingsPanel;
 	public static GameObject LE_cellInputFields;
 	public static MovePanel LE_cellPanel;
 	public static Animator LE_editorSliderPanel;
+	public static GameObject LE_upgradePickerPanel;
 	//public static GameObject menuPanel;
 
 	#endregion
@@ -103,7 +104,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case Scenes.EDITOR: { // Editor
 				Transform c = GameObject.Find("Canvas").transform;
-				LE_editorSettingsPanel = c.Find("EditorSettingsPanel").gameObject;
+				//LE_editorSettingsPanel = c.Find("EditorSettingsPanel").gameObject;
 				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
 				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
@@ -113,6 +114,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				LE_cellInputFields = c.Find("CellPanel/CellEdit").gameObject;
 				MULTI_menuPanel = c.Find("MenuPanel").gameObject;
 				LE_editorSliderPanel = c.Find("Another Panel").GetComponent<Animator>();
+				LE_upgradePickerPanel = c.Find("UPGRADE_Selection_To_UI").gameObject;
 				return;
 			}
 			case Scenes.SELECT: { // LevelSelect

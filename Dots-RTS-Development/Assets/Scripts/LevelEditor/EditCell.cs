@@ -12,7 +12,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	#region Prefabreferences
 	public SpriteRenderer maxCellRadius;
-
+	public UM_Editor upgrade_manager;
 	#endregion
 
 
@@ -85,6 +85,9 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
 				regenPeriod = core.regenarationPeriod;
 			}
+			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
+				upgrade_manager.upgrades = UM_Editor.getUiUpgradeSlotValues;
+			}
 		}
 	}
 
@@ -106,9 +109,9 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	public void ToggleCellOutline(bool on) {
 		if (on) {
 			maxCellRadius.enabled = true;
-
+			print((2 * col.radius * (3 - transform.localScale.x)));
 			maxCellRadius.size = new Vector2((2 * col.radius * (3 - transform.localScale.x)), (2 * col.radius * (3 - transform.localScale.x)));
-			Debug.LogWarning("I smell hardcoded BS!");
+			//Debug.LogWarning("I smell hardcoded BS!");
 		}
 		else {
 			maxCellRadius.enabled = false;
@@ -162,10 +165,12 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			if (value == true) {
 				OnCellSelected(this);
 				cellSelectedRenderer.enabled = true;
+				upgrade_manager.ToggleUpgradeInteraction(true);
 			}
 			else {
 				OnCellDeselected(this);
 				cellSelectedRenderer.enabled = false;
+				upgrade_manager.ToggleUpgradeInteraction(false);
 			}
 			_isCellSelected = value;
 		}

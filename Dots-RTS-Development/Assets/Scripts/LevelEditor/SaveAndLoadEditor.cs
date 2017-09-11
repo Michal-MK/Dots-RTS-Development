@@ -36,7 +36,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	}
 
 	public void SaveButton() {
-		Save();
+		string s = Save();
+		print(s);
 	}
 
 	public string Save(bool temp = false) {

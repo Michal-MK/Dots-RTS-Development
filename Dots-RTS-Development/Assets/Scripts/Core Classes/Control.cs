@@ -16,9 +16,9 @@ public class Control : MonoBehaviour {
 	public delegate void EditModeChanged(LevelEditorCore.Mode mode);
 	public delegate void NewSelectionForDownload(SaveFileInfo sender);
 
-	public delegate void EnteredUpgradeMode(Upgrade_Manager sender);
-	public delegate void QuitUpgradeMode(Upgrade_Manager sender);
-	public delegate void InstallUpgradeHandler(Upgrade.Upgrades type, Upgrade_Manager cell);
+	public delegate void EnteredUpgradeMode(UM_InGame sender);
+	public delegate void QuitUpgradeMode(UM_InGame sender);
+	public delegate void InstallUpgradeHandler(Upgrade.Upgrades type, UM_InGame cell);
 
 	public delegate void OnMouseButtonPressed(Vector2 position);
 
@@ -166,6 +166,7 @@ public class Control : MonoBehaviour {
 		if (Input.GetMouseButtonDown(1)) {
 			if (RMBPressed != null) {
 				RMBPressed(Input.mousePosition);
+				print("Pressed RMB");
 			}
 		}
 	}
@@ -180,21 +181,12 @@ public class Control : MonoBehaviour {
 			}
 		}
 	}
-	private IEnumerator DisableAfterAnimation() {
-		Animator anim = UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>();
-		anim.SetTrigger("Hide");
-		yield return new WaitForSecondsRealtime(anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - 0.1f);
-		if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hide")) {
-			anim.gameObject.SetActive(false);
-			UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0));
-		}
-	}
 
 	public void Pause() {
 		if (UI_Manager.getWindowCount == 0) {
 			isPaused = true;
 			Time.timeScale = 0;
-			UI_Manager.AddWindow(UI_ReferenceHolder.MULTI_menuPanel);
+			UI_Manager.AddWindow(new Window(UI_ReferenceHolder.MULTI_menuPanel,Window.WindowType.MOVING));
 
 			foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
 				img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
@@ -209,8 +201,7 @@ public class Control : MonoBehaviour {
 			if (!s.IsName("Hide") && !s.IsName("Def")) {
 				UI_ReferenceHolder.LE_editorSliderPanel.SetTrigger("Hide");
 			}
-
-			UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0));
+			UI_ReferenceHolder.LE_cellPanel.ToggleControlsPanel();
 		}
 		else {
 			UI_Manager.CloseMostRecent();
@@ -220,7 +211,7 @@ public class Control : MonoBehaviour {
 	public void UnPause() {
 		isPaused = false;
 		Time.timeScale = 1;
-		StartCoroutine(DisableAfterAnimation());
+		UI_Manager.CloseMostRecent();
 	}
 
 	IEnumerator TakePicture() {

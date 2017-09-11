@@ -14,6 +14,7 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 
 	public float anchorDiffPercent;
 	private bool isShown = true;
+	private bool isMoving = false;
 
 	#region Events
 	void Start() {
@@ -53,48 +54,50 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (!isShown) {
-			StartCoroutine(MoveToAnchor(anchorDiffPercent));
+			StartCoroutine(MoveToAnchor(anchorDiffPercent,2));
 		}
 		else if (eventData.clickCount == 2) {
-			StartCoroutine(MoveToAnchor(0));
+			StartCoroutine(MoveToAnchor(0,2));
 
 		}
 	}
 
 	public void ToggleControlsPanel() {
-		if (!Control.isPaused) {
-			StartCoroutine(MoveToAnchor(0));
+		if (Control.isPaused) {
+			StartCoroutine(MoveToAnchor(0,2));
 		}
 		else {
-			StartCoroutine(MoveToAnchor(anchorDiffPercent));
+			StartCoroutine(MoveToAnchor(anchorDiffPercent,2));
 		}
 	}
 
 	private void Control_RMBPressed(Vector2 position) {
-		//print("Pressed " + isShown);
-		if (!isShown) {
-			StartCoroutine(MoveToAnchor(anchorDiffPercent));
-		}
-		else {
-			StartCoroutine(MoveToAnchor(0));
-
+		print("Here");
+		if (!isMoving) {
+			print("Is Not mowing Mowing");
+			if (!isShown) {
+				print("Is Shown");
+				StartCoroutine(MoveToAnchor(anchorDiffPercent, 2));
+			}
+			else {
+				print("Is not Shown");
+				StartCoroutine(MoveToAnchor(0, 2));
+			}
 		}
 	}
-	public IEnumerator MoveToAnchor(float topAnchor) {
+	public IEnumerator MoveToAnchor(float topAnchor, float speedMultiplyer) {
 		float initialTopAnchor = CSTransform.anchorMax.y;
 
-	 
-		for (float time = 0; time < 1f; time += Time.fixedDeltaTime) {
-			
+		isMoving = true;
+		for (float time = 0; time < 1f; time += Time.unscaledDeltaTime * speedMultiplyer) {
+			print(time + " " + speedMultiplyer);
 			CSTransform.anchorMin = new Vector2(0, Mathf.SmoothStep(initialTopAnchor - anchorDiffPercent, topAnchor - anchorDiffPercent, time));
 			CSTransform.anchorMax = new Vector2(1, Mathf.SmoothStep(initialTopAnchor, topAnchor, time));
 			yield return null;
 		}
+		isMoving = false;
+		print("Done Mowing");
 
-#if !UNITY_ANDROID && !UNITY_IOS
-		
-#endif
-		
 		if (topAnchor == anchorDiffPercent) {
 			isShown = true;
 			HidePanelHint.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 10);
@@ -107,18 +110,4 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 			HidePanelHint.enabled = false;
 		}
 	}
-
-	public void RecenterRectWrapper(float speed) {
-		transform.parent.GetComponent<RectTransform>().position = Vector2.zero;
-		//StartCoroutine(RecenterRect(transform.parent.GetComponent<RectTransform>(),speed));
-	}
-
-	private IEnumerator RecenterRect(RectTransform rect, float speed) {
-		for (float f = 0; f < 1; f += speed) {
-			Vector3 speedVec = Vector3.zero;
-			rect.anchoredPosition = Vector3.SmoothDamp(rect.anchoredPosition, Vector3.zero, ref speedVec, .5f);
-			yield return null;
-		}
-	}
-
 }

@@ -11,7 +11,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	public Image typeImage;
 	private TextMeshProUGUI desc;
 
-	private static Upgrade_Manager currentCell;
+	private static UM_InGame currentCell;
 
 	public static event Control.InstallUpgradeHandler OnUpgradeInstalled;
 
@@ -21,15 +21,15 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	private void Awake() {
 		if (!isSubscribed) {
 			//print("Subscribed Panel");
-			Upgrade_Manager.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
+			UM_InGame.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
 			isSubscribed = true;
 		}
 	}
 
 	private void OnDestroy() {
 		//print("Unsubbed Panel");
-		Upgrade_Manager.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
-		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+		UM_InGame.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
+		UM_InGame.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 		isSubscribed = false;
 
 	}
@@ -49,8 +49,8 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		}
 	}
 
-	private void Upgrade_Manager_OnUpgradeQuit(Upgrade_Manager sender) {
-		Upgrade_Manager.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+	private void Upgrade_Manager_OnUpgradeQuit(UM_InGame sender) {
+		UM_InGame.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 
 
 		print("Upgrade Quit " + sender.gameObject.name);
@@ -62,8 +62,8 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		currentCell = null;
 	}
 
-	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
-		Upgrade_Manager.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+	private void Upgrade_Manager_OnUpgradeBegin(UM_InGame sender) {
+		UM_InGame.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 
 		print("Upgrade Begin " + sender.gameObject.name);
 		currentCell = sender;
@@ -109,7 +109,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	//Stuff to do with instalation, moving numbers around
 	private void InstallUpgradeTo(UpgradeSlot sender, int slot) {
 		UpgradeSlot.OnSlotClicked -= InstallUpgradeTo;
-		currentCell.InstallUpgrade(slot, type);
+		currentCell.InstallUpgrade(currentCell.cell,slot, type);
 		count--;
 		UpdateUpgradeOverview();
 		if (sender == null) {
@@ -122,6 +122,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 			sender.selfSprite.size = Vector2.one * 25;
 		}
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.25f);
+		isListeningForSlot = true;
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {

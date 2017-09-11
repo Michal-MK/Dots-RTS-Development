@@ -338,6 +338,8 @@ public class TeamSetup : MonoBehaviour {
 		return output;
 	}
 }
+
+[System.Serializable]
 public class AllyHolder {
 	public List<Cell.enmTeam> allies = new List<Cell.enmTeam>();
 }

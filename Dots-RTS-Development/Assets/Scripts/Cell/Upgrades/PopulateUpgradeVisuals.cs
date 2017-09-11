@@ -3,15 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PopulateUpgradeVisuals : MonoBehaviour {
+
+	public GameObject populateWithPrefab;
 
 	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.SHOP) {
 			PopulateStore();
 		}
+		else if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+			PopulateEditorPicker();
+		}
 		else {
 			Populate(transform);
+		}
+	}
+
+	private void PopulateEditorPicker() {
+		Upgrade.Upgrades[] upgrades = (Upgrade.Upgrades[])Enum.GetValues(typeof(Upgrade.Upgrades));
+		string[] upgradeNames = Enum.GetNames(typeof(Upgrade.Upgrades));
+
+		for (int i = 0; i < Enum.GetValues(typeof(Upgrade.Upgrades)).Length; i++) {
+			if (upgrades[i] != Upgrade.Upgrades.NONE) {
+				UpgradePickerInstance instance = Instantiate(populateWithPrefab, transform).GetComponent<UpgradePickerInstance>();
+				instance.gameObject.name = upgradeNames[i];
+				instance.upgrade = upgrades[i];
+
+				if ((int)upgrades[i] <= 99) {
+					instance.upgradeType = Upgrade.UpgradeType.OFFENSIVE;
+				}
+				else if ((int)upgrades[i] >= 100 && (int)upgrades[i] < 199) {
+					instance.upgradeType = Upgrade.UpgradeType.DEFENSIVE;
+				}
+				else {
+					instance.upgradeType = Upgrade.UpgradeType.UTILITY;
+				}
+				Sprite s;
+				if (Upgrade.UPGRADE_GRAPHICS.TryGetValue(upgrades[i], out s)) {
+					instance.upgradeImg.sprite = s;
+				}
+			}
 		}
 	}
 

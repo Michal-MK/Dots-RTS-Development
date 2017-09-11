@@ -86,7 +86,7 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
+		int selected = UM_Store.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
 		//print(selected);
 
 		if(selected <= 99) {
@@ -159,12 +159,14 @@ public class Buttons : MainMenuUI  {
 		}
 	}
 
-	public void ShowHidePanel() {
-		if (transform.parent.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
-			transform.parent.GetComponent<Animator>().SetTrigger("Hide");
+	public void ShowHidePanel(GameObject window) {
+		if (window.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
+			window.GetComponent<Animator>().SetTrigger("Hide");
+			UI_Manager.CloseWindow(window);
 		}
 		else {
-			transform.parent.GetComponent<Animator>().SetTrigger("Show");
+			window.GetComponent<Animator>().SetTrigger("Show");
+			UI_Manager.AddWindow(window);
 		}
 	}
 }

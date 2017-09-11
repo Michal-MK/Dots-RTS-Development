@@ -7,6 +7,7 @@ public class GlobalMonoBehaviour : MonoBehaviour {
 		StartCoroutine(GetSpritesFromResources("AttackIcon"));
 		StartCoroutine(GetSpritesFromResources("DefenceIcon"));
 		StartCoroutine(GetSpritesFromResources("UtilityIcon"));
+		StartCoroutine(GetSpritesFromResources("TeamBox"));
 
 	}
 
