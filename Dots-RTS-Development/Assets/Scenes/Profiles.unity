@@ -307,11 +307,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -961,11 +961,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -1615,7 +1615,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2114136303}
   m_HandleRect: {fileID: 2114136302}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2202,11 +2202,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -3818,7 +3818,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2179a5b210e29684b8442d2dbc3d7a87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgrade: 0
 --- !u!1 &1204708116
 GameObject:
   m_ObjectHideFlags: 0
@@ -3917,6 +3916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f29c24bbcb07e478ab6dac04ca2958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  populateWithPrefab: {fileID: 0}
 --- !u!1001 &1225582424
 Prefab:
   m_ObjectHideFlags: 0
@@ -4721,11 +4721,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -5479,11 +5479,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -6194,11 +6194,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -6717,7 +6717,6 @@ MonoBehaviour:
   selected:
     pathToFile: 
     onLevelImage: 
-    onLevelBaseGame: 0
     ownedCoins: 0
     contributedLevels: 0
     totalCreatedLevels: 0
@@ -6898,7 +6897,6 @@ MonoBehaviour:
   selected:
     pathToFile: 
     onLevelImage: 
-    onLevelBaseGame: 0
     ownedCoins: 0
     contributedLevels: 0
     totalCreatedLevels: 0
@@ -7115,7 +7113,6 @@ MonoBehaviour:
   selected:
     pathToFile: 
     onLevelImage: 
-    onLevelBaseGame: 0
     ownedCoins: 0
     contributedLevels: 0
     totalCreatedLevels: 0

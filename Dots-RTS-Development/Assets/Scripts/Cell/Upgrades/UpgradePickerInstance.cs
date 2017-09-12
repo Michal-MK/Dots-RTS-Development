@@ -25,6 +25,7 @@ public class UpgradePickerInstance : MonoBehaviour,IPointerDownHandler,IPointerC
 	public void OnPointerClick(PointerEventData eventData) {
 		OnPickerClicked(UpgradeSlot.getHighlightedSlot,this);
 	}
+
 	public void OnPointerDown(PointerEventData eventData) {
 		//Necessary for some reason
 	}

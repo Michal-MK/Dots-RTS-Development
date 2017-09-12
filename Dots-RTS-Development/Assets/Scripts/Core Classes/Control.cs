@@ -31,9 +31,9 @@ public class Control : MonoBehaviour {
 	public static bool canPause = true;
 	public static event OnMouseButtonPressed RMBPressed;
 
-	private float time;
+	//private float time;
 
-	private bool isInGame = false;
+	//private bool isInGame = false;
 
 	public static ProfileManager pM;
 
@@ -186,22 +186,24 @@ public class Control : MonoBehaviour {
 		if (UI_Manager.getWindowCount == 0) {
 			isPaused = true;
 			Time.timeScale = 0;
-			UI_Manager.AddWindow(new Window(UI_ReferenceHolder.MULTI_menuPanel,Window.WindowType.MOVING));
+			UI_Manager.AddWindow(new Window(UI_ReferenceHolder.MULTI_menuPanel, Window.WindowType.MOVING));
+			if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
 
-			foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
-				img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
-			}
-			foreach (TextMeshProUGUI text in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<TextMeshProUGUI>()) {
-				text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
-			}
-			UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>().SetTrigger("Show");
+				foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
+					img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+				}
+				foreach (TextMeshProUGUI text in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<TextMeshProUGUI>()) {
+					text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+				}
+				UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>().SetTrigger("Show");
 
-			AnimatorStateInfo s = UI_ReferenceHolder.LE_editorSliderPanel.GetCurrentAnimatorStateInfo(0);
+				AnimatorStateInfo s = UI_ReferenceHolder.LE_editorSliderPanel.GetCurrentAnimatorStateInfo(0);
 
-			if (!s.IsName("Hide") && !s.IsName("Def")) {
-				UI_ReferenceHolder.LE_editorSliderPanel.SetTrigger("Hide");
+				if (!s.IsName("Hide") && !s.IsName("Def")) {
+					UI_ReferenceHolder.LE_editorSliderPanel.SetTrigger("Hide");
+				}
+				UI_ReferenceHolder.LE_cellPanel.ToggleControlsPanel();
 			}
-			UI_ReferenceHolder.LE_cellPanel.ToggleControlsPanel();
 		}
 		else {
 			UI_Manager.CloseMostRecent();

@@ -27,10 +27,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		DontDestroyOnLoad(this.gameObject);
 
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-		SceneManager.LoadScene(Scenes.PLAYER);
+		SceneManager.LoadScene(Scenes.PLAYER,LoadSceneMode.Additive);
 	}
 
 	private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
+		SceneManager.SetActiveScene(arg0);
 		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
 	}
@@ -89,30 +90,32 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		#endregion
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Create(fullpath);
-		SaveData save = new SaveData();
+		using (FileStream file = File.Create(fullpath)) {
+			SaveData save = new SaveData();
 
-		for (int i = 0; i < core.cellList.Count; i++) {
-			Cell c = core.cellList[i];
+			for (int i = 0; i < core.cellList.Count; i++) {
+				EditCell c = core.cellList[i];
 
-			S_Cell serCell = new S_Cell();
-			serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
-			serCell.elementCount = c.elementCount;
-			serCell.maxElementCount = c.maxElements;
-			serCell.team = (int)c.cellTeam;
-			serCell.regenerationPeriod = c.regenPeriod;
+				S_Cell serCell = new S_Cell();
+				serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
+				serCell.elementCount = c.elementCount;
+				serCell.maxElementCount = c.maxElements;
+				serCell.team = (int)c.cellTeam;
+				serCell.regenerationPeriod = c.regenPeriod;
+				serCell.installedUpgrades = c.upgrade_manager.upgrades;
+				save.cells.Add(serCell);
+			}
 
-			save.cells.Add(serCell);
+			save.savedAtAspect = Camera.main.aspect;
+			save.difficulty = core.aiDifficultyDict;
+			save.gameSize = core.gameSize;
+			save.levelInfo = new LevelInfo(core.levelName, core.authorName, DateTime.Now);
+			save.clans = teams.clanDict;
+			ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
+			formatter.Serialize(file, save);
+			file.Close();
+			return fullpath;
 		}
-		save.savedAtAspect = Camera.main.aspect;
-		save.difficulty = core.aiDifficultyDict;
-		save.gameSize = core.gameSize;
-		save.levelInfo = new LevelInfo(core.levelName, core.authorName, DateTime.Now);
-		save.clans = teams.clanDict;
-		ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
-		formatter.Serialize(file, save);
-		file.Close();
-		return fullpath;
 	}
 
 	public void Load(string path) {
@@ -125,39 +128,41 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream file = File.Open(path, FileMode.Open);
-		SaveData save = (SaveData)formatter.Deserialize(file);
-		core.gameSize = save.gameSize;
+		using (FileStream file = File.Open(path, FileMode.Open)) {
+			SaveData save = (SaveData)formatter.Deserialize(file);
+			core.gameSize = save.gameSize;
 
-		core.aiDifficultyDict = save.difficulty;
-
-		if (save.difficulty != null) {
 			core.aiDifficultyDict = save.difficulty;
-		}
-		else {
-			core.aiDifficultyDict = new Dictionary<Cell.enmTeam, float>();
-		}
-		if (save.clans != null) {
-			teams.clanDict = save.clans;
-		}
-		else {
-			teams.clanDict = new Dictionary<Cell.enmTeam, AllyHolder>();
-		}
 
-		file.Close();
+			if (save.difficulty != null) {
+				core.aiDifficultyDict = save.difficulty;
+			}
+			else {
+				core.aiDifficultyDict = new Dictionary<Cell.enmTeam, float>();
+			}
+			if (save.clans != null) {
+				teams.clanDict = save.clans;
+			}
+			else {
+				teams.clanDict = new Dictionary<Cell.enmTeam, AllyHolder>();
+			}
 
-		for (int j = 0; j < save.cells.Count; j++) {
+			file.Close();
 
-			EditCell c = Instantiate(prefab).GetComponent<EditCell>();
+			for (int j = 0; j < save.cells.Count; j++) {
 
-			c.cellPosition = (Vector3)save.cells[j].pos;
-			c.gameObject.transform.position = c.cellPosition;
-			c.elementCount = save.cells[j].elementCount;
-			c.maxElements = save.cells[j].maxElementCount;
-			c.cellTeam = (Cell.enmTeam)save.cells[j].team;
-			c.regenPeriod = save.cells[j].regenerationPeriod;
+				EditCell c = Instantiate(prefab).GetComponent<EditCell>();
 
-			core.AddCell(c);
+				c.cellPosition = (Vector3)save.cells[j].pos;
+				c.gameObject.transform.position = c.cellPosition;
+				c.elementCount = save.cells[j].elementCount;
+				c.maxElements = save.cells[j].maxElementCount;
+				c.cellTeam = (Cell.enmTeam)save.cells[j].team;
+				c.regenPeriod = save.cells[j].regenerationPeriod;
+				c.upgrade_manager.upgrades = save.cells[j].installedUpgrades;
+				print("Getting upgrades from saves");
+				core.AddCell(c);
+			}
 		}
 	}
 }

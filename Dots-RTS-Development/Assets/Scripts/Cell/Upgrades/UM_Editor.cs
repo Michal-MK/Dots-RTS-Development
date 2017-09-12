@@ -2,6 +2,8 @@
 
 public class UM_Editor : Upgrade_Manager {
 
+	private EditCell currentCell;
+
 	private static UpgradeSlot[] ui_upgradeSlots = new UpgradeSlot[8];
 	private SpriteRenderer[] ui_upgradeSlotsSprite = new SpriteRenderer[8];
 	private BoxCollider2D[] ui_upgradeSlotColider = new BoxCollider2D[8];
@@ -9,10 +11,8 @@ public class UM_Editor : Upgrade_Manager {
 	public SpriteRenderer upgradeSlotFields;
 	public UpgradeSlot[] upgrade_Slots = new UpgradeSlot[8];
 
-	private EditCell currentCell;
 
 	private static bool isSubscribed = false;
-
 	private void Start() {
 		GameObject uiUpgrades = UI_ReferenceHolder.LE_cellPanel.transform.parent.Find("UI_Upgrades").gameObject;
 
@@ -37,9 +37,7 @@ public class UM_Editor : Upgrade_Manager {
 	}
 
 	private void UpgradeSlot_OnSlotClicked(UpgradeSlot sender, int slot) {
-		if (sender.isOnCell) {
-			print("I belong to " + sender.transform.parent.parent.name);
-		}
+		print("I belong to " + sender.transform.parent.parent.name + " you clicked slot " + slot);
 	}
 
 	public void ToggleUpgradeInteraction(bool isOn) {

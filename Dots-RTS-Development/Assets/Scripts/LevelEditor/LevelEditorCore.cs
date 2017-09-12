@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Globalization;
+using System;
 
 public class LevelEditorCore : MonoBehaviour {
 	/// <summary>
@@ -123,8 +124,24 @@ public class LevelEditorCore : MonoBehaviour {
 	private TeamSetup teamSetup;
 	private bool _isUpdateSentByCell;
 	private Cell.enmTeam singleDifficultyInputFieldSpecificTeam;
+	private static LevelEditorCore instance;
+
+	private void Awake() {
+		if (instance == null) {
+			instance = this;
+		}
+		else if (instance != this) {
+			Destroy(gameObject);
+		}
+	}
 
 	private void Start() {
+		if (ProfileManager.getCurrentProfile == null) {
+			Control.DebugSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+			UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.Scenes.PROFILES);
+			return;
+		}
+
 		teamSetup = UI_ReferenceHolder.LE_gameSettingsPanel.GetComponent<TeamSetup>();
 
 		EditCell.OnCellSelected += EditCell_OnCellSelected;
@@ -162,6 +179,11 @@ public class LevelEditorCore : MonoBehaviour {
 				AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 			}
 		}
+		//for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {
+		//	if(c.upgrade_manager.upgrades[i] != Upgrade.Upgrades.NONE) {
+		//		c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+		//	}
+		//}
 
 	}
 	public void RemoveCell(EditCell c) {
@@ -217,6 +239,8 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#endregion
 
+	public static EditCell debug;
+
 	//Cell placing logic
 	private void Update() {
 #if (UNITY_EDITOR || UNITY_STANDALONE)
@@ -229,10 +253,15 @@ public class LevelEditorCore : MonoBehaviour {
 			c.maxElements = maxElementCount;
 			c.regenPeriod = regenarationPeriod;
 			c.elementCount = startingElementCount;
+			Array.Copy(UpgradeSlot_UI.getAssignedUpgrades, c.upgrade_manager.upgrades,UpgradeSlot_UI.instances.Length);
+			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
+				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
+				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+			}
 			c.core = this;
 			AddCell(c);
 			c.FastResize();
-
+			debug = c;
 		}
 #endif
 #if (UNITY_ANDROID || UNITY_IOS)
@@ -244,6 +273,13 @@ public class LevelEditorCore : MonoBehaviour {
 			c.maxElements = max;
 			c.regenPeriod = regen;
 			c.elementCount = start;
+			c.upgrade_manager.upgrades = UpgradeSlot.getAssignedUpgrades;
+			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
+				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
+				Sprite s;
+				Upgrade.UPGRADE_GRAPHICS.TryGetValue(c.upgrade_manager.upgrades[i], out s);
+				c.upgrade_manager.upgrade_Slots[i].selfSprite.sprite = s;
+			}
 			c.core = this;
 			c.FastResize();
 			AddCell(c);
@@ -350,6 +386,7 @@ public class LevelEditorCore : MonoBehaviour {
 		UI_ReferenceHolder.LE_cellInputFields.SetActive(true);
 	}
 
+	//Updates team button colour depending on the team for a visual feedback and better representation
 	private void UpdateTeamButtonVisual(Cell.enmTeam thisTeam) {
 		Text description = teamButton.Find("TeamDescription").GetComponent<Text>();
 		description.color = ColourTheTeamButtons.GetContrastColorBasedOnTeam(thisTeam);
@@ -357,6 +394,7 @@ public class LevelEditorCore : MonoBehaviour {
 		teamButton.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(thisTeam);
 	}
 
+	//Editor setting whethrt cell should show thier maximum size
 	public void CellOutlineToggle(Toggle toggle) {
 		_outlineOn = toggle.isOn;
 		foreach (EditCell cell in cellList) {
@@ -405,6 +443,7 @@ public class LevelEditorCore : MonoBehaviour {
 		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 	}
 
+	//After doubleclicking a team on the round table an input filed pops up where you can adjust the speed
 	public void EnableSingleDiffInputField(TeamBox t) {
 
 		aiDifficultySingleInput.gameObject.SetActive(true);
@@ -434,6 +473,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
+	//Calculation of camera size and position for zooming onto a cell
 	public void FitCellsOnScreen(List<EditCell> cells) {
 		//find borders
 		if (cells.Count == 0) {

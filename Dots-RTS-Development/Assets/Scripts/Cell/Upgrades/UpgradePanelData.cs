@@ -118,8 +118,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 			s.size = Vector2.one * 25;
 		}
 		else {
-			sender.selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
-			sender.selfSprite.size = Vector2.one * 25;
+			sender.ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[type]);
 		}
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.25f);
 		isListeningForSlot = true;

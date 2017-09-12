@@ -10,31 +10,37 @@ public class UI_Manager : MonoBehaviour {
 	public Text errorText;
 	public GameObject[] thingsToDisable = new GameObject[2];
 
+	/// <summary>
+	/// Stack of active windows, wince windows tend to "Stack up" may be switched for a list  in the future to allow for removing from the middle.
+	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
+
 
 	private void Awake() {
 		if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
-			UM_InGame.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
-			UM_InGame.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+			UM_InGame.OnUpgradeBegin += UM_InGame_OnUpgradeBegin;
+			UM_InGame.OnUpgradeQuit += UM_InGame_OnUpgradeQuit;
 		}
 	}
 	private void OnDisable() {
-		UM_InGame.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
-		UM_InGame.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+		UM_InGame.OnUpgradeBegin -= UM_InGame_OnUpgradeBegin;
+		UM_InGame.OnUpgradeQuit -= UM_InGame_OnUpgradeQuit;
 		activeWindows.Clear();
 	}
 
-
-
-	private void Upgrade_Manager_OnUpgradeBegin(Upgrade_Manager sender) {
+	/// <summary>
+	/// Called in play scene to show upgrade panel
+	/// </summary>
+	private void UM_InGame_OnUpgradeBegin(Upgrade_Manager sender) {
 		AddWindow(new Window(UI_ReferenceHolder.MULTI_upgradePanel.gameObject, Window.WindowType.ACTIVATING));
 		UI_ReferenceHolder.MULTI_upgradePanel.anchoredPosition = Vector2.zero;
-		//upgrades.GetComponent<Animator>().Play("Show");
 	}
 
-	private void Upgrade_Manager_OnUpgradeQuit(Upgrade_Manager sender) {
+	/// <summary>
+	/// Called in play scene to hide upgrade panel
+	/// </summary>
+	private void UM_InGame_OnUpgradeQuit(Upgrade_Manager sender) {
 		UI_ReferenceHolder.MULTI_upgradePanel.anchoredPosition = new Vector2(0, -360);
-		//upgrades.GetComponent<Animator>().Play("Hide");
 	}
 
 

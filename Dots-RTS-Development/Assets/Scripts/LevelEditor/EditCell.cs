@@ -87,6 +87,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
 				upgrade_manager.upgrades = UM_Editor.getUiUpgradeSlotValues;
+				print("Getting values from statics");
 			}
 		}
 	}

@@ -10,7 +10,7 @@ public class Upgrade_Manager : MonoBehaviour {
 	public static bool isUpgrading = false;
 
 	public Upgrade.Upgrades[] upgrades = new Upgrade.Upgrades[8] {
-		Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE
+		Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,
 	};
 
 	/// <summary>

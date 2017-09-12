@@ -2,92 +2,55 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UpgradeSlot : MonoBehaviour,IPointerClickHandler, IPointerDownHandler {
+/*
+ * This script is used for data storage, it is included in upgrade prefabs in editor,
+ * as well as in play scene in the upgrade panel, pretty much every "TeamBox" upgrade has a script that derives from this.
+ */
 
-	private bool _isOnCell;
-	private Sprite transparent;
-	private Sprite highlight;
-	private Image uiSlot;
-	private Image uiSlotHighlight;
+public class UpgradeSlot : MonoBehaviour {
 
-	public Upgrade.Upgrades type = Upgrade.Upgrades.NONE;
-	public SpriteRenderer selfSprite;
-	public int slot;
+	public int _slot;
+	public Upgrade.Upgrades _type = Upgrade.Upgrades.NONE;
 
 
 	public delegate void OnUpgradeSlotClick(UpgradeSlot sender, int slot);
 	public static event OnUpgradeSlotClick OnSlotClicked;
 
-	private static UpgradeSlot highlightedSlot;
-	
+	protected static UpgradeSlot highlightedSlot;
+
 	private static bool isSubscribed = false;
 
-	void Start() {
-		if (transform.parent.name != "UPGRADE_Grid") {
-			slot = int.Parse(transform.name);
+	protected virtual void Start() {
+		_slot = int.Parse(transform.name);
 
-			if (!isSubscribed) {
-				ClearUpgradeSlot.OnSlotClear += ClearUpgradeSlot_OnSlotClear;
-				UpgradePickerInstance.OnPickerClicked += UpgradePickerInstance_OnPickerClicked;
-			}
-
-			if (transform.parent.name == "UpgradeSlots") {
-				_isOnCell = true;
-			}
-			else {
-				_isOnCell = false;
-				uiSlot = transform.Find("UpgradeImg").GetComponent<Image>();
-				uiSlotHighlight = transform.Find("Slot Highlight").GetComponent<Image>();
-
-				transparent = uiSlot.sprite;
-				highlight = uiSlotHighlight.sprite;
-				uiSlotHighlight.sprite = transparent;
-			}
+		if (!isSubscribed) {
+			ClearUpgradeSlot.OnSlotClear += ClearUpgradeSlot_OnSlotClear;
 		}
 	}
 
-	private void OnDestroy() {
+	public virtual void ChangeUpgradeImage(Sprite newSprite) {
+
+	}
+
+	protected virtual void OnDestroy() {
 		ClearUpgradeSlot.OnSlotClear -= ClearUpgradeSlot_OnSlotClear;
-		UpgradePickerInstance.OnPickerClicked -= UpgradePickerInstance_OnPickerClicked;
 	}
 
-	private void UpgradePickerInstance_OnPickerClicked(UpgradeSlot clicked, UpgradePickerInstance sender) {
-		if(clicked == this) {
-			uiSlot.sprite = sender.upgradeImg.sprite;
-			highlightedSlot = null;
-			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
-			uiSlotHighlight.sprite = transparent;
-			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
-		}
+	protected virtual void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
+		print("Base Class set statics to NONE on slot " + getSlotID);
 	}
 
-	private void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
-		if(clicked == this) {
-			uiSlot.sprite = transparent;
-			type = Upgrade.Upgrades.NONE;
-		}
-	}
-
-	public void OnPointerClick(PointerEventData eventData) {
-		if (OnSlotClicked != null) {
-			OnSlotClicked(this, slot);
-		}
-		highlightedSlot = this;
-		print("Clicked slot " + slot + " my parent is " + transform.parent.name);
-		uiSlotHighlight.sprite = highlight;
-		uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
-		UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(true);
-	}
-	public void OnPointerDown(PointerEventData eventData) {
-		//Has to be implemented for some reason.
-	}
-
-
-	public bool isOnCell {
-		get { return _isOnCell; }
-	}
 
 	public static UpgradeSlot getHighlightedSlot {
 		get { return highlightedSlot; }
+	}
+
+	public int getSlotID {
+		get { return _slot; }
+	}
+
+	public Upgrade.Upgrades type {
+		get { return _type; }
+		set { _type = value; }
 	}
 }

@@ -20,7 +20,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region EditorRefs
-	public static GameObject LE_saveLoadTryLevel;
+	//public static GameObject LE_saveLoadTryLevel;
 	public static GameObject LE_saveInfoPanel;
 	public static GameObject LE_gameSettingsPanel;
 	public static GameObject LE_teamPickerPanel;
@@ -108,7 +108,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
 				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
-				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
+				//LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
 				LE_cellPanel = c.Find("CellPanel/Handle").GetComponent<MovePanel>();
 				LE_teamPickerPanel = c.Find("CellPanel/TeamSelectPanel").gameObject;
 				LE_cellInputFields = c.Find("CellPanel/CellEdit").gameObject;

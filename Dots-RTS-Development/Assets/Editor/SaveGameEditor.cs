@@ -9,8 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class SaveGameEditor : EditorWindow {
 
-	int difficulty = 1;
-	string levelName = "";
+	//int difficulty = 1;
+	//string levelName = "";
 	static GameObject canvas;
 
 	[MenuItem("Campaign/SaveLevel")]

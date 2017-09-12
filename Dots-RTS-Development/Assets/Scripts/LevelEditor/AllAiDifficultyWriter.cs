@@ -7,9 +7,8 @@ public class AllAiDifficultyWriter : MonoBehaviour {
 	public static Text myText;
 
 	public static void RedoText(Dictionary<Cell.enmTeam,float> diffDict) {
-		//print("asfjkhgvaidful;hvaiu;HVAUILEHVUILAEHUIVAERHUIVAERHIUVRHAUILVHAEILRUBHVAILUEHBUIAHuihasilubhauilfbdhiluabdfhiluab");
 		if (myText == null) {
-			myText = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/AiDiffWriter").GetComponent<Text>();
+			myText = GameObject.Find("Canvas").transform.Find("GameSettingsPanel/RIGHT_Side/AI_DebugInfo").GetComponent<Text>();
 		}
 
 		myText.text = "";

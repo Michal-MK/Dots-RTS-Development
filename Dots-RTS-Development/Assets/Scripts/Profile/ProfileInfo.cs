@@ -17,7 +17,12 @@ public class ProfileInfo : MonoBehaviour {
 	#endregion
 
 	public void LoadProfile() {
-		SceneManager.LoadScene(Scenes.MENU);
+		if (Control.DebugSceneIndex != 0 && Control.DebugSceneIndex != 1) {
+			SceneManager.LoadScene(Control.DebugSceneIndex);
+		}
+		else {
+			SceneManager.LoadScene(Scenes.MENU);
+		}
 	}
 
 	public void InitializeProfile(Profile p, string profileName) {
