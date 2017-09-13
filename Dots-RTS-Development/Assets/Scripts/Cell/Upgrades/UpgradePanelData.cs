@@ -77,11 +77,12 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	public void UpdateUpgradeOverview() {
 		if (count == 0) {
 			GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+			transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = "";
 		}
 		else {
 			GetComponent<Image>().color = new Color(1, 1, 1, 1);
+			transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
 		}
-		transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
 		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 	}
 

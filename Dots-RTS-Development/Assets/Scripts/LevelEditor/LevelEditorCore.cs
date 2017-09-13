@@ -225,7 +225,6 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public void ModeButtonWrapper(int mode) {
 		if (UI_ReferenceHolder.LE_cellPanel.transform.parent.Find("Toggles").GetChild(mode).GetComponent<Toggle>().isOn) {
-			print("Wraping moode " + mode);
 			ModeButton((Mode)mode);
 		}
 	}

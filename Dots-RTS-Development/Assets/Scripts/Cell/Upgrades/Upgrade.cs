@@ -114,9 +114,7 @@ public class Upgrade : MonoBehaviour {
 	public static async Task<Sprite> GetSprite(Upgrades type) {
 		try {
 			using (FileStream fs = new FileStream(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png", FileMode.Open, FileAccess.Read, FileShare.Read, 4069, true)) {
-				//print("Got Image for " + type + " on path " + Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png");
 				byte[] result = new byte[fs.Length];
-				//print(result.Length);
 				await fs.ReadAsync(result, 0, (int)fs.Length);
 				Texture2D tex = new Texture2D(1024, 1024);
 				tex.LoadImage(result);
@@ -136,6 +134,7 @@ public class Upgrade : MonoBehaviour {
 
 		for (int i = 0; i < values.Length; i++) {
 			if(values[i] != -1) {
+				print(values[i]);
 				t[i] = GetSprite((Upgrades)values[i]);
 			}
 		}

@@ -90,7 +90,7 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 
 		isMoving = true;
 		for (float time = 0; time < 1f; time += Time.unscaledDeltaTime * speedMultiplyer) {
-			print(time + " " + speedMultiplyer);
+			//print(time + " " + speedMultiplyer);
 			CSTransform.anchorMin = new Vector2(0, Mathf.SmoothStep(initialTopAnchor - anchorDiffPercent, topAnchor - anchorDiffPercent, time));
 			CSTransform.anchorMax = new Vector2(1, Mathf.SmoothStep(initialTopAnchor, topAnchor, time));
 			yield return null;
