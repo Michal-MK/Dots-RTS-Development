@@ -12,6 +12,9 @@ public class UpgradeSlot : MonoBehaviour {
 	public int _slot;
 	public Upgrade.Upgrades _type = Upgrade.Upgrades.NONE;
 
+	public static Upgrade.Upgrades[] instances = new Upgrade.Upgrades[8] {
+		Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE
+	};
 
 	public delegate void OnUpgradeSlotClick(UpgradeSlot sender, int slot);
 	public static event OnUpgradeSlotClick OnSlotClicked;
@@ -40,7 +43,6 @@ public class UpgradeSlot : MonoBehaviour {
 		print("Base Class set statics to NONE on slot " + getSlotID);
 	}
 
-
 	public static UpgradeSlot getHighlightedSlot {
 		get { return highlightedSlot; }
 	}
@@ -52,5 +54,12 @@ public class UpgradeSlot : MonoBehaviour {
 	public Upgrade.Upgrades type {
 		get { return _type; }
 		set { _type = value; }
+	}
+
+	public static Upgrade.Upgrades[] getAssignedUpgrades {
+		get {
+			//print("Getting INstances");
+			return instances;
+		}
 	}
 }

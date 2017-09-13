@@ -26,21 +26,6 @@ public class ClearUpgradeSlot : MonoBehaviour, IPointerDownHandler, IPointerClic
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
-		if (parentSlot != null) {
-			if (parentSlot.type == Upgrade.Upgrades.NONE) {
-				GetComponent<Image>().color = new Color(1, 1, 1, 0f);
-			}
-			else {
-				GetComponent<Image>().color = new Color(1, 1, 1, 0.4f);
-			}
-		}
-		else {
-			if (transform.parent.GetComponent<UpgradeSlot>().type == Upgrade.Upgrades.NONE) {
-				GetComponent<Image>().color = new Color(1, 1, 1, 0f);
-			}
-			else {
-				GetComponent<Image>().color = new Color(1, 1, 1, 0.4f);
-			}
-		}
+		GetComponent<Image>().color = new Color(1, 1, 1, 0.4f);
 	}
 }

@@ -25,11 +25,15 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	private bool lookForLongPress;
 	#endregion
 
+	private static bool isSubscribed = false;
 	public override void Awake() {
 		base.Awake();
 		pointerDownAtTime = Mathf.Infinity;
-		LevelEditorCore.modeChange += EditorModeUpdate;
-		LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
+		if (!isSubscribed) {
+			LevelEditorCore.modeChange += EditorModeUpdate;
+			LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
+			isSubscribed = true;
+		}
 	}
 
 	private void OnDisable() {
@@ -63,7 +67,6 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 
 	private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
-		//print(isCellSelected);
 		if (isCellSelected && core.isUpdateSentByCell == false) {
 			if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
 
@@ -86,9 +89,16 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 				regenPeriod = core.regenarationPeriod;
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
-				upgrade_manager.upgrades = UM_Editor.getUiUpgradeSlotValues;
-				print("Getting values from statics");
+				Array.Copy(UpgradeSlot.instances, uManager.upgrades, UpgradeSlot.instances.Length);
+				UpdateUpgradeVisual();
 			}
+		}
+	}
+
+	private void UpdateUpgradeVisual() {
+		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
+			//upgrade_manager.upgrade_Slots[i].type = upgrade_manager.upgrades[i];
+			upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
 		}
 	}
 

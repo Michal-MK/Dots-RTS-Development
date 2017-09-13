@@ -3,15 +3,15 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System;
 
-public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler {
 
 	public SpriteRenderer selfSprite;
 	public SpriteRenderer clearUpgrade;
 
 	UM_Editor uManager;
 
-	public delegate void CellUpgradeClick(UpgradeSlot_Cell sender);
-	public static event CellUpgradeClick OnCellUpgradeSlotClicked;
+	//public delegate void CellUpgradeClick(UpgradeSlot_Cell sender);
+	//public static event CellUpgradeClick OnCellUpgradeSlotClicked;
 
 
 	private static bool isSubscribed = false;
@@ -64,9 +64,37 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		if(OnCellUpgradeSlotClicked != null) {
-			OnCellUpgradeSlotClicked(this);
-			print("Clicked on any cell slot");
+		if(type != Upgrade.Upgrades.NONE) {
+			uManager.upgrades[getSlotID] = type = Upgrade.Upgrades.NONE;
+			clearUpgrade.color = new Color(1, 1, 1, 0);
+			selfSprite.sprite = null;
 		}
+		else {
+			highlightedSlot = this;
+			UpgradePickerInstance.OnPickerClicked += InstallUpgradeDirectly;
+			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(true);
+		}
+
+		//if (OnCellUpgradeSlotClicked != null) {
+		//	OnCellUpgradeSlotClicked(this);
+		//	print("Clicked on any cell slot");
+		//}
+	}
+
+	private void InstallUpgradeDirectly(UpgradeSlot selected, UpgradePickerInstance sender) {
+
+		UpgradePickerInstance.OnPickerClicked -= InstallUpgradeDirectly;
+		if (selected == this) {
+			print("Selected " + selected.getSlotID + " This " + getSlotID);
+			uManager.upgrades[getSlotID] = type = sender.upgrade;
+			selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+			selfSprite.size = Vector2.one * 25f;
+			print("B");
+		}
+		UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
+	}
+
+	public void OnPointerDown(PointerEventData eventData) {
+		//Has to be implemented
 	}
 }

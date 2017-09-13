@@ -136,11 +136,11 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 
 	private void Start() {
-		if (ProfileManager.getCurrentProfile == null) {
-			Control.DebugSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-			UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.Scenes.PROFILES);
-			return;
-		}
+		//if (ProfileManager.getCurrentProfile == null) {
+		//	Control.DebugSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+		//	UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.Scenes.PROFILES);
+		//	return;
+		//}
 
 		teamSetup = UI_ReferenceHolder.LE_gameSettingsPanel.GetComponent<TeamSetup>();
 
@@ -253,7 +253,7 @@ public class LevelEditorCore : MonoBehaviour {
 			c.maxElements = maxElementCount;
 			c.regenPeriod = regenarationPeriod;
 			c.elementCount = startingElementCount;
-			Array.Copy(UpgradeSlot_UI.getAssignedUpgrades, c.upgrade_manager.upgrades,UpgradeSlot_UI.instances.Length);
+			Array.Copy(UpgradeSlot.getAssignedUpgrades, c.upgrade_manager.upgrades,UpgradeSlot.instances.Length);
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
 				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
 				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
@@ -344,6 +344,11 @@ public class LevelEditorCore : MonoBehaviour {
 				UI_ReferenceHolder.LE_cellInputFields.SetActive(false);
 				UI_ReferenceHolder.LE_teamPickerPanel.SetActive(true);
 				return;
+			}
+			case PCPanelAttribute.Upgrades: {
+				panelValueParsed?.Invoke(PCPanelAttribute.Upgrades);
+				return;
+
 			}
 
 		}

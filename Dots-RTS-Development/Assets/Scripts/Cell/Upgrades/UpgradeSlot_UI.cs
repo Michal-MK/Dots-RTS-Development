@@ -10,10 +10,6 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 	private Sprite transparent;
 	private Sprite highlight;
 
-	public static Upgrade.Upgrades[] instances = new Upgrade.Upgrades[8] {
-		Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE
-	};
-
 	private static bool isSubscribed = false;
 
 	public delegate void UiUpgradeClick(UpgradeSlot_UI slot);
@@ -52,7 +48,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 	public void OnPointerClick(PointerEventData eventData) {
 		if (OnUIUpgradeSlotClicked != null) {
 			OnUIUpgradeSlotClicked(this);
-			print("Clicked on UI Slot " + getSlotID);
+			//print("Clicked on UI Slot " + getSlotID);
 		}
 
 		if (highlightedSlot != null) {
@@ -64,7 +60,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 		}
 		else { 
 			highlightedSlot = this;
-			print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
+			//print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
 			uiSlotHighlight.sprite = highlight;
 			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
 			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(true);
@@ -80,14 +76,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 			uiSlotHighlight.sprite = transparent;
 			instances[getSlotID] = sender.upgrade;
 			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
-			print("Clicked upgrade picker " + sender.upgrade);
-		}
-	}
-
-	public static Upgrade.Upgrades[] getAssignedUpgrades {
-		get {
-			print("Getting INstances");
-			return instances;
+			//print("Clicked upgrade picker " + sender.upgrade);
 		}
 	}
 }
