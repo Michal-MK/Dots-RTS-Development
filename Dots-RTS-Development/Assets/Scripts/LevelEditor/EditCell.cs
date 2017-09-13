@@ -10,7 +10,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	public LevelEditorCore core;
 
-	#region Prefabreferences
+	#region PrefabReferences
 	public SpriteRenderer maxCellRadius;
 	public UM_Editor upgrade_manager;
 	#endregion
@@ -25,15 +25,11 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	private bool lookForLongPress;
 	#endregion
 
-	private static bool isSubscribed = false;
 	public override void Awake() {
 		base.Awake();
 		pointerDownAtTime = Mathf.Infinity;
-		if (!isSubscribed) {
-			LevelEditorCore.modeChange += EditorModeUpdate;
-			LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
-			isSubscribed = true;
-		}
+		LevelEditorCore.modeChange += EditorModeUpdate;
+		LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
 	}
 
 	private void OnDisable() {
@@ -76,7 +72,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
 				cellTeam = core.team;
-				if(cellTeam != enmTeam.ALLIED && cellTeam != enmTeam.NEUTRAL) {
+				if (cellTeam != enmTeam.ALLIED && cellTeam != enmTeam.NEUTRAL) {
 					core.AddCell(this);
 				}
 			}
@@ -89,7 +85,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 				regenPeriod = core.regenarationPeriod;
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
-				Array.Copy(UpgradeSlot.instances, uManager.upgrades, UpgradeSlot.instances.Length);
+				Array.Copy(UpgradeSlot.instances, upgrade_manager.upgrades, UpgradeSlot.instances.Length);
 				UpdateUpgradeVisual();
 			}
 		}
@@ -97,13 +93,16 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	private void UpdateUpgradeVisual() {
 		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
-			//upgrade_manager.upgrade_Slots[i].type = upgrade_manager.upgrades[i];
+			upgrade_manager.upgrade_Slots[i].type = upgrade_manager.upgrades[i];
 			upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
 		}
 	}
 
 	private void EditorModeUpdate(LevelEditorCore.Mode mode) {
-		isCellSelected = false;
+		if (isCellSelected == true) {
+			//print(gameObject.name + " is deselecting");
+			isCellSelected = false;
+		}
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
@@ -119,8 +118,6 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	public void ToggleCellOutline(bool on) {
 		if (on) {
-			maxCellRadius.enabled = true;
-			print((2 * col.radius * (3 - transform.localScale.x)));
 			maxCellRadius.size = new Vector2((2 * col.radius * (3 - transform.localScale.x)), (2 * col.radius * (3 - transform.localScale.x)));
 			//Debug.LogWarning("I smell hardcoded BS!");
 		}

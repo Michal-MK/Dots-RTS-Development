@@ -16713,7 +16713,7 @@ GameObject:
   - component: {fileID: 1787684724}
   - component: {fileID: 1787684723}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Apply Upgrades
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

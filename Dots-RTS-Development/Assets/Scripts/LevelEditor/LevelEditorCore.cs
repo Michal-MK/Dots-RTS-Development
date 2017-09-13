@@ -116,7 +116,7 @@ public class LevelEditorCore : MonoBehaviour {
 		/// Upgrades will be parsed from UI Upgrade slots
 		/// </summary>
 		Upgrades
-		
+
 	};
 	#endregion
 
@@ -203,6 +203,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#region Event subscribers
 	private void EditCell_OnCellSelected(EditCell sender) {
+		//print("ONCellSelected " + sender.gameObject.name);
 		if (!selectedCellList.Contains(sender)) {
 			selectedCellList.Add(sender);
 		}
@@ -212,6 +213,7 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 
 	private void EditCell_OnCellDeselected(EditCell sender) {
+		//print("OnCellDeselected " + sender.gameObject.name);
 		selectedCellList.Remove(sender);
 		if (areCellsFitToScreen) {
 			FitCellsOnScreen(selectedCellList);
@@ -222,7 +224,10 @@ public class LevelEditorCore : MonoBehaviour {
 	#region Wrappers
 
 	public void ModeButtonWrapper(int mode) {
-		ModeButton((Mode)mode);
+		if (UI_ReferenceHolder.LE_cellPanel.transform.parent.Find("Toggles").GetChild(mode).GetComponent<Toggle>().isOn) {
+			print("Wraping moode " + mode);
+			ModeButton((Mode)mode);
+		}
 	}
 
 	public void PlaceCellPanelParseFromFieldWrapper(int inputField) {
@@ -253,7 +258,7 @@ public class LevelEditorCore : MonoBehaviour {
 			c.maxElements = maxElementCount;
 			c.regenPeriod = regenarationPeriod;
 			c.elementCount = startingElementCount;
-			Array.Copy(UpgradeSlot.getAssignedUpgrades, c.upgrade_manager.upgrades,UpgradeSlot.instances.Length);
+			Array.Copy(UpgradeSlot.getAssignedUpgrades, c.upgrade_manager.upgrades, UpgradeSlot.instances.Length);
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
 				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
 				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
@@ -304,6 +309,7 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			case Mode.DeleteCells: {
 				Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
+
 				return;
 			}
 			default: {
@@ -560,7 +566,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public Mode editorMode {
 		get { return _editorMode; }
-		set {
+		private set {
 			ModeButton(value);
 		}
 	}
