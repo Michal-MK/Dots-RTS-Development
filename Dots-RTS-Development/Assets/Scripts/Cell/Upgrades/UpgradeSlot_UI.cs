@@ -21,6 +21,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 		if (!isSubscribed) {
 			UpgradePickerInstance.OnPickerClicked += UpgradePickerInstance_OnPickerClicked;
 			ClearUpgradeSlot.OnSlotClear += ClearUpgradeSlot_OnSlotClear;
+			UI_Manager.OnWindowClose += WindowClosed;
 		}
 		uiSlot = transform.Find("UpgradeImg").GetComponent<Image>();
 		uiSlotHighlight = transform.Find("Slot Highlight").GetComponent<Image>();
@@ -29,6 +30,14 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 		highlight = uiSlotHighlight.sprite;
 		uiSlotHighlight.sprite = transparent;
 		instances[_slot] = _type;
+	}
+
+	private void WindowClosed(Window changed) {
+		if(changed.window.name == "UPGRADE_Selection_To_UI") {
+			highlightedSlot = null;
+			uiSlotHighlight.sprite = transparent;
+			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
+		}
 	}
 
 	protected override void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
@@ -52,10 +61,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 		}
 
 		if (highlightedSlot != null) {
-			highlightedSlot = null;
-			uiSlotHighlight.sprite = transparent;
-			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
-			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
+			UI_Manager.CloseMostRecent();
 			return;
 		}
 		else { 
@@ -63,7 +69,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 			//print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
 			uiSlotHighlight.sprite = highlight;
 			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
-			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(true);
+			UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
 		}
 	}
 

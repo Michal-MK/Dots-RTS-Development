@@ -15,6 +15,8 @@ public class UI_Manager : MonoBehaviour {
 	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
 
+	public delegate void WindowChangedHandler(Window changed);
+	public static event WindowChangedHandler OnWindowClose;
 
 	private void Awake() {
 		if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
@@ -106,6 +108,10 @@ public class UI_Manager : MonoBehaviour {
 				t = Window.WindowType.ACTIVATING;
 				break;
 			}
+			case "UPGRADE_Selection_To_UI": {
+				t = Window.WindowType.ACTIVATING;
+				break;
+			}
 			default: {
 				t = Window.WindowType.MOVING;
 				break;
@@ -115,7 +121,7 @@ public class UI_Manager : MonoBehaviour {
 		AddWindow(w);
 	}
 
-	public static void CloseMostRecent(int count = 1) {
+	public static void CloseMostRecent() {
 		if (activeWindows.Count > 0) {
 			Window win = activeWindows.Pop();
 			if (win != null) {
@@ -128,12 +134,40 @@ public class UI_Manager : MonoBehaviour {
 						Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
 					}
 				}
+				OnWindowClose(win);
 			}
 			else {
 				Control.script.Pause();
 			}
 		}
 		else {
+			Control.script.Pause();
+		}
+	}
+
+	public static void CloseMostRecent(int count) {
+		if (activeWindows.Count >= count) {
+			for (int i = 0; i < count; i++) {
+				Window win = activeWindows.Pop();
+				if (win != null) {
+					if (win.type == Window.WindowType.ACTIVATING) {
+						win.window.SetActive(false);
+					}
+					else {
+						win.animator.SetTrigger("Hide");
+						if (win.isFlagedForSwithOff) {
+							Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
+						}
+					}
+					OnWindowClose(win);
+				}
+				else {
+					Control.script.Pause();
+				}
+			}
+		}
+		else {
+			print("Invalid count " + count + " is bigger than all active windows " + activeWindows.Count);
 			Control.script.Pause();
 		}
 	}

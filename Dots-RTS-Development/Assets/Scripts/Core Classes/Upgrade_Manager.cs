@@ -18,8 +18,14 @@ public class Upgrade_Manager : MonoBehaviour {
 	/// </summary>
 	public Upgrade.Upgrades[] PreinstallUpgrades {
 		get { return upgrades; }
-		set { upgrades = value; }
+		set { upgrades = value;
+			UpgradePreinstallSprites();
+		}
 
+	}
+
+	protected virtual void UpgradePreinstallSprites() {
+		
 	}
 
 	/// <summary>

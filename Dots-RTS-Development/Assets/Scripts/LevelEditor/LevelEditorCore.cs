@@ -166,25 +166,30 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 
 	#region Functions to add or remove a cell from the static list
-	public void AddCell(EditCell c) {
+	public void AddCell(EditCell c, bool loadedFromFile = false) {
 
 		cellList.Add(c);
 		if (getOutilneState) {
 			c.ToggleCellOutline(true);
 		}
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
-			if (!teamList.Contains(c.cellTeam)) {
-				teamList.Add(c.cellTeam);
-				aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
-				AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+			if (!loadedFromFile) {
+				if (!teamList.Contains(c.cellTeam)) {
+					teamList.Add(c.cellTeam);
+					aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
+					AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+				}
 			}
 		}
-		//for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {
-		//	if(c.upgrade_manager.upgrades[i] != Upgrade.Upgrades.NONE) {
-		//		c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
-		//	}
-		//}
-
+		if (loadedFromFile) {
+			for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {
+				if (c.upgrade_manager.upgrades[i] != Upgrade.Upgrades.NONE) {
+					c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
+					c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+				}
+			}
+			c.core = this;
+		}
 	}
 	public void RemoveCell(EditCell c) {
 		cellList.Remove(c);

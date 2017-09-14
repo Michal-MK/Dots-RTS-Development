@@ -52,7 +52,7 @@ public class LoadFromFile : MonoBehaviour {
 				c.maxElements = customSave.cells[j].maxElementCount;
 				c.cellTeam = (Cell.enmTeam)customSave.cells[j].team;
 				c.regenPeriod = customSave.cells[j].regenerationPeriod;
-				//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+				c.uManager.PreinstallUpgrades = customSave.cells[j].installedUpgrades;
 
 				c.gameObject.name = "Cell " + j + " " + c.cellTeam;
 

@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 using TMPro;
 
-public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler,IPointerClickHandler {
+public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler {
 
 	public GameObject panel;
 	public RectTransform CSTransform;
@@ -41,7 +41,7 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 		if (cursorPerCent < 0.125f) {
 			CSTransform.anchorMin = new Vector2(0, 0);
 			CSTransform.anchorMax = new Vector2(1, anchorDiffPercent);
-			
+
 
 		}
 		else if (cursorPerCent > 0.875f) {
@@ -54,20 +54,20 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (!isShown) {
-			StartCoroutine(MoveToAnchor(anchorDiffPercent,2));
+			StartCoroutine(MoveToAnchor(anchorDiffPercent, 2));
 		}
 		else if (eventData.clickCount == 2) {
-			StartCoroutine(MoveToAnchor(0,2));
+			StartCoroutine(MoveToAnchor(0, 2));
 
 		}
 	}
 
 	public void ToggleControlsPanel() {
 		if (Control.isPaused) {
-			StartCoroutine(MoveToAnchor(0,2));
+			StartCoroutine(MoveToAnchor(0, 2));
 		}
 		else {
-			StartCoroutine(MoveToAnchor(anchorDiffPercent,2));
+			StartCoroutine(MoveToAnchor(anchorDiffPercent, 2));
 		}
 	}
 

@@ -25,9 +25,16 @@ public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
 		}
 	}
 
+	protected override void UpgradePreinstallSprites() {
+		for (int i = 0; i < slotsGO.Length; i++) {
+			if (upgrades[i] != Upgrade.Upgrades.NONE) {
+				slotsGO[i].GetComponent<SpriteRenderer>().sprite = Upgrade.UPGRADE_GRAPHICS[upgrades[i]];
+				slotsGO[i].GetComponent<SpriteRenderer>().size = Vector2.one * 25f;
+			}
+		}
+	}
+
 	public void OnPointerClick(PointerEventData eventData) {
-		//print("Click " + gameObject.name);
-		//Detects double click on cell
 		if (eventData.clickCount == 2) {
 			if (OnUpgradeBegin != null) {
 				if (currentCell != null) {

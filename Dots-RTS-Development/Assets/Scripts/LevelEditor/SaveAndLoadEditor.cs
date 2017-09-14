@@ -160,8 +160,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				c.cellTeam = (Cell.enmTeam)save.cells[j].team;
 				c.regenPeriod = save.cells[j].regenerationPeriod;
 				c.upgrade_manager.upgrades = save.cells[j].installedUpgrades;
-				print("Getting upgrades from saves");
-				core.AddCell(c);
+				core.AddCell(c,true);
 			}
 		}
 	}

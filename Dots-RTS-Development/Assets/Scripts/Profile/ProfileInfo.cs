@@ -22,7 +22,6 @@ public class ProfileInfo : MonoBehaviour {
 			foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
 				if (u != Upgrade.Upgrades.NONE) {
 					ProfileManager.getCurrentProfile.acquiredUpgrades[u] = 8;
-					print("Upgrade " + u + " now has " + selected.acquiredUpgrades[u] + " assigned");
 				}
 			}
 			ProfileManager.SerializeChanges();

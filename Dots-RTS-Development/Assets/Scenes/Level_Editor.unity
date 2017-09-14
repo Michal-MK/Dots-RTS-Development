@@ -385,11 +385,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -2736,7 +2736,7 @@ MonoBehaviour:
   ErrorMessages: {fileID: 1231634547}
   core: {fileID: 982779531}
   teams: {fileID: 1338730052}
-  prefab: {fileID: 0}
+  prefab: {fileID: 1238293250153330, guid: 2e2061a1e5670df43b2b9c5db7c0884c, type: 2}
 --- !u!1 &337644529
 GameObject:
   m_ObjectHideFlags: 0
@@ -12671,11 +12671,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -12989,7 +12989,7 @@ MonoBehaviour:
   campaignViewContent0: {fileID: 0}
   campaignViewContent1: {fileID: 0}
   error: {fileID: 707107598}
-  saveAndLoadEditor: {fileID: 0}
+  saveAndLoadEditor: {fileID: 337587428}
   onPage: 0
   totalPages: 1
 --- !u!1 &1361287105
@@ -17748,11 +17748,11 @@ MonoBehaviour:
     lineCount: 3
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:

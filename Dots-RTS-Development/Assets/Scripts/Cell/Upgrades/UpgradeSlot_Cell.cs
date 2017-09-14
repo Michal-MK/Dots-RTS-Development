@@ -72,13 +72,8 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 		else {
 			highlightedSlot = this;
 			UpgradePickerInstance.OnPickerClicked += InstallUpgradeDirectly;
-			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(true);
+			UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
 		}
-
-		//if (OnCellUpgradeSlotClicked != null) {
-		//	OnCellUpgradeSlotClicked(this);
-		//	print("Clicked on any cell slot");
-		//}
 	}
 
 	private void InstallUpgradeDirectly(UpgradeSlot selected, UpgradePickerInstance sender) {
@@ -89,9 +84,9 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 			uManager.upgrades[getSlotID] = type = sender.upgrade;
 			selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 			selfSprite.size = Vector2.one * 25f;
-			print("B");
 		}
-		UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
+		UI_Manager.CloseMostRecent();
+		highlightedSlot = null;
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
