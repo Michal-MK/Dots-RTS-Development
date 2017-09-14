@@ -20,14 +20,16 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region EditorRefs
-	public static GameObject LE_saveLoadTryLevel;
-	public static GameObject LE_placedCellInfoPanel;
-	public static GameObject LE_editorMouseModes;
+	//public static GameObject LE_saveLoadTryLevel;
 	public static GameObject LE_saveInfoPanel;
 	public static GameObject LE_gameSettingsPanel;
 	public static GameObject LE_teamPickerPanel;
 	public static GameObject LE_loadForEditPanel;
-	public static GameObject LE_editorSettingsPanel;
+	//public static GameObject LE_editorSettingsPanel;
+	public static GameObject LE_cellInputFields;
+	public static MovePanel LE_cellPanel;
+	public static Animator LE_editorSliderPanel;
+	public static GameObject LE_upgradePickerPanel;
 	//public static GameObject menuPanel;
 
 	#endregion
@@ -86,7 +88,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 	#endregion
 
-	void Start() {
+	void OnEnable() {
 		SceneManager_activeSceneChanged(SceneManager.GetActiveScene(), SceneManager.GetActiveScene());
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 	}
@@ -102,15 +104,17 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case Scenes.EDITOR: { // Editor
 				Transform c = GameObject.Find("Canvas").transform;
-				LE_editorMouseModes = c.Find("ModeButtons").gameObject;
-				LE_editorSettingsPanel = c.Find("ViewMenuPanel").gameObject;
+				//LE_editorSettingsPanel = c.Find("EditorSettingsPanel").gameObject;
 				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
 				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
-				LE_placedCellInfoPanel = c.Find("PlaceCellPanel").gameObject;
 				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
-				LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
-				LE_teamPickerPanel = c.Find("TeamSelectPanel").gameObject;
+				//LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
+				LE_cellPanel = c.Find("CellPanel/Handle").GetComponent<MovePanel>();
+				LE_teamPickerPanel = c.Find("CellPanel/TeamSelectPanel").gameObject;
+				LE_cellInputFields = c.Find("CellPanel/CellEdit").gameObject;
 				MULTI_menuPanel = c.Find("MenuPanel").gameObject;
+				LE_editorSliderPanel = c.Find("Another Panel").GetComponent<Animator>();
+				LE_upgradePickerPanel = c.Find("UPGRADE_Selection_To_UI").gameObject;
 				return;
 			}
 			case Scenes.SELECT: { // LevelSelect

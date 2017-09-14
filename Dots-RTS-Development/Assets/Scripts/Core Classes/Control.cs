@@ -5,19 +5,20 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class Control : MonoBehaviour {
 
 	#region Delegates
 	public delegate void TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current);
-	public delegate void EnteredCellEditMode(EditCell sender);
+	public delegate void CellSelected(EditCell sender);
 	public delegate void PanelValueChanged(LevelEditorCore.PCPanelAttribute attribute);
 	public delegate void EditModeChanged(LevelEditorCore.Mode mode);
 	public delegate void NewSelectionForDownload(SaveFileInfo sender);
 
-	public delegate void EnteredUpgradeMode(Upgrade_Manager sender);
-	public delegate void QuitUpgradeMode(Upgrade_Manager sender);
-	public delegate void InstallUpgradeHandler(Upgrade.Upgrades type, Upgrade_Manager cell);
+	public delegate void EnteredUpgradeMode(UM_InGame sender);
+	public delegate void QuitUpgradeMode(UM_InGame sender);
+	public delegate void InstallUpgradeHandler(Upgrade.Upgrades type, UM_InGame cell);
 
 	public delegate void OnMouseButtonPressed(Vector2 position);
 
@@ -30,9 +31,9 @@ public class Control : MonoBehaviour {
 	public static bool canPause = true;
 	public static event OnMouseButtonPressed RMBPressed;
 
-	private float time;
+	//private float time;
 
-	private bool isInGame = false;
+	//private bool isInGame = false;
 
 	public static ProfileManager pM;
 
@@ -165,12 +166,13 @@ public class Control : MonoBehaviour {
 		if (Input.GetMouseButtonDown(1)) {
 			if (RMBPressed != null) {
 				RMBPressed(Input.mousePosition);
+				print("Pressed RMB");
 			}
 		}
 	}
 
 	private void LateUpdate() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (Input.GetKeyDown(KeyCode.Escape) && IsInPausebleScene()) {
 			if (isPaused) {
 				UnPause();
 			}
@@ -180,21 +182,38 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	public static void Pause() {
+	public void Pause() {
 		if (UI_Manager.getWindowCount == 0) {
 			isPaused = true;
 			Time.timeScale = 0;
-			UI_ReferenceHolder.MULTI_menuPanel.SetActive(true);
+			UI_Manager.AddWindow(new Window(UI_ReferenceHolder.MULTI_menuPanel, Window.WindowType.MOVING));
+			if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+
+				foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
+					img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+				}
+				foreach (TextMeshProUGUI text in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<TextMeshProUGUI>()) {
+					text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+				}
+				UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>().SetTrigger("Show");
+
+				AnimatorStateInfo s = UI_ReferenceHolder.LE_editorSliderPanel.GetCurrentAnimatorStateInfo(0);
+
+				if (!s.IsName("Hide") && !s.IsName("Def")) {
+					UI_ReferenceHolder.LE_editorSliderPanel.SetTrigger("Hide");
+				}
+				UI_ReferenceHolder.LE_cellPanel.ToggleControlsPanel();
+			}
 		}
 		else {
 			UI_Manager.CloseMostRecent();
 		}
 	}
 
-	public static void UnPause() {
+	public void UnPause() {
 		isPaused = false;
 		Time.timeScale = 1;
-		UI_ReferenceHolder.MULTI_menuPanel.SetActive(false);
+		UI_Manager.CloseMostRecent();
 	}
 
 	IEnumerator TakePicture() {
@@ -215,5 +234,14 @@ public class Control : MonoBehaviour {
 		}
 	}
 
+	private bool IsInPausebleScene() {
+		string s = SceneManager.GetActiveScene().name;
+		if (s == Scenes.EDITOR || s == Scenes.PLAYER) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
 

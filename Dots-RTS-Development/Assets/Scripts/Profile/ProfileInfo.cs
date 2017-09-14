@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +18,20 @@ public class ProfileInfo : MonoBehaviour {
 	#endregion
 
 	public void LoadProfile() {
-		SceneManager.LoadScene(Scenes.MENU);
+		if (Input.GetKey(KeyCode.A)){;
+			foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
+				if (u != Upgrade.Upgrades.NONE) {
+					ProfileManager.getCurrentProfile.acquiredUpgrades[u] = 8;
+				}
+			}
+			ProfileManager.SerializeChanges();
+		}
+		if (Control.DebugSceneIndex != 0 && Control.DebugSceneIndex != 1) {
+			SceneManager.LoadScene(Control.DebugSceneIndex);
+		}
+		else {
+			SceneManager.LoadScene(Scenes.MENU);
+		}
 	}
 
 	public void InitializeProfile(Profile p, string profileName) {

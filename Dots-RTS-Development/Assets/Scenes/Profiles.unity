@@ -1223,7 +1223,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d522a9282b3de6344b872d132a6bc917,
+      objectReference: {fileID: 21300000, guid: a34ecbfa1feb9144eb8742e30754d760,
         type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -1615,7 +1615,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2114136303}
   m_HandleRect: {fileID: 2114136302}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3472,7 +3472,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d522a9282b3de6344b872d132a6bc917,
+      objectReference: {fileID: 21300000, guid: a34ecbfa1feb9144eb8742e30754d760,
         type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -3734,7 +3734,7 @@ Prefab:
     - target: {fileID: 114834060088014102, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: type
-      value: 104
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -3818,7 +3818,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2179a5b210e29684b8442d2dbc3d7a87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgrade: 0
 --- !u!1 &1204708116
 GameObject:
   m_ObjectHideFlags: 0
@@ -3917,6 +3916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f29c24bbcb07e478ab6dac04ca2958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  populateWithPrefab: {fileID: 0}
 --- !u!1001 &1225582424
 Prefab:
   m_ObjectHideFlags: 0
@@ -6055,7 +6055,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d522a9282b3de6344b872d132a6bc917,
+      objectReference: {fileID: 21300000, guid: a34ecbfa1feb9144eb8742e30754d760,
         type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -6338,7 +6338,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d522a9282b3de6344b872d132a6bc917,
+      objectReference: {fileID: 21300000, guid: a34ecbfa1feb9144eb8742e30754d760,
         type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -6481,7 +6481,7 @@ Prefab:
     - target: {fileID: 114834060088014102, guid: 65c2f0f48ec5f6f44944107d353437bd,
         type: 2}
       propertyPath: type
-      value: 105
+      value: 201
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65c2f0f48ec5f6f44944107d353437bd, type: 2}
@@ -6717,7 +6717,6 @@ MonoBehaviour:
   selected:
     pathToFile: 
     onLevelImage: 
-    onLevelBaseGame: 0
     ownedCoins: 0
     contributedLevels: 0
     totalCreatedLevels: 0
@@ -6898,7 +6897,6 @@ MonoBehaviour:
   selected:
     pathToFile: 
     onLevelImage: 
-    onLevelBaseGame: 0
     ownedCoins: 0
     contributedLevels: 0
     totalCreatedLevels: 0
@@ -7115,7 +7113,6 @@ MonoBehaviour:
   selected:
     pathToFile: 
     onLevelImage: 
-    onLevelBaseGame: 0
     ownedCoins: 0
     contributedLevels: 0
     totalCreatedLevels: 0
@@ -7180,7 +7177,7 @@ Prefab:
     - target: {fileID: 224254676858301408, guid: 0fd06381fa84bae4fa1d5208c39b2833,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224254676858301408, guid: 0fd06381fa84bae4fa1d5208c39b2833,
         type: 2}

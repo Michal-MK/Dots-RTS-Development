@@ -6,10 +6,10 @@ using UnityEngine;
 public class SaveData {
 	public List<S_Cell> cells = new List<S_Cell>();
 	public LevelInfo levelInfo;
-	public Dictionary<int,float> difficulty;
+	public Dictionary<Cell.enmTeam, float> difficulty;
 	public float gameSize;
     public float savedAtAspect;
-    public Dictionary<int,int> clans;
+    public Dictionary<Cell.enmTeam,AllyHolder> clans;
 
 }
 
@@ -27,7 +27,7 @@ public class S_Cell {
 	public int maxElementCount;
 	public int team;
 	public float regenerationPeriod;
-	public S_Upgrades installedUpgrades;
+	public Upgrade.Upgrades[] installedUpgrades;
 
 }
 
@@ -38,11 +38,6 @@ public class S_Vec3 {
 	public static explicit operator Vector3(S_Vec3 v) {
 		return new Vector3(v.x, v.y, v.z);
 	}
-}
-
-[Serializable]
-public class S_Upgrades {
-	public int[] upgrade;
 }
 
 [Serializable]

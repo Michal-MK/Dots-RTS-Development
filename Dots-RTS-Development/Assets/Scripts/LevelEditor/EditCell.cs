@@ -1,41 +1,40 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
-	//public LevelEditorCore core;
+
+	public static event Control.CellSelected OnCellSelected;
+	public static event Control.CellSelected OnCellDeselected;
+
+	public LevelEditorCore core;
+
+	#region PrefabReferences
+	public SpriteRenderer maxCellRadius;
+	public UM_Editor upgrade_manager;
+	#endregion
 
 
-	//public static event Control.EnteredCellEditMode changedASelectionOfCell;
+	private bool _isCellSelected = false;
 
-	//private Camera _cam;
-	//private Vector3 _oldCamPos;
-
-	public GameObject myMaxSizeOutline;
-
-	public bool isCellSelected = false;
-
-	//private float _defaultSize;
-	//private float _zoomedSize;
-
-	float pointerDownAtTime;
-	bool longPress;
-	float longPressTreshold = 0.8f;
-	bool lookForLongPress;
-
-
-
+	#region Press legth detection
+	private float pointerDownAtTime;
+	private bool longPress;
+	private float longPressTreshold = 0.8f;
+	private bool lookForLongPress;
+	#endregion
 
 	public override void Awake() {
 		base.Awake();
 		pointerDownAtTime = Mathf.Infinity;
 		LevelEditorCore.modeChange += EditorModeUpdate;
-		LevelEditorCore.panelChange += RefreshCellFromPanel;
+		LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
 	}
 
 	private void OnDisable() {
 		LevelEditorCore.modeChange -= EditorModeUpdate;
-		LevelEditorCore.panelChange -= RefreshCellFromPanel;
+		LevelEditorCore.panelValueParsed -= RefreshCellFromPanel;
 	}
 
 	public void FastResize() {
@@ -56,130 +55,75 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		}
 		transform.localScale = new Vector3(mappedValue, mappedValue);
 		cellRadius = col.radius * transform.localScale.x;
-		if (LevelEditorCore.fitCellsOnScreen) {
-			LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+		if (LevelEditorCore.getOutilneState) {
+			ToggleCellOutline(true);
 		}
 	}
 
-	#region Comment
-	//private void Start() {
-	//	_defaultSize = _cam.orthographicSize;
-	//	_zoomedSize = _defaultSize * 0.25f;
-	//}
 
-	//private void OnMouseOver() {
-	//	if (Input.GetMouseButtonDown(0)) {
-	//		if (LevelEditorCore.editorMode == LevelEditorCore.Mode.EditCells && isCellSelected == false) {
-	//			isCellSelected = true;
-	//			_oldCamPos = _cam.transform.position;
-	//			_cam.transform.position = gameObject.transform.position + new Vector3(0, 0, -10);
-	//			if (LevelEditorCore.start >= 10 && LevelEditorCore.start <= LevelEditorCore.max) {
-	//				_cam.orthographicSize = Map.MapFloat(LevelEditorCore.start, 10, LevelEditorCore.max, _zoomedSize, 120);
-	//			}
-
-	//			LevelEditorCore.teamButton.team = ((int)thisCell.cellTeam);
-	//			LevelEditorCore.startInput.text = thisCell.elementCount.ToString();
-	//			LevelEditorCore.regenInput.text = thisCell.regenPeriod.ToString();
-	//			LevelEditorCore.maxInput.text = thisCell.maxElements.ToString();
-	//		}
-	//		if (LevelEditorCore.editorMode == LevelEditorCore.Mode.DeleteCells) {
-	//			LevelEditorCore.RemoveCell(gameObject.GetComponent<Cell>());
-	//			Destroy(gameObject);
-
-	//		}
-	//	}
-	//}
-
-
-	//private void Update() {
-	//	if (isCellSelected) {
-	//		if (Input.GetKeyDown(KeyCode.Escape)) {
-	//			_cam.orthographicSize = _defaultSize;
-	//			_cam.transform.position = _oldCamPos;
-	//			isCellSelected = false;
-	//		}
-	//	}
-	//}
-	#endregion
 
 	private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
-		//print(isCellSelected);
-		if (isCellSelected) {
+		if (isCellSelected && core.isUpdateSentByCell == false) {
 			if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
-				
-				elementCount = LevelEditorCore.start;
+
+				elementCount = core.startingElementCount;
 
 				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
-				cellTeam = (Cell.enmTeam)LevelEditorCore.team;
+				cellTeam = core.team;
+				if (cellTeam != enmTeam.ALLIED && cellTeam != enmTeam.NEUTRAL) {
+					core.AddCell(this);
+				}
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
-				maxElements = LevelEditorCore.max;
-				
+				maxElements = core.maxElementCount;
+
 				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
-				regenPeriod = LevelEditorCore.regen;
+				regenPeriod = core.regenarationPeriod;
 			}
+			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
+				Array.Copy(UpgradeSlot.instances, upgrade_manager.upgrades, UpgradeSlot.instances.Length);
+				UpdateUpgradeVisual();
+			}
+		}
+	}
+
+	private void UpdateUpgradeVisual() {
+		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
+			upgrade_manager.upgrade_Slots[i].type = upgrade_manager.upgrades[i];
+			upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
 		}
 	}
 
 	private void EditorModeUpdate(LevelEditorCore.Mode mode) {
-
-		LevelEditorCore.selectedCellList.Remove(gameObject.GetComponent<Cell>());
-		isCellSelected = false;
-		cellSelected.enabled = false;
-		if (LevelEditorCore.fitCellsOnScreen) {
-			LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
+		if (isCellSelected == true) {
+			//print(gameObject.name + " is deselecting");
+			isCellSelected = false;
 		}
-
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
-		if (LevelEditorCore.editorMode == LevelEditorCore.Mode.EditCells) {
+		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
 			pointerDownAtTime = Time.time;
 			lookForLongPress = true;
-			isCellSelected = !isCellSelected;
-			if (isCellSelected) {
-				LevelEditorCore.selectedCellList.Add(gameObject.GetComponent<Cell>());
-				
-				LevelEditorCore.dontUpdate = true;
-				LevelEditorCore.team = ((int)cellTeam);
-				LevelEditorCore.startInput.text = elementCount.ToString();
-				LevelEditorCore.regenInput.text = regenPeriod.ToString();
-				LevelEditorCore.maxInput.text = maxElements.ToString();
-
-				EnableCircle(Color.magenta);
-				LevelEditorCore.dontUpdate = false;
-				if (LevelEditorCore.fitCellsOnScreen) {
-					LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
-				}
-			}
-			else {
-
-				LevelEditorCore.selectedCellList.Remove(gameObject.GetComponent<Cell>());
-				cellSelected.enabled = false;
-				if (LevelEditorCore.fitCellsOnScreen) {
-					LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
-				}
-			}
-
 		}
-
-
-		if (LevelEditorCore.editorMode == LevelEditorCore.Mode.DeleteCells) {
-			LevelEditorCore.RemoveCell(gameObject.GetComponent<Cell>());
+		if (core.editorMode == LevelEditorCore.Mode.DeleteCells) {
+			core.RemoveCell(gameObject.GetComponent<EditCell>());
 			Destroy(gameObject);
 		}
 	}
 
-	void ToggleCellOutline(bool on) {
+	public void ToggleCellOutline(bool on) {
 		if (on) {
-			myMaxSizeOutline.SetActive(true);
+			maxCellRadius.enabled = true;
+			maxCellRadius.size = new Vector2((2 * col.radius * (3 - transform.localScale.x)), (2 * col.radius * (3 - transform.localScale.x)));
+			//Debug.LogWarning("I smell hardcoded BS!");
 		}
 		else {
-			myMaxSizeOutline.SetActive(false);
+			maxCellRadius.enabled = false;
 		}
 	}
 
@@ -187,8 +131,8 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		if (lookForLongPress) {
 			if (Time.time - pointerDownAtTime > longPressTreshold) {
 				longPress = true;
-				isCellSelected = true;
 				EnableCircle(Color.green);
+				lookForLongPress = false;
 			}
 		}
 		if (longPress) {
@@ -196,19 +140,48 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		}
 	}
 
-
 	public void OnPointerUp(PointerEventData eventData) {
-		if (isCellSelected) {
-			EnableCircle(Color.magenta);
-			if (!LevelEditorCore.selectedCellList.Contains(this)) {
-				LevelEditorCore.selectedCellList.Add(this);
-				if (LevelEditorCore.fitCellsOnScreen) {
-					LevelEditorCore.FitCellsOnScreen(LevelEditorCore.selectedCellList);
-				}
+
+
+		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
+			if (lookForLongPress == false) {
+				isCellSelected = true;
 			}
-			
+			else {
+				isCellSelected = !isCellSelected;
+			}
+			if (isCellSelected) {
+				core.isUpdateSentByCell = true;
+				core.team = cellTeam;
+				core.startingElementCount = elementCount;
+				core.regenarationPeriod = regenPeriod;
+				core.maxElementCount = maxElements;
+				core.isUpdateSentByCell = false;
+				EnableCircle(Color.magenta);
+			}
+
+
+
 		}
-		lookForLongPress = false;
 		longPress = false;
+		lookForLongPress = false;
+
+	}
+
+	public bool isCellSelected {
+		get { return _isCellSelected; }
+		set {
+			if (value == true) {
+				OnCellSelected(this);
+				cellSelectedRenderer.enabled = true;
+				upgrade_manager.ToggleUpgradeInteraction(true);
+			}
+			else {
+				OnCellDeselected(this);
+				cellSelectedRenderer.enabled = false;
+				upgrade_manager.ToggleUpgradeInteraction(false);
+			}
+			_isCellSelected = value;
+		}
 	}
 }

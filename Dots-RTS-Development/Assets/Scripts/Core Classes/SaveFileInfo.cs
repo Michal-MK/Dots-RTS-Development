@@ -110,6 +110,7 @@ public class SaveFileInfo : MonoBehaviour {
 		string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
 #endif
 		saveAndLoadEditor.Load(fileName);
+		UI_Manager.CloseMostRecent(2);
 	}
 	#endregion
 }

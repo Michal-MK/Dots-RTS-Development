@@ -7,7 +7,7 @@ using TMPro;
 public class Buttons : MainMenuUI  {
 	
 	public void Continue() {
-		Control.UnPause();
+		Control.script.UnPause();
 		Time.timeScale = 1;
 	}
 
@@ -73,10 +73,8 @@ public class Buttons : MainMenuUI  {
 	public void EditMode() {
 		SceneManager.LoadScene(Scenes.EDITOR);
 	}
-
-	public void FitCells() {
-		LevelEditorCore.ResizeToggle(GetComponent<Toggle>().isOn);
-
+	public void FitCellsToggle(Toggle toggle) {
+		GameObject.Find("Core").GetComponent<LevelEditorCore>().areCellsFitToScreen = toggle.isOn;
 	}
 
 	public void PauseGameorEscape() {
@@ -88,7 +86,7 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = Upgrade_Manager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
+		int selected = UM_Store.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
 		//print(selected);
 
 		if(selected <= 99) {
@@ -147,6 +145,28 @@ public class Buttons : MainMenuUI  {
 				UI_ReferenceHolder.U_upgradesOwnedHolder.text = "x pcs.";
 				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
 			}
+		}
+	}
+
+
+	public void HighlightSelectedToggle() {
+		Color32 defaultColor = new Color32(255, 196, 4, 255);
+		if (gameObject.GetComponent<Toggle>().isOn) {
+			transform.Find("Text").GetComponent<TextMeshProUGUI>().color = Color.red;
+		}
+		else {
+			transform.Find("Text").GetComponent<TextMeshProUGUI>().color = defaultColor;
+		}
+	}
+
+	public void ShowHidePanel(GameObject window) {
+		if (window.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
+			window.GetComponent<Animator>().SetTrigger("Hide");
+			UI_Manager.CloseWindow(window);
+		}
+		else {
+			window.GetComponent<Animator>().SetTrigger("Show");
+			UI_Manager.AddWindow(window);
 		}
 	}
 }

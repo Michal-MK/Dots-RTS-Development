@@ -65,7 +65,7 @@ public class LevelSelectScript : MonoBehaviour {
 				catch {
 					error.text += "Error " + saves[i].Name;
 				}
-				if (SceneManager.GetActiveScene().buildIndex == 1) {
+				if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
 					level.saveAndLoadEditor = saveAndLoadEditor;
 				}
 				displayedSaves.Add(level);

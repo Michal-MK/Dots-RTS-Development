@@ -164,7 +164,7 @@ public class Profile {
 	public Profile() {
 		foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
 			if (u != Upgrade.Upgrades.NONE) {
-				acquiredUpgrades.Add(u, 8);
+				acquiredUpgrades.Add(u,0);
 			}
 		}
 		creationTime = DateTime.Now;

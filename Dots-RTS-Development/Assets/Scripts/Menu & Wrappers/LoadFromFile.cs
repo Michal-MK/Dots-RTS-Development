@@ -35,10 +35,11 @@ public class LoadFromFile : MonoBehaviour {
 			if (customSave.gameSize != 0) {
 				Camera.main.orthographicSize = customSave.gameSize;
 			}
-			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(customSave.savedAtAspect);
-			Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
-			foreach (int key in diffKeys) {
-				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
+			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
+			foreach (Cell.enmTeam key in diffKeys) {
+				print("Possible error");
+				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
 			}
 
 			for (int j = 0; j < customSave.cells.Count; j++) {
@@ -51,7 +52,7 @@ public class LoadFromFile : MonoBehaviour {
 				c.maxElements = customSave.cells[j].maxElementCount;
 				c.cellTeam = (Cell.enmTeam)customSave.cells[j].team;
 				c.regenPeriod = customSave.cells[j].regenerationPeriod;
-				//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
+				c.uManager.PreinstallUpgrades = customSave.cells[j].installedUpgrades;
 
 				c.gameObject.name = "Cell " + j + " " + c.cellTeam;
 
@@ -67,10 +68,10 @@ public class LoadFromFile : MonoBehaviour {
 			if (campaignSave.game.gameSize != 0) {
 				Camera.main.orthographicSize = campaignSave.game.gameSize;
 			}
-			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(campaignSave.game.savedAtAspect);
-			Dictionary<int, float>.KeyCollection diffKeys = campaignSave.game.difficulty.Keys;
-			foreach (int key in diffKeys) {
-				campaignSave.game.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(campaignSave.game.savedAtAspect);
+			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = campaignSave.game.difficulty.Keys;
+			foreach (Cell.enmTeam key in diffKeys) {
+				campaignSave.game.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
 			}
 
 			for (int j = 0; j < campaignSave.game.cells.Count; j++) {
@@ -98,10 +99,10 @@ public class LoadFromFile : MonoBehaviour {
             if (customSave.gameSize != 0) {
                 Camera.main.orthographicSize = customSave.gameSize;
             }
-			GameObject.Find("Borders").GetComponent<PositionColiders>().ResizeBackground(customSave.savedAtAspect);
-			Dictionary<int, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
-            foreach (int key in diffKeys) {
-                customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[key - 2]);
+			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
+			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
+            foreach (Cell.enmTeam key in diffKeys) {
+                customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
             }
 
             for (int j = 0; j < customSave.cells.Count; j++) {
@@ -127,6 +128,5 @@ public class LoadFromFile : MonoBehaviour {
 			//throw new System.Exception();
 		}
 		file.Close();
-		PlayManager.levelState = PlayManager.PlaySceneState.NONE;
 	}
 }
