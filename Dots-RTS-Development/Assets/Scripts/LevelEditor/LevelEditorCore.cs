@@ -248,8 +248,6 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#endregion
 
-	public static EditCell debug;
-
 	//Cell placing logic
 	private void Update() {
 #if (UNITY_EDITOR || UNITY_STANDALONE)
@@ -270,24 +268,21 @@ public class LevelEditorCore : MonoBehaviour {
 			c.core = this;
 			AddCell(c);
 			c.FastResize();
-			debug = c;
 		}
 #endif
 #if (UNITY_ANDROID || UNITY_IOS)
-		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && LevelEditorCore.editorMode == LevelEditorCore.Mode.PlaceCells) {
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && editorMode == Mode.PlaceCells) {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			GameObject newCell = Instantiate(CellPrefab, pos, Quaternion.identity);
+			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
 			EditCell c = newCell.GetComponent<EditCell>();
 			c.cellTeam = team;
-			c.maxElements = max;
-			c.regenPeriod = regen;
-			c.elementCount = start;
+			c.maxElements = maxElementCount;
+			c.regenPeriod = regenarationPeriod;
+			c.elementCount = startingElementCount;
 			c.upgrade_manager.upgrades = UpgradeSlot.getAssignedUpgrades;
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
 				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
-				Sprite s;
-				Upgrade.UPGRADE_GRAPHICS.TryGetValue(c.upgrade_manager.upgrades[i], out s);
-				c.upgrade_manager.upgrade_Slots[i].selfSprite.sprite = s;
+				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
 			}
 			c.core = this;
 			c.FastResize();

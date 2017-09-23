@@ -69,6 +69,7 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 			//print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
 			uiSlotHighlight.sprite = highlight;
 			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
+			uiSlotHighlight.GetComponent<Animator>().ResetTrigger("Stop");
 			UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
 		}
 	}

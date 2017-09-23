@@ -105,7 +105,13 @@ public class PlayManager : MonoBehaviour {
 		else {
 			domination = false;
 		}
-		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+		gameTime = string.Format("{0:00}:{1:00}.{2:00} ", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+		if((int)time / 60 == 0) {
+			gameTime += "seconds";
+		}
+		else {
+			gameTime += "minutes";
+		}
 
 		//Did we play a campaign level ?
 		if (CampaignLevel.current != null) {
@@ -145,7 +151,7 @@ public class PlayManager : MonoBehaviour {
 			UI_ReferenceHolder.PG_didDominate.text = "";
 		}
 
-		UI_ReferenceHolder.PG_totalTimeToClear.text = "Fought for:\n" + gameTime;
+		UI_ReferenceHolder.PG_totalTimeToClear.text = "Fought for:\t" + gameTime;
 
 		UI_ReferenceHolder.PG_totalCoinsAwarded.text = totalCoinsAwarded + " <size=40>coins";
 
