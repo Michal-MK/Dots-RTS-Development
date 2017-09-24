@@ -14886,7 +14886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1638094407
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16675,38 +16675,38 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+SubmitEvent, TextMeshPro-1.0.55.2017.1.0b10,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: TMPro.TMP_InputField+SubmitEvent, TextMeshPro-1.0.55.56.0b11, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+SubmitEvent, TextMeshPro-1.0.55.2017.1.0b10,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: TMPro.TMP_InputField+SubmitEvent, TextMeshPro-1.0.55.56.0b11, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   m_OnSelect:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+SelectionEvent, TextMeshPro-1.0.55.2017.1.0b10,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: TMPro.TMP_InputField+SelectionEvent, TextMeshPro-1.0.55.56.0b11, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+SelectionEvent, TextMeshPro-1.0.55.2017.1.0b10,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: TMPro.TMP_InputField+SelectionEvent, TextMeshPro-1.0.55.56.0b11, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+TextSelectionEvent, TextMeshPro-1.0.55.2017.1.0b10,
+    m_TypeName: TMPro.TMP_InputField+TextSelectionEvent, TextMeshPro-1.0.55.56.0b11,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   m_OnEndTextSelection:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+TextSelectionEvent, TextMeshPro-1.0.55.2017.1.0b10,
+    m_TypeName: TMPro.TMP_InputField+TextSelectionEvent, TextMeshPro-1.0.55.56.0b11,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: TMPro.TMP_InputField+OnChangeEvent, TextMeshPro-1.0.55.2017.1.0b10,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: TMPro.TMP_InputField+OnChangeEvent, TextMeshPro-1.0.55.56.0b11, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}

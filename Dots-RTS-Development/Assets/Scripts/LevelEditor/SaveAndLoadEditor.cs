@@ -22,18 +22,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
 		print(PlayManager.levelState);
 
-		DontDestroyOnLoad(core.gameObject);
-		DontDestroyOnLoad(teams.gameObject);
-		DontDestroyOnLoad(this.gameObject);
-
-		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-		SceneManager.LoadScene(Scenes.PLAYER,LoadSceneMode.Additive);
-	}
-
-	private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
-		SceneManager.SetActiveScene(arg0);
-		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
+		SceneManager.LoadScene(Scenes.PLAYER);
 	}
 
 	public void SaveButton() {
