@@ -81,6 +81,7 @@ public class UI_Manager : MonoBehaviour {
 		}
 	}
 
+	[Obsolete("Use the more specific version of \"AddWindow\" whenever possible.")]
 	public static void AddWindow(GameObject win) {
 		Window.WindowType t;
 		switch (win.name) {
