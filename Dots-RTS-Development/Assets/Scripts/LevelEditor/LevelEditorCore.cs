@@ -157,7 +157,10 @@ public class LevelEditorCore : MonoBehaviour {
 		ParseSaveInfo_SavePanel();
 		AiDiffHandler();
 
-		saveAndLoad.Load(PlayerPrefs.GetString("LoadLevelFilePath"));
+		string path = PlayerPrefs.GetString("LoadLevelFilePath");
+		if (!string.IsNullOrEmpty(path)) {
+			saveAndLoad.Load(PlayerPrefs.GetString("LoadLevelFilePath"));
+		}	
 		//Set defalut mode to placeCells
 		editorMode = Mode.PlaceCells;
 	}
