@@ -70,21 +70,58 @@ public class Initialize_AI : MonoBehaviour {
 		}
 
 	}
-	//Creates a new AI, sets its state to true in the corresponding slot in the Array
-	private void SetAis(int index, Cell.enmTeam team) {
-		//print("Attepting to set AI at " + index + " with team " + team);
+
+	public void SetAis(int index, Cell.enmTeam team) {
 		if (initAIs[index] == false) {
 			initAIs[index] = true;
 			aiTeams[index] = team;
 
 			GameObject aiHolder = new GameObject("AI code " + index + " enemy " + (index + 1));
-			Enemy_AI ai = aiHolder.AddComponent<Enemy_AI>();
+			//Select AI preset according to the enemy team
+			AI_Behaviour ai;
+			switch (index) {
+				case 0: {
+					ai = aiHolder.AddComponent<AI_0>();
+					break;
+				}
+				case 1: {
+					ai = aiHolder.AddComponent<AI_1>();
+					break;
+				}
+				case 2: {
+					ai = aiHolder.AddComponent<AI_2>();
+					break;
+				}
+				case 3: {
+					ai = aiHolder.AddComponent<AI_3>();
+					break;
+				}
+				case 4: {
+					ai = aiHolder.AddComponent<AI_4>();
+					break;
+				}
+				case 5: {
+					ai = aiHolder.AddComponent<AI_5>();
+					break;
+				}
+				case 6: {
+					ai = aiHolder.AddComponent<AI_6>();
+					break;
+				}
+				case 7: {
+					ai = aiHolder.AddComponent<AI_7>();
+					break;
+				}
+				default: {
+					ai = aiHolder.AddComponent<AI_Behaviour>();
+					break;
+				}
+			}
 			ai.decisionSpeed = decisionSpeeds[index];
-			ai._aiTeam = team;
+			ai.aiTeam = team;
 			ai.isActive = true;
 			AIs[index] = ai;
 		}
-
 	}
 }
 

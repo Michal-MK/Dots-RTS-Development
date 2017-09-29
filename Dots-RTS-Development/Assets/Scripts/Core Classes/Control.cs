@@ -236,7 +236,7 @@ public class Control : MonoBehaviour {
 
 	private bool IsInPausebleScene() {
 		string s = SceneManager.GetActiveScene().name;
-		if (s == Scenes.EDITOR || s == Scenes.PLAYER) {
+		if (s == Scenes.EDITOR || s == Scenes.PLAYER || s == Scenes.DEBUG) {
 			return true;
 		}
 		else {

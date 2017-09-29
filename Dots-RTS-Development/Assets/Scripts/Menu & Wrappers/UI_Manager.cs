@@ -135,7 +135,9 @@ public class UI_Manager : MonoBehaviour {
 						Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
 					}
 				}
-				OnWindowClose(win);
+				if (OnWindowClose != null) {
+					OnWindowClose(win);
+				}
 			}
 			else {
 				Control.script.Pause();
@@ -179,7 +181,9 @@ public class UI_Manager : MonoBehaviour {
 
 		if (win.GetCurrentAnimatorStateInfo(0).IsName("Hide")) {
 			win.gameObject.SetActive(false);
-			UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0.25f, 2));
+			if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+				UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0.25f, 2));
+			}
 		}
 	}
 
