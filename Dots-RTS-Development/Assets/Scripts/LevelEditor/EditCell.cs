@@ -119,7 +119,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	public void ToggleCellOutline(bool on) {
 		if (on) {
 			maxCellRadius.enabled = true;
-			maxCellRadius.size = new Vector2((2 * col.radius * (3 - transform.localScale.x)), (2 * col.radius * (3 - transform.localScale.x)));
+			maxCellRadius.transform.localScale = new Vector2((2 / maxCellRadius.transform.parent.localScale.x), (2 / maxCellRadius.transform.parent.localScale.x));
 			//Debug.LogWarning("I smell hardcoded BS!");
 		}
 		else {

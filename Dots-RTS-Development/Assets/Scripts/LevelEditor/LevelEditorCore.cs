@@ -19,6 +19,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public GameObject cellPrefab;
 	public Transform teamButton;
+	public SaveAndLoadEditor saveAndLoad;
 
 	public List<EditCell> cellList = new List<EditCell>();
 	public List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
@@ -156,6 +157,10 @@ public class LevelEditorCore : MonoBehaviour {
 		ParseSaveInfo_SavePanel();
 		AiDiffHandler();
 
+		string path = PlayerPrefs.GetString("LoadLevelFilePath");
+		if (!string.IsNullOrEmpty(path)) {
+			saveAndLoad.Load(PlayerPrefs.GetString("LoadLevelFilePath"));
+		}	
 		//Set defalut mode to placeCells
 		editorMode = Mode.PlaceCells;
 	}
