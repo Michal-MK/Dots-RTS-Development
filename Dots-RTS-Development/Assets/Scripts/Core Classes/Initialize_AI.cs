@@ -65,7 +65,7 @@ public class Initialize_AI : MonoBehaviour {
 			List<Cell.enmTeam> allies = temp.allies;
 
 			foreach (int team in allies) {
-				AIs[(int)j - 2].alliesOfThisAI.Add(AIs[team - 2]);
+				AIs[(int)j - 2].AddAlly(AIs[team - 2]);
 			}
 		}
 

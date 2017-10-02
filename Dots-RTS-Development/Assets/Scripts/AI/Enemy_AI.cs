@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +12,6 @@ public class Enemy_AI : MonoBehaviour {
 
 	public Cell.enmTeam aiTeam;
 
-
-
 	private enum Decision { EXPAND, ATTACK, HELP };
 
 	public List<CellBehaviour> _targets = new List<CellBehaviour>();            //Cells this AI will attack
@@ -23,7 +19,7 @@ public class Enemy_AI : MonoBehaviour {
 	public List<CellBehaviour> _neutrals = new List<CellBehaviour>();           //Neutral cells in the scene
 	public List<CellBehaviour> _allies = new List<CellBehaviour>();             //Cells this AI will not attack
 
-	public List<Enemy_AI> alliesOfThisAI = new List<Enemy_AI>();
+	protected List<Enemy_AI> alliesOfThisAI = new List<Enemy_AI>();
 
 	protected CellBehaviour selectedAiCell;                                       //Selected AI cell that will prefrom the action.
 	protected CellBehaviour selectedTargetCell;                                   //Selected target that can be attacked
@@ -35,17 +31,19 @@ public class Enemy_AI : MonoBehaviour {
 	protected float defendChoiceProbability = 0;
 
 	private string s = "";
-	
+
 	//Event subscribers / unsubscribers
 	private void OnEnable() {
-		CellBehaviour.TeamChanged += RemoveCell;
+		//CellBehaviour.TeamChanged += RemoveCell;
 	}
 	private void OnDisable() {
-		CellBehaviour.TeamChanged -= RemoveCell;
+		//CellBehaviour.TeamChanged -= RemoveCell;
 	}
 
 	//Sort cells on screen to lists by their team
 	protected virtual void Start() {
+		CellBehaviour.TeamChanged += CellBehaviour_TeamChanged;
+
 		for (int i = 0; i < PlayManager.cells.Count; i++) {
 
 			CellBehaviour current = PlayManager.cells[i];
@@ -63,6 +61,21 @@ public class Enemy_AI : MonoBehaviour {
 
 		ConsiderAllies();
 		print("AI " + getCurrentAiTeam + " Initialized!");
+	}
+
+	protected virtual void OnDestroy() {
+		CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
+	}
+
+	private void CellBehaviour_TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current) {
+		if (isActive) {
+			Enemy_AI prevAI = (Enemy_AI)previous;
+			DataHolder dataPrevAI = new DataHolder(prevAI, sender);
+			Enemy_AI currAI = (Enemy_AI)current;
+			DataHolder dataCurrAI = new DataHolder(currAI, sender);
+			
+
+		}
 	}
 
 	//Update this AI's allies and targets
@@ -90,222 +103,217 @@ public class Enemy_AI : MonoBehaviour {
 		}
 	}
 
-	//Accepts a cell, the algorythm searches for that cell in every AI and saves it in a data holder
+	/// <summary>
+	/// Accepts a cell, returns location of that cell in every AI present.
+	/// </summary>
+	/// <param name="referenceCell">Cell to use in the aglorythm</param>
+	/// <returns></returns>
 	private List<DataHolder> GetCellInstances(CellBehaviour referenceCell) {
 		List<DataHolder> AIs_Cells = new List<DataHolder>();
 		for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
 			if (Initialize_AI.AIs[i] != null) {
 				Enemy_AI currentAI = Initialize_AI.AIs[i];
-				DataHolder d = new DataHolder { AI = currentAI };
-				AIs_Cells.Add(d);
-
-				for (int j = 0; j < currentAI._aiCells.Count; j++) {
-					if (referenceCell == currentAI._aiCells[j]) {
-						d.cells[0] = referenceCell;
-					}
-				}
-				for (int j = 0; j < currentAI._targets.Count; j++) {
-					if (referenceCell == currentAI._targets[j]) {
-						d.cells[1] = referenceCell;
-					}
-				}
-				for (int j = 0; j < currentAI._allies.Count; j++) {
-					if (referenceCell == currentAI._allies[j]) {
-						d.cells[2] = referenceCell;
-					}
-				}
-				for (int j = 0; j < currentAI._neutrals.Count; j++) {
-					if (referenceCell == currentAI._neutrals[j]) {
-						d.cells[3] = referenceCell;
-					}
-				}
+				DataHolder data = new DataHolder(currentAI, referenceCell);
+				AIs_Cells.Add(data);
 			}
 		}
 		return AIs_Cells;
 	}
 
-	//Triggered when a cell changs team
-	private void RemoveCell(CellBehaviour sender, Cell.enmTeam cellTeam, Cell.enmTeam elementTeam) {
-
-		List<DataHolder> data = GetCellInstances(sender);
-		#region DataDebugging
-		//print(data.Count);
-		//for (int i = 0; i < data.Count; i++) {
-		//	print("AI name: " + data[i].AI.name);
-		//	if (data[i].AI._aiTeam == _aiTeam) {
-		//		print("The Data this Ai cell should see: ");
-		//		for (int j = 0; j < data[i].cells.Length; j++) {
-		//			switch (j) {
-		//				case 0: {
-		//					if (data[i].cells[j] != null) {
-		//						print("This cell is a cell of this AI " + data[i].cells[j].gameObject.name);
-		//					}
-		//					else {
-		//						print("No Data found for this AIs aiCell");
-		//					}
-		//					break;
-		//				}
-		//				case 1: {
-		//					if (data[i].cells[j] != null) {
-		//						print("This cell is a target of this AI " + data[i].cells[j].gameObject.name);
-		//					}
-		//					else {
-		//						print("No Data found for this AIs target");
-		//					}
-		//					break;
-		//				}
-		//				case 2: {
-		//					if (data[i].cells[j] != null) {
-		//						print("This cell is an ally of this AI " + data[i].cells[j].gameObject.name);
-		//					}
-		//					else {
-		//						print("No Data found for this AIs ally");
-		//					}
-		//					break;
-		//				}
-		//				case 3: {
-		//					if (data[i].cells[j] != null) {
-		//						print("This cell is a neutral cell of this AI " + data[i].cells[j].gameObject.name);
-		//					}
-		//					else {
-		//						print("No Data found for this AIs neutal");
-		//					}
-		//					break;
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
-		#endregion
-
-		//Loop through all AIs and determine what to do with the removed cell in reference to the current AI
-		//Each cell is loacted somewhere in every AI structure, be it Cell of the AI, its target, its ally, or a neutral cell.
-		//If the cell does't exist in the AI then something went wrong.
-
-		foreach (DataHolder instance in data) {
-			if (instance.AI == this) {
-				List<CellBehaviour> aiCells = new List<CellBehaviour>(instance.AI._aiCells);
-				foreach (CellBehaviour c in aiCells) {
-					for (int i = 0; i < instance.cells.Length; i++) {
-						if (instance.cells[i] != null) {
-							if (c == instance.cells[i]) {
-								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its AICELLS");
-								if (elementTeam != aiTeam) {
-									if (_aiCells.Contains(sender)) {
-										_aiCells.Remove(sender);
-									}
-									if (!_targets.Contains(sender)) {
-										_targets.Add(sender);
-									}
-								}
-							}
-						}
-					}
-				}
-				List<CellBehaviour> targets = new List<CellBehaviour>(instance.AI._targets);
-				foreach (CellBehaviour c in targets) {
-					for (int i = 0; i < instance.cells.Length; i++) {
-						if (instance.cells[i] != null) {
-							if (c == instance.cells[i]) {
-								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its TRAGETS");
-								if (elementTeam == aiTeam) {
-									if (!_aiCells.Contains(sender)) {
-										_aiCells.Add(sender);
-									}
-									if (_targets.Contains(sender)) {
-										_targets.Remove(sender);
-									}
-								}
-								else {
-									foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
-										if (elementTeam == ai.aiTeam) {
-											//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
-											if (!_allies.Contains(sender)) {
-												_allies.Add(sender);
-											}
-											if (_targets.Contains(sender)) {
-												_targets.Remove(sender);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				List<CellBehaviour> allies = new List<CellBehaviour>(instance.AI._allies);
-				foreach (CellBehaviour c in allies) {
-					for (int i = 0; i < instance.cells.Length; i++) {
-						if (instance.cells[i] != null) {
-							if (c == instance.cells[i]) {
-								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its ALLIES");
-								if (elementTeam == aiTeam) {
-									if (!_allies.Contains(sender)) {
-										_allies.Remove(sender);
-									}
-									if (!_aiCells.Contains(sender)) {
-										_aiCells.Add(sender);
-									}
-								}
-								else {
-									bool isOvertakenByAlly = false;
-									foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
-										if (elementTeam == ai.aiTeam) {
-											//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
-											if (!_allies.Contains(sender)) {
-												_allies.Add(sender);
-											}
-											isOvertakenByAlly = true;
-										}
-									}
-									if (!isOvertakenByAlly) {
-										if (!_targets.Contains(sender)) {
-											_targets.Add(sender);
-										}
-										if (_allies.Contains(sender)) {
-											_allies.Remove(sender);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				List<CellBehaviour> neutralCells = new List<CellBehaviour>(instance.AI._neutrals);
-				foreach (CellBehaviour c in neutralCells) {
-					for (int i = 0; i < instance.cells.Length; i++) {
-						if (instance.cells[i] != null) {
-							if (c == instance.cells[i]) {
-								//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its NEUTRALS");
-								_neutrals.Remove(sender);
-
-								if (elementTeam == aiTeam) {
-									_aiCells.Add(sender);
-								}
-								else {
-									bool willBeAlly = false;
-									foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
-										if (elementTeam == ai.aiTeam) {
-											//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
-											if (!_allies.Contains(sender)) {
-												_allies.Add(sender);
-											}
-											willBeAlly = true;
-										}
-									}
-									if (!willBeAlly) {
-										if (!_targets.Contains(sender)) {
-											_targets.Add(sender);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="referenceCell">The cell to look for.</param>
+	/// <param name="ai">The AI to look in.</param>
+	/// <returns></returns>
+	private DataHolder GetCellInstances(CellBehaviour referenceCell, Enemy_AI ai) {
+		DataHolder data = new DataHolder(ai, referenceCell);
+		return data;
 	}
+
+	//Triggered when a cell chanegs team
+	//private void RemoveCell(CellBehaviour sender, Cell.enmTeam cellTeam, Cell.enmTeam elementTeam) {
+
+	//	List<DataHolder> data = GetCellInstances(sender);
+	//	#region DataDebugging
+	//	//print(data.Count);
+	//	//for (int i = 0; i < data.Count; i++) {
+	//	//	print("AI name: " + data[i].AI.name);
+	//	//	if (data[i].AI._aiTeam == _aiTeam) {
+	//	//		print("The Data this Ai cell should see: ");
+	//	//		for (int j = 0; j < data[i].cells.Length; j++) {
+	//	//			switch (j) {
+	//	//				case 0: {
+	//	//					if (data[i].cells[j] != null) {
+	//	//						print("This cell is a cell of this AI " + data[i].cells[j].gameObject.name);
+	//	//					}
+	//	//					else {
+	//	//						print("No Data found for this AIs aiCell");
+	//	//					}
+	//	//					break;
+	//	//				}
+	//	//				case 1: {
+	//	//					if (data[i].cells[j] != null) {
+	//	//						print("This cell is a target of this AI " + data[i].cells[j].gameObject.name);
+	//	//					}
+	//	//					else {
+	//	//						print("No Data found for this AIs target");
+	//	//					}
+	//	//					break;
+	//	//				}
+	//	//				case 2: {
+	//	//					if (data[i].cells[j] != null) {
+	//	//						print("This cell is an ally of this AI " + data[i].cells[j].gameObject.name);
+	//	//					}
+	//	//					else {
+	//	//						print("No Data found for this AIs ally");
+	//	//					}
+	//	//					break;
+	//	//				}
+	//	//				case 3: {
+	//	//					if (data[i].cells[j] != null) {
+	//	//						print("This cell is a neutral cell of this AI " + data[i].cells[j].gameObject.name);
+	//	//					}
+	//	//					else {
+	//	//						print("No Data found for this AIs neutal");
+	//	//					}
+	//	//					break;
+	//	//				}
+	//	//			}
+	//	//		}
+	//	//	}
+	//	//}
+	//	#endregion
+
+	//	//Loop through all AIs and determine what to do with the removed cell in reference to the current AI
+	//	//Each cell is loacted somewhere in every AI structure, be it Cell of the AI, its target, its ally, or a neutral cell.
+	//	//If the cell does't exist in the AI then something went wrong.
+
+	//	foreach (DataHolder instance in data) {
+	//		if (instance.AI == this) {
+	//			List<CellBehaviour> aiCells = new List<CellBehaviour>(instance.AI._aiCells);
+	//			foreach (CellBehaviour c in aiCells) {
+	//				for (int i = 0; i < instance.cells.Length; i++) {
+	//					if (instance.cells[i] != null) {
+	//						if (c == instance.cells[i]) {
+	//							//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its AICELLS");
+	//							if (elementTeam != getCurrentAiTeam) {
+	//								if (_aiCells.Contains(sender)) {
+	//									_aiCells.Remove(sender);
+	//								}
+	//								if (!_targets.Contains(sender)) {
+	//									_targets.Add(sender);
+	//								}
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//			List<CellBehaviour> targets = new List<CellBehaviour>(instance.AI._targets);
+	//			foreach (CellBehaviour c in targets) {
+	//				for (int i = 0; i < instance.cells.Length; i++) {
+	//					if (instance.cells[i] != null) {
+	//						if (c == instance.cells[i]) {
+	//							//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its TRAGETS");
+	//							if (elementTeam == getCurrentAiTeam) {
+	//								if (!_aiCells.Contains(sender)) {
+	//									_aiCells.Add(sender);
+	//								}
+	//								if (_targets.Contains(sender)) {
+	//									_targets.Remove(sender);
+	//								}
+	//							}
+	//							else {
+	//								foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
+	//									if (elementTeam == ai.getCurrentAiTeam) {
+	//										//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
+	//										if (!_allies.Contains(sender)) {
+	//											_allies.Add(sender);
+	//										}
+	//										if (_targets.Contains(sender)) {
+	//											_targets.Remove(sender);
+	//										}
+	//									}
+	//								}
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//			List<CellBehaviour> allies = new List<CellBehaviour>(instance.AI._allies);
+	//			foreach (CellBehaviour c in allies) {
+	//				for (int i = 0; i < instance.cells.Length; i++) {
+	//					if (instance.cells[i] != null) {
+	//						if (c == instance.cells[i]) {
+	//							//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its ALLIES");
+	//							if (elementTeam == getCurrentAiTeam) {
+	//								if (!_allies.Contains(sender)) {
+	//									_allies.Remove(sender);
+	//								}
+	//								if (!_aiCells.Contains(sender)) {
+	//									_aiCells.Add(sender);
+	//								}
+	//							}
+	//							else {
+	//								bool isOvertakenByAlly = false;
+	//								foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
+	//									if (elementTeam == ai.getCurrentAiTeam) {
+	//										//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
+	//										if (!_allies.Contains(sender)) {
+	//											_allies.Add(sender);
+	//										}
+	//										isOvertakenByAlly = true;
+	//									}
+	//								}
+	//								if (!isOvertakenByAlly) {
+	//									if (!_targets.Contains(sender)) {
+	//										_targets.Add(sender);
+	//									}
+	//									if (_allies.Contains(sender)) {
+	//										_allies.Remove(sender);
+	//									}
+	//								}
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//			List<CellBehaviour> neutralCells = new List<CellBehaviour>(instance.AI._neutrals);
+	//			foreach (CellBehaviour c in neutralCells) {
+	//				for (int i = 0; i < instance.cells.Length; i++) {
+	//					if (instance.cells[i] != null) {
+	//						if (c == instance.cells[i]) {
+	//							//print("If we get here, that means" + this.gameObject.name + " has " + sender.name + " in its NEUTRALS");
+	//							_neutrals.Remove(sender);
+
+	//							if (elementTeam == getCurrentAiTeam) {
+	//								_aiCells.Add(sender);
+	//							}
+	//							else {
+	//								bool willBeAlly = false;
+	//								foreach (Enemy_AI ai in instance.AI.alliesOfThisAI) {
+	//									if (elementTeam == ai.getCurrentAiTeam) {
+	//										//print("Adding Ally because " + ai.name + " overtook " + c.name + " and " + this.gameObject.name + " is his ally");
+	//										if (!_allies.Contains(sender)) {
+	//											_allies.Add(sender);
+	//										}
+	//										willBeAlly = true;
+	//									}
+	//								}
+	//								if (!willBeAlly) {
+	//									if (!_targets.Contains(sender)) {
+	//										_targets.Add(sender);
+	//									}
+	//								}
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
 
 	public CellBehaviour AiCellSelector() {
 		int elementRecordAI = -1;
@@ -355,7 +363,7 @@ public class Enemy_AI : MonoBehaviour {
 			}
 		}
 		else {
-			s += "NO cell (highest "+ elementRecordAI +") above " + aICellSelectElementTreshold + " treshold | ";
+			s += "NO cell (highest " + elementRecordAI + ") above " + aICellSelectElementTreshold + " treshold | ";
 			return null;
 		}
 	}
@@ -472,7 +480,7 @@ public class Enemy_AI : MonoBehaviour {
 		}
 		// 40% return the best cell you found
 		if (UnityEngine.Random.Range(0, 10) < 4) {
-			if(Mathf.Abs(selectedAiCell.elementCount - _aiCells[recordIndex].elementCount) > aICellAidElementTreshold) {
+			if (Mathf.Abs(selectedAiCell.elementCount - _aiCells[recordIndex].elementCount) > aICellAidElementTreshold) {
 				defendChoiceProbability = 0.6f;
 			}
 			else {
@@ -494,16 +502,56 @@ public class Enemy_AI : MonoBehaviour {
 		get { return aiTeam; }
 		private set { aiTeam = value; }
 	}
+
+	public void AddAlly(Enemy_AI ai) {
+		alliesOfThisAI.Add(ai);
+	}
+
+	public static explicit operator Enemy_AI(Cell.enmTeam team) {
+		return Initialize_AI.AIs[(int)team - 2];
+	}
+
 }
 
 public class DataHolder {
 	/// <summary>
 	/// The AI for which this configuration is valid
 	/// </summary>
-	public Enemy_AI AI;
+	private Enemy_AI _ai;
 	/// <summary>
 	/// Instances in this AI --> [0] = AI, [1] = target, [2] = ally, [3] = neutral
 	/// </summary>
-	public CellBehaviour[] cells = new CellBehaviour[4] { null, null, null, null };
+	private int[] cellIndexes = new int[4] { -1, -1, -1, -1 };
 
+	public DataHolder(Enemy_AI AI, CellBehaviour cell) {
+		_ai = AI;
+
+		for (int i = 0; i < AI._aiCells.Count; i++) {
+			if(AI._aiCells[i] == cell) {
+				cellIndexes[0] = i;
+			}
+		}
+		for (int i = 0; i < AI._targets.Count; i++) {
+			if (AI._targets[i] == cell) {
+				cellIndexes[1] = i;
+			}
+		}
+		for (int i = 0; i < AI._allies.Count; i++) {
+			if (AI._allies[i] == cell) {
+				cellIndexes[2] = i;
+			}
+		}
+		for (int i = 0; i < AI._neutrals.Count; i++) {
+			if (AI._neutrals[i] == cell) {
+				cellIndexes[3] = i;
+			}
+		}
+	}
+	public Enemy_AI getAI {
+		get { return _ai; }
+	}
+
+	public int[] getCellIndexes {
+		get { return cellIndexes; }
+	}
 }
