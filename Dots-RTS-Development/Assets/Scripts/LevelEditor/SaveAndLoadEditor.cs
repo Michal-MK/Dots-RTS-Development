@@ -139,7 +139,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				teams.clanDict = save.clans;
 			}
 			else {
-				teams.clanDict = new Dictionary<Cell.enmTeam, AllyHolder>();
+				teams.clanDict = new Dictionary<Cell.enmTeam, AIHolder>();
 			}
 
 			file.Close();

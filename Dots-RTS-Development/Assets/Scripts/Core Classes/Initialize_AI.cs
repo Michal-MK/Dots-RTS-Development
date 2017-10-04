@@ -10,65 +10,86 @@ public class Initialize_AI : MonoBehaviour {
 	public static Enemy_AI[] AIs = new Enemy_AI[8];
 
 	private void Start() {
-		StartAiInitialization(new Dictionary<Cell.enmTeam, AllyHolder>());
+		//Should be necessary only for older saves and Debug scene
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == UnityEngine.SceneManagement.Scenes.DEBUG) {
+			StartAiInitialization(new Dictionary<Cell.enmTeam, AIHolder>());
+		}
 	}
 
 	//Goes though all the cells and creates an AI for each team.
-	public void StartAiInitialization(Dictionary<Cell.enmTeam, AllyHolder> clanDict) {
+	public void StartAiInitialization(Dictionary<Cell.enmTeam, AIHolder> clanDict) {
 		foreach (Cell c in PlayManager.cells) {
 			//If cell is enemy create ai for that enemy - Only once
 			if ((int)c.cellTeam >= 2) {
-				//print((int)c.cellTeam + "  " + c.gameObject.name);
-				switch ((int)c.cellTeam) {
-					case 2: {
-						SetAis(0, c.cellTeam);
-						break;
-					}
-					case 3: {
-						SetAis(1, c.cellTeam);
-						break;
-					}
-					case 4: {
-						SetAis(2, c.cellTeam);
-						break;
-					}
-					case 5: {
-						SetAis(3, c.cellTeam);
-						break;
-					}
-					case 6: {
-						SetAis(4, c.cellTeam);
-						break;
-					}
-					case 7: {
-						SetAis(5, c.cellTeam);
-						break;
-					}
-					case 8: {
-						SetAis(6, c.cellTeam);
-						break;
-					}
-					case 9: {
-						SetAis(7, c.cellTeam);
-						break;
-					}
+				SetAis((int)c.cellTeam - 2, c.cellTeam);
 
-				}
+				//print((int)c.cellTeam + "  " + c.gameObject.name);
+				//switch ((int)c.cellTeam) {
+				//	case 2: {
+				//		SetAis(0, c.cellTeam);
+				//		break;
+				//	}
+				//	case 3: {
+				//		SetAis(1, c.cellTeam);
+				//		break;
+				//	}
+				//	case 4: {
+				//		SetAis(2, c.cellTeam);
+				//		break;
+				//	}
+				//	case 5: {
+				//		SetAis(3, c.cellTeam);
+				//		break;
+				//	}
+				//	case 6: {
+				//		SetAis(4, c.cellTeam);
+				//		break;
+				//	}
+				//	case 7: {
+				//		SetAis(5, c.cellTeam);
+				//		break;
+				//	}
+				//	case 8: {
+				//		SetAis(6, c.cellTeam);
+				//		break;
+				//	}
+				//	case 9: {
+				//		SetAis(7, c.cellTeam);
+				//		break;
+				//	}
+				//}
 			}
 		}
 
-		Dictionary<Cell.enmTeam, AllyHolder>.KeyCollection keys = clanDict.Keys;
+		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = clanDict.Keys;
 		foreach (Cell.enmTeam j in keys) {
-			AllyHolder temp;
+			AIHolder temp;
 
 			clanDict.TryGetValue(j, out temp);
 			List<Cell.enmTeam> allies = temp.allies;
+			List<Cell.enmTeam> targets = temp.targets;
 
-			foreach (int team in allies) {
-				AIs[(int)j - 2].AddAlly(AIs[team - 2]);
+
+			foreach (Cell.enmTeam team in allies) {
+				AIs[(int)j - 2].AddAlly((Enemy_AI)team);
+			}
+			foreach (Cell.enmTeam team in targets) {
+				AIs[(int)j - 2].AddTarget((Enemy_AI)team);
 			}
 		}
 
+		/*Test
+		foreach(KeyValuePair<Cell.enmTeam, AIHolder> kvp in clanDict) {
+			AIHolder temp = kvp.Value;
+
+			foreach (Cell.enmTeam team in kvp.Value.allies) {
+				AIs[(int)kvp.Key - 2].AddAlly((Enemy_AI)team);
+			}
+			foreach(Cell.enmTeam team in kvp.Value.targets) {
+				AIs[(int)kvp.Key - 2].AddTarget((Enemy_AI)team);
+			}
+		}
+		*/
 	}
 
 	public void SetAis(int index, Cell.enmTeam team) {
