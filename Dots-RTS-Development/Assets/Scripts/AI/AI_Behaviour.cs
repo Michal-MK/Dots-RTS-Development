@@ -5,7 +5,7 @@ public class AI_Behaviour : Enemy_AI {
 
 	private enum Decision { EXPAND, ATTACK, HELP };
 
-	private string s = "";
+	private string ss = "";
 	public bool printOutLog = false;
 
 	protected override void Start() {
@@ -14,58 +14,58 @@ public class AI_Behaviour : Enemy_AI {
 	}
 
 	private Decision CalculateBestChoice() {
-		s += "ATK = " + attackChoiceProbability + "EXP = " + expandChoiceProbability + "DEF = " + defendChoiceProbability + " | ";
-		s += "SELECTED AI = " + selectedAiCell + " TARGET = " + selectedTargetCell + " DEFENSE =  " + selectedAiCellForAid + " EXPAND = " + selectedNeutralCell + " | ";
+		ss += "ATK = " + attackChoiceProbability + "EXP = " + expandChoiceProbability + "DEF = " + defendChoiceProbability + " | ";
+		ss += "SELECTED AI = " + selectedAiCell + " TARGET = " + selectedTargetCell + " DEFENSE =  " + selectedAiCellForAid + " EXPAND = " + selectedNeutralCell + " | ";
 		if (attackChoiceProbability > expandChoiceProbability) {
-			s += "ATTACK++ ? | ";
+			ss += "ATTACK++ ? | ";
 			if ((defendChoiceProbability > expandChoiceProbability) && (defendChoiceProbability > attackChoiceProbability)) {
-				s += "defense ++ | ";
+				ss += "defense ++ | ";
 				if (Random.Range(0, 10) < 5) {
-					s += "def 50% | ";
+					ss += "def 50% | ";
 					return Decision.HELP;
 				}
 				else {
 					if (Random.Range(0, 10) < 5) {
-						s += "atk 25% | ";
+						ss += "atk 25% | ";
 						return Decision.ATTACK;
 					}
 					else {
-						s += "exp 25% | ";
+						ss += "exp 25% | ";
 						return Decision.EXPAND;
 					}
 				}
 			}
 			else {
-				s += "attack++ | ";
+				ss += "attack++ | ";
 				if (Random.Range(0, 10) < 7.5f) {
-					s += "atk 75% | ";
+					ss += "atk 75% | ";
 					return Decision.ATTACK;
 				}
 				else {
 					if (Random.Range(0, 10) < 5) {
-						s += "def 12.5% | ";
+						ss += "def 12.5% | ";
 						return Decision.HELP;
 					}
 					else {
-						s += "exp 12.5% | ";
+						ss += "exp 12.5% | ";
 						return Decision.EXPAND;
 					}
 				}
 			}
 		}
 		else {
-			s += "EXPAND++ ? | ";
+			ss += "EXPAND++ ? | ";
 			if (Random.Range(0, 10) < 8) {
-				s += "exp 80% | ";
+				ss += "exp 80% | ";
 				return Decision.EXPAND;
 			}
 			else {
 				if (Random.Range(0, 10) < 5) {
-					s += "atk 10% | ";
+					ss += "atk 10% | ";
 					return Decision.ATTACK;
 				}
 				else {
-					s += "def 10% | ";
+					ss += "def 10% | ";
 					return Decision.HELP;
 				}
 			}
@@ -109,33 +109,33 @@ public class AI_Behaviour : Enemy_AI {
 			 * Else this AI will shut down.
 			 */
 			if (_aiCells.Count != 0) {
-				s += "Selecting | ";
+				ss += "Selecting | ";
 				selectedAiCell = AiCellSelector();
 				//If we have exactly one cell in the pool, we cant select others, no halping each other is possible.
 				if (_aiCells.Count == 1) {
 					isAlone = true;
-					s += "Alone | ";
+					ss += "Alone | ";
 				}
-				s += "Not Alone | ";
+				ss += "Not Alone | ";
 
 			}
 			else {
 				isActive = false;
-				s += "No AI cell Selestion, DONE!";
+				ss += "No AI cell Selestion, DONE!";
 				if (printOutLog) {
-					print(s);
+					print(ss);
 				}
-				s = "";
+				ss = "";
 				yield break;
 			}
 
 			if (selectedAiCell == null) {
-				s += "Could not Select Cell";
+				ss += "Could not Select Cell";
 
 				if (printOutLog) {
-					print(s);
+					print(ss);
 				}
-				s = "";
+				ss = "";
 				goto restart;
 			}
 
@@ -143,83 +143,83 @@ public class AI_Behaviour : Enemy_AI {
 
 			//Aid selection
 			if (!isAlone) {
-				s += "Selecting Friend | ";
+				ss += "Selecting Friend | ";
 				selectedAiCellForAid = AiAidSelector();
 			}
 
 			//Target selection
 			if (_targets.Count != 0) {
-				s += "Selecting Target | ";
+				ss += "Selecting Target | ";
 				selectedTargetCell = TargetCellSelector();
 			}
 			else {
-				s += "No TARGET cell Selestion, DONE!";
+				ss += "No TARGET cell Selestion, DONE!";
 				if (printOutLog) {
-					print(s);
+					print(ss);
 				}
-				s = "";
+				ss = "";
 				yield break;
 			}
 
 			//Neutral cell selection
 			if (_neutrals.Count != 0) {
-				s += "Selecting Neutral | ";
+				ss += "Selecting Neutral | ";
 				selectedNeutralCell = ExpandCellSelector();
 			}
 			else {
-				s += "No Neutrals exist | ";
+				ss += "No Neutrals exist | ";
 				selectedNeutralCell = null;
 			}
 
 
-			s += "Calculating choices | ";
+			ss += "Calculating choices | ";
 			Decision factor = CalculateBestChoice();
 
 			//If these combinations are met the script will fail.. we have to redo the selection
 			if (selectedNeutralCell == null && factor == Decision.EXPAND) {
-				s += "Expanding with no free cells, DONE!";
+				ss += "Expanding with no free cells, DONE!";
 				if (printOutLog) {
-					print(s);
+					print(ss);
 				}
-				s = "";
+				ss = "";
 				goto redoAction;
 			}
 			if (isAlone == true && factor == Decision.HELP) {
-				s += "Aiding with no allies, DONE!";
+				ss += "Aiding with no allies, DONE!";
 				if (printOutLog) {
-					print(s);
+					print(ss);
 				}
-				s = "";
+				ss = "";
 				goto redoAction;
 			}
 			if (selectedTargetCell == null && factor == Decision.ATTACK) {
-				s += "Attacking with no targets, DONE!";
+				ss += "Attacking with no targets, DONE!";
 				if (printOutLog) {
-					print(s);
+					print(ss);
 				}
-				s = "";
+				ss = "";
 				goto restart;
 			}
 
 
 			if (factor == Decision.EXPAND) {
-				s += "Expanding as " + selectedAiCell + " to " + selectedNeutralCell + " END ";
+				ss += "Expanding as " + selectedAiCell + " to " + selectedNeutralCell + " END ";
 				Expand(selectedAiCell, selectedNeutralCell);
 
 			}
 			else if (factor == Decision.ATTACK) {
-				s += "Attacking as " + selectedAiCell + " cell " + selectedTargetCell + " END ";
+				ss += "Attacking as " + selectedAiCell + " cell " + selectedTargetCell + " END ";
 				Attack(selectedAiCell, selectedTargetCell);
 
 			}
 			else {
-				s += "Aiding as " + selectedAiCell + " teammates cell " + selectedAiCellForAid + " END ";
+				ss += "Aiding as " + selectedAiCell + " teammates cell " + selectedAiCellForAid + " END ";
 				Defend(selectedAiCell, selectedAiCellForAid);
 			}
 			if (printOutLog) {
-				print(s);
+				print(ss);
 			}
-			s = "";
+			ss = "";
 		}
 	}
 }

@@ -3,17 +3,24 @@ using UnityEngine;
 
 public class Initialize_AI : MonoBehaviour {
 
+	public GameObject playerData;
+
 	public bool[] initAIs = new bool[8] { false, false, false, false, false, false, false, false };
 
 	public Cell.enmTeam[] aiTeams = new Cell.enmTeam[8] { Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE };
 	public float[] decisionSpeeds = new float[8];
 	public static Enemy_AI[] AIs = new Enemy_AI[8];
 
+	private Player playerScript;
+
 	private void Start() {
 		//Should be necessary only for older saves and Debug scene
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == UnityEngine.SceneManagement.Scenes.DEBUG) {
 			StartAiInitialization(new Dictionary<Cell.enmTeam, AIHolder>());
 		}
+		GameObject g = Instantiate(playerData);
+		g.name = "Player";
+		playerScript = g.GetComponent<Player>();
 	}
 
 	//Goes though all the cells and creates an AI for each team.
@@ -68,7 +75,6 @@ public class Initialize_AI : MonoBehaviour {
 			clanDict.TryGetValue(j, out temp);
 			List<Cell.enmTeam> allies = temp.allies;
 			List<Cell.enmTeam> targets = temp.targets;
-
 
 			foreach (Cell.enmTeam team in allies) {
 				AIs[(int)j - 2].AddAlly((Enemy_AI)team);
@@ -142,6 +148,7 @@ public class Initialize_AI : MonoBehaviour {
 			ai.aiTeam = team;
 			ai.isActive = true;
 			AIs[index] = ai;
+			ai.playerScript = playerScript;
 		}
 	}
 }
