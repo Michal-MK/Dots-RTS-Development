@@ -19,6 +19,21 @@ public class TeamSetup : MonoBehaviour {
 	[HideInInspector]
 	public float roundTableR;
 
+	#region Dictionary debug tool
+	//Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = newDict.Keys;
+	//	foreach (Cell.enmTeam team in keys) {
+	//		string s = "";
+	//AIHolder hold = new AIHolder();
+	//newDict.TryGetValue(team, out hold);
+	//		foreach(Cell.enmTeam t in hold.targets) {
+	//			s += (" " + t + " ");
+
+	//		}
+	//		print(team + " has targets:" + s );
+			
+	//	}
+	#endregion
+
 	void OnEnable() {
 		print(GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor); 
 		roundTableR = ((roundTable.rect.width * 0.5f)) - teamGOPrefab.GetComponent<RectTransform>().sizeDelta.x;
@@ -323,6 +338,46 @@ public class TeamSetup : MonoBehaviour {
 		}
 		return output;
 	}
+
+	public Dictionary<Cell.enmTeam,AIHolder> dictWithAllInfo() {
+		Dictionary<Cell.enmTeam, AIHolder> newDict = new Dictionary<Cell.enmTeam, AIHolder>();
+		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection TeamKeys = clanDict.Keys;
+		List<Cell.enmTeam> noClaners = new List<Cell.enmTeam>(core.teamList);
+		foreach (Cell.enmTeam team in TeamKeys) {
+			noClaners.Remove(team);
+			AIHolder holder = new AIHolder();
+			if(clanDict.TryGetValue(team, out holder) == false) {
+				Debug.LogError("This can't happen");
+				clanDict.Add(team, holder);
+			}
+			holder.targets = new List<Cell.enmTeam>(core.teamList);
+			//print(" targets start " + holder.targets.Count);
+			//print(" allies " + holder.allies.Count);
+			holder.targets.Remove(team);
+			foreach (Cell.enmTeam ally in holder.allies) {
+				holder.targets.Remove(ally);
+				//print("this runs this time");
+			}
+			//print("targets ends at " + holder.targets.Count);
+			if (holder.targets.Count + holder.allies.Count != core.teamList.Count - 1) {
+				Debug.LogError("Targets&Allies don't add up to AllTeams");
+			}
+
+			newDict.Add(team, holder);
+			
+		}
+		foreach (Cell.enmTeam team in noClaners) {
+			AIHolder newAiHolder = new AIHolder();
+			newAiHolder.targets = new List<Cell.enmTeam>(core.teamList);
+			newAiHolder.targets.Remove(team);
+			newDict.Add(team, newAiHolder);
+		}
+		
+
+		return newDict;
+
+		
+	} 
 }
 
 [System.Serializable]

@@ -96,11 +96,17 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			}
 
 			save.savedAtAspect = Camera.main.aspect;
+
+
 			save.difficulty = core.aiDifficultyDict;
+
+
 			save.gameSize = core.gameSize;
 			save.levelInfo = new LevelInfo(core.levelName, core.authorName, DateTime.Now);
+
 			
-			save.clans = teams.clanDict;
+			save.clans = teams.dictWithAllInfo();
+
 			ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 			formatter.Serialize(file, save);
 			file.Close();
