@@ -288,7 +288,7 @@ public class TeamSetup : MonoBehaviour {
 		}
 
 		foreach (List<Cell.enmTeam> clan in actualClans) {
-
+			print("Useless loop says Hi! ... seriously, why is this here ?");
 
 		}
 		foreach (TeamBox t in newList) {
