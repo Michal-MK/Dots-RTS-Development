@@ -209,24 +209,10 @@ public class TeamSetup : MonoBehaviour {
 			Destroy(list[i]);
 		}
 	}
-	public void UpdateRoundTableVisuals() {
-
-		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keysDebug = clanDict.Keys;
-		foreach (Cell.enmTeam team in keysDebug) {
-			AIHolder holder = new AIHolder();
-			clanDict.TryGetValue(team, out holder);
-			string s = " ";
-			foreach (Cell.enmTeam ally in holder.allies) {
-				s += (ally + " ");
-			}
-			print("Team: " + team + " has allies" + s);
-		}
-
-
-		DestroyAllInList(bgList);
+	List<List<Cell.enmTeam>> CDToActualClans(Dictionary<Cell.enmTeam, AIHolder> dict) {
 		List<List<Cell.enmTeam>> actualClans = new List<List<Cell.enmTeam>>();
 
-		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = clanDict.Keys;
+		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = dict.Keys;
 		foreach (Cell.enmTeam j in keys) {
 			//print(j + " Key");
 			AIHolder value;
@@ -245,16 +231,35 @@ public class TeamSetup : MonoBehaviour {
 				}
 
 			}
-			if (newClan) {
+			if (newClan && clanJ.Count > 1) {
 				actualClans.Add(clanJ);
 			}
 
 		}
+		return actualClans;
+	}
+
+	public void UpdateRoundTableVisuals() {
+
+		//Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keysDebug = clanDict.Keys;
+		//foreach (Cell.enmTeam team in keysDebug) {
+		//	AIHolder holder = new AIHolder();
+		//	clanDict.TryGetValue(team, out holder);
+		//	string s = " ";
+		//	foreach (Cell.enmTeam ally in holder.allies) {
+		//		s += (ally + " ");
+		//	}
+		//	print("Team: " + team + " has allies" + s);
+		//}
+
+
+		DestroyAllInList(bgList);
+		
 		List<TeamBox> newList = new List<TeamBox>(teamBoxes);
 
 		float angle = 0;
 
-
+		List<List<Cell.enmTeam>> actualClans = CDToActualClans(clanDict);
 		for (int i = 0; i < actualClans.Count; i++) {
 			GameObject bg = Instantiate(clanBG, roundTable);
 			bgList.Add(bg);
@@ -284,11 +289,6 @@ public class TeamSetup : MonoBehaviour {
 				angle += diffAngle;
 			}
 			rt.rotation = Quaternion.Euler(0, 0, -lastTeamBoxAngle);
-
-		}
-
-		foreach (List<Cell.enmTeam> clan in actualClans) {
-
 
 		}
 		foreach (TeamBox t in newList) {
@@ -339,7 +339,7 @@ public class TeamSetup : MonoBehaviour {
 		return output;
 	}
 
-	public Dictionary<Cell.enmTeam,AIHolder> dictWithAllInfo() {
+	public Dictionary<Cell.enmTeam,AIHolder> DictWithAllInfo() {
 		Dictionary<Cell.enmTeam, AIHolder> newDict = new Dictionary<Cell.enmTeam, AIHolder>();
 		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection TeamKeys = clanDict.Keys;
 		List<Cell.enmTeam> noClaners = new List<Cell.enmTeam>(core.teamList);

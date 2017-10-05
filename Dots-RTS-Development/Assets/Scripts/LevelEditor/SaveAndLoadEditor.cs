@@ -105,7 +105,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			save.levelInfo = new LevelInfo(core.levelName, core.authorName, DateTime.Now);
 
 			
-			save.clans = teams.dictWithAllInfo();
+			save.clans = teams.DictWithAllInfo();
 
 			ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 			formatter.Serialize(file, save);
