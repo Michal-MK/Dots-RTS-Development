@@ -64,6 +64,13 @@ public class Enemy_AI : MonoBehaviour {
 
 		ConsiderAllies();
 		print("AI " + getCurrentAiTeam + " Initialized!");
+
+		foreach (Enemy_AI friend in alliesOfThisAI) {
+			print("ally of " + aiTeam + " is " + friend.aiTeam);
+		}
+		foreach (Enemy_AI target in targetsOfThisAI) {
+			print("target of " + aiTeam + " is " + target.aiTeam);
+		}
 	}
 
 	protected virtual void OnDestroy() {
@@ -73,14 +80,14 @@ public class Enemy_AI : MonoBehaviour {
 	private void CellBehaviour_TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current) {
 
 		if (isActive) {
-			if(previous == Cell.enmTeam.NEUTRAL) {
+			if (previous == Cell.enmTeam.NEUTRAL) {
 				for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
-					if(Initialize_AI.AIs[i] != null) {
+					if (Initialize_AI.AIs[i] != null) {
 						Initialize_AI.AIs[i]._neutrals.Remove(sender);
 					}
 				}
 				Enemy_AI reference = (Enemy_AI)current;
-				if(reference == this) {
+				if (reference == this) {
 					reference._aiCells.Add(sender);
 
 					foreach (Enemy_AI ally in reference.getAllies) {
@@ -92,21 +99,21 @@ public class Enemy_AI : MonoBehaviour {
 						target.ProcessData(currData, true);
 					}
 				}
-				else if(reference == null) {
+				else if (reference == null) {
 					//Cell was taken by a player --> we have no reference so we'll add sender as a target to every AI because player+enemy teams are not possible atm.
-					foreach(Enemy_AI ai in Initialize_AI.AIs) {
-						if(ai == this) {
+					foreach (Enemy_AI ai in Initialize_AI.AIs) {
+						if (ai == this) {
 							ai._targets.Add(sender);
 						}
 					}
 				}
 			}
-			if(previous == Cell.enmTeam.ALLIED) {
+			if (previous == Cell.enmTeam.ALLIED) {
 				Enemy_AI curr = (Enemy_AI)current;
 				curr._aiCells.Add(sender);
 				foreach (Enemy_AI ally in curr.getAllies) {
 					DataHolder currData = DataHolder.TransformForAlly(new DataHolder(curr, sender), ally);
-					ally.ProcessData(currData,true);
+					ally.ProcessData(currData, true);
 				}
 				foreach (Enemy_AI enemy in curr.getTargets) {
 					DataHolder currData = DataHolder.TransformForTarget(new DataHolder(curr, sender), enemy);
