@@ -160,7 +160,7 @@ public class LevelEditorCore : MonoBehaviour {
 		string path = PlayerPrefs.GetString("LoadLevelFilePath");
 		if (!string.IsNullOrEmpty(path)) {
 			saveAndLoad.Load(PlayerPrefs.GetString("LoadLevelFilePath"));
-		}	
+		}
 		//Set defalut mode to placeCells
 		editorMode = Mode.PlaceCells;
 	}
@@ -178,13 +178,15 @@ public class LevelEditorCore : MonoBehaviour {
 			c.ToggleCellOutline(true);
 		}
 		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
-			if (!loadedFromFile) {
-				if (!teamList.Contains(c.cellTeam)) {
-					teamList.Add(c.cellTeam);
+
+			if (!teamList.Contains(c.cellTeam)) {
+				teamList.Add(c.cellTeam);
+				if (!loadedFromFile) {
 					aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
 					AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 				}
 			}
+
 		}
 		if (loadedFromFile) {
 			for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {

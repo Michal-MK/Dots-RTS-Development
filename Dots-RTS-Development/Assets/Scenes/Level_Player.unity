@@ -292,7 +292,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 599.6117
+      value: 599.72473
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -416,7 +416,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 467.20877
+      value: 467.29355
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -1346,7 +1346,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 334.80585
+      value: 334.86237
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 631089167}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: 
@@ -1737,11 +1737,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -1965,7 +1965,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 996.82056
+      value: 997.0182
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -2683,7 +2683,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 1129.2235
+      value: 1129.4493
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -3836,7 +3836,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1263508644}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: 
@@ -3925,11 +3925,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -4196,7 +4196,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 202.40292
+      value: 202.43118
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -4723,7 +4723,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 864.4176
+      value: 864.58704
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -4887,7 +4887,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 1261.6265
+      value: 1261.8805
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -5017,7 +5017,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1465621277}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: 
@@ -5106,11 +5106,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -6452,7 +6452,7 @@ Prefab:
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 732.01465
+      value: 732.1559
       objectReference: {fileID: 0}
     - target: {fileID: 224330000714602946, guid: d1ba9546a2394a84a8392d5719b29294,
         type: 2}
@@ -7158,7 +7158,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1968041218}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: 
@@ -7247,11 +7247,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -7312,7 +7312,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2029816252}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: 
@@ -7401,11 +7401,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
