@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_AI : MonoBehaviour {
-
+public class Enemy_AI : MonoBehaviour, IAlly {
 
 	public bool isActive = true;
 
@@ -478,6 +477,9 @@ public class Enemy_AI : MonoBehaviour {
 	/// <param name="is_Adding">Is the selected process addition or deletion -- not implemented</param>
 	/// <param name="ai">The Ai to operate on, default points to the one specified in DataHolder</param>
 	private void ProcessData(DataHolder data, bool is_Adding, Enemy_AI ai = null) {
+
+		this.IsAllyOf(ai);
+
 		if (ai == null) {
 			ai = data.getAI;
 		}
@@ -532,6 +534,12 @@ public class Enemy_AI : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	public bool IsAllyOF(IAlly other) {
+		//	Enemy_AI ai = (Enemy_AI)other;
+		//	print(ai.aiTeam);
+		return false;
 	}
 
 	#region Getters and Operators

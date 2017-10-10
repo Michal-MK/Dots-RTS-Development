@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Conversions;
 
 public class TeamSetup : MonoBehaviour {
 
@@ -38,6 +39,7 @@ public class TeamSetup : MonoBehaviour {
 		print(GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor); 
 		roundTableR = ((roundTable.rect.width * 0.5f)) - teamGOPrefab.GetComponent<RectTransform>().sizeDelta.x;
 
+
 		for (int i = 0; i < core.teamList.Count; i++) {
 
 			GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
@@ -52,7 +54,7 @@ public class TeamSetup : MonoBehaviour {
 		float nextAngle = 0;
 
 		for (int i = 0; i < teamBoxes.Count; i++) {
-			teamBoxes[i].transform.localPosition = AngleToPos(nextAngle);
+			teamBoxes[i].transform.localPosition = BasicConversions.PolarToCartesian(nextAngle, roundTableR);
 
 			teamBoxes[i].myAngle = (nextAngle);
 			nextAngle += diffAngle;
@@ -162,14 +164,7 @@ public class TeamSetup : MonoBehaviour {
 		}
 	}
 
-	bool AlreadyIsInAllyHolder(AIHolder list, Cell.enmTeam value) {
-		for (int i = 0; i < list.allies.Count; i++) {
-			if (list.allies[i] == value) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
 
 	void CheckAndAddOtherTeams(Cell.enmTeam firstTeam, Cell.enmTeam secondTeam) {
 		AIHolder firstTeamFriends;
@@ -209,49 +204,8 @@ public class TeamSetup : MonoBehaviour {
 			Destroy(list[i]);
 		}
 	}
-	List<List<Cell.enmTeam>> CDToActualClans(Dictionary<Cell.enmTeam, AIHolder> dict) {
-		List<List<Cell.enmTeam>> actualClans = new List<List<Cell.enmTeam>>();
-
-		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = dict.Keys;
-		foreach (Cell.enmTeam j in keys) {
-			//print(j + " Key");
-			AIHolder value;
-			clanDict.TryGetValue(j, out value);
-			List<Cell.enmTeam> clanJ = new List<Cell.enmTeam>(value.allies);
-			clanJ.Add(j);
-			clanJ.Sort();
-
-
-			bool newClan = true;
-			foreach (List<Cell.enmTeam> clan in actualClans) {
-				//print(" one clan with [0] = " + clan[0]);
-				if (clanJ.Contains(clan[0])) {
-					newClan = false;
-					break;
-				}
-
-			}
-			if (newClan && clanJ.Count > 1) {
-				actualClans.Add(clanJ);
-			}
-
-		}
-		return actualClans;
-	}
 
 	public void UpdateRoundTableVisuals() {
-
-		//Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keysDebug = clanDict.Keys;
-		//foreach (Cell.enmTeam team in keysDebug) {
-		//	AIHolder holder = new AIHolder();
-		//	clanDict.TryGetValue(team, out holder);
-		//	string s = " ";
-		//	foreach (Cell.enmTeam ally in holder.allies) {
-		//		s += (ally + " ");
-		//	}
-		//	print("Team: " + team + " has allies" + s);
-		//}
-
 
 		DestroyAllInList(bgList);
 		
@@ -259,7 +213,8 @@ public class TeamSetup : MonoBehaviour {
 
 		float angle = 0;
 
-		List<List<Cell.enmTeam>> actualClans = CDToActualClans(clanDict);
+		
+		List<List<Cell.enmTeam>> actualClans = BasicConversions.CDToActualClans(clanDict);
 		for (int i = 0; i < actualClans.Count; i++) {
 			GameObject bg = Instantiate(clanBG, roundTable);
 			bgList.Add(bg);
@@ -278,7 +233,7 @@ public class TeamSetup : MonoBehaviour {
 				foreach (TeamBox t in teamBoxes) {
 					if (t.team == j) {
 						//Debug.Log(t.team);
-						t.transform.localPosition = AngleToPos(angle);
+						t.transform.localPosition = BasicConversions.PolarToCartesian(angle, roundTableR);
 						t.myAngle = angle;
 						t.AllThingsSet();
 						img.fillAmount += 1f / teamBoxes.Count;
@@ -292,7 +247,7 @@ public class TeamSetup : MonoBehaviour {
 
 		}
 		foreach (TeamBox t in newList) {
-			t.transform.localPosition = AngleToPos(angle);
+			t.transform.localPosition = BasicConversions.PolarToCartesian(angle, roundTableR);
 			t.myAngle = angle;
 			t.AllThingsSet();
 			angle += diffAngle;
@@ -301,9 +256,16 @@ public class TeamSetup : MonoBehaviour {
 
 	}
 
-	Vector2 AngleToPos(float angle) {
-		return new Vector2(Mathf.Sin(angle) * (roundTableR), Mathf.Cos(angle) * (roundTableR));
+
+	public static bool AlreadyIsInAllyHolder(AIHolder list, Cell.enmTeam value) {
+		for (int i = 0; i < list.allies.Count; i++) {
+			if (list.allies[i] == value) {
+				return true;
+			}
+		}
+		return false;
 	}
+
 
 
 	public int MySpawnsIndexFromTeam(Cell.enmTeam team) {
@@ -320,6 +282,7 @@ public class TeamSetup : MonoBehaviour {
 		}
 		return output;
 	}
+
 	public int MySpawnsIndexFromAngle(float RawAngle) {
 		float angle = RawAngle;
 		if (Mathf.Round(angle * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
@@ -373,7 +336,7 @@ public class TeamSetup : MonoBehaviour {
 			newDict.Add(team, newAiHolder);
 		}
 		
-
+		
 		return newDict;
 
 		
