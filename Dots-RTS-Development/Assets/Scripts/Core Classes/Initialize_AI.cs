@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Conversions;
 
 public class Initialize_AI : MonoBehaviour {
 
+	public static List<List<Cell.enmTeam>> clanList = new List<List<Cell.enmTeam>>();
 	public GameObject playerData;
 
 	public bool[] initAIs = new bool[8] { false, false, false, false, false, false, false, false };
@@ -25,46 +27,10 @@ public class Initialize_AI : MonoBehaviour {
 
 	//Goes though all the cells and creates an AI for each team.
 	public void StartAiInitialization(Dictionary<Cell.enmTeam, AIHolder> clanDict) {
+		clanList = BasicConversions.CDToActualClans(clanDict);
 		foreach (Cell c in PlayManager.cells) {
-			//If cell is enemy create ai for that enemy - Only once
 			if ((int)c.cellTeam >= 2) {
 				SetAis((int)c.cellTeam - 2, c.cellTeam);
-
-				//print((int)c.cellTeam + "  " + c.gameObject.name);
-				//switch ((int)c.cellTeam) {
-				//	case 2: {
-				//		SetAis(0, c.cellTeam);
-				//		break;
-				//	}
-				//	case 3: {
-				//		SetAis(1, c.cellTeam);
-				//		break;
-				//	}
-				//	case 4: {
-				//		SetAis(2, c.cellTeam);
-				//		break;
-				//	}
-				//	case 5: {
-				//		SetAis(3, c.cellTeam);
-				//		break;
-				//	}
-				//	case 6: {
-				//		SetAis(4, c.cellTeam);
-				//		break;
-				//	}
-				//	case 7: {
-				//		SetAis(5, c.cellTeam);
-				//		break;
-				//	}
-				//	case 8: {
-				//		SetAis(6, c.cellTeam);
-				//		break;
-				//	}
-				//	case 9: {
-				//		SetAis(7, c.cellTeam);
-				//		break;
-				//	}
-				//}
 			}
 		}
 
