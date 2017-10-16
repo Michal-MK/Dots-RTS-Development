@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class AI_Helper {
 	public static bool IsTargetOf(this Enemy_AI ai, Enemy_AI other) {
-		foreach (Enemy_AI temp in ai.getTargets) {
+		foreach (Enemy_AI temp in ai.getAiTargets) {
 			if (temp == other) {
 				return true;
 			}
@@ -13,7 +13,7 @@ public static class AI_Helper {
 	}
 
 	public static bool IsAllyOf(this Enemy_AI ai, Enemy_AI other) {
-		foreach (Enemy_AI temp in other.getAllies) {
+		foreach (Enemy_AI temp in other.getAiAllies) {
 			if (ai == temp) {
 				return true;
 			}
@@ -31,11 +31,11 @@ public static class AI_Helper {
 	}
 
 	public static void AddAlly(this Enemy_AI ai, Enemy_AI ally) {
-		ai.getAllies.Add(ally);
+		ai.getAiAllies.Add(ally);
 	}
 
 	public static void AddTarget(this Enemy_AI ai,Enemy_AI target) {
-		ai.getTargets.Add(target);
+		ai.getAiTargets.Add(target);
 	}
 }
 

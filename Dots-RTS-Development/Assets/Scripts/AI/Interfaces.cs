@@ -4,8 +4,12 @@ using System;
 using System.Collections.Generic;
 
 public interface IAlly {
-	bool IsAllyOF(IAlly other);
+	Cell.enmTeam Team { get; }
+	List<IAlly> Targets { get; set; }
+	List<IAlly> Allies { get; set; }
 
+	bool IsAllyOf(IAlly other);
+	bool IsTargetOf(IAlly other);
 }
 
 public static class IAllyExtension {

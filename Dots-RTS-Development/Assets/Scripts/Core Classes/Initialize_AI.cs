@@ -111,7 +111,7 @@ public class Initialize_AI : MonoBehaviour {
 				}
 			}
 			ai.decisionSpeed = decisionSpeeds[index];
-			ai.aiTeam = team;
+			ai.team = team;
 			ai.isActive = true;
 			AIs[index] = ai;
 			ai.playerScript = playerScript;
