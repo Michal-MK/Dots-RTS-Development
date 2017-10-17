@@ -560,16 +560,12 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		}
 	}
 
-
-
-	public List<IAlly> Allies => throw new NotImplementedException();
-
-	public bool IsAllyOf(Cell.enmTeam other) {
-		if ()
+	public bool IsAllyOf(IAlly other) {
+		return Allies.Contains(other);
 	}
 
 	public bool IsTargetOf(IAlly other) {
-		throw new NotImplementedException();
+		return Targets.Contains(other);
 	}
 
 #endregion
@@ -603,7 +599,16 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	/// Get a list containing all targets of this AI
 	/// </summary>
 	public List<Enemy_AI> getAiTargets {
-		get { return targetsOfThisAI; }
+		get {
+			List<Enemy_AI> ais = new List<Enemy_AI>();
+			foreach (IAlly target in targetsOfThisAI) {
+				Enemy_AI ai = target as Enemy_AI;
+				if (target != null) {
+					ais.Add(ai);
+				}
+			}
+			return ais;
+		}
 	}
 
 	/// <summary>
