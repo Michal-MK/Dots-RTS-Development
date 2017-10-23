@@ -75,7 +75,7 @@ public class AI_Behaviour : Enemy_AI {
 	#region Function to preform ATTACKS, DEFENCES, EXPANSIONS
 	//Expand from - to
 	private void Expand(CellBehaviour selectedCell, CellBehaviour toTarget) {
-		if (_neutrals.Count == 0) {
+		if (PlayManager.neutralCells.Count == 0) {
 			print("Expanding to NONE -- return;");
 			return;
 		}
@@ -162,7 +162,7 @@ public class AI_Behaviour : Enemy_AI {
 			}
 
 			//Neutral cell selection
-			if (_neutrals.Count != 0) {
+			if (PlayManager.neutralCells.Count != 0) {
 				ss += "Selecting Neutral | ";
 				selectedNeutralCell = ExpandCellSelector();
 			}

@@ -14,6 +14,7 @@ public class PlayManager : MonoBehaviour {
 	}
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
+	public static List<CellBehaviour> neutralCells = new List<CellBehaviour>();
 
 	private float time;
 	private bool isInGame = true;

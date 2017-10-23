@@ -8,8 +8,9 @@ public static class AI_Helper {
 		ai.getAiAllies.Add(ally);
 	}
 
-	public static void AddTarget(this Enemy_AI ai,Enemy_AI target) {
+	public static void AddTarget(this Enemy_AI ai, Enemy_AI target) {
 		ai.getAiTargets.Add(target);
 	}
+
 }
 

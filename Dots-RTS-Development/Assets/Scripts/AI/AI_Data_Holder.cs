@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DataHolder {
+public class AI_Data_Holder {
 
 	private Enemy_AI _ai;
 	private CellBehaviour senderCell;
@@ -10,7 +10,7 @@ public class DataHolder {
 	private int[] cellIndexes = new int[4] { -1, -1, -1, -1 };
 
 	//Constructor
-	public DataHolder(Enemy_AI AI, CellBehaviour cell) {
+	public AI_Data_Holder(Enemy_AI AI, CellBehaviour cell) {
 		_ai = AI;
 		senderCell = cell;
 
@@ -29,14 +29,20 @@ public class DataHolder {
 				cellIndexes[2] = i;
 			}
 		}
-		for (int i = 0; i < AI._neutrals.Count; i++) {
-			if (AI._neutrals[i] == cell) {
-				cellIndexes[3] = i;
+	}
+
+	public AI_Data_Holder(Player player, CellBehaviour cell) {
+		_ai = null;
+		senderCell = cell;
+
+		for (int i = 0; i < player.playerCells.Count; i++) {
+			if (player.playerCells[i] == cell) {
+				cellIndexes[0] = i;
 			}
 		}
 	}
 
-	public static DataHolder TransformForAlly(DataHolder data, Enemy_AI ally) {
+	public static AI_Data_Holder TransformForAlly(AI_Data_Holder data, Enemy_AI ally) {
 
 		data._ai = ally;
 		data.isModified = true;
@@ -47,7 +53,7 @@ public class DataHolder {
 		return data;
 	}
 
-	public static DataHolder TransformForTarget(DataHolder data, Enemy_AI target) {
+	public static AI_Data_Holder TransformForTarget(AI_Data_Holder data, Enemy_AI target) {
 		data._ai = target;
 		data.isModified = true;
 

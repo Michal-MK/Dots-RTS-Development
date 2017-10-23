@@ -20,14 +20,16 @@ public class Initialize_AI : MonoBehaviour {
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == UnityEngine.SceneManagement.Scenes.DEBUG) {
 			StartAiInitialization(new Dictionary<Cell.enmTeam, AIHolder>());
 		}
-		GameObject g = Instantiate(playerData);
-		g.name = "Player";
-		playerScript = g.GetComponent<Player>();
 	}
 
 	//Goes though all the cells and creates an AI for each team.
 	public void StartAiInitialization(Dictionary<Cell.enmTeam, AIHolder> clanDict) {
 		clanList = BasicConversions.CDToActualClans(clanDict);
+
+		GameObject g = Instantiate(playerData);
+		g.name = "Player";
+		playerScript = g.GetComponent<Player>();
+
 		foreach (Cell c in PlayManager.cells) {
 			if ((int)c.cellTeam >= 2) {
 				SetAis((int)c.cellTeam - 2, c.cellTeam);

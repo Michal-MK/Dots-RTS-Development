@@ -20,6 +20,9 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 	public override void Awake() {
 		base.Awake();
 		PlayManager.cells.Add(this);
+		if(cellTeam == enmTeam.NEUTRAL) {
+			PlayManager.neutralCells.Add(this);
+		}
 	}
 
 	//Set default

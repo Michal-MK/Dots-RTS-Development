@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System;
 
 public class Player : MonoBehaviour, IAlly {
-	Cell.enmTeam playerTeam;
-	List<IAlly> alliesOfPlayer;
-	List<IAlly> targetsOfPlayer;
+	public Cell.enmTeam playerTeam;
+	private List<IAlly> alliesOfPlayer = new List<IAlly>();
+	private List<IAlly> targetsOfPlayer = new List<IAlly>();
 
 	public List<IAlly> listOfAlly = new List<IAlly>();
 	public List<CellBehaviour> playerCells = new List<CellBehaviour>();
@@ -26,7 +26,8 @@ public class Player : MonoBehaviour, IAlly {
 		}
 	}
 
-	public List<IAlly> Targets { get {
+	public List<IAlly> Targets {
+		get {
 			return targetsOfPlayer;
 		}
 		set { targetsOfPlayer = value;
