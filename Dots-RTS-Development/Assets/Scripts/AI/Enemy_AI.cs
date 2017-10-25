@@ -45,7 +45,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			if (current.cellTeam == team) {
 				_aiCells.Add(current);
 			}
-			else {
+			else if(current.cellTeam != Cell.enmTeam.NEUTRAL) {
 				_targets.Add(current);
 			}
 		}
@@ -139,12 +139,19 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 				Enemy_AI prevAI = (Enemy_AI)previous;
 				//If Player took over the cell
 				if (current == Cell.enmTeam.ALLIED) {
-					//Cell was taken by a player --> we have no reference so we'll add sender as a target to every AI because player+enemy teams are not possible atm.
 					foreach (Enemy_AI ally in playerScript.Allies) {
 						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
 						ally.ProcessData(currData, true);
+						print("Updating players allies :");
+						foreach (IAlly e in playerScript.Allies) {
+							print(((Enemy_AI)e).gameObject.name);
+						}
 					}
 					foreach (Enemy_AI enemy in playerScript.Targets) {
+						print("Updating players targets :");
+						foreach (IAlly e in playerScript.Targets) {
+							print(((Enemy_AI)e).gameObject.name);
+						}
 						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), enemy);
 						enemy.ProcessData(currData, true);
 					}
