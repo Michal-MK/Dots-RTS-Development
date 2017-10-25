@@ -38,6 +38,9 @@ public class Initialize_AI : MonoBehaviour {
 
 		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = clanDict.Keys;
 		foreach (Cell.enmTeam j in keys) {
+			if (j == Cell.enmTeam.ALLIED) {
+				continue;
+			}
 			AIHolder temp;
 
 			clanDict.TryGetValue(j, out temp);
@@ -67,6 +70,7 @@ public class Initialize_AI : MonoBehaviour {
 	}
 
 	public void SetAis(int index, Cell.enmTeam team) {
+		print("THIS ACTUALLY GOT CALLED");
 		if (initAIs[index] == false) {
 			initAIs[index] = true;
 			aiTeams[index] = team;
