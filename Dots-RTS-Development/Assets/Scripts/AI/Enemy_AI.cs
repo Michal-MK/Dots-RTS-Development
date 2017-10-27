@@ -85,20 +85,23 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		 */
 		if (isActive) {
 			if (previous == Cell.enmTeam.NEUTRAL) {
-
+				
 				Enemy_AI reference = (Enemy_AI)current;
+				
 				if (reference == this) {
 					reference._aiCells.Add(sender);
 
 					foreach (Enemy_AI ally in reference.getAiAllies) {
 						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(reference, sender), ally);
 						ally.ProcessData(currData, true);
+						
 					}
 					foreach (Enemy_AI target in reference.getAiTargets) {
 						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(reference, sender), target);
 						target.ProcessData(currData, true);
 					}
 				}
+				
 				else if (reference == null) {
 					//Was player
 					playerScript.playerCells.Add(sender);
@@ -563,7 +566,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			List<Enemy_AI> ais = new List<Enemy_AI>();
 			foreach (IAlly ally in alliesOfThisAI) {
 				Enemy_AI ai = ally as Enemy_AI;
-				if (ally != null) {
+				if (ai != null) {
 					ais.Add(ai);
 				}
 			}
@@ -586,7 +589,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			List<Enemy_AI> ais = new List<Enemy_AI>();
 			foreach (IAlly target in targetsOfThisAI) {
 				Enemy_AI ai = target as Enemy_AI;
-				if (target != null) {
+				if (ai != null) {
 					ais.Add(ai);
 				}
 			}
