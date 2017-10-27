@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 
 public class Player : MonoBehaviour, IAlly {
-	public Cell.enmTeam playerTeam;
+	public Cell.enmTeam playerTeam = Cell.enmTeam.ALLIED;
 	private List<IAlly> alliesOfPlayer = new List<IAlly>();
 	private List<IAlly> targetsOfPlayer = new List<IAlly>();
 
@@ -42,11 +42,33 @@ public class Player : MonoBehaviour, IAlly {
 		}
 	}
 
+	public List<CellBehaviour> MyCells {
+		get {
+			return playerCells;
+		}
+	}
+
 	public bool IsAllyOf(IAlly other) {
 		return Allies.Contains(other);
 	}
 
 	public bool IsTargetOf(IAlly other) {
 		return Targets.Contains(other);
+	}
+
+	public void AddAlly(IAlly ally) {
+		alliesOfPlayer.Add(ally);
+	}
+
+	public void RemoveAlly(IAlly ally) {
+		alliesOfPlayer.Remove(ally);
+	}
+
+	public void AddTarget(IAlly target) {
+		alliesOfPlayer.Add(target);
+	}
+
+	public void RemoveTarget(IAlly target) {
+		alliesOfPlayer.Remove(target);
 	}
 }

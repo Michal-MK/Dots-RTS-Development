@@ -37,21 +37,53 @@ public class Initialize_AI : MonoBehaviour {
 		}
 
 		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = clanDict.Keys;
-		foreach (Cell.enmTeam j in keys) {
-			if (j == Cell.enmTeam.ALLIED) {
-				continue;
+		List<Cell.enmTeam> tl = new List<Cell.enmTeam>();
+		foreach (Cell.enmTeam q in keys) {
+			tl.Add (q);
+		}
+
+
+		List<IAlly> InterfaceList = new List<IAlly>();
+		foreach (Enemy_AI ai in AIs) {
+
+			if (ai != null && tl.Contains (ai.team)) {
+				InterfaceList.Add(ai);
 			}
+		}
+		InterfaceList.Add(playerScript);
+
+
+		foreach (IAlly iAlly in InterfaceList) {
+			//print(iAlly.Team);
 			AIHolder temp;
 
-			clanDict.TryGetValue(j, out temp);
-			List<Cell.enmTeam> allies = temp.allies;
-			List<Cell.enmTeam> targets = temp.targets;
-
-			foreach (Cell.enmTeam team in allies) {
-				AIs[(int)j - 2].AddAlly((Enemy_AI)team);
+			if (clanDict.TryGetValue(iAlly.Team, out temp) == false) {
+				Debug.LogError("Not all IAlly|s are in the dictionary");
 			}
+			List<Cell.enmTeam> allies = temp.allies;
+			List<IAlly> alliesI = new List<IAlly>();
+			foreach (Cell.enmTeam team in allies) {
+				foreach (IAlly t in InterfaceList) {
+					if (t.Team == team) {
+						alliesI.Add(t);
+					}
+				}
+			}
+			List<Cell.enmTeam> targets = temp.targets;
+			List<IAlly> targetsI = new List<IAlly>();
 			foreach (Cell.enmTeam team in targets) {
-				AIs[(int)j - 2].AddTarget((Enemy_AI)team);
+				foreach (IAlly t in InterfaceList) {
+					if (t.Team == team) {
+						targetsI.Add(t);
+					}
+				}
+			}
+
+			foreach (IAlly ally in alliesI) {
+				iAlly.AddAlly(ally);
+			}
+			foreach (IAlly targ in targetsI) {
+				iAlly.AddTarget(targ);
 			}
 		}
 
