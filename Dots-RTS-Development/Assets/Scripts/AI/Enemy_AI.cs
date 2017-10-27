@@ -83,7 +83,6 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		 *	3. Current is Target of Enemy
 		 *		- Update targets and allies
 		 */
-
 		if (isActive) {
 			if (previous == Cell.enmTeam.NEUTRAL) {
 
@@ -232,11 +231,11 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 		//Loop through all allied Enemy_AIs
 		for (int j = 0; j < getAiAllies.Count; j++) {
-			Enemy_AI currentAlly = getAiAllies[j];                                                                                 //print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
+			IAlly currentAlly = Allies[j];                                                                                 //print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
 
 			//Loop though all aiCells of the allied Enemy_AI
-			for (int k = 0; k < currentAlly._aiCells.Count; k++) {
-				CellBehaviour currentCellOfTheAlliedAI = currentAlly._aiCells[k];                                       //print(currentAlliedCellOfTheAlliedAI.gameObject.name);
+			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
+				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                       //print(currentAlliedCellOfTheAlliedAI.gameObject.name);
 
 				//Loop though all the targets of this AI
 				for (int l = 0; l < this._targets.Count; l++) {
@@ -572,6 +571,13 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		}
 	}
 
+	public List<CellBehaviour> MyCells {
+		get {
+			return _aiCells;
+		}
+	}
+
+
 	/// <summary>
 	/// Get a list containing all targets of this AI
 	/// </summary>
@@ -586,6 +592,19 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			}
 			return ais;
 		}
+	}
+
+	public void AddAlly(IAlly ally) {
+		alliesOfThisAI.Add(ally);
+	}
+	public void RemoveAlly(IAlly ally) {
+		alliesOfThisAI.Remove(ally);
+	}
+	public void AddTarget(IAlly target) {
+		targetsOfThisAI.Add(target);
+	}
+	public void RemoveTarget(IAlly target) {
+		targetsOfThisAI.Remove(target);
 	}
 
 	/// <summary>
