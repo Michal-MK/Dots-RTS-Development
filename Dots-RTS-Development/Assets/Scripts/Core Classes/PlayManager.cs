@@ -37,6 +37,7 @@ public class PlayManager : MonoBehaviour {
 
 		StopAllCoroutines();
 		cells.Clear();
+		neutralCells.Clear();
 	}
 
 	public IEnumerator GameState() {
