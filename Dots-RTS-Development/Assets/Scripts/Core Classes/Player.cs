@@ -65,10 +65,10 @@ public class Player : MonoBehaviour, IAlly {
 	}
 
 	public void AddTarget(IAlly target) {
-		alliesOfPlayer.Add(target);
+		targetsOfPlayer.Add(target);
 	}
 
 	public void RemoveTarget(IAlly target) {
-		alliesOfPlayer.Remove(target);
+		targetsOfPlayer.Remove(target);
 	}
 }

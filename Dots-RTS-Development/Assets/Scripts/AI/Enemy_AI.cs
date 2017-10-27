@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,6 +39,15 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	protected virtual void Start() {
 		CellBehaviour.TeamChanged += CellBehaviour_TeamChanged;
 
+
+		ConsiderAllies();
+
+		print("AI " + getCurrentAiTeam + " Initialized!");
+	}
+	protected virtual void OnDestroy() {
+		CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
+	}
+	public void FindRelationWithCells() {
 		for (int i = 0; i < PlayManager.cells.Count; i++) {
 
 			CellBehaviour current = PlayManager.cells[i];
@@ -45,16 +55,10 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			if (current.cellTeam == team) {
 				_aiCells.Add(current);
 			}
-			else if(current.cellTeam != Cell.enmTeam.NEUTRAL) {
+			else if (current.cellTeam != Cell.enmTeam.NEUTRAL) {
 				_targets.Add(current);
 			}
 		}
-
-		ConsiderAllies();
-		print("AI " + getCurrentAiTeam + " Initialized!");
-	}
-	protected virtual void OnDestroy() {
-		CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
 	}
 
 	//AI List sorting logic
@@ -108,11 +112,11 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 					foreach (Enemy_AI ally in playerScript.Allies) {
 						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
-						ally.ProcessData(currData, true);
+						ally.ProcessData(currData, true, ally);
 					}
 					foreach (Enemy_AI target in playerScript.Targets) {
 						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), target);
-						target.ProcessData(currData, true);
+						target.ProcessData(currData, true, target);
 					}
 				}
 			}
@@ -180,7 +184,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 					Enemy_AI currAI = (Enemy_AI)current;
 
 					if (prevAI == this) {
-						prevAI._targets.Add(sender);
+						//prevAI._targets.Add(sender);
 						prevAI._aiCells.Remove(sender);
 
 						//Every ally of prevAI had to be a target of currAI -- so all of the Ais should remove that cell from their ally list
@@ -224,32 +228,32 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	//Update this AI's allies and targets
 	private void ConsiderAllies() {  //Needs revalidtion / rewrite
 
-		//Bad way of implementing Targets
+		////Bad way of implementing Targets
 
-		for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
-			bool isAlly = false;
-			for (int j = 0; j < getAiAllies.Count; j++) {
-				if (Initialize_AI.AIs[i] == getAiAllies[j]) {
-					isAlly = true;
-				}
-			}
-			if (isAlly == false && Initialize_AI.AIs[i] != null && Initialize_AI.AIs[i] != this) {
-				targetsOfThisAI.Add(Initialize_AI.AIs[i]);
-			}
-		}
+		//for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
+		//	bool isAlly = false;
+		//	for (int j = 0; j < getAiAllies.Count; j++) {
+		//		if (Initialize_AI.AIs[i] == getAiAllies[j]) {
+		//			isAlly = true;
+		//		}
+		//	}
+		//	if (isAlly == false && Initialize_AI.AIs[i] != null && Initialize_AI.AIs[i] != this) {
+		//		targetsOfThisAI.Add(Initialize_AI.AIs[i]);
+		//	}
+		//}
 
-
-		//Loop through all allied Enemy_AIs
+		//Loop through all allied IAllies
 		for (int j = 0; j < getAiAllies.Count; j++) {
-			IAlly currentAlly = Allies[j];                                                                                 //print("My ally has " + alliesOfThisAI[j]._aiCells.Count + " cells.  " + gameObject.name);
+			IAlly currentAlly = Allies[j];                                                                                 print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
 
-			//Loop though all aiCells of the allied Enemy_AI
+			//Loop though all aiCells of the allied IAlly
 			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
-				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                       //print(currentAlliedCellOfTheAlliedAI.gameObject.name);
+				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];
+														print(currentCellOfTheAlliedAI.gameObject.name);
 
 				//Loop though all the targets of this AI
 				for (int l = 0; l < this._targets.Count; l++) {
-					CellBehaviour myTarget = this._targets[l];                                                                         //print("Comparing " + currentAlliedCellOfTheAlliedAI + " to " + current + "ENEMY 2");
+					CellBehaviour myTarget = this._targets[l];                                                                         print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
 					if (currentCellOfTheAlliedAI == myTarget) {

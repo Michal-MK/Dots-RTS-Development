@@ -12,7 +12,7 @@ public class Initialize_AI : MonoBehaviour {
 	public Cell.enmTeam[] aiTeams = new Cell.enmTeam[8] { Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE };
 	public float[] decisionSpeeds = new float[8];
 	public static Enemy_AI[] AIs = new Enemy_AI[8];
-
+	
 	private Player playerScript;
 
 	private void Start() {
@@ -33,6 +33,7 @@ public class Initialize_AI : MonoBehaviour {
 		foreach (Cell c in PlayManager.cells) {
 			if ((int)c.cellTeam >= 2) {
 				SetAis((int)c.cellTeam - 2, c.cellTeam);
+				print("B");
 			}
 		}
 
@@ -87,6 +88,11 @@ public class Initialize_AI : MonoBehaviour {
 			}
 		}
 
+		foreach (Enemy_AI ai in AIs) {
+			if (ai != null) {
+				ai.FindRelationWithCells();
+			}
+		}
 		/*Test
 		foreach(KeyValuePair<Cell.enmTeam, AIHolder> kvp in clanDict) {
 			AIHolder temp = kvp.Value;
@@ -102,7 +108,7 @@ public class Initialize_AI : MonoBehaviour {
 	}
 
 	public void SetAis(int index, Cell.enmTeam team) {
-		print("THIS ACTUALLY GOT CALLED");
+		
 		if (initAIs[index] == false) {
 			initAIs[index] = true;
 			aiTeams[index] = team;

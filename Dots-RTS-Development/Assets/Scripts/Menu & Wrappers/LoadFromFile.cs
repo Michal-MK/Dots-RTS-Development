@@ -38,7 +38,7 @@ public class LoadFromFile : MonoBehaviour {
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
 			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
 			foreach (Cell.enmTeam key in diffKeys) {
-				print("Possible error");
+				//print("Possible error");
 				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
 			}
 
