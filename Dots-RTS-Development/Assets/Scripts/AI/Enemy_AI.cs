@@ -42,11 +42,12 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 		ConsiderAllies();
 
-		print("AI " + getCurrentAiTeam + " Initialized!");
+		//print("AI " + getCurrentAiTeam + " Initialized!");
 	}
 	protected virtual void OnDestroy() {
 		CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
 	}
+
 	public void FindRelationWithCells() {
 		for (int i = 0; i < PlayManager.cells.Count; i++) {
 
@@ -65,49 +66,60 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	private void CellBehaviour_TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current) {
 		/*
 		 * We have to cover all cases that can happen -- Only do them when the AI is active
-		 * 1. Previous was Neutral
-		 *		- Update neutrals in AI - DONE
-		 *	1.Current is Neutral
-		 *	2.Current is Player
-		 *		- Update targets and allies - TEMP
-		 *	3.Current is Enemy
-		 *		- Update targets and allies - DONE
+		 * (1.) Previous was Neutral
+		 *			- Update neutrals in AI - DONE GLOBALY
+		 *		2.Current is Player
+		 *			- Set targets and allies - DONE
+		 *		3.Current is Enemy
+		 *			- Set targets and allies - DONE
 		 *	
-		 * 2. Previous was Player
-		 *		- Update targets and allies - NIY
-		 *	1. Current is Neutral
-		 *	2. Current is Enemy
+		 * (2.) Previous was Player
+		 *		- Remove self - DONE
 		 *		- Update targets and allies - DONE
+		 *		1. Current is Neutral - IMPOSSIBLE
+		 *		2. Current is Enemy
+		 *			- Update self - DONE
+		 *			- Update targets and allies - DONE
 		 *	
-		 * 3.Previous was Enemy
+		 * (3.) Previous was Enemy
+		 *		- Remove self
 		 *		- Update targets and allies - TEMP
-		 *	1. Current is Neutral
-		 *	2. Current is Ally of Enemy
-		 *		- Update targets and allies
-		 *	3. Current is Target of Enemy
-		 *		- Update targets and allies
+		 *		1. Current is Neutral - IMPOSSIBLE
+		 *		2. Current is Player:
+		 *			- Update self - DONE
+		 *			- Update targets and allies - DONE
+		 *			1. Player is Ally of previous
+		 *			2. Player is Target of previous
+		 *		3.Current is Enemy
+		 *			- Update self - DONE
+		 *			- Update targets and allies - DONE
+		 *			1. Enemy is Ally of previous
+		 *			2. Enemy is Target of previous
 		 */
+
 		if (isActive) {
 			if (previous == Cell.enmTeam.NEUTRAL) {
-				
-				Enemy_AI reference = (Enemy_AI)current;
-				
-				if (reference == this) {
-					reference._aiCells.Add(sender);
 
-					foreach (Enemy_AI ally in reference.getAiAllies) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(reference, sender), ally);
+				Enemy_AI currAI = (Enemy_AI)current;
+
+				if (currAI == this) {
+					print("AI took over NEUTRAL---------------------");
+					currAI._aiCells.Add(sender);
+
+					foreach (Enemy_AI ally in currAI.getAiAllies) {
+						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(currAI, sender), ally);
 						ally.ProcessData(currData, true);
-						
+
 					}
-					foreach (Enemy_AI target in reference.getAiTargets) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(reference, sender), target);
+					foreach (Enemy_AI target in currAI.getAiTargets) {
+						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(currAI, sender), target);
 						target.ProcessData(currData, true);
 					}
 				}
-				
-				else if (reference == null) {
-					//Was player
+
+				else if (currAI == null) {
+					print("PLAYER took over NEUTRAL---------------------");
+
 					playerScript.playerCells.Add(sender);
 
 					foreach (Enemy_AI ally in playerScript.Allies) {
@@ -125,17 +137,29 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 				playerScript.playerCells.Remove(sender);
 
-				Enemy_AI curr = (Enemy_AI)current;
-				if (curr == this) {
-					curr._aiCells.Add(sender);
-					curr._targets.Remove(sender);
+				foreach (Enemy_AI ally in playerScript.Allies) {
+					AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
+					ally.ProcessData(currData, false);
+				}
+				foreach (Enemy_AI enemy in playerScript.Targets) {
+					AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), enemy);
+					enemy.ProcessData(currData, false);
+				}
 
-					foreach (Enemy_AI ally in curr.getAiAllies) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(curr, sender), ally);
+				Enemy_AI currAI = (Enemy_AI)current;
+
+				if (currAI == this) {
+					print("AI took over PLAYER---------------------");
+
+					currAI._aiCells.Add(sender);
+					currAI._targets.Remove(sender);
+
+					foreach (Enemy_AI ally in currAI.getAiAllies) {
+						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(currAI, sender), ally);
 						ally.ProcessData(currData, true);
 					}
-					foreach (Enemy_AI enemy in curr.getAiTargets) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(curr, sender), enemy);
+					foreach (Enemy_AI enemy in currAI.getAiTargets) {
+						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(currAI, sender), enemy);
 						enemy.ProcessData(currData, true);
 					}
 				}
@@ -143,21 +167,15 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 			if ((int)previous >= 2) {
 				Enemy_AI prevAI = (Enemy_AI)previous;
-				//If Player took over the cell
+
 				if (current == Cell.enmTeam.ALLIED) {
+					print("PLAYER took over AI---------------------");
+
 					foreach (Enemy_AI ally in playerScript.Allies) {
 						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
 						ally.ProcessData(currData, true);
-						print("Updating players allies :");
-						foreach (IAlly e in playerScript.Allies) {
-							print(((Enemy_AI)e).gameObject.name);
-						}
 					}
 					foreach (Enemy_AI enemy in playerScript.Targets) {
-						print("Updating players targets :");
-						foreach (IAlly e in playerScript.Targets) {
-							print(((Enemy_AI)e).gameObject.name);
-						}
 						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), enemy);
 						enemy.ProcessData(currData, true);
 					}
@@ -165,45 +183,48 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 					if (prevAI == this) {
 						prevAI._aiCells.Remove(sender);
 
-
-						if (playerScript.IsAllyOf(prevAI)) {
-							print("Y u took my cell ;.;");
-						}
-						else {
-							foreach (Enemy_AI enemy in prevAI.getAiTargets) {
-								AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), enemy);
-								enemy.ProcessData(currData, true);
-							}
-						}
-
-					}
-				}
-				else {
-					//If AI took over the cell
-					AI_Data_Holder dataPrevAI = new AI_Data_Holder(prevAI, sender);
-					Enemy_AI currAI = (Enemy_AI)current;
-
-					if (prevAI == this) {
-						//prevAI._targets.Add(sender);
-						prevAI._aiCells.Remove(sender);
-
-						//Every ally of prevAI had to be a target of currAI -- so all of the Ais should remove that cell from their ally list
 						foreach (Enemy_AI ally in prevAI.getAiAllies) {
 							AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(prevAI, sender), ally);
 							ally.ProcessData(currData, false);
 						}
-						//Any target of prevAI can be an Ally of currAI -- that decides whether we add sender as targets target or not
-						foreach (Enemy_AI target in prevAI.getAiTargets) {
-							if (target.IsAllyOf(currAI)) {
-								AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), target);
-								target.ProcessData(currData, false);
-							}
-							else {
-								AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), target);
-								target.ProcessData(currData, true);
-							}
+						foreach (Enemy_AI enemy in prevAI.getAiTargets) {
+							AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), enemy);
+							enemy.ProcessData(currData, false);
+						}
+
+						if (playerScript.IsAllyOf(prevAI)) {
+							print("Y u took my cell ;.;");
 						}
 					}
+				}
+
+				else {
+					print("AI took over AI---------------------");
+
+					Enemy_AI currAI = (Enemy_AI)current;
+
+					if (prevAI == this) {
+						prevAI._aiCells.Remove(sender);
+
+						foreach (Enemy_AI ally in prevAI.getAiAllies) {
+							AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(prevAI, sender), ally);
+							ally.ProcessData(currData, false);
+						}
+						foreach (Enemy_AI target in prevAI.getAiTargets) {
+							AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), target);
+							target.ProcessData(currData, false);
+						}
+
+						if (prevAI.IsAllyOf(currAI)) {
+							print("Y U Took me cell bro...?");
+							print(prevAI.gameObject.name + " Will be adding as an Ally");
+							currAI._allies.Remove(sender);
+						}
+						else if (prevAI.IsTargetOf(currAI)) {
+							print(prevAI.gameObject.name + " Will be adding as a Target");
+						}
+					}
+
 					if (currAI == this) {
 						currAI._aiCells.Add(sender);
 						currAI._targets.Remove(sender);
@@ -228,32 +249,17 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	//Update this AI's allies and targets
 	private void ConsiderAllies() {  //Needs revalidtion / rewrite
 
-		////Bad way of implementing Targets
-
-		//for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
-		//	bool isAlly = false;
-		//	for (int j = 0; j < getAiAllies.Count; j++) {
-		//		if (Initialize_AI.AIs[i] == getAiAllies[j]) {
-		//			isAlly = true;
-		//		}
-		//	}
-		//	if (isAlly == false && Initialize_AI.AIs[i] != null && Initialize_AI.AIs[i] != this) {
-		//		targetsOfThisAI.Add(Initialize_AI.AIs[i]);
-		//	}
-		//}
-
 		//Loop through all allied IAllies
 		for (int j = 0; j < getAiAllies.Count; j++) {
-			IAlly currentAlly = Allies[j];                                                                                 print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
+			Debug.LogWarning("Ehm.. hello we are looping throug one array and using its indexes in another..");
+			IAlly currentAlly = Allies[j];																					//print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
 
 			//Loop though all aiCells of the allied IAlly
 			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
-				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];
-														print(currentCellOfTheAlliedAI.gameObject.name);
+				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                            //Loop though all the targets of this AI
 
-				//Loop though all the targets of this AI
 				for (int l = 0; l < this._targets.Count; l++) {
-					CellBehaviour myTarget = this._targets[l];                                                                         print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
+					CellBehaviour myTarget = this._targets[l];                                                              //print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
 					if (currentCellOfTheAlliedAI == myTarget) {
@@ -446,87 +452,62 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	}
 
 	/// <summary>
-	/// Accepts a cell, returns location of that cell in every AI present.
-	/// </summary>
-	/// <param name="referenceCell">Cell to use in the aglorythm</param>
-	/// <returns></returns>
-	private List<AI_Data_Holder> GetCellInstances(CellBehaviour referenceCell) {
-		List<AI_Data_Holder> AIs_Cells = new List<AI_Data_Holder>();
-		for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
-			if (Initialize_AI.AIs[i] != null) {
-				Enemy_AI currentAI = Initialize_AI.AIs[i];
-				AI_Data_Holder data = new AI_Data_Holder(currentAI, referenceCell);
-				AIs_Cells.Add(data);
-			}
-		}
-		return AIs_Cells;
-	}
-
-	/// <summary>
-	/// Accepts a cell, return its location in the AI provided
-	/// </summary>
-	/// <param name="referenceCell">The cell to look for.</param>
-	/// <param name="ai">The AI to look in.</param>
-	/// <returns></returns>
-	private AI_Data_Holder GetCellInstances(CellBehaviour referenceCell, Enemy_AI ai) {
-		AI_Data_Holder data = new AI_Data_Holder(ai, referenceCell);
-		return data;
-	}
-
-	/// <summary>
 	/// Applies information stored in the Data format to a selected AI
 	/// </summary>
 	/// <param name="data">The data to process</param>
-	/// <param name="is_Adding">Is the selected process addition or deletion -- not implemented</param>
+	/// <param name="is_Adding">Is the selected process addition or deletion</param>
 	/// <param name="ai">The Ai to operate on, default points to the one specified in DataHolder</param>
 	private void ProcessData(AI_Data_Holder data, bool is_Adding, Enemy_AI ai = null) {
 
 		if (ai == null) {
 			ai = data.getAI;
 		}
+		else if (ai != data.getAI) {
+			throw new Exception("AI mismatch, trying to apply data for " + ai.gameObject.name + " to " + data.getAI.gameObject.name);
+		}
 
-		for (int i = 0; i < data.getCellIndexes.Length; i++) {
-			if (data.getCellIndexes[i] != -1) {
-				switch (i) {
-					case 0: {
-						if (is_Adding) {
-							if (!ai._aiCells.Contains(data.getSender)) {
-								ai._aiCells.Add(data.getSender);
-							}
-						}
-						else {
-							ai._aiCells.Remove(data.getSender);
-						}
-						break;
-					}
-					case 1: {
-						if (is_Adding) {
-							if (!ai._targets.Contains(data.getSender)) {
-								ai._targets.Add(data.getSender);
-							}
-						}
-						else {
-							ai._targets.Remove(data.getSender);
-						}
-						break;
-					}
-					case 2: {
-						if (is_Adding) {
-							if (!ai._allies.Contains(data.getSender)) {
-								ai._allies.Add(data.getSender);
-							}
-						}
-						else {
-							ai._allies.Remove(data.getSender);
-						}
-						break;
+		switch (data.getRelation) {
+			case AI_Data_Holder.RelationToAI.MYSELF: {
+				if (is_Adding) {
+					if (!ai._aiCells.Contains(data.getSender)) {
+						ai._aiCells.Add(data.getSender);
 					}
 				}
+				else {
+					ai._aiCells.Remove(data.getSender);
+				}
+				break;
+			}
+			case AI_Data_Holder.RelationToAI.TARGET: {
+				if (is_Adding) {
+					if (!ai._targets.Contains(data.getSender)) {
+						ai._targets.Add(data.getSender);
+						ai._allies.Remove(data.getSender);
+					}
+				}
+				else {
+					ai._targets.Remove(data.getSender);
+				}
+				break;
+			}
+			case AI_Data_Holder.RelationToAI.ALLY: {
+				if (is_Adding) {
+					if (!ai._allies.Contains(data.getSender)) {
+						ai._allies.Add(data.getSender);
+						ai._targets.Remove(data.getSender);
+					}
+				}
+				else {
+					ai._allies.Remove(data.getSender);
+				}
+				break;
 			}
 		}
+
+
 	}
 
-#region IAlly implementation
+	#region IAlly implementation
 	public Cell.enmTeam Team {
 		get {
 			return team;
@@ -558,7 +539,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		return Targets.Contains(other);
 	}
 
-#endregion
+	#endregion
 
 	#region Getters and Operators
 	/// <summary>

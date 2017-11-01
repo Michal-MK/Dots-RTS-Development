@@ -98,7 +98,7 @@ public class AI_Behaviour : Enemy_AI {
 
 
 		while (isActive) {
-			print("Waiting " + (decisionSpeed) + " seconds.");
+			//print("Waiting " + (decisionSpeed) + " seconds.");
 			restart: //If selection fails for a known reason use goto restart;
 			yield return new WaitForSeconds(decisionSpeed);
 			redoAction: //If selection fails due to a flaw in the design LEL use goto redoAction;

@@ -33,7 +33,6 @@ public class Initialize_AI : MonoBehaviour {
 		foreach (Cell c in PlayManager.cells) {
 			if ((int)c.cellTeam >= 2) {
 				SetAis((int)c.cellTeam - 2, c.cellTeam);
-				print("B");
 			}
 		}
 
