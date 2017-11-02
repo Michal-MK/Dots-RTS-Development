@@ -44,7 +44,7 @@ public class LoadFromFile : MonoBehaviour {
 
 			for (int j = 0; j < customSave.cells.Count; j++) {
 
-				CellBehaviour c = Instantiate(cellPrefab).GetComponent<CellBehaviour>();
+				CellBehaviour c = cellPrefab.GetComponent<CellBehaviour>();
 
 				c.cellPosition = (Vector3)customSave.cells[j].pos;
 				c.gameObject.transform.position = c.cellPosition;
@@ -52,13 +52,14 @@ public class LoadFromFile : MonoBehaviour {
 				c.maxElements = customSave.cells[j].maxElementCount;
 				c.cellTeam = (Cell.enmTeam)customSave.cells[j].team;
 				c.regenPeriod = customSave.cells[j].regenerationPeriod;
-				c.uManager.PreinstallUpgrades = customSave.cells[j].installedUpgrades;
 
-				c.gameObject.name = "Cell " + j + " " + c.cellTeam;
+				CellBehaviour cg = Instantiate(cellPrefab).GetComponent<CellBehaviour>();
 
-				c.enabled = true;
+				cg.uManager.PreinstallUpgrades = customSave.cells[j].installedUpgrades;
+				cg.gameObject.name = "Cell " + j + " " + c.cellTeam;
+				cg.enabled = true;
 
-				c.UpdateCellInfo();
+				//c.UpdateCellInfo();
 			}
 			init.StartAiInitialization(customSave.clans);
 		}

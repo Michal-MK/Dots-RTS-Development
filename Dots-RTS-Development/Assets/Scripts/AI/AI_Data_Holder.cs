@@ -13,9 +13,8 @@ public class AI_Data_Holder {
 		MYSELF,
 		PLAYER
 	}
-	//private int[] cellIndexes = new int[3] { -1, -1, -1 };
 
-	//Constructor
+	//Constructor initially created object can only have reference to itself
 	public AI_Data_Holder(Enemy_AI AI, CellBehaviour cell) {
 		_ai = AI;
 		_senderCell = cell;
@@ -28,6 +27,12 @@ public class AI_Data_Holder {
 		_relation = RelationToAI.PLAYER;
 	}
 
+	/// <summary>
+	///When we create a new Holder object, and transform it, the initial AI is changed and the reference is updated to refer to "sender" in relation to initial AI
+	/// </summary>
+	/// <param name="data">The data to modify</param>
+	/// <param name="target">The Ally we are changing reference to</param>
+	/// <returns></returns>
 	public static AI_Data_Holder TransformForAlly(AI_Data_Holder data, Enemy_AI ally) {
 
 		data._ai = ally;
@@ -37,7 +42,12 @@ public class AI_Data_Holder {
 
 		return data;
 	}
-
+	/// <summary>
+	///When we create a new Holder object, and transform it, the initial AI is changed and the reference is updated to refer to "sender" in relation to initial AI
+	/// </summary>
+	/// <param name="data">The data to modify</param>
+	/// <param name="target">The Target we are changing reference to</param>
+	/// <returns></returns>
 	public static AI_Data_Holder TransformForTarget(AI_Data_Holder data, Enemy_AI target) {
 		data._ai = target;
 		data.isModified = true;

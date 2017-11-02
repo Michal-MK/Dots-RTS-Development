@@ -351,54 +351,6 @@ public class CellBehaviour : Cell, IPointerEnterHandler, IPointerClickHandler, I
 		#endregion
 	}
 
-	//Old Attack code
-	//private void OnMouseOver() {
-	//	Legacy Attack behaviour
-	//		if (Input.GetMouseButtonUp(0)) {
-	//		print("OnMouseOver " + gameObject.name);
-	//			AttackWrapper(this, cellTeam);
-	//}
-	//}
-	//
-	//private void OnMouseEnter() {
-	//print("Entering cell");
-	//Legacy Attack behaviour
-	//if (Input.GetMouseButton(0)) {
-	//	if (cellTeam == enmTeam.ALLIED) {
-	//		ModifySelection(this);
-	//print("Added " + gameObject.name);
-	//}
-	//}
-	//}
-	//
-	//Hides Upgrade Slots
-	//private void OnMouseExit() {
-	//print("Exitting Cell");
-	//base.UpdateCellInfo();
-	//}
-	//
-	//
-	//Determine action depending on clicked cell's team.
-	//private void OnMouseDown() {
-	//print("Clicking on Cell");
-	//if (cellTeam == enmTeam.ALLIED) {
-	//	ModifySelection(this);
-	//	//print("Added " + gameObject.name);
-	//}
-	//}
-	//
-	//private void OnMouseUp() {
-	//print("Releasing button over cell");
-	////print(gameObject.name);
-	//if (cellTeam != enmTeam.ALLIED) {
-	//	AttackWrapper(this, cellTeam);
-	//}
-	//else {
-	//	EmpowerCell(this);
-	//}
-	//circle.positionCount = 0;
-	//}
-
 	public void OnPointerEnter(PointerEventData eventData) {
 
 		Background.onReleaseClear = false;

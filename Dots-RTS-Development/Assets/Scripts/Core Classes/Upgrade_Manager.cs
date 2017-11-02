@@ -77,7 +77,7 @@ public class Upgrade_Manager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// 	Does the cell have this type of upgrade already?
+	/// Does the cell have this type of upgrade already?
 	/// </summary>
 	/// <param name="type"></param>
 	/// <returns>Amount of upgrades of type "type" in this cell.</returns>

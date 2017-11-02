@@ -39,11 +39,11 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	protected virtual void Start() {
 		CellBehaviour.TeamChanged += CellBehaviour_TeamChanged;
 
-
 		ConsiderAllies();
 
-		//print("AI " + getCurrentAiTeam + " Initialized!");
+		print("AI " + getCurrentAiTeam + " Initialized!");
 	}
+
 	protected virtual void OnDestroy() {
 		CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
 	}
@@ -104,47 +104,23 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 				if (currAI == this) {
 					print("AI took over NEUTRAL---------------------");
+
 					currAI._aiCells.Add(sender);
-
-					foreach (Enemy_AI ally in currAI.getAiAllies) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(currAI, sender), ally);
-						ally.ProcessData(currData, true);
-
-					}
-					foreach (Enemy_AI target in currAI.getAiTargets) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(currAI, sender), target);
-						target.ProcessData(currData, true);
-					}
+					UpdateCellLists(currAI, sender, true, true);
 				}
 
 				else if (currAI == null) {
 					print("PLAYER took over NEUTRAL---------------------");
 
 					playerScript.playerCells.Add(sender);
-
-					foreach (Enemy_AI ally in playerScript.Allies) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
-						ally.ProcessData(currData, true, ally);
-					}
-					foreach (Enemy_AI target in playerScript.Targets) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), target);
-						target.ProcessData(currData, true, target);
-					}
+					UpdateCellLists(playerScript, sender, true, true);
 				}
 			}
 
 			if (previous == Cell.enmTeam.ALLIED) {
 
 				playerScript.playerCells.Remove(sender);
-
-				foreach (Enemy_AI ally in playerScript.Allies) {
-					AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
-					ally.ProcessData(currData, false);
-				}
-				foreach (Enemy_AI enemy in playerScript.Targets) {
-					AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), enemy);
-					enemy.ProcessData(currData, false);
-				}
+				UpdateCellLists(playerScript, sender, false, false);
 
 				Enemy_AI currAI = (Enemy_AI)current;
 
@@ -153,15 +129,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 					currAI._aiCells.Add(sender);
 					currAI._targets.Remove(sender);
-
-					foreach (Enemy_AI ally in currAI.getAiAllies) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(currAI, sender), ally);
-						ally.ProcessData(currData, true);
-					}
-					foreach (Enemy_AI enemy in currAI.getAiTargets) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(currAI, sender), enemy);
-						enemy.ProcessData(currData, true);
-					}
+					UpdateCellLists(currAI, sender, true, true);
 				}
 			}
 
@@ -171,26 +139,12 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 				if (current == Cell.enmTeam.ALLIED) {
 					print("PLAYER took over AI---------------------");
 
-					foreach (Enemy_AI ally in playerScript.Allies) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
-						ally.ProcessData(currData, true);
-					}
-					foreach (Enemy_AI enemy in playerScript.Targets) {
-						AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), enemy);
-						enemy.ProcessData(currData, true);
-					}
+					UpdateCellLists(playerScript, sender, true, true);
 
 					if (prevAI == this) {
 						prevAI._aiCells.Remove(sender);
 
-						foreach (Enemy_AI ally in prevAI.getAiAllies) {
-							AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(prevAI, sender), ally);
-							ally.ProcessData(currData, false);
-						}
-						foreach (Enemy_AI enemy in prevAI.getAiTargets) {
-							AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), enemy);
-							enemy.ProcessData(currData, false);
-						}
+						UpdateCellLists(prevAI, sender, false, false);
 
 						if (playerScript.IsAllyOf(prevAI)) {
 							print("Y u took my cell ;.;");
@@ -206,13 +160,10 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 					if (prevAI == this) {
 						prevAI._aiCells.Remove(sender);
 
-						foreach (Enemy_AI ally in prevAI.getAiAllies) {
-							AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(prevAI, sender), ally);
-							ally.ProcessData(currData, false);
-						}
-						foreach (Enemy_AI target in prevAI.getAiTargets) {
-							AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(prevAI, sender), target);
-							target.ProcessData(currData, false);
+						UpdateCellLists(prevAI, sender, false, false);
+
+						if(prevAI._aiCells.Count == 0) {
+							DisableAI(this);
 						}
 
 						if (prevAI.IsAllyOf(currAI)) {
@@ -229,14 +180,8 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 						currAI._aiCells.Add(sender);
 						currAI._targets.Remove(sender);
 
-						foreach (Enemy_AI ally in currAI.getAiAllies) {
-							AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(currAI, sender), ally);
-							ally.ProcessData(currData, true);
-						}
-						foreach (Enemy_AI target in currAI.getAiTargets) {
-							AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(currAI, sender), target);
-							target.ProcessData(currData, true);
-						}
+						UpdateCellLists(currAI, sender, true, true);
+
 					}
 				}
 			}
@@ -248,206 +193,28 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 	//Update this AI's allies and targets
 	private void ConsiderAllies() {  //Needs revalidtion / rewrite
+		if(gameObject.name == "AI code 1 enemy 2") {
+			print("");
+		}
 
 		//Loop through all allied IAllies
-		for (int j = 0; j < getAiAllies.Count; j++) {
-			Debug.LogWarning("Ehm.. hello we are looping throug one array and using its indexes in another..");
+		for (int j = 0; j < Allies.Count; j++) {
 			IAlly currentAlly = Allies[j];																					//print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
 
 			//Loop though all aiCells of the allied IAlly
 			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
 				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                            //Loop though all the targets of this AI
 
-				for (int l = 0; l < this._targets.Count; l++) {
-					CellBehaviour myTarget = this._targets[l];                                                              //print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
+				for (int l = 0; l < _targets.Count; l++) {
+					CellBehaviour thisAIsTarget = _targets[l];                                                              //print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
-					if (currentCellOfTheAlliedAI == myTarget) {
-						this._allies.Add(myTarget);
-						this._targets.Remove(myTarget);
+					if (currentCellOfTheAlliedAI == thisAIsTarget) {
+						_allies.Add(thisAIsTarget);
+						_targets.Remove(thisAIsTarget);
 					}
 				}
 			}
-		}
-	}
-
-	public CellBehaviour AiCellSelector() {
-		int elementRecordAI = -1;
-		int recordIndex = -1;
-		CellBehaviour current;
-
-		for (int i = 0; i < _aiCells.Count; i++) {
-			current = _aiCells[i];
-
-			//Find the best cell to work with (the most elements)
-			if (current.elementCount > elementRecordAI) {
-				elementRecordAI = current.elementCount;
-				recordIndex = i;
-			}
-
-			//Just return curent cell
-			if (UnityEngine.Random.Range(0, 10) < 1) {
-				s += "Selected 10% chance | ";
-				return current;
-			}
-		}
-		//If the biggest cell has more than "x" elements 80% return it
-		if (elementRecordAI > aICellSelectElementTreshold) {
-			if (UnityEngine.Random.Range(0, 10) < 6) {
-				s += "Selected cell above threshold | ";
-				return _aiCells[recordIndex];
-			}
-			else {
-				s += "Cells above treshold exist, but were not selected | ";
-				//If a target that can be overtaken exists still try to attack
-				for (int i = 0; i < _aiCells.Count; i++) {
-					for (int j = 0; j < _targets.Count; j++) {
-						if ((_aiCells[i].elementCount * 0.5f) > ((_targets[j].elementCount) + 1)) {
-							if (UnityEngine.Random.Range(0, 10) < 6) {
-								s += "Selected Cell with guaranteed Overtake | ";
-								return _aiCells[i];
-							}
-							else {
-								s += "NO selection in second Chance | ";
-								return null;
-							}
-						}
-					}
-				}
-				s += "NO selection above " + aICellSelectElementTreshold + " treshold REALISM PLS | ";
-				return null;
-			}
-		}
-		else {
-			s += "NO cell (highest " + elementRecordAI + ") above " + aICellSelectElementTreshold + " treshold | ";
-			return null;
-		}
-	}
-
-	public CellBehaviour TargetCellSelector() {
-		//if I don't have an attacker .. don't even bother.
-		if (selectedAiCell == null) {
-			return null;
-		}
-
-		int elementRecord = 99999;
-		int recordIndex = -1;
-
-		CellBehaviour current;
-
-		for (int i = 0; i < _targets.Count; i++) {
-			current = _targets[i];
-
-			//Just return curent cell
-			if (UnityEngine.Random.Range(0, 10) < 2) {
-				attackChoiceProbability = 0.3f;
-				return current;
-			}
-			//Find the best cell to attack
-			if (current.elementCount < elementRecord) {
-				elementRecord = current.elementCount;
-				recordIndex = i;
-			}
-			//If curret cell's element count is smaller than the one attacking 60% return it
-			if (current.elementCount < selectedAiCell.elementCount) {
-				if (UnityEngine.Random.Range(0, 10) < 6) {
-					attackChoiceProbability = 0.6f;
-					return current;
-				}
-			}
-		}
-		//70% return the best target
-		if (UnityEngine.Random.Range(0, 10) < 7) {
-			attackChoiceProbability = 0.7f;
-			return _targets[recordIndex];
-		}
-		else {
-			attackChoiceProbability = 0f;
-			return _targets[recordIndex];
-		}
-	}
-
-	public CellBehaviour ExpandCellSelector() {
-		CellBehaviour current;
-
-		int elementRecord = 99999;
-		int recordIndex = -1;
-		for (int i = 0; i < PlayManager.neutralCells.Count; i++) {
-			current = PlayManager.neutralCells[i];
-
-			//If there is still posibility to expand just return the curent cell
-			if (UnityEngine.Random.Range(0, 10) < 4) {
-				expandChoiceProbability = 0.4f;
-				return current;
-			}
-			//Find a neutral cell that has the least elements
-			if (current.elementCount < elementRecord) {
-				elementRecord = current.elementCount;
-				recordIndex = i;
-			}
-
-			//If the neutral cell has less than "x" elements in it 80% return it
-			if (current.elementCount < 5) {
-				if (UnityEngine.Random.Range(0, 10) < 8) {
-					expandChoiceProbability = 0.8f;
-					return current;
-				}
-			}
-		}
-		//20% return the best cell you found
-		expandChoiceProbability = 0.2f;
-		return PlayManager.neutralCells[recordIndex];
-	}
-
-	public CellBehaviour AiAidSelector() {
-
-		CellBehaviour current;
-
-		int elementRecord = 99999;
-		int recordIndex = -1;
-		for (int i = 0; i < _aiCells.Count; i++) {
-			current = _aiCells[i];
-			//Locate a cell with the lest amount of elements
-			if (current.elementCount < elementRecord) {
-				if (current != selectedAiCell) {
-					elementRecord = current.elementCount;
-					recordIndex = i;
-				}
-			}
-			//If you get one and it has < 5 elements => 50% return it
-			if (current.elementCount < 5) {
-				if (UnityEngine.Random.Range(0, 10) < 5) {
-					if (current != selectedAiCell) {
-						if (Mathf.Abs(selectedAiCell.elementCount - current.elementCount) > aICellAidElementTreshold) {
-							defendChoiceProbability = 0.5f;
-						}
-						else {
-							defendChoiceProbability = 0.2f;
-						}
-						return current;
-					}
-				}
-			}
-			//Random cell for help
-			if (UnityEngine.Random.Range(0, 10) < 1) {
-				expandChoiceProbability = 0.1f;
-				return current;
-			}
-		}
-		// 40% return the best cell you found
-		if (UnityEngine.Random.Range(0, 10) < 4) {
-			if (Mathf.Abs(selectedAiCell.elementCount - _aiCells[recordIndex].elementCount) > aICellAidElementTreshold) {
-				defendChoiceProbability = 0.6f;
-			}
-			else {
-				defendChoiceProbability = 0.2f;
-			}
-			return _aiCells[recordIndex];
-		}
-		//Helping not recommended
-		else {
-			defendChoiceProbability = 0f;
-			return _aiCells[recordIndex];
 		}
 	}
 
@@ -503,8 +270,48 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 				break;
 			}
 		}
+	}
 
+	/// <summary>
+	///	Wrapper for Updating cell lists inside an AI
+	/// </summary>
+	/// <param name="playerScript">The script to operate on</param>
+	/// <param name="sender">The cell that activated this function call</param>
+	/// <param name="addAllies">Should we add the cell or remove it?</param>
+	/// <param name="addTargets">Should we add the cell or remove it?</param>
+	private void UpdateCellLists(Player playerScript, CellBehaviour sender, bool addAllies, bool addTargets) {
+		foreach (Enemy_AI ally in playerScript.Allies) {
+			AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
+			ally.ProcessData(currData, addAllies);
+		}
 
+		foreach (Enemy_AI enemy in playerScript.Targets) {
+			AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(playerScript, sender), enemy);
+			enemy.ProcessData(currData, addTargets);
+		}
+	}
+	/// <summary>
+	///	Wrapper for Updating cell lists inside an AI
+	/// </summary>
+	/// <param name="ai">The script to operate on</param>
+	/// <param name="sender">The cell that activated this function call</param>
+	/// <param name="addAllies">Should we add the cell or remove it?</param>
+	/// <param name="addTargets">Should we add the cell or remove it?</param>
+	private void UpdateCellLists(Enemy_AI ai, CellBehaviour sender, bool addAllies, bool addTargets) {
+		foreach (Enemy_AI ally in ai.getAiAllies) {
+			AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(ai, sender), ally);
+			ally.ProcessData(currData, addAllies);
+		}
+
+		foreach (Enemy_AI enemy in ai.getAiTargets) {
+			AI_Data_Holder currData = AI_Data_Holder.TransformForTarget(new AI_Data_Holder(ai, sender), enemy);
+			enemy.ProcessData(currData, addTargets);
+		}
+	}
+
+	private void DisableAI(Enemy_AI ai) {
+		ai.isActive = false;
+		print("AI " + ai.gameObject.name + " was deactivaed, No cells remain.");
 	}
 
 	#region IAlly implementation

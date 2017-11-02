@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System;
 
 public class Player : MonoBehaviour, IAlly {
+
 	public Cell.enmTeam playerTeam = Cell.enmTeam.ALLIED;
 	private List<IAlly> alliesOfPlayer = new List<IAlly>();
 	private List<IAlly> targetsOfPlayer = new List<IAlly>();
 
 	public List<IAlly> listOfAlly = new List<IAlly>();
 	public List<CellBehaviour> playerCells = new List<CellBehaviour>();
-
-	
 
 	private void Start() {
 		foreach (CellBehaviour cell in PlayManager.cells) {

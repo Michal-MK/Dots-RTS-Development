@@ -54,7 +54,6 @@ public class Initialize_AI : MonoBehaviour {
 
 
 		foreach (IAlly iAlly in InterfaceList) {
-			//print(iAlly.Team);
 			AIHolder temp;
 
 			if (clanDict.TryGetValue(iAlly.Team, out temp) == false) {
