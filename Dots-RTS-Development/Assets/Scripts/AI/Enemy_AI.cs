@@ -115,6 +115,8 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 					playerScript.playerCells.Add(sender);
 					UpdateCellLists(playerScript, sender, true, true);
 				}
+
+				PlayManager.neutralCells.Remove(sender);
 			}
 
 			if (previous == Cell.enmTeam.ALLIED) {

@@ -86,6 +86,7 @@ public class PlayManager : MonoBehaviour {
 
 	private void FixedUpdate() {
 		time += Time.fixedDeltaTime;
+
 	}
 
 	public void GameOver() {
