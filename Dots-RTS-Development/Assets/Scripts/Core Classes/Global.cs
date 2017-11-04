@@ -26,8 +26,6 @@ public class Global {
 		await Task.WhenAll(tasks);
 
 		baseLoaded = true;
-
-
 	}
 }
 

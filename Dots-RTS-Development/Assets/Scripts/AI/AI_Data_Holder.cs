@@ -1,58 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DataHolder {
+public class AI_Data_Holder {
 
 	private Enemy_AI _ai;
-	private CellBehaviour senderCell;
+	private CellBehaviour _senderCell;
+	private RelationToAI _relation;
 	private bool isModified = false;
-
-	private int[] cellIndexes = new int[4] { -1, -1, -1, -1 };
-
-	//Constructor
-	public DataHolder(Enemy_AI AI, CellBehaviour cell) {
-		_ai = AI;
-		senderCell = cell;
-
-		for (int i = 0; i < AI._aiCells.Count; i++) {
-			if (AI._aiCells[i] == cell) {
-				cellIndexes[0] = i;
-			}
-		}
-		for (int i = 0; i < AI._targets.Count; i++) {
-			if (AI._targets[i] == cell) {
-				cellIndexes[1] = i;
-			}
-		}
-		for (int i = 0; i < AI._allies.Count; i++) {
-			if (AI._allies[i] == cell) {
-				cellIndexes[2] = i;
-			}
-		}
-		for (int i = 0; i < AI._neutrals.Count; i++) {
-			if (AI._neutrals[i] == cell) {
-				cellIndexes[3] = i;
-			}
-		}
+	public enum RelationToAI {
+		ALLY,
+		TARGET,
+		MYSELF,
+		PLAYER
 	}
 
-	public static DataHolder TransformForAlly(DataHolder data, Enemy_AI ally) {
+	//Constructor initially created object can only have reference to itself
+	public AI_Data_Holder(Enemy_AI AI, CellBehaviour cell) {
+		_ai = AI;
+		_senderCell = cell;
+		_relation = RelationToAI.MYSELF;
+	}
+
+	public AI_Data_Holder(Player player, CellBehaviour cell) {
+		_ai = null;
+		_senderCell = cell;
+		_relation = RelationToAI.PLAYER;
+	}
+
+	/// <summary>
+	///When we create a new Holder object, and transform it, the initial AI is changed and the reference is updated to refer to "sender" in relation to initial AI
+	/// </summary>
+	/// <param name="data">The data to modify</param>
+	/// <param name="target">The Ally we are changing reference to</param>
+	/// <returns></returns>
+	public static AI_Data_Holder TransformForAlly(AI_Data_Holder data, Enemy_AI ally) {
 
 		data._ai = ally;
 		data.isModified = true;
 
-		data.cellIndexes[2] = data.cellIndexes[0];
-		data.cellIndexes[0] = -1;
+		data._relation = RelationToAI.ALLY;
 
 		return data;
 	}
-
-	public static DataHolder TransformForTarget(DataHolder data, Enemy_AI target) {
+	/// <summary>
+	///When we create a new Holder object, and transform it, the initial AI is changed and the reference is updated to refer to "sender" in relation to initial AI
+	/// </summary>
+	/// <param name="data">The data to modify</param>
+	/// <param name="target">The Target we are changing reference to</param>
+	/// <returns></returns>
+	public static AI_Data_Holder TransformForTarget(AI_Data_Holder data, Enemy_AI target) {
 		data._ai = target;
 		data.isModified = true;
 
-		data.cellIndexes[1] = data.cellIndexes[0];
-		data.cellIndexes[0] = -1;
+		data._relation = RelationToAI.TARGET;
 
 		return data;
 	}
@@ -68,14 +68,14 @@ public class DataHolder {
 	/// Get the cell that triggered creation of this script
 	/// </summary>
 	public CellBehaviour getSender {
-		get { return senderCell; }
+		get { return _senderCell; }
 	}
 
 	/// <summary>
-	/// Instances in this AI --> [0] = AI, [1] = target, [2] = ally, [3] = neutral
+	/// Relation of this AI to other
 	/// </summary>
-	public int[] getCellIndexes {
-		get { return cellIndexes; }
+	public RelationToAI getRelation {
+		get { return _relation; }
 	}
 
 	/// <summary>

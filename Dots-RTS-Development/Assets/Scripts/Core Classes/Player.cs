@@ -2,60 +2,72 @@
 using System.Collections.Generic;
 using System;
 
-public class Player : MonoBehaviour,IAlly {
-	//Cell.enmTeam playerTeam;
-	//List<Enemy_AI> alliesOfPlayer;
-	//List<Enemy_AI> targetsOfPlayer;
+public class Player : MonoBehaviour, IAlly {
 
-	public ExtraPlayer pl1;
-	public ExtraPlayer pl2;
-	public ExtraPlayer pl3;
-	public Player pl4;
+	public Cell.enmTeam playerTeam = Cell.enmTeam.ALLIED;
+	private List<IAlly> alliesOfPlayer = new List<IAlly>();
+	private List<IAlly> targetsOfPlayer = new List<IAlly>();
 
 	public List<IAlly> listOfAlly = new List<IAlly>();
 	public List<CellBehaviour> playerCells = new List<CellBehaviour>();
 
-	//private void Start() {
-	//	foreach (CellBehaviour cell in PlayManager.cells) {
-	//		if (cell.cellTeam == Cell.enmTeam.ALLIED) {
-	//			playerCells.Add(cell);
-	//		}
-	//	}
-	//}
 	private void Start() {
-		listOfAlly.Add(pl1);
-		//listOfAlly.Add(pl2);
-		//listOfAlly.Add(pl3);
-		//listOfAlly.Add(pl4);
-	}
-
-
-	public bool IsAllyOF(IAlly other) {
-		//ExtraPlayer playah = (ExtraPlayer)other;
-		//playah.PRintCrap();
-		foreach (IAlly ally in listOfAlly) {
-
-			if (ally == other) {
-				try {
-					print(((Enemy_AI)other).name);
-				}
-				catch(Exception e) {
-					Debug.Log(e);
-				}
-				print(((ExtraPlayer)other).name);
-
-				print("Found a match" + ally + " " + other);
-				return true;
+		foreach (CellBehaviour cell in PlayManager.cells) {
+			if (cell.cellTeam == Cell.enmTeam.ALLIED) {
+				playerCells.Add(cell);
 			}
-			else {
-				print("NOG");
-			}
-
 		}
-		return false;
 	}
 
-	public void PRintCrap() {
-		//print("Stuff yaay");
+	public Cell.enmTeam Team {
+		get {
+			return playerTeam;
+		}
+	}
+
+	public List<IAlly> Targets {
+		get {
+			return targetsOfPlayer;
+		}
+		set { targetsOfPlayer = value;
+		}
+	}
+	public List<IAlly> Allies {
+		get {
+			return alliesOfPlayer;
+		}
+		set {
+			alliesOfPlayer = value;
+		}
+	}
+
+	public List<CellBehaviour> MyCells {
+		get {
+			return playerCells;
+		}
+	}
+
+	public bool IsAllyOf(IAlly other) {
+		return Allies.Contains(other);
+	}
+
+	public bool IsTargetOf(IAlly other) {
+		return Targets.Contains(other);
+	}
+
+	public void AddAlly(IAlly ally) {
+		alliesOfPlayer.Add(ally);
+	}
+
+	public void RemoveAlly(IAlly ally) {
+		alliesOfPlayer.Remove(ally);
+	}
+
+	public void AddTarget(IAlly target) {
+		targetsOfPlayer.Add(target);
+	}
+
+	public void RemoveTarget(IAlly target) {
+		targetsOfPlayer.Remove(target);
 	}
 }

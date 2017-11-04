@@ -22,7 +22,6 @@ public class Control : MonoBehaviour {
 
 	public delegate void OnMouseButtonPressed(Vector2 position);
 
-
 	#endregion
 
 	//public static List<CellBehaviour> cells = new List<CellBehaviour>();

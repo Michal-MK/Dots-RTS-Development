@@ -492,9 +492,18 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			Camera.main.transform.position = Vector3.zero + Vector3.back * 10;
 			Camera.main.orthographicSize = val;
+			Debug.LogWarning("Not working properly");
+			//StartCoroutine(LerpFloat(Camera.main, Camera.main.orthographicSize, val, 1f));
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(Camera.main.aspect);
 		}
 	}
+
+	//private IEnumerator LerpFloat(Camera c,float original, float newVal, float rate) {
+	//	for (float f = 0; f < 1; f+= Time.fixedDeltaTime * rate) {
+	//		c.orthographicSize = Mathf.SmoothStep(original, newVal, f);
+	//		yield return null;
+	//	}
+	//}
 
 	//Calculation of camera size and position for zooming onto a cell
 	public void FitCellsOnScreen(List<EditCell> cells) {
@@ -507,7 +516,6 @@ public class LevelEditorCore : MonoBehaviour {
 		float highestX = -Mathf.Infinity;
 		float lowestY = Mathf.Infinity;
 		float highestY = -Mathf.Infinity;
-		//print("CellCount " + cells.Count);
 		float adjustBy = 0;
 
 		foreach (EditCell cell in cellList) {
