@@ -35,12 +35,7 @@ public class LoadFromFile : MonoBehaviour {
 			if (customSave.gameSize != 0) {
 				Camera.main.orthographicSize = customSave.gameSize;
 			}
-			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
-			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
-			foreach (Cell.enmTeam key in diffKeys) {
-				//print("Possible error");
-				customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
-			}
+			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);;
 
 			for (int j = 0; j < customSave.cells.Count; j++) {
 
@@ -61,7 +56,7 @@ public class LoadFromFile : MonoBehaviour {
 
 				//c.UpdateCellInfo();
 			}
-			init.StartAiInitialization(customSave.clans);
+			init.StartAiInitialization(customSave.clans, customSave.difficulty);
 		}
 
 		else if (PlayManager.levelState == PlayManager.PlaySceneState.CAMPAIGN) {
@@ -70,10 +65,6 @@ public class LoadFromFile : MonoBehaviour {
 				Camera.main.orthographicSize = campaignSave.game.gameSize;
 			}
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(campaignSave.game.savedAtAspect);
-			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = campaignSave.game.difficulty.Keys;
-			foreach (Cell.enmTeam key in diffKeys) {
-				campaignSave.game.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
-			}
 
 			for (int j = 0; j < campaignSave.game.cells.Count; j++) {
 
@@ -91,7 +82,7 @@ public class LoadFromFile : MonoBehaviour {
 
 				c.UpdateCellInfo();
 			}
-			init.StartAiInitialization(campaignSave.game.clans);
+			init.StartAiInitialization(campaignSave.game.clans, campaignSave.game.difficulty);
 
 		}
 		else if (PlayManager.levelState == PlayManager.PlaySceneState.PREVIEW) {
@@ -101,10 +92,6 @@ public class LoadFromFile : MonoBehaviour {
                 Camera.main.orthographicSize = customSave.gameSize;
             }
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
-			Dictionary<Cell.enmTeam, float>.KeyCollection diffKeys = customSave.difficulty.Keys;
-            foreach (Cell.enmTeam key in diffKeys) {
-                customSave.difficulty.TryGetValue(key, out init.decisionSpeeds[(int)key - 2]);
-            }
 
             for (int j = 0; j < customSave.cells.Count; j++) {
 
@@ -122,7 +109,7 @@ public class LoadFromFile : MonoBehaviour {
 
                 c.UpdateCellInfo();
             }
-            init.StartAiInitialization(customSave.clans);
+            init.StartAiInitialization(customSave.clans, customSave.difficulty);
         }
         else {
 			SceneManager.LoadScene(Scenes.PROFILES);
