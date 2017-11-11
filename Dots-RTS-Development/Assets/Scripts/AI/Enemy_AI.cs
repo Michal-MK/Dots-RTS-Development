@@ -428,7 +428,13 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			return null;
 		}
 		else {
-			return Initialize_AI.AIs[(int)team - 2];
+			foreach (Enemy_AI ai in Initialize_AI.AIs) {
+				if (ai.team == team) {
+					return ai;
+				}
+			}
+			Debug.LogError("AIs doesn't have an ai with team " + team);
+			return null;
 		}
 	}
 	#endregion

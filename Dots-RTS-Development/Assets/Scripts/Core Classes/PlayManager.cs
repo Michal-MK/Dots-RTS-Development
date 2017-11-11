@@ -52,15 +52,14 @@ public class PlayManager : MonoBehaviour {
 			int activeAIs = 0;
 			int alliedAIs = 0;
 
-			for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
-				if (Initialize_AI.AIs[i] != null) {
-					if (Initialize_AI.AIs[i].isActive) {
-						activeAIs++;
-					}
-					if (Initialize_AI.AIs[i].IsAllyOf(playerScript)) {
+			foreach (Enemy_AI ai in Initialize_AI.AIs) {
+				if (ai.isActive) {
+					activeAIs++;
+					if (ai.IsAllyOf(playerScript)) {
 						alliedAIs++;
 					}
 				}
+				
 			}
 
 			if (activeAIs == 0 || activeAIs == alliedAIs) {

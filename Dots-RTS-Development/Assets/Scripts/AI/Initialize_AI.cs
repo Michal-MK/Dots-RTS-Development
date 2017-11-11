@@ -4,51 +4,48 @@ using Conversions;
 
 public class Initialize_AI : MonoBehaviour {
 
-	public static List<List<Cell.enmTeam>> clanList = new List<List<Cell.enmTeam>>();
 	public GameObject playerData;
 
-	public bool[] initAIs = new bool[8] { false, false, false, false, false, false, false, false };
 
-	public Cell.enmTeam[] aiTeams = new Cell.enmTeam[8] { Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE, Cell.enmTeam.NONE };
-	public float[] decisionSpeeds = new float[8];
-	public static Enemy_AI[] AIs = new Enemy_AI[8];
+	public static List<Enemy_AI> AIs = new List<Enemy_AI>();
 	
 	private Player playerScript;
 
+	private void OnEnable() {
+		AIs.Clear();
+	}
 	private void Start() {
 		//Should be necessary only for older saves and Debug scene
+		
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == UnityEngine.SceneManagement.Scenes.DEBUG) {
-			StartAiInitialization(new Dictionary<Cell.enmTeam, AIHolder>());
+			StartAiInitialization(new Dictionary<Cell.enmTeam, AIHolder>(), new Dictionary<Cell.enmTeam, float>());
 		}
 	}
 
 	//Goes though all the cells and creates an AI for each team.
-	public void StartAiInitialization(Dictionary<Cell.enmTeam, AIHolder> clanDict) {
-		clanList = BasicConversions.CDToActualClans(clanDict);
-
+	public void StartAiInitialization(Dictionary<Cell.enmTeam, AIHolder> clanDict, Dictionary<Cell.enmTeam, float> difficultyDict) {
 		GameObject g = Instantiate(playerData);
 		g.name = "Player";
 		playerScript = g.GetComponent<Player>();
 
-		foreach (Cell c in PlayManager.cells) {
-			if ((int)c.cellTeam >= 2) {
-				SetAis((int)c.cellTeam - 2, c.cellTeam);
+
+		//Make an ai for every team contained in the clandict
+		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection teams = clanDict.Keys;
+		foreach  (Cell.enmTeam team in teams) {
+			if ((int)team >= 2) {
+				float diff;
+				if (difficultyDict.TryGetValue(team, out diff) == false) {
+					SetAis(team, 2);
+				}
+				else {
+					SetAis(team, diff);
+				}
 			}
 		}
-
-		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = clanDict.Keys;
-		List<Cell.enmTeam> tl = new List<Cell.enmTeam>();
-		foreach (Cell.enmTeam q in keys) {
-			tl.Add (q);
-		}
-
 
 		List<IAlly> InterfaceList = new List<IAlly>();
 		foreach (Enemy_AI ai in AIs) {
-
-			if (ai != null && tl.Contains (ai.team)) {
-				InterfaceList.Add(ai);
-			}
+			InterfaceList.Add(ai);
 		}
 		InterfaceList.Add(playerScript);
 
@@ -105,16 +102,13 @@ public class Initialize_AI : MonoBehaviour {
 		*/
 	}
 
-	public void SetAis(int index, Cell.enmTeam team) {
+	public void SetAis(Cell.enmTeam team, float decisionSpeed) {
 		
-		if (initAIs[index] == false) {
-			initAIs[index] = true;
-			aiTeams[index] = team;
 
-			GameObject aiHolder = new GameObject("AI code " + index + " enemy " + (index + 1));
+			GameObject aiHolder = new GameObject("AI code " + (int)team + " " + team);
 			//Select AI preset according to the enemy team
 			AI_Behaviour ai;
-			switch (index) {
+			switch ((int)team - 1) {
 				case 0: {
 					ai = aiHolder.AddComponent<AI_0>();
 					break;
@@ -152,12 +146,11 @@ public class Initialize_AI : MonoBehaviour {
 					break;
 				}
 			}
-			ai.decisionSpeed = decisionSpeeds[index];
+			ai.decisionSpeed = decisionSpeed;
 			ai.team = team;
 			ai.isActive = true;
-			AIs[index] = ai;
+			AIs.Add(ai);
 			ai.playerScript = playerScript;
-		}
 	}
 }
 
