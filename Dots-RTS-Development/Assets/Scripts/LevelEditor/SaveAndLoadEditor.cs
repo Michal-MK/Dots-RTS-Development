@@ -96,11 +96,17 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			}
 
 			save.savedAtAspect = Camera.main.aspect;
+
+
 			save.difficulty = core.aiDifficultyDict;
+
+
 			save.gameSize = core.gameSize;
 			save.levelInfo = new LevelInfo(core.levelName, core.authorName, DateTime.Now);
+
 			
-			save.clans = teams.clanDict;
+			save.clans = teams.DictWithAllInfo();
+
 			ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
 			formatter.Serialize(file, save);
 			file.Close();
@@ -139,7 +145,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				teams.clanDict = save.clans;
 			}
 			else {
-				teams.clanDict = new Dictionary<Cell.enmTeam, AllyHolder>();
+				teams.clanDict = new Dictionary<Cell.enmTeam, AIHolder>();
 			}
 
 			file.Close();
@@ -163,6 +169,3 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		}
 	}
 }
-
-
-

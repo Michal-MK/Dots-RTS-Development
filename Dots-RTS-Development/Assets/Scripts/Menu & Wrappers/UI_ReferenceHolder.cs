@@ -136,7 +136,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 			}
 			case Scenes.DEBUG: { // DebugScene
 				MULTI_menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("Upgrade_Panel").GetComponent<RectTransform>();
+				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("UPGRADE_Panel").GetComponent<RectTransform>();
 				return;
 			}
 			case Scenes.POSTG: { // PostGame Scene

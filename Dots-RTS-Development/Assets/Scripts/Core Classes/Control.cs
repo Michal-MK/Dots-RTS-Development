@@ -22,7 +22,6 @@ public class Control : MonoBehaviour {
 
 	public delegate void OnMouseButtonPressed(Vector2 position);
 
-
 	#endregion
 
 	//public static List<CellBehaviour> cells = new List<CellBehaviour>();
@@ -236,7 +235,7 @@ public class Control : MonoBehaviour {
 
 	private bool IsInPausebleScene() {
 		string s = SceneManager.GetActiveScene().name;
-		if (s == Scenes.EDITOR || s == Scenes.PLAYER) {
+		if (s == Scenes.EDITOR || s == Scenes.PLAYER || s == Scenes.DEBUG) {
 			return true;
 		}
 		else {

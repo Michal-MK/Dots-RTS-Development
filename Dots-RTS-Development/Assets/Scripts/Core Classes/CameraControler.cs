@@ -7,8 +7,6 @@ public class CameraControler : MonoBehaviour {
 	private Vector3 defaultPos;
 	private float defaultSize = 0;
 
-	private float bgVertSize;
-	private float bgHorSize;
 	private float camHorDiff;
 	private float camVertDiff;
 	private float camHorDiffL;

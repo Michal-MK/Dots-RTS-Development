@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44871dc4b679cee4391f74f4fe74ca3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 1121900551361786, guid: ab110c352f1dd804b9bc5f5066dce436, type: 2}
   initAIs: 0000000000000000
   aiTeams: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
   decisionSpeeds:

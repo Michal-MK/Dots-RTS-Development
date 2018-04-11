@@ -14,6 +14,9 @@ public class PlayManager : MonoBehaviour {
 	}
 
 	public static List<CellBehaviour> cells = new List<CellBehaviour>();
+	public static List<CellBehaviour> neutralCells = new List<CellBehaviour>();
+
+	public float checkFreq = 0.2f;
 
 	private float time;
 	private bool isInGame = true;
@@ -21,12 +24,14 @@ public class PlayManager : MonoBehaviour {
 	private bool domination = false;
 	private string gameTime = "";
 	private int totalCoinsAwarded = 0;
+	private Player playerScript;
 
-	// Use this for initialization
 	void Start() {
+		playerScript = GameObject.Find("Player").GetComponent<Player>();
+
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 		if (levelState != PlaySceneState.PREVIEW) {
-			StartCoroutine(GameState());
+			StartCoroutine(GameState(checkFreq));
 		}
 		levelState = PlaySceneState.NONE;
 	}
@@ -36,24 +41,28 @@ public class PlayManager : MonoBehaviour {
 
 		StopAllCoroutines();
 		cells.Clear();
+		neutralCells.Clear();
 	}
 
-	public IEnumerator GameState() {
+	public IEnumerator GameState(float updateCheckFreq) {
 
 		while (SceneManager.GetActiveScene().name == Scenes.PLAYER && isInGame) {
-			yield return new WaitForSeconds(1);
+			yield return new WaitForSeconds(updateCheckFreq);
 
 			int activeAIs = 0;
+			int alliedAIs = 0;
 
-			for (int i = 0; i < Initialize_AI.AIs.Length; i++) {
-				if (Initialize_AI.AIs[i] != null) {
-					if (Initialize_AI.AIs[i].isActive) {
-						activeAIs++;
+			foreach (Enemy_AI ai in Initialize_AI.AIs) {
+				if (ai.isActive) {
+					activeAIs++;
+					if (ai.IsAllyOf(playerScript)) {
+						alliedAIs++;
 					}
 				}
+				
 			}
 
-			if (activeAIs == 0) {
+			if (activeAIs == 0 || activeAIs == alliedAIs) {
 				yield return new WaitForSeconds(1.5f);
 				YouWon();
 			}
@@ -66,7 +75,7 @@ public class PlayManager : MonoBehaviour {
 				}
 			}
 			if (playerCells == 0) {
-				yield return new WaitForSeconds(2);
+				yield return new WaitForSeconds(1.5f);
 				if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
 					GameOver();
 				}
@@ -76,6 +85,7 @@ public class PlayManager : MonoBehaviour {
 
 	private void FixedUpdate() {
 		time += Time.fixedDeltaTime;
+
 	}
 
 	public void GameOver() {

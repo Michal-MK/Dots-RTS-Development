@@ -9,7 +9,7 @@ public class SaveData {
 	public Dictionary<Cell.enmTeam, float> difficulty;
 	public float gameSize;
     public float savedAtAspect;
-    public Dictionary<Cell.enmTeam,AllyHolder> clans;
+    public Dictionary<Cell.enmTeam,AIHolder> clans;
 
 }
 

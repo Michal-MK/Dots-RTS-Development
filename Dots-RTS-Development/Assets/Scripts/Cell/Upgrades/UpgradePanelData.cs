@@ -13,7 +13,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	private static UM_InGame currentCell;
 
-	public static event Control.InstallUpgradeHandler OnUpgradeInstalled;
+	//public static event Control.InstallUpgradeHandler OnUpgradeInstalled;
 
 	private static bool isSubscribed = false;
 	private static bool isListeningForSlot = true;

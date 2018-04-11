@@ -160,7 +160,7 @@ public class LevelEditorCore : MonoBehaviour {
 		string path = PlayerPrefs.GetString("LoadLevelFilePath");
 		if (!string.IsNullOrEmpty(path)) {
 			saveAndLoad.Load(PlayerPrefs.GetString("LoadLevelFilePath"));
-		}	
+		}
 		//Set defalut mode to placeCells
 		editorMode = Mode.PlaceCells;
 	}
@@ -177,14 +177,18 @@ public class LevelEditorCore : MonoBehaviour {
 		if (getOutilneState) {
 			c.ToggleCellOutline(true);
 		}
-		if (c.cellTeam != Cell.enmTeam.ALLIED && c.cellTeam != Cell.enmTeam.NEUTRAL) {
-			if (!loadedFromFile) {
-				if (!teamList.Contains(c.cellTeam)) {
-					teamList.Add(c.cellTeam);
-					aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
-					AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+		if (c.cellTeam != Cell.enmTeam.NEUTRAL) {
+
+			if (!teamList.Contains(c.cellTeam)) {
+				teamList.Add(c.cellTeam);
+				if (!loadedFromFile) {
+					if(c.cellTeam != Cell.enmTeam.ALLIED) {
+						aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
+						AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+					}
 				}
 			}
+
 		}
 		if (loadedFromFile) {
 			for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {
@@ -206,8 +210,10 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		teamSetup.RemoveFromClan(c.cellTeam);
 		teamList.Remove(c.cellTeam);
-		aiDifficultyDict.Remove(c.cellTeam);
-		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+		if (c.cellTeam != Cell.enmTeam.ALLIED) {
+			aiDifficultyDict.Remove(c.cellTeam);
+			AllAiDifficultyWriter.RedoText(aiDifficultyDict);
+		}
 	}
 	#endregion
 
@@ -426,8 +432,9 @@ public class LevelEditorCore : MonoBehaviour {
 			foreach (Cell.enmTeam key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
+					aiDifficultyDict.Add(key, aiDificultyAll);
 				}
-				aiDifficultyDict.Add(key, aiDificultyAll);
+				
 			}
 
 		}
@@ -435,8 +442,9 @@ public class LevelEditorCore : MonoBehaviour {
 			foreach (Cell.enmTeam key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
+					aiDifficultyDict.Add(key, defaultDificulty);
 				}
-				aiDifficultyDict.Add(key, defaultDificulty);
+				
 			}
 
 		}
@@ -484,9 +492,18 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			Camera.main.transform.position = Vector3.zero + Vector3.back * 10;
 			Camera.main.orthographicSize = val;
+			Debug.LogWarning("Not working properly");
+			//StartCoroutine(LerpFloat(Camera.main, Camera.main.orthographicSize, val, 1f));
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(Camera.main.aspect);
 		}
 	}
+
+	//private IEnumerator LerpFloat(Camera c,float original, float newVal, float rate) {
+	//	for (float f = 0; f < 1; f+= Time.fixedDeltaTime * rate) {
+	//		c.orthographicSize = Mathf.SmoothStep(original, newVal, f);
+	//		yield return null;
+	//	}
+	//}
 
 	//Calculation of camera size and position for zooming onto a cell
 	public void FitCellsOnScreen(List<EditCell> cells) {
@@ -499,7 +516,6 @@ public class LevelEditorCore : MonoBehaviour {
 		float highestX = -Mathf.Infinity;
 		float lowestY = Mathf.Infinity;
 		float highestY = -Mathf.Infinity;
-		//print("CellCount " + cells.Count);
 		float adjustBy = 0;
 
 		foreach (EditCell cell in cellList) {

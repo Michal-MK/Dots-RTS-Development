@@ -134,7 +134,7 @@ public class Upgrade : MonoBehaviour {
 
 		for (int i = 0; i < values.Length; i++) {
 			if(values[i] != -1) {
-				print(values[i]);
+				//print(values[i]);
 				t[i] = GetSprite((Upgrades)values[i]);
 			}
 		}
