@@ -22,7 +22,7 @@ public class LevelEditorCore : MonoBehaviour {
 	public SaveAndLoadEditor saveAndLoad;
 
 	public List<EditCell> cellList = new List<EditCell>();
-	public List<Cell.enmTeam> teamList = new List<Cell.enmTeam>();
+	public List<Team> teamList = new List<Team>();
 	public List<EditCell> selectedCellList = new List<EditCell>();
 	public Texture2D[] cursors;
 
@@ -45,7 +45,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#region Parsed value for each input field
 	//Cell Editting Panel
-	private Cell.enmTeam _team;
+	private Team _team;
 	private int _max;
 	private int _start;
 	private float _regen;
@@ -53,7 +53,7 @@ public class LevelEditorCore : MonoBehaviour {
 	//Game Settings Panel
 	private float aiDificultyAll;
 	private float _gameSize;
-	public Dictionary<Cell.enmTeam, float> aiDifficultyDict = new Dictionary<Cell.enmTeam, float>();
+	public Dictionary<Team, float> aiDifficultyDict = new Dictionary<Team, float>();
 
 	//Export Panel
 	public string levelName;
@@ -65,7 +65,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#region Default value for each input field ==> this gets used if input field value can not be parsed correctly
 	//Cell Editting Panel
-	private Cell.enmTeam defaultTeam = Cell.enmTeam.NEUTRAL;
+	private Team defaultTeam = Team.NEUTRAL;
 	private int defaultMax = 50;
 	private int defaultStart = 10;
 	private float defaultRegen = 1f;
@@ -124,7 +124,7 @@ public class LevelEditorCore : MonoBehaviour {
 	private Mode _editorMode;
 	private TeamSetup teamSetup;
 	private bool _isUpdateSentByCell;
-	private Cell.enmTeam singleDifficultyInputFieldSpecificTeam;
+	private Team singleDifficultyInputFieldSpecificTeam;
 	private static LevelEditorCore instance;
 
 	private void Awake() {
@@ -177,13 +177,13 @@ public class LevelEditorCore : MonoBehaviour {
 		if (getOutilneState) {
 			c.ToggleCellOutline(true);
 		}
-		if (c.cellTeam != Cell.enmTeam.NEUTRAL) {
+		if (c.Cell.CellTeam != Team.NEUTRAL) {
 
-			if (!teamList.Contains(c.cellTeam)) {
-				teamList.Add(c.cellTeam);
+			if (!teamList.Contains(c.Cell.CellTeam)) {
+				teamList.Add(c.Cell.CellTeam);
 				if (!loadedFromFile) {
-					if(c.cellTeam != Cell.enmTeam.ALLIED) {
-						aiDifficultyDict.Add(c.cellTeam, defaultDificulty);
+					if(c.Cell.CellTeam != Team.ALLIED) {
+						aiDifficultyDict.Add(c.Cell.CellTeam, defaultDificulty);
 						AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 					}
 				}
@@ -192,8 +192,8 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		if (loadedFromFile) {
 			for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {
-				if (c.upgrade_manager.upgrades[i] != Upgrade.Upgrades.NONE) {
-					c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
+				if (c.upgrade_manager.upgrades[i] != Upgrades.NONE) {
+					c.upgrade_manager.upgrade_Slots[i].Type = c.upgrade_manager.upgrades[i];
 					c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
 				}
 			}
@@ -203,15 +203,15 @@ public class LevelEditorCore : MonoBehaviour {
 	public void RemoveCell(EditCell c) {
 		cellList.Remove(c);
 		//If a cell is found with the same team then don't remove the clan.
-		foreach (Cell cell in cellList) {
-			if (cell.cellTeam == c.cellTeam) {
+		foreach (CellBehaviour cell in cellList) {
+			if (cell.Cell.CellTeam == c.Cell.CellTeam) {
 				return;
 			}
 		}
-		teamSetup.RemoveFromClan(c.cellTeam);
-		teamList.Remove(c.cellTeam);
-		if (c.cellTeam != Cell.enmTeam.ALLIED) {
-			aiDifficultyDict.Remove(c.cellTeam);
+		teamSetup.RemoveFromClan(c.Cell.CellTeam);
+		teamList.Remove(c.Cell.CellTeam);
+		if (c.Cell.CellTeam != Team.ALLIED) {
+			aiDifficultyDict.Remove(c.Cell.CellTeam);
 			AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 		}
 	}
@@ -250,7 +250,7 @@ public class LevelEditorCore : MonoBehaviour {
 	}
 
 	public void TeamSelectedButtonWrapper(int thisTeam) {
-		TeamSelectedButton((Cell.enmTeam)thisTeam);
+		TeamSelectedButton((Team)thisTeam);
 	}
 
 	public void AiDiffHandlerWrapper() {
@@ -267,13 +267,13 @@ public class LevelEditorCore : MonoBehaviour {
 			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
 			newCell.name = "Cell " + team;
 			EditCell c = newCell.GetComponent<EditCell>();
-			c.cellTeam = team;
-			c.maxElements = maxElementCount;
-			c.regenPeriod = regenarationPeriod;
-			c.elementCount = startingElementCount;
-			Array.Copy(UpgradeSlot.getAssignedUpgrades, c.upgrade_manager.upgrades, UpgradeSlot.instances.Length);
+			c.Cell.CellTeam = team;
+			c.Cell.MaxElements = maxElementCount;
+			c.Cell.RegenPeriod = regenarationPeriod;
+			c.Cell.ElementCount = startingElementCount;
+			Array.Copy(UpgradeSlot.UpgradeInstances, c.upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length);
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
-				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
+				c.upgrade_manager.upgrade_Slots[i].Type = c.upgrade_manager.upgrades[i];
 				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
 			}
 			c.core = this;
@@ -401,14 +401,14 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-	public void TeamSelectedButton(Cell.enmTeam correspondingTeam) {
+	public void TeamSelectedButton(Team correspondingTeam) {
 		team = correspondingTeam;
 		UI_ReferenceHolder.LE_teamPickerPanel.SetActive(false);
 		UI_ReferenceHolder.LE_cellInputFields.SetActive(true);
 	}
 
 	//Updates team button colour depending on the team for a visual feedback and better representation
-	private void UpdateTeamButtonVisual(Cell.enmTeam thisTeam) {
+	private void UpdateTeamButtonVisual(Team thisTeam) {
 		Text description = teamButton.Find("TeamDescription").GetComponent<Text>();
 		description.color = ColourTheTeamButtons.GetContrastColorBasedOnTeam(thisTeam);
 		description.text = ColourTheTeamButtons.GetDescriptionBasedOnTeam(thisTeam);
@@ -427,9 +427,9 @@ public class LevelEditorCore : MonoBehaviour {
 	/// Refreshes the Ai difficulty
 	/// </summary>
 	/// <param name="team">the team this applies to, 0 = all</param>
-	public void AiDiffHandler(Cell.enmTeam team = Cell.enmTeam.NEUTRAL) {
+	public void AiDiffHandler(Team team = Team.NEUTRAL) {
 		if (float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
-			foreach (Cell.enmTeam key in teamList) {
+			foreach (Team key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
 					aiDifficultyDict.Add(key, aiDificultyAll);
@@ -439,7 +439,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 		}
 		else if (!float.TryParse(aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out aiDificultyAll) && team == 0) {
-			foreach (Cell.enmTeam key in teamList) {
+			foreach (Team key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {
 					aiDifficultyDict.Remove(key);
 					aiDifficultyDict.Add(key, defaultDificulty);
@@ -519,34 +519,34 @@ public class LevelEditorCore : MonoBehaviour {
 		float adjustBy = 0;
 
 		foreach (EditCell cell in cellList) {
-			if (cell.cellRadius * 0.33f > adjustBy) {
-				adjustBy = cell.cellRadius * 0.33f;
+			if (cell.Cell.CellRadius * 0.33f > adjustBy) {
+				adjustBy = cell.Cell.CellRadius * 0.33f;
 			}
 		}
 
 		if (cells.Count == 1) {
 			Vector3 pos = cells[0].transform.position;
-			lowestX = pos.x - cells[0].cellRadius;
-			highestX = pos.x + cells[0].cellRadius;
-			lowestY = pos.y - cells[0].cellRadius;
-			highestY = pos.y + cells[0].cellRadius;
+			lowestX = pos.x - cells[0].Cell.CellRadius;
+			highestX = pos.x + cells[0].Cell.CellRadius;
+			lowestY = pos.y - cells[0].Cell.CellRadius;
+			highestY = pos.y + cells[0].Cell.CellRadius;
 		}
 		else {
-			foreach (Cell cell in cells) {
+			foreach (CellBehaviour cell in cells) {
 				Vector3 cellPos = cell.transform.position;
 				//print("radius " + cell.cellRadius);
-				if (cellPos.x - cell.cellRadius < lowestX) {
-					lowestX = cellPos.x - cell.cellRadius;
+				if (cellPos.x - cell.Cell.CellRadius < lowestX) {
+					lowestX = cellPos.x - cell.Cell.CellRadius;
 
 				}
-				if (cellPos.x + cell.cellRadius > highestX) {
-					highestX = cellPos.x + cell.cellRadius;
+				if (cellPos.x + cell.Cell.CellRadius > highestX) {
+					highestX = cellPos.x + cell.Cell.CellRadius;
 				}
-				if (cellPos.y - cell.cellRadius < lowestY) {
-					lowestY = cellPos.y - cell.cellRadius;
+				if (cellPos.y - cell.Cell.CellRadius < lowestY) {
+					lowestY = cellPos.y - cell.Cell.CellRadius;
 				}
-				if (cellPos.y + cell.cellRadius > highestY) {
-					highestY = cellPos.y + cell.cellRadius;
+				if (cellPos.y + cell.Cell.CellRadius > highestY) {
+					highestY = cellPos.y + cell.Cell.CellRadius;
 				}
 			}
 		}
@@ -596,7 +596,7 @@ public class LevelEditorCore : MonoBehaviour {
 		set { _isUpdateSentByCell = value; }
 	}
 
-	public Cell.enmTeam team {
+	public Team team {
 		get { return _team; }
 		set {
 			_team = value;

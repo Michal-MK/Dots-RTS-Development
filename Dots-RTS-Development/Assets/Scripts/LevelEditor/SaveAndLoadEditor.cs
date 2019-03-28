@@ -1,7 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,7 +22,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		PlayManager.levelState = PlayManager.PlaySceneState.PREVIEW;
 		print(PlayManager.levelState);
 
-		SceneManager.LoadScene(Scenes.PLAYER);
+		SceneManager.LoadScene(Scenes.GAME);
 	}
 
 	public void SaveButton() {
@@ -36,21 +36,22 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			fileName = "testLevel";
 		}
 		string fullpath;
-#if UNITY_ANDROID
+		if (GameEnvironment.IsAndroid) {
 			fullpath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
-#else
+		}
+		else {
 			fullpath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName + ".phage";
-#endif
+		}
 
 		#region Pre-Save Error checking
 
 		int numAllies = 0;
 		int numEnemies = 0;
 		for (int i = 0; i < core.cellList.Count; i++) {
-			if (core.cellList[i].cellTeam == Cell.enmTeam.ALLIED) {
+			if (core.cellList[i].Cell.CellTeam == Team.ALLIED) {
 				numAllies++;
 			}
-			if ((int)core.cellList[i].cellTeam >= (int)Cell.enmTeam.ENEMY1) {
+			if ((int)core.cellList[i].Cell.CellTeam >= (int)Team.ENEMY1) {
 				numEnemies++;
 			}
 		}
@@ -87,10 +88,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 				S_Cell serCell = new S_Cell();
 				serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
-				serCell.elementCount = c.elementCount;
-				serCell.maxElementCount = c.maxElements;
-				serCell.team = (int)c.cellTeam;
-				serCell.regenerationPeriod = c.regenPeriod;
+				serCell.elementCount = c.Cell.ElementCount;
+				serCell.maxElementCount = c.Cell.MaxElements;
+				serCell.team = (int)c.Cell.CellTeam;
+				serCell.regenerationPeriod = c.Cell.RegenPeriod;
 				serCell.installedUpgrades = c.upgrade_manager.upgrades;
 				save.cells.Add(serCell);
 			}
@@ -104,7 +105,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			save.gameSize = core.gameSize;
 			save.levelInfo = new LevelInfo(core.levelName, core.authorName, DateTime.Now);
 
-			
+
 			save.clans = teams.DictWithAllInfo();
 
 			ErrorMessages.text += "  displayName:(" + save.levelInfo.levelName + ")";
@@ -139,13 +140,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				core.aiDifficultyDict = save.difficulty;
 			}
 			else {
-				core.aiDifficultyDict = new Dictionary<Cell.enmTeam, float>();
+				core.aiDifficultyDict = new Dictionary<Team, float>();
 			}
 			if (save.clans != null) {
 				teams.clanDict = save.clans;
 			}
 			else {
-				teams.clanDict = new Dictionary<Cell.enmTeam, AIHolder>();
+				teams.clanDict = new Dictionary<Team, AIHolder>();
 			}
 
 			file.Close();
@@ -154,14 +155,14 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 				EditCell c = Instantiate(prefab).GetComponent<EditCell>();
 
-				c.cellPosition = (Vector3)save.cells[j].pos;
-				c.gameObject.transform.position = c.cellPosition;
-				c.elementCount = save.cells[j].elementCount;
-				c.maxElements = save.cells[j].maxElementCount;
-				c.cellTeam = (Cell.enmTeam)save.cells[j].team;
-				c.regenPeriod = save.cells[j].regenerationPeriod;
+				c.Cell.CellPosition = (Vector3)save.cells[j].pos;
+				c.gameObject.transform.position = c.Cell.CellPosition;
+				c.Cell.ElementCount = save.cells[j].elementCount;
+				c.Cell.MaxElements = save.cells[j].maxElementCount;
+				c.Cell.CellTeam = (Team)save.cells[j].team;
+				c.Cell.RegenPeriod = save.cells[j].regenerationPeriod;
 				c.upgrade_manager.upgrades = save.cells[j].installedUpgrades;
-				core.AddCell(c,true);
+				core.AddCell(c, true);
 			}
 		}
 		if (path == Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + "testLevel.phage") {

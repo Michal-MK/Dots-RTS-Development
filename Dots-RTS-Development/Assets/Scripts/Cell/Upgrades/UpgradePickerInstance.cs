@@ -9,7 +9,7 @@ public class UpgradePickerInstance : MonoBehaviour,IPointerDownHandler,IPointerC
 
 	public Image upgradeImg;
 
-	private Upgrade.Upgrades _upgrade;
+	private Upgrades _upgrade;
 	private Upgrade.UpgradeType _upgradeType;
 
 	public Upgrade.UpgradeType upgradeType {
@@ -17,14 +17,14 @@ public class UpgradePickerInstance : MonoBehaviour,IPointerDownHandler,IPointerC
 		set { _upgradeType = value; }
 	}
 
-	public Upgrade.Upgrades upgrade {
+	public Upgrades upgrade {
 		get { return _upgrade; }
 		set { _upgrade = value; }
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (OnPickerClicked != null) {
-			OnPickerClicked(UpgradeSlot.getHighlightedSlot, this);
+			OnPickerClicked(UpgradeSlot.HighlightedSlot, this);
 			print("Invoked");
 		}
 	}

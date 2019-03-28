@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -8,32 +6,28 @@ using UnityEngine.UI;
 
 public class ProfileManager {
 
-	public delegate void profileDeleted(ProfileInfo sender);
+	public static Profile CurrentProfile { get; set; }
 
-	private GameObject profileVisual;
-	private Transform parentTransform;
-	private static Profile currentProfile;
-	public bool isProfileSelected = false;
+	public static bool ProfileSelected => CurrentProfile != null;
 
-	private Button b;
-	public GameObject profileCreation;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="visualRepresentation">The Prefab to instantiate</param>
-	/// <param name="listParent">Transform under which to sort Items</param>
+	private readonly GameObject profileVisual;
+	private readonly Transform parentTransform;
+
+	private Button createProfile_Button;
+	private GameObject profileCreation;
+
 	public ProfileManager(GameObject visualRepresentation, Transform listParent) {
 		profileVisual = visualRepresentation;
 		parentTransform = listParent;
-		b = GameObject.Find("NoProfiles").GetComponent<Button>();
-		b.gameObject.SetActive(false);
+		createProfile_Button = GameObject.Find("NoProfiles").GetComponent<Button>();
+		createProfile_Button.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
 		ProfileInfo.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
 	}
 
-	private void ProfileInfo_OnProfileDeleted(ProfileInfo sender) {
+	private void ProfileInfo_OnProfileDeleted(object sender, ProfileInfo pInfo) {
 		ListProfiles();
 	}
 
@@ -45,41 +39,37 @@ public class ProfileManager {
 	public void ListProfiles() {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
-		BinaryFormatter bf = new BinaryFormatter();
-		if (parentTransform != null) {
-			foreach (ProfileInfo pF in parentTransform.GetComponentsInChildren<ProfileInfo>()) {
-				GameObject.Destroy(pF.gameObject);
-			}
+
+		foreach (ProfileInfo pF in parentTransform?.GetComponentsInChildren<ProfileInfo>()) {
+			GameObject.Destroy(pF.gameObject);
 		}
 
 		if (files.Length == 0) {
 			Debug.Log("No Profies Found");
-			if (b == null) {
-				b = GameObject.Find("Content").transform.Find("NoProfiles").GetComponent<Button>();
+			if (createProfile_Button == null) {
+				createProfile_Button = GameObject.Find("Content").transform.Find("NoProfiles").GetComponent<Button>();
 			}
-			b.gameObject.SetActive(true);
-			b.onClick.RemoveAllListeners();
-			b.onClick.AddListener(() => ShowProfileCreation());
+			createProfile_Button.gameObject.SetActive(true);
+			createProfile_Button.onClick.RemoveAllListeners();
+			createProfile_Button.onClick.AddListener(() => ShowProfileCreation());
 			return;
 		}
+
+		BinaryFormatter bf = new BinaryFormatter();
+
 		foreach (FileInfo f in files) {
 			using (FileStream fs = File.Open(f.FullName, FileMode.Open)) {
-				try {
-					Profile p = (Profile)bf.Deserialize(fs);
-					ProfileInfo pI = GameObject.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
-					pI.name = f.FullName;
-					pI.self = pI.gameObject;
-					pI.InitializeProfile(p, p.profileName);
-				}
-				catch (Exception e) {
-					Debug.Log(e);
-				}
+				Profile p = (Profile)bf.Deserialize(fs);
+				ProfileInfo pI = GameObject.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
+				pI.name = f.FullName;
+				pI.self = pI.gameObject;
+				pI.InitializeProfile(p, p.Name);
 			}
 		}
 	}
 
 	public void ShowProfileCreation() {
-		b.gameObject.SetActive(false);
+		createProfile_Button.gameObject.SetActive(false);
 		profileCreation.SetActive(true);
 		Button creationB = GameObject.Find("CreateProfileButton").GetComponent<Button>();
 		creationB.onClick.RemoveAllListeners();
@@ -103,70 +93,21 @@ public class ProfileManager {
 		}
 
 		BinaryFormatter bf = new BinaryFormatter();
-		Profile p = new Profile();
+		Profile p = new Profile(name);
 
-		p.profileName = name;
-		p.creationTime = DateTime.Now;
-		p.ownedCoins = 0;
-		p.contributedLevels = 0;
-		p.totalCreatedLevels = 0;
-		p.onLevelBaseGame = new CampaignLevelCode(1, 1);
-		p.onLevelImage = null;
-		p.pathToFile = Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles" + Path.DirectorySeparatorChar + name + ".gp";
-
-		using (FileStream fs = new FileStream(p.pathToFile, FileMode.Create)) {
+		//TODO Sanitize FS access
+		using (FileStream fs = new FileStream(p.DataFilePath, FileMode.Create)) {
 			bf.Serialize(fs, p);
 		}
+
 		profileCreation.SetActive(false);
-		Debug.Log("Created");
 		ListProfiles();
-
-	}
-
-	public static Profile getCurrentProfile {
-		get { return currentProfile; }
-	}
-	public static Profile setCurrentProfile {
-		set { currentProfile = value; }
 	}
 
 	public static void SerializeChanges() {
 		BinaryFormatter bf = new BinaryFormatter();
-		using (FileStream fs = new FileStream(getCurrentProfile.pathToFile, FileMode.Open)) {
-			bf.Serialize(fs, getCurrentProfile);
+		using (FileStream fs = new FileStream(CurrentProfile.DataFilePath, FileMode.Open)) {
+			bf.Serialize(fs, CurrentProfile);
 		}
-	}
-
-}
-
-[Serializable]
-public class Profile {
-	public string pathToFile;
-
-	public byte[] onLevelImage;
-	public CampaignLevelCode onLevelBaseGame;
-	public int ownedCoins;
-
-	public int contributedLevels;
-	public int totalCreatedLevels;
-
-	public DateTime creationTime;
-
-	public string profileName;
-
-
-	public int completedCampaignLevels;
-	public int completedCustomLevels;
-
-	public Dictionary<Upgrade.Upgrades, int> acquiredUpgrades = new Dictionary<Upgrade.Upgrades, int>();
-	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels = new Dictionary<SaveDataCampaign, float>();
-
-	public Profile() {
-		foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
-			if (u != Upgrade.Upgrades.NONE) {
-				acquiredUpgrades.Add(u,0);
-			}
-		}
-		creationTime = DateTime.Now;
 	}
 }

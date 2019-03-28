@@ -1,8 +1,9 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
+public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 
 	public static event Control.CellSelected OnCellSelected;
@@ -25,8 +26,19 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 	private bool lookForLongPress;
 	#endregion
 
-	public override void Awake() {
-		base.Awake();
+	public void Awake() {
+		cellSprite = GetComponent<SpriteRenderer>();
+		col = GetComponent<CircleCollider2D>();
+		rg = GetComponent<Rigidbody2D>();
+		uManager = GetComponent<Upgrade_Manager>();
+
+		GameObject count = transform.Find("Count").gameObject;
+		elementCountDisplay = count.GetComponent<TextMeshPro>();
+		elementCountDisplayRenderer = count.GetComponent<MeshRenderer>();
+
+		cellSelectedRenderer = transform.Find("Selected").GetComponent<SpriteRenderer>();
+
+		Cell.CellRadius = col.radius * transform.localScale.x;
 		pointerDownAtTime = Mathf.Infinity;
 		LevelEditorCore.modeChange += EditorModeUpdate;
 		LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
@@ -39,22 +51,22 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	public void FastResize() {
 		float mappedValue;
-		if (elementCount < 10) {
+		if (Cell.ElementCount < 10) {
 			mappedValue = 1;
 		}
-		else if (elementCount >= 10 && elementCount <= maxElements) {
-			mappedValue = Map.MapFloat(elementCount, 10, maxElements, 1f, 2f);
+		else if (Cell.ElementCount >= 10 && Cell.ElementCount <= Cell.MaxElements) {
+			mappedValue = Map.MapFloat(Cell.ElementCount, 10, Cell.MaxElements, 1f, 2f);
 		}
 		else {
-			if (elementCount < 1000) {
-				mappedValue = Map.MapFloat(elementCount, maxElements, 999f, 2f, 4f);
+			if (Cell.ElementCount < 1000) {
+				mappedValue = Map.MapFloat(Cell.ElementCount, Cell.MaxElements, 999f, 2f, 4f);
 			}
 			else {
 				mappedValue = 4;
 			}
 		}
 		transform.localScale = new Vector3(mappedValue, mappedValue);
-		cellRadius = col.radius * transform.localScale.x;
+		Cell.CellRadius = col.radius * transform.localScale.x;
 		if (LevelEditorCore.getOutilneState) {
 			ToggleCellOutline(true);
 		}
@@ -66,26 +78,26 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 		if (isCellSelected && core.isUpdateSentByCell == false) {
 			if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
 
-				elementCount = core.startingElementCount;
+				Cell.ElementCount = core.startingElementCount;
 
 				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
-				cellTeam = core.team;
-				if (cellTeam != enmTeam.ALLIED && cellTeam != enmTeam.NEUTRAL) {
+				Cell.CellTeam = core.team;
+				if (Cell.CellTeam != Team.ALLIED && Cell.CellTeam != Team.NEUTRAL) {
 					core.AddCell(this);
 				}
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
-				maxElements = core.maxElementCount;
+				Cell.MaxElements = core.maxElementCount;
 
 				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
-				regenPeriod = core.regenarationPeriod;
+				Cell.RegenPeriod = core.regenarationPeriod;
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
-				Array.Copy(UpgradeSlot.instances, upgrade_manager.upgrades, UpgradeSlot.instances.Length);
+				Array.Copy(UpgradeSlot.UpgradeInstances, upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length);
 				UpdateUpgradeVisual();
 			}
 		}
@@ -93,7 +105,7 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 
 	private void UpdateUpgradeVisual() {
 		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
-			upgrade_manager.upgrade_Slots[i].type = upgrade_manager.upgrades[i];
+			upgrade_manager.upgrade_Slots[i].Type = upgrade_manager.upgrades[i];
 			upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
 		}
 	}
@@ -152,10 +164,10 @@ public class EditCell : Cell, IPointerDownHandler, IPointerUpHandler {
 			}
 			if (isCellSelected) {
 				core.isUpdateSentByCell = true;
-				core.team = cellTeam;
-				core.startingElementCount = elementCount;
-				core.regenarationPeriod = regenPeriod;
-				core.maxElementCount = maxElements;
+				core.team = Cell.CellTeam;
+				core.startingElementCount = Cell.ElementCount;
+				core.regenarationPeriod = Cell.RegenPeriod;
+				core.maxElementCount = Cell.MaxElements;
 				core.isUpdateSentByCell = false;
 				EnableCircle(Color.magenta);
 			}

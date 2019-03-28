@@ -8,14 +8,14 @@ public class Background : MonoBehaviour, IPointerEnterHandler {
 	public void OnPointerEnter(PointerEventData eventData) {
 		if (Input.GetMouseButton(0)) {
 			onReleaseClear = true;
-			CellBehaviour.lastEnteredCell = null;
+			GameCell.lastEnteredCell = null;
 		}
 	}
 
 	private void Update() {
 		if (onReleaseClear) {
 			if (Input.GetMouseButtonUp(0)) {
-				CellBehaviour.ClearSelection();
+				GameCell.ClearSelection();
 			}
 		}
 	}

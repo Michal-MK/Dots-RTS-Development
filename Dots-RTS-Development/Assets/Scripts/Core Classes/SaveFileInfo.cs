@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
-using TMPro;
 
 public class SaveFileInfo : MonoBehaviour {
 	public bool isSavedLocaly = false;
@@ -48,7 +46,7 @@ public class SaveFileInfo : MonoBehaviour {
 
 	#region Server Specific
 
-	public async void DowloadLevel(Transform filename) {
+	public async void DownloadLevel(Transform filename) {
 		await serverAccess.DownloadFTPAsync(filename.name);
 	}
 
@@ -57,36 +55,31 @@ public class SaveFileInfo : MonoBehaviour {
 	#region Local
 
 	public void LoadLevel(Transform levelName) {
-#if UNITY_ANDROID
-		string s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
-#else
-		string s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
-#endif
+		string s;
+		if (GameEnvironment.IsAndroid) {
+			s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+		}
+		else {
+			s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+		}
+
 		PlayManager.levelState = PlayManager.PlaySceneState.CUSTOM;
 		PlayerPrefs.SetString("LoadLevelFilePath", s);
-		SceneManager.LoadScene(Scenes.PLAYER);
+		SceneManager.LoadScene(Scenes.GAME);
 	}
 
 	public void DeleteObject(Transform fileName) {
-#if UNITY_ANDROID
-		File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
-#else
-		File.Delete(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
-#endif
+		if (GameEnvironment.IsAndroid) {
+			File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
+		}
+		else {
+			File.Delete(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
+		}
+
 		LevelSelectScript.displayedSaves.Remove(this);
 		Destroy(gameObject);
 	}
 
-	//public void UploadLevel(Transform fileName) {
-	//	List<string> contents = serverAccess.GetContents();
-	//	for (int i = 0; i < contents.Count; i++) {
-	//		if (contents[i] == fileName.name) {
-	//			print("File with this name already exists. Upload cancelled.");
-	//			return;
-	//		}
-	//	}
-	//	serverAccess.UploadFileFTP(fileName.name);
-	//}
 	public async void UploadLevel(Transform fileName) {
 		List<string> contents = await serverAccess.GetContentsAsync();
 		for (int i = 0; i < contents.Count; i++) {
@@ -103,12 +96,13 @@ public class SaveFileInfo : MonoBehaviour {
 	#region Editor Specific
 
 	public void LoadToEditor() {
-		//print(levelName.name);
-#if UNITY_ANDROID
-		string fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
-#else
-		string fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
-#endif
+		string fileName;
+		if (GameEnvironment.IsAndroid) {
+			fileName = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+		}
+		else {
+			fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
+		}
 		saveAndLoadEditor.Load(fileName);
 		UI_Manager.CloseMostRecent(2);
 	}

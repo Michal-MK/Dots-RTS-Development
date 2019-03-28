@@ -119,7 +119,6 @@ public class LevelMarket : MonoBehaviour {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
-
 	public static Task<T> DeserializeObjectAsync<T>(FileStream stream) {
 		return Task.Run(() => {
 			BinaryFormatter bf = new BinaryFormatter();

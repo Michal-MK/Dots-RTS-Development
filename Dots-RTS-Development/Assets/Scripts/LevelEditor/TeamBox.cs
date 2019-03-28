@@ -7,7 +7,7 @@ public class TeamBox : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointe
 	public TeamSetup myParrent;
 	public Vector3 initialPos;
 
-	public Cell.enmTeam team;
+	public Team team;
 	public RectTransform myRectTransform;
 
 	Vector2 oldMousePos = Vector2.zero;

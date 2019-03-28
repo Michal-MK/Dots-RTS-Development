@@ -4,7 +4,7 @@ using System.Collections;
 public class AI_Data_Holder {
 
 	private Enemy_AI _ai;
-	private CellBehaviour _senderCell;
+	private GameCell _senderCell;
 	private RelationToAI _relation;
 	private bool isModified = false;
 	public enum RelationToAI {
@@ -15,13 +15,13 @@ public class AI_Data_Holder {
 	}
 
 	//Constructor initially created object can only have reference to itself
-	public AI_Data_Holder(Enemy_AI AI, CellBehaviour cell) {
+	public AI_Data_Holder(Enemy_AI AI, GameCell cell) {
 		_ai = AI;
 		_senderCell = cell;
 		_relation = RelationToAI.MYSELF;
 	}
 
-	public AI_Data_Holder(Player player, CellBehaviour cell) {
+	public AI_Data_Holder(Player player, GameCell cell) {
 		_ai = null;
 		_senderCell = cell;
 		_relation = RelationToAI.PLAYER;
@@ -67,7 +67,7 @@ public class AI_Data_Holder {
 	/// <summary>
 	/// Get the cell that triggered creation of this script
 	/// </summary>
-	public CellBehaviour getSender {
+	public GameCell getSender {
 		get { return _senderCell; }
 	}
 

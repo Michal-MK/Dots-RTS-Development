@@ -19,7 +19,7 @@ public class UI_Manager : MonoBehaviour {
 	public static event WindowChangedHandler OnWindowClose;
 
 	private void Awake() {
-		if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
+		if (SceneManager.GetActiveScene().name == Scenes.GAME) {
 			UM_InGame.OnUpgradeBegin += UM_InGame_OnUpgradeBegin;
 			UM_InGame.OnUpgradeQuit += UM_InGame_OnUpgradeQuit;
 		}
@@ -54,7 +54,7 @@ public class UI_Manager : MonoBehaviour {
 	}
 	IEnumerator ReturnToLevelSelectIn(float seconds) {
 		yield return new WaitForSeconds(seconds);
-		SceneManager.LoadScene(Scenes.SELECT);
+		SceneManager.LoadScene(Scenes.LEVEL_SELECT);
 	}
 
 
@@ -132,7 +132,7 @@ public class UI_Manager : MonoBehaviour {
 				else {
 					win.animator.SetTrigger("Hide");
 					if (win.isFlagedForSwithOff) {
-						Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
+						Control.Script.StartCoroutine(DisableAfterAnimation(win.animator));
 					}
 				}
 				if (OnWindowClose != null) {
@@ -140,11 +140,11 @@ public class UI_Manager : MonoBehaviour {
 				}
 			}
 			else {
-				Control.script.Pause();
+				Control.Script.Pause();
 			}
 		}
 		else {
-			Control.script.Pause();
+			Control.Script.Pause();
 		}
 	}
 
@@ -159,19 +159,19 @@ public class UI_Manager : MonoBehaviour {
 					else {
 						win.animator.SetTrigger("Hide");
 						if (win.isFlagedForSwithOff) {
-							Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
+							Control.Script.StartCoroutine(DisableAfterAnimation(win.animator));
 						}
 					}
 					OnWindowClose(win);
 				}
 				else {
-					Control.script.Pause();
+					Control.Script.Pause();
 				}
 			}
 		}
 		else {
 			print("Invalid count " + count + " is bigger than all active windows " + activeWindows.Count);
-			Control.script.Pause();
+			Control.Script.Pause();
 		}
 	}
 
@@ -181,7 +181,7 @@ public class UI_Manager : MonoBehaviour {
 
 		if (win.GetCurrentAnimatorStateInfo(0).IsName("Hide")) {
 			win.gameObject.SetActive(false);
-			if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+			if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 				UI_ReferenceHolder.LE_cellPanel.StartCoroutine(UI_ReferenceHolder.LE_cellPanel.MoveToAnchor(0.25f, 2));
 			}
 		}

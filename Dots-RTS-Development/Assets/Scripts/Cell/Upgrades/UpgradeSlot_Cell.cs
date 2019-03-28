@@ -1,27 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
-using System;
 
 public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler {
 
 	public SpriteRenderer selfSprite;
 	public SpriteRenderer clearUpgrade;
 
-	UM_Editor uManager;
+	private UM_Editor uManager;
 
-	//public delegate void CellUpgradeClick(UpgradeSlot_Cell sender);
-	//public static event CellUpgradeClick OnCellUpgradeSlotClicked;
-
-
-	private static bool isSubscribed = false;
 	// Use this for initialization
 	protected override void Start() {
 		base.Start();
-		if (!isSubscribed) {
+		if (!IsSubscribed) {
 			OnSlotClicked += UpgradeSlot_OnSlotClicked;
 		}
-		uManager = transform.parent.parent.GetComponent<UM_Editor>();
+		uManager = transform.parent.parent.GetComponent<UM_Editor>(); //What?? 
 	}
 
 	protected override void OnDestroy() {
@@ -29,22 +22,20 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 		OnSlotClicked -= UpgradeSlot_OnSlotClicked;
 	}
 
-
-
-	private void UpgradeSlot_OnSlotClicked(UpgradeSlot sender, int slot) {
-		if (sender == this) {
-			print("Clicked on slot " + slot + " invoked by " + sender.getSlotID + " in " + sender.transform.parent.name);
+	private void UpgradeSlot_OnSlotClicked(object sender, OnUpgradeSlotClickedEventArgs e) {
+		if (e.Slot == this) {
+			print($"Clicked on slot {e.Slot} invoked by {e.SlotID} in {transform.parent.name}");
 			selfSprite.sprite = null;
 			clearUpgrade.color = new Color(1, 1, 1, 0);
-			type = Upgrade.Upgrades.NONE;
-			uManager.upgrades[slot] = Upgrade.Upgrades.NONE;
+			Type = Upgrades.NONE;
+			uManager.upgrades[e.SlotID] = Upgrades.NONE;
 		}
 	}
 
-	protected override void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
+	protected override void ClearUpgradeSlot_OnSlotClear(object sender, UpgradeSlot clicked) {
 		if (clicked == this) {
-			base.ClearUpgradeSlot_OnSlotClear(clicked);
-			print("Clered slot " + getSlotID + " On Cell");
+			base.ClearUpgradeSlot_OnSlotClear(sender, clicked);
+			print($"Clered slot {SlotID} in cell {transform.parent.name}");
 		}
 	}
 
@@ -54,7 +45,7 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		if (type != Upgrade.Upgrades.NONE) {
+		if (Type != Upgrades.NONE) {
 			clearUpgrade.color = new Color(1, 1, 1, 1);
 		}
 	}
@@ -64,13 +55,13 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		if(type != Upgrade.Upgrades.NONE) {
-			uManager.upgrades[getSlotID] = type = Upgrade.Upgrades.NONE;
+		if (Type != Upgrades.NONE) {
+			uManager.upgrades[SlotID] = Type = Upgrades.NONE;
 			clearUpgrade.color = new Color(1, 1, 1, 0);
 			selfSprite.sprite = null;
 		}
 		else {
-			highlightedSlot = this;
+			//highlightedSlot = this;
 			UpgradePickerInstance.OnPickerClicked += InstallUpgradeDirectly;
 			UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
 		}
@@ -80,9 +71,9 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 
 		UpgradePickerInstance.OnPickerClicked -= InstallUpgradeDirectly;
 		if (selected == this) {
-			print("Selected " + selected.getSlotID + " This " + getSlotID);
-			uManager.upgrades[getSlotID] = type = sender.upgrade;
-			selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+			print("Selected " + selected.SlotID + " This " + SlotID);
+			uManager.upgrades[SlotID] = Type = sender.upgrade;
+			selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[Type];
 			selfSprite.size = Vector2.one * 25f;
 		}
 		UI_Manager.CloseMostRecent();

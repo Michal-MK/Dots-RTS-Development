@@ -11,7 +11,7 @@ class ElementBehaviour : Element {
 
     //Calculates steering behaviour for the element 
     private void FixedUpdate() {
-        if (DistanceToTarget(target) < target.cellRadius) {
+        if (DistanceToTarget(target) < target.Cell.CellRadius) {
             //Execute this code after collision with target.
             if (team > 0) {
                 ExecuteAttack();
@@ -34,13 +34,13 @@ class ElementBehaviour : Element {
         gameObject.transform.position += (Vector3)ApplySidewaysWobble(velocity);
 	}
 
-	private Vector2 DirectionToTarget(CellBehaviour target) {
+	private Vector2 DirectionToTarget(GameCell target) {
 		Vector2 seekF = target.gameObject.transform.position - transform.position;
 		seekF.Normalize();
 		return seekF;
 	}
     
-    private float DistanceToTarget(CellBehaviour target) {
+    private float DistanceToTarget(GameCell target) {
         return Vector2.Distance(target.transform.position, transform.position);
     }
 

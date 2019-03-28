@@ -4,25 +4,23 @@ public class MainMenuUI : MonoBehaviour {
 
 	// Turns OFF the game
 	public void ExitGame() {
-#if UNITY_EDITOR
-		UnityEditor.EditorApplication.isPlaying = false;
-#else
-			Application.Quit();
-#endif
+		if (GameEnvironment.IsEditor) {
+			UnityEditor.EditorApplication.isPlaying = false;
+		}
+
+		Application.Quit();
 	}
 
 	public void DisplaySelection(bool isCampaign) {
 		if (isCampaign) {
-			//isDisplayingCampaign = true;
 			UI_ReferenceHolder.LS_rectCustom.anchoredPosition = new Vector3(2048, 0);
 			UI_ReferenceHolder.LS_rectCampaign.anchoredPosition = new Vector3(0, 0);
-
 		}
 		else {
-			//isDisplayingCampaign = false;
 			UI_ReferenceHolder.LS_rectCampaign.anchoredPosition = new Vector3(-2048, 0);
 			UI_ReferenceHolder.LS_rectCustom.anchoredPosition = new Vector3(0, 0);
 		}
+
 		UI_ReferenceHolder.LS_canvasBase.SetActive(false);
 		//UI_ReferenceHolder.centralToMainMenu.SetActive(false);
 		//UI_ReferenceHolder.campaignButton.SetActive(false);

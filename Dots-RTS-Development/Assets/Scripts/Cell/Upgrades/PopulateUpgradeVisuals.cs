@@ -10,10 +10,10 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 	public GameObject populateWithPrefab;
 
 	private void Start() {
-		if (SceneManager.GetActiveScene().name == Scenes.SHOP) {
+		if (SceneManager.GetActiveScene().name == Scenes.UPGRADE_SHOP) {
 			PopulateStore();
 		}
-		else if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+		else if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 			PopulateEditorPicker();
 		}
 		else {
@@ -22,11 +22,11 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 	}
 
 	private void PopulateEditorPicker() {
-		Upgrade.Upgrades[] upgrades = (Upgrade.Upgrades[])Enum.GetValues(typeof(Upgrade.Upgrades));
-		string[] upgradeNames = Enum.GetNames(typeof(Upgrade.Upgrades));
+		Upgrades[] upgrades = (Upgrades[])Enum.GetValues(typeof(Upgrades));
+		string[] upgradeNames = Enum.GetNames(typeof(Upgrades));
 
-		for (int i = 0; i < Enum.GetValues(typeof(Upgrade.Upgrades)).Length; i++) {
-			if (upgrades[i] != Upgrade.Upgrades.NONE) {
+		for (int i = 0; i < Enum.GetValues(typeof(Upgrades)).Length; i++) {
+			if (upgrades[i] != Upgrades.NONE) {
 				UpgradePickerInstance instance = Instantiate(populateWithPrefab, transform).GetComponent<UpgradePickerInstance>();
 				instance.gameObject.name = upgradeNames[i];
 				instance.upgrade = upgrades[i];
@@ -50,14 +50,14 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 
 	public void Populate(Transform parent) {
 		foreach (UpgradePanelData data in parent.GetComponentsInChildren<UpgradePanelData>()) {
-			foreach (KeyValuePair<Upgrade.Upgrades, int> owned in ProfileManager.getCurrentProfile.acquiredUpgrades) {
+			foreach (KeyValuePair<Upgrades, int> owned in ProfileManager.CurrentProfile.acquiredUpgrades) {
 				if (owned.Key == data.type) {
 					data.count = owned.Value;
 
 					data.name = FolderAccess.GetUpgradeName(owned.Key);
 					data.UpdateUpgradeOverview();
 				}
-				else if (data.type == Upgrade.Upgrades.NONE) {
+				else if (data.type == Upgrades.NONE) {
 					data.UpdateUpgradeOverview();
 				}
 			}
@@ -70,7 +70,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		foreach (Image i in transform.Find("UPGRADE_Panel/ATK_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "ATK_Upgrades" && i.gameObject.name != "Image") {
 				try {
-					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
 				catch (KeyNotFoundException) {
 					i.sprite = FolderAccess.GetNIYImage();
@@ -80,7 +80,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		foreach (Image i in transform.Find("UPGRADE_Panel/DEF_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "DEF_Upgrades" && i.gameObject.name != "Image") {
 				try {
-					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
 				catch (KeyNotFoundException) {
 					i.sprite = FolderAccess.GetNIYImage();
@@ -90,7 +90,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		foreach (Image i in transform.Find("UPGRADE_Panel/UTIL_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "UTIL_Upgrades" && i.gameObject.name != "Image") {
 				try {
-					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
 				catch (KeyNotFoundException) {
 					i.sprite = FolderAccess.GetNIYImage();
@@ -105,8 +105,8 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 	//	int inte = 0;
 	//	while (true) {
 	//		yield return new WaitForSeconds(0.5f);
-	//		print("Sprite " + (Upgrade.Upgrades)inte);
-	//		i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrade.Upgrades)inte];
+	//		print("Sprite " + (Upgrades)inte);
+	//		i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)inte];
 	//		inte++;
 	//		if (inte > 3) {
 	//			inte = 0;

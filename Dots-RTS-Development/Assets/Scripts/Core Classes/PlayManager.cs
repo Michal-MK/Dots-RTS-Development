@@ -13,8 +13,8 @@ public class PlayManager : MonoBehaviour {
 		PREVIEW
 	}
 
-	public static List<CellBehaviour> cells = new List<CellBehaviour>();
-	public static List<CellBehaviour> neutralCells = new List<CellBehaviour>();
+	public static List<GameCell> cells = new List<GameCell>();
+	public static List<GameCell> neutralCells = new List<GameCell>();
 
 	public float checkFreq = 0.2f;
 
@@ -46,7 +46,7 @@ public class PlayManager : MonoBehaviour {
 
 	public IEnumerator GameState(float updateCheckFreq) {
 
-		while (SceneManager.GetActiveScene().name == Scenes.PLAYER && isInGame) {
+		while (SceneManager.GetActiveScene().name == Scenes.GAME && isInGame) {
 			yield return new WaitForSeconds(updateCheckFreq);
 
 			int activeAIs = 0;
@@ -70,13 +70,13 @@ public class PlayManager : MonoBehaviour {
 			int playerCells = 0;
 
 			for (int i = 0; i < cells.Count; i++) {
-				if (cells[i].cellTeam == Cell.enmTeam.ALLIED) {
+				if (cells[i].Cell.CellTeam == Team.ALLIED) {
 					playerCells++;
 				}
 			}
 			if (playerCells == 0) {
 				yield return new WaitForSeconds(1.5f);
-				if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
+				if (SceneManager.GetActiveScene().name == Scenes.GAME) {
 					GameOver();
 				}
 			}
@@ -90,7 +90,7 @@ public class PlayManager : MonoBehaviour {
 
 	public void GameOver() {
 		DontDestroyOnLoad(gameObject);
-		SceneManager.LoadScene(Scenes.POSTG);
+		SceneManager.LoadScene(Scenes.POST_GAME);
 		isWinner = false;
 		gameTime = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 		isInGame = false;
@@ -99,12 +99,12 @@ public class PlayManager : MonoBehaviour {
 
 	public void YouWon() {
 		DontDestroyOnLoad(gameObject);
-		SceneManager.LoadScene(Scenes.POSTG);
+		SceneManager.LoadScene(Scenes.POST_GAME);
 		totalCoinsAwarded = 1;
 		isWinner = true;
 		int neutrals = 0;
-		foreach (CellBehaviour c in cells) {
-			if (c.cellTeam == Cell.enmTeam.NEUTRAL) {
+		foreach (GameCell c in cells) {
+			if (c.Cell.CellTeam == Team.NEUTRAL) {
 				neutrals++;
 			}
 		}
@@ -125,20 +125,20 @@ public class PlayManager : MonoBehaviour {
 
 		//Did we play a campaign level ?
 		if (CampaignLevel.current != null) {
-			CampaignLevelCode c = ProfileManager.getCurrentProfile.onLevelBaseGame;
-			ProfileManager.getCurrentProfile.completedCampaignLevels += 1;
-			ProfileManager.getCurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
-			ProfileManager.getCurrentProfile.onLevelBaseGame = new CampaignLevelCode(c.difficulty, c.level + 1);
+			CampaignLevelCode c = ProfileManager.CurrentProfile.CurrentCampaignLevel;
+			ProfileManager.CurrentProfile.CompletedCampaignLevels += 1;
+			ProfileManager.CurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
+			ProfileManager.CurrentProfile.CurrentCampaignLevel = new CampaignLevelCode(c.difficulty, c.level + 1);
 			CampaignLevel.current = null;
 			Destroy(FindObjectOfType<CampaignLevel>().gameObject);
 		}
 		else {
-			ProfileManager.getCurrentProfile.completedCustomLevels += 1;
+			ProfileManager.CurrentProfile.CompletedCustomLevels += 1;
 			print("Played custom garbage");
 		}
 
 		isInGame = false;
-		ProfileManager.getCurrentProfile.ownedCoins += totalCoinsAwarded;
+		ProfileManager.CurrentProfile.Coins += totalCoinsAwarded;
 		ProfileManager.SerializeChanges();
 	}
 

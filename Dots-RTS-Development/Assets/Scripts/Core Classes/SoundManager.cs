@@ -1,14 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
 	public List<AudioSource> sources = new List<AudioSource>();
 	public bool play;
 
-
-	// Use this for initialization
 	void Start() {
 		play = true;
 		foreach (AudioSource s in transform.GetComponentsInChildren<AudioSource>()) {
@@ -20,27 +17,18 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	public void AddToSoundQueue(AudioClip newClip) {
-		//print("attempt");
-		bool added = false;
 		foreach (AudioSource s in sources) {
-			if(s.clip == null) {
-				//print("Added");
-				added = true;
+			if (s.clip == null) {
 				s.clip = newClip;
 				s.Play();
 				StartCoroutine(RemoveClipAfterFinish(s));
 				return;
 			}
 		}
-		if (!added) {
-			//print("Not Enough Sound players");
-		}
-
 	}
 
 	public IEnumerator RemoveClipAfterFinish(AudioSource s) {
 		yield return new WaitUntil(() => !s.isPlaying);
 		s.clip = null;
-		//print("Removed");
 	}
 }

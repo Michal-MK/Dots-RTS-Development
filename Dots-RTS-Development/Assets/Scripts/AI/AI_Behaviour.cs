@@ -75,7 +75,7 @@ public class AI_Behaviour : Enemy_AI {
 
 	#region Function to preform ATTACKS, DEFENSES, EXPANSIONS
 	//Expand from - to
-	private void Expand(CellBehaviour selectedCell, CellBehaviour toTarget) {
+	private void Expand(GameCell selectedCell, GameCell toTarget) {
 		if (PlayManager.neutralCells.Count == 0) {
 			print("Expanding to NONE -- return;");
 			return;
@@ -84,12 +84,12 @@ public class AI_Behaviour : Enemy_AI {
 	}
 
 	//Attack from - who
-	private void Attack(CellBehaviour selectedCell, CellBehaviour target) {
+	private void Attack(GameCell selectedCell, GameCell target) {
 		selectedCell.AttackCell(target);
 	}
 
 	//Defend from - who
-	private void Defend(CellBehaviour selectedCell, CellBehaviour target) {
+	private void Defend(GameCell selectedCell, GameCell target) {
 		selectedCell.EmpowerCell(target);
 	}
 	#endregion
@@ -221,17 +221,17 @@ public class AI_Behaviour : Enemy_AI {
 
 	#region Cell Selecting code  -  AI Cells, Targets, Allies, Neutrals
 
-	public CellBehaviour AiCellSelector() {
+	public GameCell AiCellSelector() {
 		int elementRecordAI = -1;
 		int recordIndex = -1;
-		CellBehaviour current;
+		GameCell current;
 
 		for (int i = 0; i < _aiCells.Count; i++) {
 			current = _aiCells[i];
 
 			//Find the best cell to work with (the most elements)
-			if (current.elementCount > elementRecordAI) {
-				elementRecordAI = current.elementCount;
+			if (current.Cell.ElementCount > elementRecordAI) {
+				elementRecordAI = current.Cell.ElementCount;
 				recordIndex = i;
 			}
 
@@ -252,7 +252,7 @@ public class AI_Behaviour : Enemy_AI {
 				//If a target that can be overtaken exists still try to attack
 				for (int i = 0; i < _aiCells.Count; i++) {
 					for (int j = 0; j < _targets.Count; j++) {
-						if ((_aiCells[i].elementCount * 0.5f) > ((_targets[j].elementCount) + 1)) {
+						if ((_aiCells[i].Cell.ElementCount * 0.5f) > ((_targets[j].Cell.ElementCount) + 1)) {
 							if (UnityEngine.Random.Range(0, 10) < 6) {
 								ss += "Selected Cell with guaranteed Overtake | ";
 								return _aiCells[i];
@@ -274,7 +274,7 @@ public class AI_Behaviour : Enemy_AI {
 		}
 	}
 
-	public CellBehaviour TargetCellSelector() {
+	public GameCell TargetCellSelector() {
 		//if I don't have an attacker .. don't even bother.
 		if (selectedAiCell == null) {
 			return null;
@@ -283,7 +283,7 @@ public class AI_Behaviour : Enemy_AI {
 		int elementRecord = 99999;
 		int recordIndex = -1;
 
-		CellBehaviour current;
+		GameCell current;
 
 		for (int i = 0; i < _targets.Count; i++) {
 			current = _targets[i];
@@ -294,12 +294,12 @@ public class AI_Behaviour : Enemy_AI {
 				return current;
 			}
 			//Find the best cell to attack
-			if (current.elementCount < elementRecord) {
-				elementRecord = current.elementCount;
+			if (current.Cell.ElementCount < elementRecord) {
+				elementRecord = current.Cell.ElementCount;
 				recordIndex = i;
 			}
 			//If curret cell's element count is smaller than the one attacking 60% return it
-			if (current.elementCount < selectedAiCell.elementCount) {
+			if (current.Cell.ElementCount < selectedAiCell.Cell.ElementCount) {
 				if (UnityEngine.Random.Range(0, 10) < 6) {
 					attackChoiceProbability = 0.6f;
 					return current;
@@ -317,8 +317,8 @@ public class AI_Behaviour : Enemy_AI {
 		}
 	}
 
-	public CellBehaviour ExpandCellSelector() {
-		CellBehaviour current;
+	public GameCell ExpandCellSelector() {
+		GameCell current;
 
 		int elementRecord = 99999;
 		int recordIndex = -1;
@@ -331,13 +331,13 @@ public class AI_Behaviour : Enemy_AI {
 				return current;
 			}
 			//Find a neutral cell that has the least elements
-			if (current.elementCount < elementRecord) {
-				elementRecord = current.elementCount;
+			if (current.Cell.ElementCount < elementRecord) {
+				elementRecord = current.Cell.ElementCount;
 				recordIndex = i;
 			}
 
 			//If the neutral cell has less than "x" elements in it 80% return it
-			if (current.elementCount < 5) {
+			if (current.Cell.ElementCount < 5) {
 				if (UnityEngine.Random.Range(0, 10) < 8) {
 					expandChoiceProbability = 0.8f;
 					return current;
@@ -349,26 +349,26 @@ public class AI_Behaviour : Enemy_AI {
 		return PlayManager.neutralCells[recordIndex];
 	}
 
-	public CellBehaviour AiAidSelector() {
+	public GameCell AiAidSelector() {
 
-		CellBehaviour current;
+		GameCell current;
 
 		int elementRecord = 99999;
 		int recordIndex = -1;
 		for (int i = 0; i < _aiCells.Count; i++) {
 			current = _aiCells[i];
 			//Locate a cell with the lest amount of elements
-			if (current.elementCount < elementRecord) {
+			if (current.Cell.ElementCount < elementRecord) {
 				if (current != selectedAiCell) {
-					elementRecord = current.elementCount;
+					elementRecord = current.Cell.ElementCount;
 					recordIndex = i;
 				}
 			}
 			//If you get one and it has < 5 elements => 50% return it
-			if (current.elementCount < 5) {
+			if (current.Cell.ElementCount < 5) {
 				if (UnityEngine.Random.Range(0, 10) < 5) {
 					if (current != selectedAiCell) {
-						if (Mathf.Abs(selectedAiCell.elementCount - current.elementCount) > aICellAidElementTreshold) {
+						if (Mathf.Abs(selectedAiCell.Cell.ElementCount - current.Cell.ElementCount) > aICellAidElementTreshold) {
 							defendChoiceProbability = 0.5f;
 						}
 						else {
@@ -386,7 +386,7 @@ public class AI_Behaviour : Enemy_AI {
 		}
 		// 40% return the best cell you found
 		if (UnityEngine.Random.Range(0, 10) < 4) {
-			if (Mathf.Abs(selectedAiCell.elementCount - _aiCells[recordIndex].elementCount) > aICellAidElementTreshold) {
+			if (Mathf.Abs(selectedAiCell.Cell.ElementCount - _aiCells[recordIndex].Cell.ElementCount) > aICellAidElementTreshold) {
 				defendChoiceProbability = 0.6f;
 			}
 			else {

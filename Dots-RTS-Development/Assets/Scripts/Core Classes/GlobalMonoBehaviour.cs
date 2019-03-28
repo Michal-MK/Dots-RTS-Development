@@ -8,7 +8,6 @@ public class GlobalMonoBehaviour : MonoBehaviour {
 		StartCoroutine(GetSpritesFromResources("DefenceIcon"));
 		StartCoroutine(GetSpritesFromResources("UtilityIcon"));
 		StartCoroutine(GetSpritesFromResources("TeamBox"));
-
 	}
 
 	IEnumerator<Sprite> GetSpritesFromResources(string path) {

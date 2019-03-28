@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class Element : MonoBehaviour {
 
-	public Cell.enmTeam team;
-	public Upgrade.Upgrades[] debuffs;
-	public CellBehaviour attacker;
-	public CellBehaviour target;
+	public Team team;
+	public Upgrades[] debuffs;
+	public GameCell attacker;
+	public GameCell target;
 
 	protected bool reflected = false;
 	private int damage = 1;
@@ -24,30 +24,30 @@ public class Element : MonoBehaviour {
 		float angle = Random.Range(0, 2 * Mathf.PI);
 		float x = Mathf.Sin(angle);
 		float y = Mathf.Cos(angle);
-		return new Vector3(transform.position.x + x * attacker.cellRadius * 0.5f, transform.position.y + y * attacker.cellRadius * 0.5f);
+		return new Vector3(transform.position.x + x * attacker.Cell.CellRadius * 0.5f, transform.position.y + y * attacker.Cell.CellRadius * 0.5f);
 	}
 	public void ExecuteAttack() {
-		Upgrade.Upgrades[] infection = new Upgrade.Upgrades[8] {
-			Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE,Upgrade.Upgrades.NONE
+		Upgrades[] infection = new Upgrades[8] {
+			Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE
 		};
 
 		#region Deterimne type of attack (buff)
 		for (int i = 0; i < debuffs.Length; i++) {
 			switch (debuffs[i]) {
-				case Upgrade.Upgrades.ATK_DOUBLE_DAMAGE: {
+				case Upgrades.ATK_DOUBLE_DAMAGE: {
 					damage = damage * 2;
 					break;
 				}
-				case Upgrade.Upgrades.ATK_SLOW_REGENERATION: {
+				case Upgrades.ATK_SLOW_REGENERATION: {
 					//damage = 1;
 					infection[i] = debuffs[i];
 					break;
 				}
-				case Upgrade.Upgrades.ATK_CRITICAL_CHANCE: {
+				case Upgrades.ATK_CRITICAL_CHANCE: {
 					infection[i] = debuffs[i];
 					break;
 				}
-				case Upgrade.Upgrades.ATK_DOT: {
+				case Upgrades.ATK_DOT: {
 					//damage = 1;
 					infection[i] = debuffs[i];
 					break;
@@ -61,10 +61,10 @@ public class Element : MonoBehaviour {
 	public void Refelcted() {
 		print("Reflected");
 		if (!reflected) {
-			CellBehaviour temp = attacker;
+			GameCell temp = attacker;
 			attacker = target;
 			target = temp;
-			team = attacker.cellTeam;
+			team = attacker.Cell.CellTeam;
 			//StartCoroutine(FlagAsReflectedOnLeave);
 			reflected = true;
 		}

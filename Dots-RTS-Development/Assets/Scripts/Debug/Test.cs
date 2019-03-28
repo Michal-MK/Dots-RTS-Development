@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class Test : MonoBehaviour {
-	public Dictionary<Upgrade.Upgrades, int> test = new Dictionary<Upgrade.Upgrades, int>() {
-		{Upgrade.Upgrades.NONE, 0 },
-		{Upgrade.Upgrades.ATK_CRITICAL_CHANCE, 0 },
-		{Upgrade.Upgrades.ATK_DOT, 0 },
-		{Upgrade.Upgrades.ATK_DOUBLE_DAMAGE, 0 },
-		{Upgrade.Upgrades.ATK_SLOW_REGENERATION, 0 },
+	public Dictionary<Upgrades, int> test = new Dictionary<Upgrades, int>() {
+		{Upgrades.NONE, 0 },
+		{Upgrades.ATK_CRITICAL_CHANCE, 0 },
+		{Upgrades.ATK_DOT, 0 },
+		{Upgrades.ATK_DOUBLE_DAMAGE, 0 },
+		{Upgrades.ATK_SLOW_REGENERATION, 0 },
 
 	};
 
@@ -22,14 +22,14 @@ public class Test : MonoBehaviour {
 
 	private IEnumerator Testaaa() {
 		yield return new WaitForSeconds(5);
-		foreach (KeyValuePair<Upgrade.Upgrades, int> item in test) {
+		foreach (KeyValuePair<Upgrades, int> item in test) {
 			print(item.Value);
 		}
 	}
 
 	public async Task FillUpgradeint() {
 		List<Task<int>> t = new List<Task<int>>();
-		foreach (KeyValuePair<Upgrade.Upgrades, int> dictItem in test) {
+		foreach (KeyValuePair<Upgrades, int> dictItem in test) {
 			print(dictItem.Key + "    " + dictItem.Value);
 			t.Add(MethodA(dictItem.Key));
 			//test[dictItem.Key] = await MethodA(dictItem.Key);
@@ -42,7 +42,7 @@ public class Test : MonoBehaviour {
 	}
 
 
-	public async Task<int> MethodA(Upgrade.Upgrades type) {
+	public async Task<int> MethodA(Upgrades type) {
 		print("Awaiting " + type);
 		await Task.Delay(500);
 		print("Expected output " + (int)type);

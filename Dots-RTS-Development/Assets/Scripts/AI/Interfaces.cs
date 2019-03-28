@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 
 public interface IAlly {
-	Cell.enmTeam Team { get; }
+	Team Team { get; }
 	List<IAlly> Targets { get; set; }
 	List<IAlly> Allies { get; set; }
-	List<CellBehaviour> MyCells { get; }
+	List<GameCell> MyCells { get; }
 
 	bool IsAllyOf(IAlly other);
 	bool IsTargetOf(IAlly other);

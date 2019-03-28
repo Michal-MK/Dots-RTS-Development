@@ -29,22 +29,22 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 		transparent = uiSlot.sprite;
 		highlight = uiSlotHighlight.sprite;
 		uiSlotHighlight.sprite = transparent;
-		instances[_slot] = _type;
+		UpgradeInstances[SlotID] = Type;
 	}
 
 	private void WindowClosed(Window changed) {
 		if(changed.window.name == "UPGRADE_Selection_To_UI") {
-			highlightedSlot = null;
+			//highlightedSlot = null;//TODO
 			uiSlotHighlight.sprite = transparent;
 			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
 		}
 	}
 
-	protected override void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
+	protected void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
 		if (clicked == this) {
-			base.ClearUpgradeSlot_OnSlotClear(clicked);
+			ClearUpgradeSlot_OnSlotClear(clicked);
 			uiSlot.sprite = transparent;
-			instances[getSlotID] = _type = Upgrade.Upgrades.NONE;
+			UpgradeInstances[SlotID] = Type = Upgrades.NONE;
 		}
 	}
 
@@ -60,30 +60,34 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 			//print("Clicked on UI Slot " + getSlotID);
 		}
 
-		if (highlightedSlot != null) {
-			UI_Manager.CloseMostRecent();
-			return;
-		}
-		else { 
-			highlightedSlot = this;
-			//print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
-			uiSlotHighlight.sprite = highlight;
-			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
-			uiSlotHighlight.GetComponent<Animator>().ResetTrigger("Stop");
-			UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
-		}
+		//if (highlightedSlot != null) {
+		//	UI_Manager.CloseMostRecent();
+		//	return;
+		//}
+		//else { 
+		//	//highlightedSlot = this;
+		//	//print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
+		//	uiSlotHighlight.sprite = highlight;
+		//	uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
+		//	uiSlotHighlight.GetComponent<Animator>().ResetTrigger("Stop");
+		//	UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
+		//}
 	}
 
 	private void UpgradePickerInstance_OnPickerClicked(UpgradeSlot highlighted, UpgradePickerInstance sender) {
 		if (highlighted == this) {
-			type = sender.upgrade;
+			Type = sender.upgrade;
 			uiSlot.sprite = sender.upgradeImg.sprite;
-			highlightedSlot = null;
+			//highlightedSlot = null;
 			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
 			uiSlotHighlight.sprite = transparent;
-			instances[getSlotID] = sender.upgrade;
+			UpgradeInstances[SlotID] = sender.upgrade;
 			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
 			//print("Clicked upgrade picker " + sender.upgrade);
 		}
+	}
+
+	public override void ChangeUpgradeImage(Sprite newSprite) {
+		throw new System.NotImplementedException();
 	}
 }

@@ -18,20 +18,20 @@ public class Initialize_AI : MonoBehaviour {
 		//Should be necessary only for older saves and Debug scene
 		
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == UnityEngine.SceneManagement.Scenes.DEBUG) {
-			StartAiInitialization(new Dictionary<Cell.enmTeam, AIHolder>(), new Dictionary<Cell.enmTeam, float>());
+			StartAiInitialization(new Dictionary<Team, AIHolder>(), new Dictionary<Team, float>());
 		}
 	}
 
 	//Goes though all the cells and creates an AI for each team.
-	public void StartAiInitialization(Dictionary<Cell.enmTeam, AIHolder> clanDict, Dictionary<Cell.enmTeam, float> difficultyDict) {
+	public void StartAiInitialization(Dictionary<Team, AIHolder> clanDict, Dictionary<Team, float> difficultyDict) {
 		GameObject g = Instantiate(playerData);
 		g.name = "Player";
 		playerScript = g.GetComponent<Player>();
 
 
 		//Make an ai for every team contained in the clandict
-		Dictionary<Cell.enmTeam, AIHolder>.KeyCollection teams = clanDict.Keys;
-		foreach  (Cell.enmTeam team in teams) {
+		Dictionary<Team, AIHolder>.KeyCollection teams = clanDict.Keys;
+		foreach  (Team team in teams) {
 			if ((int)team >= 2) {
 				float diff;
 				if (difficultyDict.TryGetValue(team, out diff) == false) {
@@ -56,18 +56,18 @@ public class Initialize_AI : MonoBehaviour {
 			if (clanDict.TryGetValue(iAlly.Team, out temp) == false) {
 				Debug.LogError("Not all IAlly|s are in the dictionary");
 			}
-			List<Cell.enmTeam> allies = temp.allies;
+			List<Team> allies = temp.allies;
 			List<IAlly> alliesI = new List<IAlly>();
-			foreach (Cell.enmTeam team in allies) {
+			foreach (Team team in allies) {
 				foreach (IAlly t in InterfaceList) {
 					if (t.Team == team) {
 						alliesI.Add(t);
 					}
 				}
 			}
-			List<Cell.enmTeam> targets = temp.targets;
+			List<Team> targets = temp.targets;
 			List<IAlly> targetsI = new List<IAlly>();
-			foreach (Cell.enmTeam team in targets) {
+			foreach (Team team in targets) {
 				foreach (IAlly t in InterfaceList) {
 					if (t.Team == team) {
 						targetsI.Add(t);
@@ -102,7 +102,7 @@ public class Initialize_AI : MonoBehaviour {
 		*/
 	}
 
-	public void SetAis(Cell.enmTeam team, float decisionSpeed) {
+	public void SetAis(Team team, float decisionSpeed) {
 		
 
 			GameObject aiHolder = new GameObject("AI code " + (int)team + " " + team);

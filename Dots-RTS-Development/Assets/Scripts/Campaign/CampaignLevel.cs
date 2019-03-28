@@ -23,7 +23,7 @@ public class CampaignLevel : MonoBehaviour {
 	public string levelPath;
 
 	private void Start() {
-		if(ProfileManager.getCurrentProfile == null) {
+		if(ProfileManager.CurrentProfile == null) {
 			Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			SceneManager.LoadScene(Scenes.PROFILES);
 			return;
@@ -37,7 +37,7 @@ public class CampaignLevel : MonoBehaviour {
 			levelInfo = (SaveDataCampaign)bf.Deserialize(fs);
 			fs.Close();
 		}
-		foreach (KeyValuePair<SaveDataCampaign,float> passedLevel in ProfileManager.getCurrentProfile.clearedCampaignLevels) {
+		foreach (KeyValuePair<SaveDataCampaign,float> passedLevel in ProfileManager.CurrentProfile.clearedCampaignLevels) {
 			if(passedLevel.Value != 0f) {
 				passedImg.gameObject.SetActive(true);
 				clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", passedLevel.Value / 60, passedLevel.Value % 60f, passedLevel.Value.ToString().Remove(0, passedLevel.Value.ToString().Length - 2));
@@ -58,7 +58,7 @@ public class CampaignLevel : MonoBehaviour {
 		current = this;
 		PlayerPrefs.SetString("LoadLevelFilePath", levelPath);
 		PlayManager.levelState = PlayManager.PlaySceneState.CAMPAIGN;
-		SceneManager.LoadScene(Scenes.PLAYER);
+		SceneManager.LoadScene(Scenes.GAME);
 		transform.parent = null;
 		DontDestroyOnLoad(gameObject);
 	}

@@ -49,7 +49,6 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 			CSTransform.anchorMax = new Vector2(1, 1f);
 			HidePanelHint.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -200);
 		}
-
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {

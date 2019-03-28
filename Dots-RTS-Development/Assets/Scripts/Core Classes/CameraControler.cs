@@ -94,7 +94,7 @@ public class CameraControler : MonoBehaviour {
 
 			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z);
 		}
-		else if (percentage.y > 0.96f) {
+		else if (percentage.y > 0.96f) { //Hello?
 			//print("B");
 			transform.position = new Vector3(newPos.x, newPos.y, newPos.z);
 

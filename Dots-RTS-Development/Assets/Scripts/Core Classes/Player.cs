@@ -4,49 +4,22 @@ using System;
 
 public class Player : MonoBehaviour, IAlly {
 
-	public Cell.enmTeam playerTeam = Cell.enmTeam.ALLIED;
-	private List<IAlly> alliesOfPlayer = new List<IAlly>();
-	private List<IAlly> targetsOfPlayer = new List<IAlly>();
-
-	public List<IAlly> listOfAlly = new List<IAlly>();
-	public List<CellBehaviour> playerCells = new List<CellBehaviour>();
+	public Team Team { get; set; } = Team.ALLIED;
 
 	private void Start() {
-		foreach (CellBehaviour cell in PlayManager.cells) {
-			if (cell.cellTeam == Cell.enmTeam.ALLIED) {
-				playerCells.Add(cell);
+		foreach (GameCell cell in PlayManager.cells) {
+			if (cell.Cell.CellTeam == Team.ALLIED) {
+				MyCells.Add(cell);
 			}
 		}
 	}
 
-	public Cell.enmTeam Team {
-		get {
-			return playerTeam;
-		}
-	}
+	public List<IAlly> Targets { get; set; } = new List<IAlly>();
+	public List<IAlly> Allies { get; set; } = new List<IAlly>();
 
-	public List<IAlly> Targets {
-		get {
-			return targetsOfPlayer;
-		}
-		set { targetsOfPlayer = value;
-		}
-	}
-	public List<IAlly> Allies {
-		get {
-			return alliesOfPlayer;
-		}
-		set {
-			alliesOfPlayer = value;
-		}
-	}
+	public List<GameCell> MyCells { get; } = new List<GameCell>();
 
-	public List<CellBehaviour> MyCells {
-		get {
-			return playerCells;
-		}
-	}
-
+	#region Ally/Target manipulation
 	public bool IsAllyOf(IAlly other) {
 		return Allies.Contains(other);
 	}
@@ -56,18 +29,19 @@ public class Player : MonoBehaviour, IAlly {
 	}
 
 	public void AddAlly(IAlly ally) {
-		alliesOfPlayer.Add(ally);
+		Allies.Add(ally);
 	}
 
 	public void RemoveAlly(IAlly ally) {
-		alliesOfPlayer.Remove(ally);
+		Allies.Remove(ally);
 	}
 
 	public void AddTarget(IAlly target) {
-		targetsOfPlayer.Add(target);
+		Targets.Add(target);
 	}
 
 	public void RemoveTarget(IAlly target) {
-		targetsOfPlayer.Remove(target);
-	}
+		Targets.Remove(target);
+	} 
+	#endregion
 }

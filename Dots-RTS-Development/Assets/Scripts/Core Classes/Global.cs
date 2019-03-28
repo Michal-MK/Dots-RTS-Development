@@ -33,13 +33,13 @@ namespace UnityEngine.SceneManagement {
 	class Scenes {
 		public const string PROFILES = "Profiles";
 		public const string MENU = "Main_Menu";
-		public const string EDITOR = "Level_Editor";
-		public const string PLAYER = "Level_Player";
-		public const string SELECT = "Level_Select";
-		public const string SHOP = "Upgrade_Store";
-		public const string SHARING = "Level_Sharing";
+		public const string LEVEL_EDITOR = "Level_Editor";
+		public const string GAME = "Level_Player";
+		public const string LEVEL_SELECT = "Level_Select";
+		public const string UPGRADE_SHOP = "Upgrade_Store";
+		public const string LEVEL_SHARE = "Level_Sharing";
 		public const string DEBUG = "Debug";
-		public const string POSTG = "Post_Game";
+		public const string POST_GAME = "Post_Game";
 		public const string SPLASH = "SplashScreen";
 	}
 }

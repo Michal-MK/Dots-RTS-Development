@@ -1,0 +1,13 @@
+﻿public enum Team {
+	NONE = -1,
+	NEUTRAL,
+	ALLIED,
+	ENEMY1,
+	ENEMY2,
+	ENEMY3,
+	ENEMY4,
+	ENEMY5,
+	ENEMY6,
+	ENEMY7,
+	ENEMY8,
+}

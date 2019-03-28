@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public Upgrade.Upgrades type;
+	public Upgrades type;
 	new public string name;
 	public int count;
 	public Image typeImage;
@@ -35,14 +35,14 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	}
 
 	void Start() {
-		if (SceneManager.GetActiveScene().name == Scenes.PLAYER || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
-			if (ProfileManager.getCurrentProfile == null) {
+		if (SceneManager.GetActiveScene().name == Scenes.GAME || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
+			if (ProfileManager.CurrentProfile == null) {
 				Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 				SceneManager.LoadScene(Scenes.PROFILES);
 				return;
 			}
-			if (type != Upgrade.Upgrades.NONE) {
-				count = ProfileManager.getCurrentProfile.acquiredUpgrades[type];
+			if (type != Upgrades.NONE) {
+				count = ProfileManager.CurrentProfile.acquiredUpgrades[type];
 				UpdateUpgradeOverview();
 			}
 			desc = transform.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();

@@ -1,18 +1,18 @@
-using System.Collections.Generic;
-using System.Net;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class ServerAccess {
 
 	/// <summary>
 	/// Connects to the FTP server and reads its contents
 	/// </summary>
-	/// <returns>List of all the files/folders in the root directory</returns>
+
 	public async Task<List<string>> GetContentsAsync() {
 		List<string> contents = new List<string>();
 
@@ -50,33 +50,23 @@ public class ServerAccess {
 		return contents;
 	}
 
-
-	///// <summary>
-	///// Downloads selected file
-	///// </summary>
-	///// <param name="filePath">Name of the file - NOT full name.</param>
-	///// <returns>Location of the file.</returns>
-	//public async Task<string> GetFilePathAsync(string filePath) {
-	//	return await DownloadFTPAsync(filePath, true);
-	//}
-
-
-
 	/// <summary>
 	/// Gets a file from a server
 	/// </summary>
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public async Task<string> DownloadFTPAsync(string fileName, bool temp = false) {
+		string tempPath;
+		string persistentPath;
+		if (GameEnvironment.IsAndroid) {
+			tempPath = Application.temporaryCachePath;
+			persistentPath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
+		}
+		else {
+			tempPath = Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
+			persistentPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
+		}
 
-#if (UNITY_ANDROID || UNITY_IOS)
-		string tempPath = Application.temporaryCachePath;
-		string persistentPath = Application.persistentDataPath  + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-#else
-		string tempPath = Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-		string persistentPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-#endif
-
-		string inputfilepath = null;
+		string inputFilePath = null;
 
 		FtpWebRequest req = (FtpWebRequest)WebRequest.Create("ftp://kocicka.endora.cz/" + fileName);
 		req.Credentials = new NetworkCredential("phage", "Abcd123");
@@ -89,24 +79,22 @@ public class ServerAccess {
 			response = (FtpWebResponse)response;
 
 			using (Stream s = response.GetResponseStream()) {
-				if (inputfilepath == null) {
+				if (inputFilePath == null) {
 					if (temp) {
-						inputfilepath = tempPath + fileName;
+						inputFilePath = tempPath + fileName;
 					}
 					else {
-						inputfilepath = persistentPath + fileName;
+						inputFilePath = persistentPath + fileName;
 					}
 				}
-				using (FileStream file = File.Create(inputfilepath)) {
-					inputfilepath = null;
+				using (FileStream file = File.Create(inputFilePath)) {
+					inputFilePath = null;
 					byte[] buffer = new byte[4096];
 					int readCount = await s.ReadAsync(buffer, 0, buffer.Length);
 					while (readCount > 0) {
 						await file.WriteAsync(buffer, 0, readCount);
 						readCount = s.Read(buffer, 0, buffer.Length);
 					}
-					file.Close();
-					s.Close();
 					UnityEngine.Debug.Log("Successfully downloaded file" + file.Name + "  - Async");
 					return file.Name;
 				}
@@ -121,15 +109,14 @@ public class ServerAccess {
 	/// <summary>
 	/// Downloads File from the server and return its contents
 	/// </summary>
-	/// <param name="path">Path to the file</param>
-	/// <returns>Data needed for level creation</returns>
 	public async Task<SaveData> GetLevelInfoAsync(string name) {
-		UnityEngine.Debug.Log(name);
+		UnityEngine.Debug.Log($"Getting level info from FTP... {name}");
 		string str = await DownloadFTPAsync(name, true);
 
 		BinaryFormatter bf = new BinaryFormatter();
 		using (FileStream fileS = new FileStream(str, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true)) {
 			SaveData s = (SaveData)bf.Deserialize(fileS);
+			UnityEngine.Debug.Log($"Data downloaded successfully!");
 			return s;
 		}
 	}

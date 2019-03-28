@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class Control : MonoBehaviour {
 
 	#region Delegates
-	public delegate void TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current);
+	public delegate void TeamChanged(GameCell sender, Team previous, Team current);
 	public delegate void CellSelected(EditCell sender);
 	public delegate void PanelValueChanged(LevelEditorCore.PCPanelAttribute attribute);
 	public delegate void EditModeChanged(LevelEditorCore.Mode mode);
@@ -18,7 +18,7 @@ public class Control : MonoBehaviour {
 
 	public delegate void EnteredUpgradeMode(UM_InGame sender);
 	public delegate void QuitUpgradeMode(UM_InGame sender);
-	public delegate void InstallUpgradeHandler(Upgrade.Upgrades type, UM_InGame cell);
+	public delegate void InstallUpgradeHandler(Upgrades type, UM_InGame cell);
 
 	public delegate void OnMouseButtonPressed(Vector2 position);
 
@@ -45,13 +45,13 @@ public class Control : MonoBehaviour {
 	#endregion
 
 	#region Initializers
-	public static Control script;
+	public static Control Script { get; set; }
 	private void Awake() {
-		if (script == null) {
-			script = this;
+		if (Script == null) {
+			Script = this;
 			DontDestroyOnLoad(gameObject);
 		}
-		else if (script != this) {
+		else if (Script != this) {
 			Destroy(gameObject);
 		}
 	}
@@ -68,7 +68,7 @@ public class Control : MonoBehaviour {
 				pM.ListProfiles();
 			}
 		}
-		if (ProfileManager.getCurrentProfile == null) {
+		if (ProfileManager.CurrentProfile == null) {
 			yield return new WaitUntil(() => Global.baseLoaded);
 
 			if (activeScene == Scenes.SPLASH) {
@@ -105,34 +105,34 @@ public class Control : MonoBehaviour {
 
 			case Scenes.MENU: {
 
-				if (ProfileManager.getCurrentProfile == null) {
+				if (ProfileManager.CurrentProfile == null) {
 					DebugSceneIndex = 0;
 					SceneManager.LoadScene(Scenes.PROFILES);
 					break;
 				}
-				GameObject.Find("Profile_Name_Menu").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.getCurrentProfile.profileName);
+				GameObject.Find("Profile_Name_Menu").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.CurrentProfile.Name);
 
 				break;
 			}
 
-			case Scenes.EDITOR: {
+			case Scenes.LEVEL_EDITOR: {
 
 				break;
 			}
 
-			case Scenes.SELECT: {
+			case Scenes.LEVEL_SELECT: {
 
 				LevelSelectScript.displayedSaves.Clear();
 
 				break;
 			}
 
-			case Scenes.PLAYER: {
+			case Scenes.GAME: {
 
 				break;
 			}
 
-			case Scenes.SHARING: {
+			case Scenes.LEVEL_SHARE: {
 
 				break;
 			}
@@ -142,12 +142,12 @@ public class Control : MonoBehaviour {
 				break;
 			}
 
-			case Scenes.POSTG: {
+			case Scenes.POST_GAME: {
 
 				break;
 			}
 
-			case Scenes.SHOP: {
+			case Scenes.UPGRADE_SHOP: {
 
 				break;
 			}
@@ -186,7 +186,7 @@ public class Control : MonoBehaviour {
 			isPaused = true;
 			Time.timeScale = 0;
 			UI_Manager.AddWindow(new Window(UI_ReferenceHolder.MULTI_menuPanel, Window.WindowType.MOVING));
-			if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+			if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 
 				foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
 					img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
@@ -221,7 +221,7 @@ public class Control : MonoBehaviour {
 			yield break;
 		}
 		else {
-			if (SceneManager.GetActiveScene().name == Scenes.PLAYER) {
+			if (SceneManager.GetActiveScene().name == Scenes.GAME) {
 				string path = File.ReadAllText(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "EnterDirToStoreImages.txt");
 				GameObject canvas = GameObject.Find("Canvas");
 				canvas.SetActive(false);
@@ -235,7 +235,7 @@ public class Control : MonoBehaviour {
 
 	private bool IsInPausebleScene() {
 		string s = SceneManager.GetActiveScene().name;
-		if (s == Scenes.EDITOR || s == Scenes.PLAYER || s == Scenes.DEBUG) {
+		if (s == Scenes.LEVEL_EDITOR || s == Scenes.GAME || s == Scenes.DEBUG) {
 			return true;
 		}
 		else {

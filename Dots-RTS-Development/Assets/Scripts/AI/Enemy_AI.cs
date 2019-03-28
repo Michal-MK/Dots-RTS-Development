@@ -11,23 +11,23 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	public int aICellAidElementTreshold = 10;
 	public float decisionSpeed = 1f;
 
-	public Cell.enmTeam team;
+	public Team team;
 
 	private enum Decision { EXPAND, ATTACK, HELP };
 
 	private Player playerCells;
 
-	public List<CellBehaviour> _targets = new List<CellBehaviour>();            //Cells this AI will attack -- aiCells of Target
-	public List<CellBehaviour> _aiCells = new List<CellBehaviour>();            //This AIs cells
-	public List<CellBehaviour> _allies = new List<CellBehaviour>();             //Cells this AI will not attack -- aiCells of Ally
+	public List<GameCell> _targets = new List<GameCell>();            //Cells this AI will attack -- aiCells of Target
+	public List<GameCell> _aiCells = new List<GameCell>();            //This AIs cells
+	public List<GameCell> _allies = new List<GameCell>();             //Cells this AI will not attack -- aiCells of Ally
 
 	protected List<IAlly> alliesOfThisAI = new List<IAlly>();
 	protected List<IAlly> targetsOfThisAI = new List<IAlly>();
 
-	protected CellBehaviour selectedAiCell;                                       //Selected AI cell that will prefrom the action.
-	protected CellBehaviour selectedTargetCell;                                   //Selected target that can be attacked
-	protected CellBehaviour selectedNeutralCell;                                  //Selected cell for expansion
-	protected CellBehaviour selectedAiCellForAid = null;                          //Selected cell for empowering
+	protected GameCell selectedAiCell;                                       //Selected AI cell that will prefrom the action.
+	protected GameCell selectedTargetCell;                                   //Selected target that can be attacked
+	protected GameCell selectedNeutralCell;                                  //Selected cell for expansion
+	protected GameCell selectedAiCellForAid = null;                          //Selected cell for empowering
 
 	protected float attackChoiceProbability = 0;
 	protected float expandChoiceProbability = 0;
@@ -37,7 +37,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 	//Sort cells on screen to lists by their team
 	protected virtual void Start() {
-		CellBehaviour.TeamChanged += CellBehaviour_TeamChanged;
+		GameCell.TeamChanged += CellBehaviour_TeamChanged;
 
 		ConsiderAllies();
 
@@ -45,25 +45,25 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	}
 
 	protected virtual void OnDestroy() {
-		CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
+		GameCell.TeamChanged -= CellBehaviour_TeamChanged;
 	}
 
 	public void FindRelationWithCells() {
 		for (int i = 0; i < PlayManager.cells.Count; i++) {
 
-			CellBehaviour current = PlayManager.cells[i];
+			GameCell current = PlayManager.cells[i];
 
-			if (current.cellTeam == team) {
+			if (current.Cell.CellTeam == team) {
 				_aiCells.Add(current);
 			}
-			else if (current.cellTeam != Cell.enmTeam.NEUTRAL) {
+			else if (current.Cell.CellTeam != Team.NEUTRAL) {
 				_targets.Add(current);
 			}
 		}
 	}
 
 	//AI List sorting logic
-	private void CellBehaviour_TeamChanged(CellBehaviour sender, Cell.enmTeam previous, Cell.enmTeam current) {
+	private void CellBehaviour_TeamChanged(GameCell sender, Team previous, Team current) {
 		/*
 		 * We have to cover all cases that can happen -- Only do them when the AI is active
 		 * (1.) Previous was Neutral
@@ -98,7 +98,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		 */
 
 		if (isActive) {
-			if (previous == Cell.enmTeam.NEUTRAL) {
+			if (previous == Team.NEUTRAL) {
 
 				Enemy_AI currAI = (Enemy_AI)current;
 
@@ -112,16 +112,16 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 				else if (currAI == null) {
 					print("PLAYER took over NEUTRAL---------------------");
 
-					playerScript.playerCells.Add(sender);
+					playerScript.MyCells.Add(sender);
 					UpdateCellLists(playerScript, sender, true, true);
 				}
 
 				PlayManager.neutralCells.Remove(sender);
 			}
 
-			if (previous == Cell.enmTeam.ALLIED) {
+			if (previous == Team.ALLIED) {
 
-				playerScript.playerCells.Remove(sender);
+				playerScript.MyCells.Remove(sender);
 				UpdateCellLists(playerScript, sender, false, false);
 
 				Enemy_AI currAI = (Enemy_AI)current;
@@ -138,7 +138,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			if ((int)previous >= 2) {
 				Enemy_AI prevAI = (Enemy_AI)previous;
 
-				if (current == Cell.enmTeam.ALLIED) {
+				if (current == Team.ALLIED) {
 					print("PLAYER took over AI---------------------");
 
 					UpdateCellLists(playerScript, sender, true, true);
@@ -189,7 +189,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 			}
 		}
 		else {
-			CellBehaviour.TeamChanged -= CellBehaviour_TeamChanged;
+			GameCell.TeamChanged -= CellBehaviour_TeamChanged;
 		}
 	}
 
@@ -205,10 +205,10 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 			//Loop though all aiCells of the allied IAlly
 			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
-				CellBehaviour currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                            //Loop though all the targets of this AI
+				GameCell currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                            //Loop though all the targets of this AI
 
 				for (int l = 0; l < _targets.Count; l++) {
-					CellBehaviour thisAIsTarget = _targets[l];                                                              //print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
+					GameCell thisAIsTarget = _targets[l];                                                              //print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
 					if (currentCellOfTheAlliedAI == thisAIsTarget) {
@@ -281,7 +281,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	/// <param name="sender">The cell that activated this function call</param>
 	/// <param name="addAllies">Should we add the cell or remove it?</param>
 	/// <param name="addTargets">Should we add the cell or remove it?</param>
-	private void UpdateCellLists(Player playerScript, CellBehaviour sender, bool addAllies, bool addTargets) {
+	private void UpdateCellLists(Player playerScript, GameCell sender, bool addAllies, bool addTargets) {
 		foreach (Enemy_AI ally in playerScript.Allies) {
 			AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(playerScript, sender), ally);
 			ally.ProcessData(currData, addAllies);
@@ -299,7 +299,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	/// <param name="sender">The cell that activated this function call</param>
 	/// <param name="addAllies">Should we add the cell or remove it?</param>
 	/// <param name="addTargets">Should we add the cell or remove it?</param>
-	private void UpdateCellLists(Enemy_AI ai, CellBehaviour sender, bool addAllies, bool addTargets) {
+	private void UpdateCellLists(Enemy_AI ai, GameCell sender, bool addAllies, bool addTargets) {
 		foreach (Enemy_AI ally in ai.getAiAllies) {
 			AI_Data_Holder currData = AI_Data_Holder.TransformForAlly(new AI_Data_Holder(ai, sender), ally);
 			ally.ProcessData(currData, addAllies);
@@ -317,7 +317,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	}
 
 	#region IAlly implementation
-	public Cell.enmTeam Team {
+	public Team Team {
 		get {
 			return team;
 		}
@@ -354,7 +354,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	/// <summary>
 	/// Get current AIs Team
 	/// </summary>
-	public Cell.enmTeam getCurrentAiTeam {
+	public Team getCurrentAiTeam {
 		get { return team; }
 		private set { team = value; }
 	}
@@ -375,7 +375,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		}
 	}
 
-	public List<CellBehaviour> MyCells {
+	public List<GameCell> MyCells {
 		get {
 			return _aiCells;
 		}
@@ -422,7 +422,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	/// <summary>
 	/// Cast Cell.enmTeam into a Enemy_AI script
 	/// </summary>
-	public static explicit operator Enemy_AI(Cell.enmTeam team) {
+	public static explicit operator Enemy_AI(Team team) {
 		int index = (int)team - 2;
 		if (index < 0) {
 			return null;

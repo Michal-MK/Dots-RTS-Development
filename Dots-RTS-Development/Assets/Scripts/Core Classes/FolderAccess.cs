@@ -68,7 +68,7 @@ class FolderAccess {
 								}
 								if (foundDesc) {
 									upgradeInfo[1] = inner.Value;
-									upgradeInfo[2] = Upgrade.GetCost((Upgrade.Upgrades)upgrade).ToString();
+									upgradeInfo[2] = Upgrade.GetCost((Upgrades)upgrade).ToString();
 									return upgradeInfo;
 								}
 								if (inner.LocalName == "name" && string.IsNullOrEmpty(upgradeInfo[0])) {
@@ -88,7 +88,7 @@ class FolderAccess {
 					}
 				}
 			}
-			Debug.LogWarning("No Upgrade of type " + (Upgrade.Upgrades)upgrade + " found!");
+			Debug.LogWarning("No Upgrade of type " + (Upgrades)upgrade + " found!");
 			return null;
 		}
 	}
@@ -97,7 +97,7 @@ class FolderAccess {
 		upgradeData = XDocument.Load(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml");
 	}
 
-	public static string GetUpgradeName(Upgrade.Upgrades type) {
+	public static string GetUpgradeName(Upgrades type) {
 		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();
 		}
@@ -113,7 +113,7 @@ class FolderAccess {
 		}
 	}
 
-	public static string GetUpgradeFunctionalName(Upgrade.Upgrades type) {
+	public static string GetUpgradeFunctionalName(Upgrades type) {
 		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();
 		}
@@ -130,7 +130,7 @@ class FolderAccess {
 	}
 
 
-	public static string GetUpgradeDesc(Upgrade.Upgrades type) {
+	public static string GetUpgradeDesc(Upgrades type) {
 		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();
 		}
@@ -150,7 +150,7 @@ class FolderAccess {
 	///  Returns name and description of an upgrade in a form of string[], [0] = Upgrade name, [1] = Upgrade description
 	/// </summary>
 	/// <param name="type">The upgrade to get information about</param>
-	public static string[] GetUpgrade(Upgrade.Upgrades type) {
+	public static string[] GetUpgrade(Upgrades type) {
 		if (upgradeData == null) {
 			RetrieveXmlUpgradeData();
 		}

@@ -6,10 +6,10 @@ using UnityEngine;
 public class SaveData {
 	public List<S_Cell> cells = new List<S_Cell>();
 	public LevelInfo levelInfo;
-	public Dictionary<Cell.enmTeam, float> difficulty;
+	public Dictionary<Team, float> difficulty;
 	public float gameSize;
     public float savedAtAspect;
-    public Dictionary<Cell.enmTeam,AIHolder> clans;
+    public Dictionary<Team,AIHolder> clans;
 
 }
 
@@ -27,7 +27,7 @@ public class S_Cell {
 	public int maxElementCount;
 	public int team;
 	public float regenerationPeriod;
-	public Upgrade.Upgrades[] installedUpgrades;
+	public Upgrades[] installedUpgrades;
 
 }
 

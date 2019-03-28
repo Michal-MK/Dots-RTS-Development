@@ -27,11 +27,11 @@ public class LevelSelectScript : MonoBehaviour {
 
 
 	private void Start() {
-		if (SceneManager.GetActiveScene().name == Scenes.SELECT) {
+		if (SceneManager.GetActiveScene().name == Scenes.LEVEL_SELECT) {
 			ListCustomSaves();
 			ListCampaignLevels(1);
 		}
-		if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+		if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 			ListCustomSaves();
 		}
 	}
@@ -65,7 +65,7 @@ public class LevelSelectScript : MonoBehaviour {
 				catch {
 					error.text += "Error " + saves[i].Name;
 				}
-				if (SceneManager.GetActiveScene().name == Scenes.EDITOR) {
+				if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 					level.saveAndLoadEditor = saveAndLoadEditor;
 				}
 				displayedSaves.Add(level);

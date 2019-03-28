@@ -10,34 +10,30 @@ namespace Conversions {
 			return new Vector2(Mathf.Sin(angle) * (r), Mathf.Cos(angle) * (r));
 		}
 
-		public static List<List<Cell.enmTeam>> CDToActualClans(Dictionary<Cell.enmTeam, AIHolder> dict) {
+		public static List<List<Team>> CDToActualClans(Dictionary<Team, AIHolder> dict) {
 
-			List<List<Cell.enmTeam>> actualClans = new List<List<Cell.enmTeam>>();
+			List<List<Team>> actualClans = new List<List<Team>>();
 
-			Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = dict.Keys;
-			foreach (Cell.enmTeam j in keys) {
+			Dictionary<Team, AIHolder>.KeyCollection keys = dict.Keys;
+			foreach (Team j in keys) {
 				AIHolder value;
 				dict.TryGetValue(j, out value);
-				List<Cell.enmTeam> clanJ = new List<Cell.enmTeam>(value.allies);
+				List<Team> clanJ = new List<Team>(value.allies);
 				clanJ.Add(j);
 				clanJ.Sort();
 				bool newClan = true;
-				foreach (List<Cell.enmTeam> clan in actualClans) {
+				foreach (List<Team> clan in actualClans) {
 
 					if (clanJ.Contains(clan[0])) {
 						newClan = false;
 						break;
 					}
-
 				}
 				if (newClan && clanJ.Count > 1) {
 					actualClans.Add(clanJ);
 				}
-
 			}
 			return actualClans;
-
 		}
-
 	}
 }

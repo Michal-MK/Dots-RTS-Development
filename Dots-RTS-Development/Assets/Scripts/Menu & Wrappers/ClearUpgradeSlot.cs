@@ -5,18 +5,15 @@ using UnityEngine.UI;
 
 public class ClearUpgradeSlot : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public delegate void ClickedOnGameObject(UpgradeSlot clicked);
-	public static event ClickedOnGameObject OnSlotClear;
-
-	public UpgradeSlot parentSlot;
+	public static event EventHandler<UpgradeSlot> OnSlotClear;
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (OnSlotClear != null) {
-			OnSlotClear(transform.parent.GetComponent<UpgradeSlot>());
-			print("Clearing slot " + transform.parent.name + " of " + transform.parent.parent.name);
+			OnSlotClear(this, transform.parent.GetComponent<UpgradeSlot>());
+			print($"Clearing slot {transform.parent.name } of {transform.parent.parent.name}");
 		}
-
 	}
+
 	public void OnPointerDown(PointerEventData eventData) {
 		//Has to be implemented for some reason.
 	}

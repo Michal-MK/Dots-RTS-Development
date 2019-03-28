@@ -9,7 +9,7 @@ public class ProfileInfo : MonoBehaviour {
 	[HideInInspector]
 	public Profile selected;
 
-	public static event ProfileManager.profileDeleted OnProfileDeleted;
+	public static event EventHandler<ProfileInfo> OnProfileDeleted;
 
 	#region Prefab References
 	public Text profileName;
@@ -19,14 +19,14 @@ public class ProfileInfo : MonoBehaviour {
 
 	public void LoadProfile() {
 		if (Input.GetKey(KeyCode.A)){;
-			foreach (Upgrade.Upgrades u in Enum.GetValues(typeof(Upgrade.Upgrades))) {
-				if (u != Upgrade.Upgrades.NONE) {
-					ProfileManager.getCurrentProfile.acquiredUpgrades[u] = 8;
+			foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {
+				if (u != Upgrades.NONE) {
+					ProfileManager.CurrentProfile.acquiredUpgrades[u] = 8;
 				}
 			}
 			ProfileManager.SerializeChanges();
 		}
-		if (Control.DebugSceneIndex != 0 && Control.DebugSceneIndex != 1) {
+		if (Control.DebugSceneIndex > 1) {
 			SceneManager.LoadScene(Control.DebugSceneIndex);
 		}
 		else {
@@ -35,19 +35,18 @@ public class ProfileInfo : MonoBehaviour {
 	}
 
 	public void InitializeProfile(Profile p, string profileName) {
-
 		selected = p;
 		this.profileName.text = profileName;
 		Texture2D tex = new Texture2D(160, 90);
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.onLevelBaseGame.difficulty, p.onLevelBaseGame.level);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.difficulty, p.CurrentCampaignLevel.level);
 		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
 		careerLevel.texture = tex;
 	}
 
 	public void ShowProfileInfo() {
-		Profile p = ProfileManager.setCurrentProfile = selected;
+		ProfileManager.CurrentProfile = selected;
 
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.onLevelBaseGame.difficulty, p.onLevelBaseGame.level);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.difficulty, p.onLevelBaseGame.level);
 
 		if(campaignLevel != null) {
 			Texture2D tex = new Texture2D(160, 90);
@@ -55,21 +54,21 @@ public class ProfileInfo : MonoBehaviour {
 				tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
 			}
 			catch (FileNotFoundException e) {
-				print("File Not Found " + e.FileName + "--> No Level texture will be shown.");
+				print($"File {e.FileName} Not Found! --> No Level texture will be shown.");
 			}
 			UI_ReferenceHolder.PO_OnLevel.text = campaignLevel.game.levelInfo.levelName;
 			UI_ReferenceHolder.PO_OnLevelImage.texture = tex;
 		}
 		else {
-			print("Loaded level is " + campaignLevel + "!");
+			print($"Loaded level is {campaignLevel}!");
 			UI_ReferenceHolder.PO_OnLevel.text = "No level found!";
 
 		}
 
-		UI_ReferenceHolder.PO_Name.text = p.profileName;
-		UI_ReferenceHolder.PO_CurrentCoins.text = "Coins : " + p.ownedCoins;
-		UI_ReferenceHolder.PO_GamesPlayed.text = "Custom : " + p.completedCustomLevels + "\nCampaign : " + p.completedCampaignLevels;
-		UI_ReferenceHolder.PO_DeleteProfile.self = this.self;
+		UI_ReferenceHolder.PO_Name.text = ProfileManager.CurrentProfile.Name;
+		UI_ReferenceHolder.PO_CurrentCoins.text = $"Coins : {ProfileManager.CurrentProfile.Coins}";
+		UI_ReferenceHolder.PO_GamesPlayed.text = $"Custom : {ProfileManager.CurrentProfile.CompletedCustomLevels }\nCampaign : {ProfileManager.CurrentProfile.CompletedCampaignLevels}";
+		UI_ReferenceHolder.PO_DeleteProfile.self = self;
 		UI_ReferenceHolder.PO_Canvas.SetActive(true);
 		UI_ReferenceHolder.PS_Canvas.SetActive(false);
 	}
@@ -83,10 +82,7 @@ public class ProfileInfo : MonoBehaviour {
 	public void DeleteProfile() {
 		File.Delete(self.name);
 		HideProfileInfo();
+		OnProfileDeleted?.Invoke(this, this);
 		Destroy(self);
-
-		if (OnProfileDeleted != null) {
-			OnProfileDeleted(this);
-		}
 	}
 }

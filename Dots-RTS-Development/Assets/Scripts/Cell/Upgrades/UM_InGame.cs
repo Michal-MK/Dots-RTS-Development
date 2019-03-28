@@ -9,7 +9,7 @@ public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
 	public static event Control.EnteredUpgradeMode OnUpgradeBegin;
 	public static event Control.QuitUpgradeMode OnUpgradeQuit;
 
-	public CellBehaviour cell;
+	public GameCell cell;
 	public SpriteRenderer slotRender;
 	public Transform slotHolder;
 
@@ -27,7 +27,7 @@ public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
 
 	protected override void UpgradePreinstallSprites() {
 		for (int i = 0; i < slotsGO.Length; i++) {
-			if (upgrades[i] != Upgrade.Upgrades.NONE) {
+			if (upgrades[i] != Upgrades.NONE) {
 				slotsGO[i].GetComponent<SpriteRenderer>().sprite = Upgrade.UPGRADE_GRAPHICS[upgrades[i]];
 				slotsGO[i].GetComponent<SpriteRenderer>().size = Vector2.one * 25f;
 			}

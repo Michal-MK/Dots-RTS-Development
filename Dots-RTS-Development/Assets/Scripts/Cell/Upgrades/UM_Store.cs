@@ -18,20 +18,20 @@ public class UM_Store : Upgrade_Manager {
 		//Preform some highlights
 
 		//Subtract total money + add the upgrade to proflie
-		int cost = Upgrade.GetCost((Upgrade.Upgrades)selectedUpgrade);
+		int cost = Upgrade.GetCost((Upgrades)selectedUpgrade);
 
-		foreach (KeyValuePair<Upgrade.Upgrades, int> col in ProfileManager.getCurrentProfile.acquiredUpgrades) {
-			if (col.Key == (Upgrade.Upgrades)selectedUpgrade) {
-				if (cost <= ProfileManager.getCurrentProfile.ownedCoins) {
-					ProfileManager.getCurrentProfile.ownedCoins -= cost;
-					ProfileManager.getCurrentProfile.acquiredUpgrades[col.Key] += 1;
+		foreach (KeyValuePair<Upgrades, int> col in ProfileManager.CurrentProfile.acquiredUpgrades) {
+			if (col.Key == (Upgrades)selectedUpgrade) {
+				if (cost <= ProfileManager.CurrentProfile.Coins) {
+					ProfileManager.CurrentProfile.Coins -= cost;
+					ProfileManager.CurrentProfile.acquiredUpgrades[col.Key] += 1;
 					ProfileManager.SerializeChanges();
-					UI_ReferenceHolder.U_profileMoney.text = ProfileManager.getCurrentProfile.ownedCoins + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.getCurrentProfile.acquiredUpgrades[col.Key] + " pcs.";
+					UI_ReferenceHolder.U_profileMoney.text = ProfileManager.CurrentProfile.Coins + " coins";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.acquiredUpgrades[col.Key] + " pcs.";
 					return;
 				}
 				else {
-					anim.GetComponent<TextMeshProUGUI>().text = "You are missing\n" + (cost - ProfileManager.getCurrentProfile.ownedCoins) + " coins.";
+					anim.GetComponent<TextMeshProUGUI>().text = "You are missing\n" + (cost - ProfileManager.CurrentProfile.Coins) + " coins.";
 					anim.Play("Show");
 				}
 			}
