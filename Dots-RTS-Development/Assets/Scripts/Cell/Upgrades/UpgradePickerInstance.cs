@@ -1,30 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UpgradePickerInstance : MonoBehaviour,IPointerDownHandler,IPointerClickHandler {
 
-	public delegate void ClickedOnPicker(UpgradeSlot selected, UpgradePickerInstance sender);
-	public static event ClickedOnPicker OnPickerClicked;
+	public static event EventHandler<OnPickerClickedEventArgs> OnPickerClicked;
 
 	public Image upgradeImg;
 
-	private Upgrades _upgrade;
-	private Upgrade.UpgradeType _upgradeType;
-
-	public Upgrade.UpgradeType upgradeType {
-		get { return _upgradeType; }
-		set { _upgradeType = value; }
-	}
-
-	public Upgrades upgrade {
-		get { return _upgrade; }
-		set { _upgrade = value; }
-	}
+	public UpgradeType UpgradeType { get; set; }
+	public Upgrades upgrade { get; set; }
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (OnPickerClicked != null) {
-			OnPickerClicked(UpgradeSlot.HighlightedSlot, this);
+			OnPickerClicked(this, new OnPickerClickedEventArgs(/*TODO*/null, /*TODO*/this));
 			print("Invoked");
 		}
 	}

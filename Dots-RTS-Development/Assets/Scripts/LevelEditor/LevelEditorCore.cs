@@ -191,10 +191,10 @@ public class LevelEditorCore : MonoBehaviour {
 
 		}
 		if (loadedFromFile) {
-			for (int i = 0; i < c.upgrade_manager.upgrade_Slots.Length; i++) {
+			for (int i = 0; i < c.upgrade_manager.upgradeSlots.Length; i++) {
 				if (c.upgrade_manager.upgrades[i] != Upgrades.NONE) {
-					c.upgrade_manager.upgrade_Slots[i].Type = c.upgrade_manager.upgrades[i];
-					c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+					c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
+					c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
 				}
 			}
 			c.core = this;
@@ -271,10 +271,10 @@ public class LevelEditorCore : MonoBehaviour {
 			c.Cell.MaxElements = maxElementCount;
 			c.Cell.RegenPeriod = regenarationPeriod;
 			c.Cell.ElementCount = startingElementCount;
-			Array.Copy(UpgradeSlot.UpgradeInstances, c.upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length);
+			//Array.Copy(UpgradeSlot.UpgradeInstances, c.upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length); //TODO
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
-				c.upgrade_manager.upgrade_Slots[i].Type = c.upgrade_manager.upgrades[i];
-				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+				c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
+				c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
 			}
 			c.core = this;
 			AddCell(c);

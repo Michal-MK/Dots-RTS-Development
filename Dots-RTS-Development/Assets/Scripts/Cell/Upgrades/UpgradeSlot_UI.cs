@@ -55,35 +55,17 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		if (OnUIUpgradeSlotClicked != null) {
-			OnUIUpgradeSlotClicked(this);
-			//print("Clicked on UI Slot " + getSlotID);
-		}
-
-		//if (highlightedSlot != null) {
-		//	UI_Manager.CloseMostRecent();
-		//	return;
-		//}
-		//else { 
-		//	//highlightedSlot = this;
-		//	//print("Clicked slot " + getSlotID + " my parent is " + transform.parent.name);
-		//	uiSlotHighlight.sprite = highlight;
-		//	uiSlotHighlight.GetComponent<Animator>().SetTrigger("Animate");
-		//	uiSlotHighlight.GetComponent<Animator>().ResetTrigger("Stop");
-		//	UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
-		//}
+		OnUIUpgradeSlotClicked?.Invoke(this);
 	}
 
-	private void UpgradePickerInstance_OnPickerClicked(UpgradeSlot highlighted, UpgradePickerInstance sender) {
-		if (highlighted == this) {
-			Type = sender.upgrade;
-			uiSlot.sprite = sender.upgradeImg.sprite;
-			//highlightedSlot = null;
+	private void UpgradePickerInstance_OnPickerClicked(object sendern, OnPickerClickedEventArgs e) {
+		if (e.Slot == this) {
+			Type = e.Instance.upgrade;
+			uiSlot.sprite = e.Instance.upgradeImg.sprite;
 			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
 			uiSlotHighlight.sprite = transparent;
-			UpgradeInstances[SlotID] = sender.upgrade;
+			UpgradeInstances[SlotID] = e.Instance.upgrade;
 			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
-			//print("Clicked upgrade picker " + sender.upgrade);
 		}
 	}
 

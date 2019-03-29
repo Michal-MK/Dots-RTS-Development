@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static Upgrade;
 
 /*
  * This script is used for data storage, it is included in upgrade prefabs in editor,

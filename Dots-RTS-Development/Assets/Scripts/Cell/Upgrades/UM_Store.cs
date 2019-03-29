@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 public class UM_Store : Upgrade_Manager {
 
@@ -31,7 +31,7 @@ public class UM_Store : Upgrade_Manager {
 					return;
 				}
 				else {
-					anim.GetComponent<TextMeshProUGUI>().text = "You are missing\n" + (cost - ProfileManager.CurrentProfile.Coins) + " coins.";
+					anim.GetComponent<TextMeshProUGUI>().text = $"You are missing\n{(cost - ProfileManager.CurrentProfile.Coins)} coins.";
 					anim.Play("Show");
 				}
 			}

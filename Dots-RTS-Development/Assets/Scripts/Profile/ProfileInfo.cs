@@ -46,7 +46,7 @@ public class ProfileInfo : MonoBehaviour {
 	public void ShowProfileInfo() {
 		ProfileManager.CurrentProfile = selected;
 
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.difficulty, p.onLevelBaseGame.level);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.difficulty, ProfileManager.CurrentProfile.CurrentCampaignLevel.level);
 
 		if(campaignLevel != null) {
 			Texture2D tex = new Texture2D(160, 90);

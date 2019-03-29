@@ -1,10 +1,16 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Player : MonoBehaviour, IAlly {
 
 	public Team Team { get; set; } = Team.ALLIED;
+
+	public List<IAlly> Targets { get; set; } = new List<IAlly>();
+
+	public List<IAlly> Allies { get; set; } = new List<IAlly>();
+
+	public List<GameCell> MyCells { get; } = new List<GameCell>();
+
 
 	private void Start() {
 		foreach (GameCell cell in PlayManager.cells) {
@@ -13,11 +19,6 @@ public class Player : MonoBehaviour, IAlly {
 			}
 		}
 	}
-
-	public List<IAlly> Targets { get; set; } = new List<IAlly>();
-	public List<IAlly> Allies { get; set; } = new List<IAlly>();
-
-	public List<GameCell> MyCells { get; } = new List<GameCell>();
 
 	#region Ally/Target manipulation
 	public bool IsAllyOf(IAlly other) {
@@ -42,6 +43,6 @@ public class Player : MonoBehaviour, IAlly {
 
 	public void RemoveTarget(IAlly target) {
 		Targets.Remove(target);
-	} 
+	}
 	#endregion
 }

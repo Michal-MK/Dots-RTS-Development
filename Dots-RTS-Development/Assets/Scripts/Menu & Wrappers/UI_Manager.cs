@@ -20,13 +20,13 @@ public class UI_Manager : MonoBehaviour {
 
 	private void Awake() {
 		if (SceneManager.GetActiveScene().name == Scenes.GAME) {
-			UM_InGame.OnUpgradeBegin += UM_InGame_OnUpgradeBegin;
-			UM_InGame.OnUpgradeQuit += UM_InGame_OnUpgradeQuit;
+			//UM_InGame.OnUpgradeBegin += UM_InGame_OnUpgradeBegin; //TODO
+			//UM_InGame.OnUpgradeQuit += UM_InGame_OnUpgradeQuit;
 		}
 	}
 	private void OnDisable() {
-		UM_InGame.OnUpgradeBegin -= UM_InGame_OnUpgradeBegin;
-		UM_InGame.OnUpgradeQuit -= UM_InGame_OnUpgradeQuit;
+		//UM_InGame.OnUpgradeBegin -= UM_InGame_OnUpgradeBegin;
+		//UM_InGame.OnUpgradeQuit -= UM_InGame_OnUpgradeQuit;
 		activeWindows.Clear();
 	}
 

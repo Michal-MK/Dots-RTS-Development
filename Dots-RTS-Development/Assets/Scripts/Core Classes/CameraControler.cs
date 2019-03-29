@@ -18,15 +18,15 @@ public class CameraControler : MonoBehaviour {
 	private void Awake() {
 		if (!isSubscribed) {
 			//print("Subscribed Camera");
-			UM_InGame.OnUpgradeBegin += OnBeginUpgrading;
-			UM_InGame.OnUpgradeQuit += OnQuitUpgrading;
+			//UM_InGame.OnUpgradeBegin += OnBeginUpgrading; //TODO
+			//UM_InGame.OnUpgradeQuit += OnQuitUpgrading;
 			isSubscribed = true;
 		}
 	}
 	private void OnDestroy() {
 		//print("Unsubbed Cam");
-		UM_InGame.OnUpgradeBegin -= OnBeginUpgrading;
-		UM_InGame.OnUpgradeQuit -= OnQuitUpgrading;
+		//UM_InGame.OnUpgradeBegin -= OnBeginUpgrading;
+		//UM_InGame.OnUpgradeQuit -= OnQuitUpgrading;
 		isSubscribed = false;
 	}
 

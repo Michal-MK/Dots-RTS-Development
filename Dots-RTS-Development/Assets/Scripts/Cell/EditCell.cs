@@ -97,7 +97,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				Cell.RegenPeriod = core.regenarationPeriod;
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
-				Array.Copy(UpgradeSlot.UpgradeInstances, upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length);
+				//Array.Copy(UpgradeSlot.UpgradeInstances, upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length); //TODO
 				UpdateUpgradeVisual();
 			}
 		}
@@ -105,8 +105,8 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 	private void UpdateUpgradeVisual() {
 		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
-			upgrade_manager.upgrade_Slots[i].Type = upgrade_manager.upgrades[i];
-			upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
+			upgrade_manager.upgradeSlots[i].Type = upgrade_manager.upgrades[i];
+			upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
 		}
 	}
 

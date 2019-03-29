@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
 	public Upgrades type;
@@ -13,25 +13,11 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	private static UM_InGame currentCell;
 
-	//public static event Control.InstallUpgradeHandler OnUpgradeInstalled;
-
 	private static bool isSubscribed = false;
 	private static bool isListeningForSlot = true;
 
-	private void Awake() {
-		if (!isSubscribed) {
-			//print("Subscribed Panel");
-			UM_InGame.OnUpgradeBegin += Upgrade_Manager_OnUpgradeBegin;
-			isSubscribed = true;
-		}
-	}
-
 	private void OnDestroy() {
-		//print("Unsubbed Panel");
-		UM_InGame.OnUpgradeBegin -= Upgrade_Manager_OnUpgradeBegin;
-		UM_InGame.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 		isSubscribed = false;
-
 	}
 
 	void Start() {
@@ -49,24 +35,23 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		}
 	}
 
-	private void Upgrade_Manager_OnUpgradeQuit(UM_InGame sender) {
-		UM_InGame.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
+	private void Upgrade_Manager_OnUpgradeQuit(object sender, UM_InGame e) {
+		e.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 
-
-		print("Upgrade Quit " + sender.gameObject.name);
-		sender.slotRender.color = new Color(1, 1, 1, 0);
-		foreach (BoxCollider2D col in sender.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
+		print($"Upgrade Quit {e.gameObject.name}");
+		e.slotRender.color = new Color(1, 1, 1, 0);
+		foreach (BoxCollider2D col in e.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
 			col.enabled = false;
 		}
 		Upgrade_Manager.isUpgrading = false;
 		currentCell = null;
 	}
 
-	private void Upgrade_Manager_OnUpgradeBegin(UM_InGame sender) {
-		UM_InGame.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
+	private void Upgrade_Manager_OnUpgradeBegin(object sender, UM_InGame e) {
+		e.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 
-		print("Upgrade Begin " + sender.gameObject.name);
-		currentCell = sender;
+		print("Upgrade Begin " + e.gameObject.name);
+		currentCell = e;
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.2f);
 		foreach (BoxCollider2D col in currentCell.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
 			col.enabled = true;
@@ -93,33 +78,33 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 				if (eventData.clickCount == 1) {
 					if (isListeningForSlot) {
-						UpgradeSlot.OnSlotClicked += InstallUpgradeTo;
+						//UpgradeSlot.OnSlotClicked += InstallUpgradeTo; //TODO
 						isListeningForSlot = false;
 					}
 					currentCell.slotRender.color = new Color(1, 1, 1, 0.8f);
 				}
 				else if (eventData.clickCount == 2) {
-					UpgradeSlot.OnSlotClicked -= InstallUpgradeTo;
+					//UpgradeSlot.OnSlotClicked -= InstallUpgradeTo; //TODO
 					int i = currentCell.GetFirstFreeSlot();
-					InstallUpgradeTo(null, i);
+					InstallUpgradeTo(null, new OnUpgradeSlotClickedEventArgs(null, i));
 				}
 			}
 		}
 	}
 
 	//Stuff to do with instalation, moving numbers around
-	private void InstallUpgradeTo(UpgradeSlot sender, int slot) {
-		UpgradeSlot.OnSlotClicked -= InstallUpgradeTo;
-		currentCell.InstallUpgrade(currentCell.cell,slot, type);
+	private void InstallUpgradeTo(object sender, OnUpgradeSlotClickedEventArgs e) {
+		e.Slot.OnSlotClicked -= InstallUpgradeTo;
+		currentCell.InstallUpgrade(currentCell.cell.Cell, e.SlotID, type);
 		count--;
 		UpdateUpgradeOverview();
 		if (sender == null) {
-			SpriteRenderer s = currentCell.transform.Find("UpgradeSlots/" + slot).GetComponent<SpriteRenderer>();
+			SpriteRenderer s = currentCell.transform.Find("UpgradeSlots/" + e.Slot).GetComponent<SpriteRenderer>();
 			s.sprite = Upgrade.UPGRADE_GRAPHICS[type];
 			s.size = Vector2.one * 25;
 		}
 		else {
-			sender.ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[type]);
+			e.Slot.ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[type]);
 		}
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.25f);
 		isListeningForSlot = true;

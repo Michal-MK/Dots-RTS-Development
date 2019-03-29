@@ -32,13 +32,13 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 				instance.upgrade = upgrades[i];
 
 				if ((int)upgrades[i] <= 99) {
-					instance.upgradeType = Upgrade.UpgradeType.OFFENSIVE;
+					instance.UpgradeType = UpgradeType.OFFENSIVE;
 				}
 				else if ((int)upgrades[i] >= 100 && (int)upgrades[i] < 199) {
-					instance.upgradeType = Upgrade.UpgradeType.DEFENSIVE;
+					instance.UpgradeType = UpgradeType.DEFENSIVE;
 				}
 				else {
-					instance.upgradeType = Upgrade.UpgradeType.UTILITY;
+					instance.UpgradeType = UpgradeType.UTILITY;
 				}
 				Sprite s;
 				if (Upgrade.UPGRADE_GRAPHICS.TryGetValue(upgrades[i], out s)) {

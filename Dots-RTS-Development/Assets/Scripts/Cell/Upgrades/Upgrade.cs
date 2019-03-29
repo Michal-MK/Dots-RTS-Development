@@ -15,12 +15,6 @@ public class Upgrade : MonoBehaviour {
 
 	public const int TOTAL_UPGRADES = TOTAL_DEFENSIVE_UPGRADES + TOTAL_OFFENSIVE_UPGRADES + TOTAL_UTILITY_UPGRADES;
 
-	public enum UpgradeType {
-		OFFENSIVE = 0,
-		DEFENSIVE = 100,
-		UTILITY = 200,
-	}
-
 
 	/*
 	 * Upgrades enum
@@ -87,7 +81,6 @@ public class Upgrade : MonoBehaviour {
 
 		for (int i = 0; i < values.Length; i++) {
 			if(values[i] != -1) {
-				//print(values[i]);
 				t[i] = GetSprite((Upgrades)values[i]);
 			}
 		}
@@ -108,7 +101,4 @@ public class Upgrade : MonoBehaviour {
 		Debug.LogWarning("No Upgrade found! Dictionary may be incomplete.");
 		return -1;
 	}
-
-
-
 }

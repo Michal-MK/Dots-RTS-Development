@@ -1,13 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
 
 	private static UM_InGame currentCell;
 
-	public static event Control.EnteredUpgradeMode OnUpgradeBegin;
-	public static event Control.QuitUpgradeMode OnUpgradeQuit;
+	public event EventHandler<UM_InGame> OnUpgradeBegin;
+	public event EventHandler<UM_InGame> OnUpgradeQuit;
 
 	public GameCell cell;
 	public SpriteRenderer slotRender;
@@ -38,11 +38,11 @@ public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
 		if (eventData.clickCount == 2) {
 			if (OnUpgradeBegin != null) {
 				if (currentCell != null) {
-					OnUpgradeQuit(currentCell);
+					OnUpgradeQuit(this, currentCell);
 				}
 				isUpgrading = true;
 				currentCell = this;
-				OnUpgradeBegin(currentCell); //Sent to Camera,UpgradePanelData 
+				OnUpgradeBegin(this, currentCell); //Sent to Camera,UpgradePanelData 
 			}
 		}
 	}
@@ -51,7 +51,7 @@ public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (isUpgrading && currentCell != null) {
 				isUpgrading = false;
-				OnUpgradeQuit(currentCell);
+				OnUpgradeQuit(this, currentCell);
 				currentCell = null;
 			}
 		}

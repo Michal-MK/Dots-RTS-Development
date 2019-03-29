@@ -19,16 +19,6 @@ public class DebugButton : MonoBehaviour {
 		//}
 	}
 
-	public void ListUpgradesOnUI() {
-		foreach (Upgrades u in UpgradeSlot_UI.UpgradeInstances) {
-			print(u);
-		}
-	}
-
-	public void A() {
-		UpgradeSlot_UI.UpgradeInstances[0] = Upgrades.ATK_CRITICAL_CHANCE;
-	}
-
 	public void B() {
 		print(GameObject.Find("Cell NEUTRAL").GetComponent<UM_Editor>().upgrades.Length);
 		GameObject.Find("Cell NEUTRAL").GetComponent<UM_Editor>().upgrades[8] = Upgrades.ATK_DOT;
@@ -36,9 +26,9 @@ public class DebugButton : MonoBehaviour {
 
 	public void C() {
 		print("UI");
-		foreach (Upgrades u in UpgradeSlot_UI.UpgradeInstances) {
-			print(u);
-		}
+		//foreach (Upgrades u in UpgradeSlot_UI.UpgradeInstances) {
+		//	print(u);
+		//}
 		print("---------------------------------------------------");
 		print("CELL");
 		foreach (Upgrades u in GameObject.Find("Cell NEUTRAL").GetComponent<UM_Editor>().upgrades) {

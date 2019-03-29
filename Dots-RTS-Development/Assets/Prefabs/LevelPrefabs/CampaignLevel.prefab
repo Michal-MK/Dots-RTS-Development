@@ -454,8 +454,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preview: {fileID: 114245567620258148}
   passedImg: {fileID: 114390370041811590}
-  levelName: {fileID: 0}
-  clearTime: {fileID: 0}
+  levelName: {fileID: 8715528679329466671}
+  clearTime: {fileID: 7373775698781631738}
   currentSaveData:
     game:
       cells: []

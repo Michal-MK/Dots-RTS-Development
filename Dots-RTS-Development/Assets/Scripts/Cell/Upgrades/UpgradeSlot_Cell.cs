@@ -8,7 +8,6 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 
 	private UM_Editor uManager;
 
-	// Use this for initialization
 	protected override void Start() {
 		base.Start();
 		if (!IsSubscribed) {
@@ -67,17 +66,17 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 		}
 	}
 
-	private void InstallUpgradeDirectly(UpgradeSlot selected, UpgradePickerInstance sender) {
+	private void InstallUpgradeDirectly(object senderm,OnPickerClickedEventArgs e) {
 
 		UpgradePickerInstance.OnPickerClicked -= InstallUpgradeDirectly;
-		if (selected == this) {
-			print("Selected " + selected.SlotID + " This " + SlotID);
-			uManager.upgrades[SlotID] = Type = sender.upgrade;
+		if (e.Slot == this) {
+			print("Selected " + e.Slot.SlotID + " This " + SlotID);
+			uManager.upgrades[SlotID] = Type = e.Instance.upgrade;
 			selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[Type];
 			selfSprite.size = Vector2.one * 25f;
 		}
 		UI_Manager.CloseMostRecent();
-		highlightedSlot = null;
+		//highlightedSlot = null; //TODO
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
