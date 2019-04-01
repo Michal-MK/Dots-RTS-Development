@@ -1,10 +1,9 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.IO;
 using TMPro;
-using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Control : MonoBehaviour {
@@ -24,18 +23,9 @@ public class Control : MonoBehaviour {
 
 	#endregion
 
-	//public static List<CellBehaviour> cells = new List<CellBehaviour>();
-
 	public static bool isPaused = false;
 	public static bool canPause = true;
 	public static event OnMouseButtonPressed RMBPressed;
-
-	//private float time;
-
-	//private bool isInGame = false;
-
-	public static ProfileManager pM;
-
 
 	public static int DebugSceneIndex = 0;
 
@@ -63,10 +53,7 @@ public class Control : MonoBehaviour {
 		string activeScene = SceneManager.GetActiveScene().name;
 
 		if (activeScene == Scenes.PROFILES) {
-			if (pM == null) {
-				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
-				pM.ListProfiles();
-			}
+			ProfileManager.Initialize(profileVis, GameObject.Find("Content").transform).ListProfiles();
 		}
 		if (ProfileManager.CurrentProfile == null) {
 			yield return new WaitUntil(() => Global.baseLoaded);
@@ -91,15 +78,8 @@ public class Control : MonoBehaviour {
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 		switch (newS.name) {
 
-			case Scenes.SPLASH: {
-
-				break;
-			}
-
 			case Scenes.PROFILES: {
-
-				pM = new ProfileManager(profileVis, GameObject.Find("Content").transform);
-				pM.ListProfiles();
+				ProfileManager.Initialize(profileVis, GameObject.Find("Content").transform).ListProfiles();
 				break;
 			}
 
@@ -126,34 +106,7 @@ public class Control : MonoBehaviour {
 
 				break;
 			}
-
-			case Scenes.GAME: {
-
-				break;
-			}
-
-			case Scenes.LEVEL_SHARE: {
-
-				break;
-			}
-
-			case Scenes.DEBUG: {
-
-				break;
-			}
-
-			case Scenes.POST_GAME: {
-
-				break;
-			}
-
-			case Scenes.UPGRADE_SHOP: {
-
-				break;
-			}
 		}
-
-		Time.timeScale = 1;
 	}
 
 	private void Update() {

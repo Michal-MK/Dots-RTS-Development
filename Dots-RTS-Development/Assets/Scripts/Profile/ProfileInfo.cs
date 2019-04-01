@@ -1,18 +1,18 @@
 using System;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ProfileInfo : MonoBehaviour {
 
-	[HideInInspector]
 	public Profile selected;
 
-	public static event EventHandler<ProfileInfo> OnProfileDeleted;
+	public event EventHandler<OnProfileInfoDeletedEventArgs> OnProfileDeleted;
 
 	#region Prefab References
-	public Text profileName;
+	public TextMeshProUGUI profileName;
 	public RawImage careerLevel;
 	public GameObject self;
 	#endregion
@@ -38,7 +38,7 @@ public class ProfileInfo : MonoBehaviour {
 		selected = p;
 		this.profileName.text = profileName;
 		Texture2D tex = new Texture2D(160, 90);
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.difficulty, p.CurrentCampaignLevel.level);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.Difficulty, p.CurrentCampaignLevel.Devel);
 		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
 		careerLevel.texture = tex;
 	}
@@ -46,7 +46,7 @@ public class ProfileInfo : MonoBehaviour {
 	public void ShowProfileInfo() {
 		ProfileManager.CurrentProfile = selected;
 
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.difficulty, ProfileManager.CurrentProfile.CurrentCampaignLevel.level);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.Difficulty, ProfileManager.CurrentProfile.CurrentCampaignLevel.Devel);
 
 		if(campaignLevel != null) {
 			Texture2D tex = new Texture2D(160, 90);
@@ -68,7 +68,6 @@ public class ProfileInfo : MonoBehaviour {
 		UI_ReferenceHolder.PO_Name.text = ProfileManager.CurrentProfile.Name;
 		UI_ReferenceHolder.PO_CurrentCoins.text = $"Coins : {ProfileManager.CurrentProfile.Coins}";
 		UI_ReferenceHolder.PO_GamesPlayed.text = $"Custom : {ProfileManager.CurrentProfile.CompletedCustomLevels }\nCampaign : {ProfileManager.CurrentProfile.CompletedCampaignLevels}";
-		UI_ReferenceHolder.PO_DeleteProfile.self = self;
 		UI_ReferenceHolder.PO_Canvas.SetActive(true);
 		UI_ReferenceHolder.PS_Canvas.SetActive(false);
 	}
@@ -80,9 +79,9 @@ public class ProfileInfo : MonoBehaviour {
 
 
 	public void DeleteProfile() {
-		File.Delete(self.name);
+		File.Delete(gameObject.name);
 		HideProfileInfo();
-		OnProfileDeleted?.Invoke(this, this);
-		Destroy(self);
+		OnProfileDeleted?.Invoke(this, new OnProfileInfoDeletedEventArgs(this));
+		Destroy(gameObject);
 	}
 }

@@ -82,7 +82,7 @@ public class Buttons : MainMenuUI  {
 	}
 
 	public void CreateNewProfile() {
-		Control.pM.ShowProfileCreation();
+		ProfileManager.Instance.ShowProfileCreation();
 	}
 
 	public void SetSelectedUpgrade() {

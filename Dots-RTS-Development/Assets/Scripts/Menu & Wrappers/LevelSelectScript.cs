@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LevelSelectScript : MonoBehaviour {
 
-	string saveDir;
+	private string saveDir;
 
 	public GameObject levelObject;
 	public GameObject campaignObject;
@@ -35,7 +35,7 @@ public class LevelSelectScript : MonoBehaviour {
 			ListCustomSaves();
 		}
 	}
-	//Display alll saves that you can find in the scroll view
+	//Display all saves that you can find in the scroll view
 	public void ListCustomSaves() {
 
 		if (GameEnvironment.IsAndroid) {
@@ -81,9 +81,6 @@ public class LevelSelectScript : MonoBehaviour {
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		int totalLevels = d.GetFiles("*.pwl").Length;
 
-		//int totalPages = totalLevels / 10;
-
-
 		foreach (CampaignLevel g in campaignViewContent0.GetComponentsInChildren<CampaignLevel>()) {
 			Destroy(g.gameObject);
 		}
@@ -122,6 +119,4 @@ public class LevelSelectScript : MonoBehaviour {
 			}
 		}
 	}
-
-
 }

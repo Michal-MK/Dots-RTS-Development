@@ -1,2 +1,0 @@
-D:\Repositories\Phage Wars Dev\Dots-RTS-Development\obj\Debug\Assembly-CSharp-Editor.csprojAssemblyReference.cache
-D:\Repositories\Phage Wars Dev\Dots-RTS-Development\obj\Debug\Assembly-CSharp-Editor.csproj.CoreCompileInputs.cache

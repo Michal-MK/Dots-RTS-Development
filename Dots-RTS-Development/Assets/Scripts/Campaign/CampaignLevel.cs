@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
+using UnityEngine.UI;
 
 public class CampaignLevel : MonoBehaviour {
 
-	#region Preafab References
+	#region Prefab References
 	public RawImage preview;
 	public Image passedImg;
 	public TextMeshProUGUI levelName;
@@ -23,35 +22,34 @@ public class CampaignLevel : MonoBehaviour {
 	public string levelPath;
 
 	private void Start() {
-		if(ProfileManager.CurrentProfile == null) {
+		if (ProfileManager.CurrentProfile == null) {
 			Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			SceneManager.LoadScene(Scenes.PROFILES);
 			return;
 		}
 
-		BinaryFormatter bf = new BinaryFormatter();
 
-		SaveDataCampaign levelInfo;
 		using (FileStream fs = new FileStream(levelPath, FileMode.Open)) {
+			BinaryFormatter bf = new BinaryFormatter();
 
-			levelInfo = (SaveDataCampaign)bf.Deserialize(fs);
-			fs.Close();
+			SaveDataCampaign levelInfo = (SaveDataCampaign)bf.Deserialize(fs);
+			Texture2D tex = new Texture2D(190, 80);
+			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + levelInfo.preview));
+			preview.texture = tex;
+
+			levelName.text = levelInfo.game.levelInfo.levelName;
 		}
-		foreach (KeyValuePair<SaveDataCampaign,float> passedLevel in ProfileManager.CurrentProfile.clearedCampaignLevels) {
-			if(passedLevel.Value != 0f) {
+
+		foreach (KeyValuePair<SaveDataCampaign, float> passedLevel in ProfileManager.CurrentProfile.clearedCampaignLevels) {
+			if (passedLevel.Value != 0f) {
 				passedImg.gameObject.SetActive(true);
 				clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", passedLevel.Value / 60, passedLevel.Value % 60f, passedLevel.Value.ToString().Remove(0, passedLevel.Value.ToString().Length - 2));
 			}
 			else {
 				passedImg.gameObject.SetActive(false);
 				clearTime.text = "TBD";
-
 			}
 		}
-		Texture2D tex = new Texture2D(190, 80);
-		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + levelInfo.preview));
-		preview.texture = tex;
-		levelName.text = levelInfo.game.levelInfo.levelName;
 	}
 
 	public void StartLevel() {
@@ -61,28 +59,6 @@ public class CampaignLevel : MonoBehaviour {
 		SceneManager.LoadScene(Scenes.GAME);
 		transform.parent = null;
 		DontDestroyOnLoad(gameObject);
-	}
-}
-
-[Serializable]
-public class CampaignLevelCode {
-	private int Difficulty;
-	private int LevelInDiff;
-	public CampaignLevelCode(int difficulty, int levelInDifficulty) {
-		this.Difficulty = difficulty;
-		this.LevelInDiff = levelInDifficulty;
-	}
-	
-	public int difficulty {
-		get {
-			return Difficulty;
-		}
-	}
-
-	public int level {
-		get {
-			return LevelInDiff;
-		}
 	}
 }
 

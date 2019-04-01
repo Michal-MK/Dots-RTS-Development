@@ -5,27 +5,30 @@ using UnityEngine;
 
 [Serializable]
 public class Profile {
-	public string DataFilePath { get; }
 
-	public byte[] LevelImageDataFilePath { get; }
+	public string Name { get; set; }
+
 	public CampaignLevelCode CurrentCampaignLevel { get; set; }
-
 
 	public int Coins { get; set; }
 
 	public int UserMadeLevels { get; set; }
+
 	public int TotlaContributedLevels { get; set; }
 
 	public DateTime CreationDate { get; }
 
-	public string Name { get; set; }
+	public string DataFilePath { get; }
 
+	public byte[] LevelImageDataFilePath { get; }
 
 	public int CompletedCampaignLevels { get; set; }
+
 	public int CompletedCustomLevels { get; set; }
 
-	public Dictionary<Upgrades, int> acquiredUpgrades = new Dictionary<Upgrades, int>();
-	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels = new Dictionary<SaveDataCampaign, float>();
+	public Dictionary<Upgrades, int> acquiredUpgrades { get; set; } = new Dictionary<Upgrades, int>();
+
+	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels { get; set; } = new Dictionary<SaveDataCampaign, float>(); //TOTO structure instead of a float
 
 	public Profile() {
 		foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {

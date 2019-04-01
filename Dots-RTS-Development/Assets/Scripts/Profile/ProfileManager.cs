@@ -10,6 +10,7 @@ public class ProfileManager {
 
 	public static bool ProfileSelected => CurrentProfile != null;
 
+	public static ProfileManager Instance { get; set; }
 
 	private readonly GameObject profileVisual;
 	private readonly Transform parentTransform;
@@ -17,17 +18,24 @@ public class ProfileManager {
 	private Button createProfile_Button;
 	private GameObject profileCreation;
 
-	public ProfileManager(GameObject visualRepresentation, Transform listParent) {
+	public static ProfileManager Initialize(GameObject visualRepresentation, Transform listParent) {
+		if(Instance != null) {
+			return Instance;
+		}
+		return Instance = new ProfileManager(visualRepresentation, listParent);
+	}
+
+	private ProfileManager(GameObject visualRepresentation, Transform listParent) {
+		Instance = this;
 		profileVisual = visualRepresentation;
 		parentTransform = listParent;
 		createProfile_Button = GameObject.Find("NoProfiles").GetComponent<Button>();
 		createProfile_Button.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
-		ProfileInfo.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
 	}
 
-	private void ProfileInfo_OnProfileDeleted(object sender, ProfileInfo pInfo) {
+	private void ProfileInfo_OnProfileDeleted(object sender, OnProfileInfoDeletedEventArgs pInfo) {
 		ListProfiles();
 	}
 
@@ -45,7 +53,7 @@ public class ProfileManager {
 		}
 
 		if (files.Length == 0) {
-			Debug.Log("No Profies Found");
+			Debug.Log("No Profiles Found");
 			if (createProfile_Button == null) {
 				createProfile_Button = GameObject.Find("Content").transform.Find("NoProfiles").GetComponent<Button>();
 			}
@@ -62,7 +70,7 @@ public class ProfileManager {
 				Profile p = (Profile)bf.Deserialize(fs);
 				ProfileInfo pI = GameObject.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
 				pI.name = f.FullName;
-				pI.self = pI.gameObject;
+				pI.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
 				pI.InitializeProfile(p, p.Name);
 			}
 		}

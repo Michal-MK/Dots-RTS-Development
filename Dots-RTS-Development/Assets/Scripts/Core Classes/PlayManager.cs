@@ -128,7 +128,7 @@ public class PlayManager : MonoBehaviour {
 			CampaignLevelCode c = ProfileManager.CurrentProfile.CurrentCampaignLevel;
 			ProfileManager.CurrentProfile.CompletedCampaignLevels += 1;
 			ProfileManager.CurrentProfile.clearedCampaignLevels[CampaignLevel.current.currentSaveData] = time;
-			ProfileManager.CurrentProfile.CurrentCampaignLevel = new CampaignLevelCode(c.difficulty, c.level + 1);
+			ProfileManager.CurrentProfile.CurrentCampaignLevel = new CampaignLevelCode(c.Difficulty, c.Devel + 1);
 			CampaignLevel.current = null;
 			Destroy(FindObjectOfType<CampaignLevel>().gameObject);
 		}
