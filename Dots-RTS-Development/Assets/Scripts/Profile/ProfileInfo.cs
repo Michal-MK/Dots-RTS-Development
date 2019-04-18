@@ -21,7 +21,7 @@ public class ProfileInfo : MonoBehaviour {
 		if (Input.GetKey(KeyCode.A)){;
 			foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {
 				if (u != Upgrades.NONE) {
-					ProfileManager.CurrentProfile.acquiredUpgrades[u] = 8;
+					ProfileManager.CurrentProfile.AcquiredUpgrades[u] = 8;
 				}
 			}
 			ProfileManager.SerializeChanges();

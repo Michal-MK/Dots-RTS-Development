@@ -18,17 +18,17 @@ public class ProfileManager {
 	private Button createProfile_Button;
 	private GameObject profileCreation;
 
-	public static ProfileManager Initialize(GameObject visualRepresentation, Transform listParent) {
+	public static ProfileManager Initialize(ProfileManagerBehaviour behaviour) {
 		if(Instance != null) {
 			return Instance;
 		}
-		return Instance = new ProfileManager(visualRepresentation, listParent);
+		return Instance = new ProfileManager(behaviour);
 	}
 
-	private ProfileManager(GameObject visualRepresentation, Transform listParent) {
+	private ProfileManager(ProfileManagerBehaviour behaviour) {
 		Instance = this;
-		profileVisual = visualRepresentation;
-		parentTransform = listParent;
+		profileVisual = behaviour.profileVisual;
+		parentTransform = behaviour.listTransform;
 		createProfile_Button = GameObject.Find("NoProfiles").GetComponent<Button>();
 		createProfile_Button.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");

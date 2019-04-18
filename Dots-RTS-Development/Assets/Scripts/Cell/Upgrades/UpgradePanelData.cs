@@ -28,7 +28,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 				return;
 			}
 			if (type != Upgrades.NONE) {
-				count = ProfileManager.CurrentProfile.acquiredUpgrades[type];
+				count = ProfileManager.CurrentProfile.AcquiredUpgrades[type];
 				UpdateUpgradeOverview();
 			}
 			desc = transform.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();

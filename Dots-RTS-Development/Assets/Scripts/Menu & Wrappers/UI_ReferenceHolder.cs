@@ -100,6 +100,10 @@ public class UI_ReferenceHolder : MonoBehaviour {
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 	}
 
+	private void OnDisable() {
+		SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+	}
+
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
 		IsInDebug = false;

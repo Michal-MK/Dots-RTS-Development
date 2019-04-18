@@ -49,19 +49,19 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 	}
 
 	public void Populate(Transform parent) {
-		foreach (UpgradePanelData data in parent.GetComponentsInChildren<UpgradePanelData>()) {
-			foreach (KeyValuePair<Upgrades, int> owned in ProfileManager.CurrentProfile.acquiredUpgrades) {
-				if (owned.Key == data.type) {
-					data.count = owned.Value;
+		//foreach (UpgradePanelData data in parent.GetComponentsInChildren<UpgradePanelData>()) {
+		//	foreach (KeyValuePair<Upgrades, int> owned in ProfileManager.CurrentProfile.AcquiredUpgrades) {
+		//		if (owned.Key == data.type) {
+		//			data.count = owned.Value;
 
-					data.name = FolderAccess.GetUpgradeName(owned.Key);
-					data.UpdateUpgradeOverview();
-				}
-				else if (data.type == Upgrades.NONE) {
-					data.UpdateUpgradeOverview();
-				}
-			}
-		}
+		//			data.name = FolderAccess.GetUpgradeName(owned.Key);
+		//			data.UpdateUpgradeOverview();
+		//		}
+		//		else if (data.type == Upgrades.NONE) {
+		//			data.UpdateUpgradeOverview();
+		//		}
+		//	}
+		//}
 		//StartCoroutine(CYCLES());
 	}
 

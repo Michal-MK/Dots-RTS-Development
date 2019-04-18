@@ -96,7 +96,7 @@ public class Buttons : MainMenuUI  {
 					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.acquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
 					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)selected];
 				}
 			}
@@ -115,7 +115,7 @@ public class Buttons : MainMenuUI  {
 					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.acquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
 					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)selected];
 				}
 			}
@@ -134,7 +134,7 @@ public class Buttons : MainMenuUI  {
 					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.acquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
 					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)selected];
 				}
 			}

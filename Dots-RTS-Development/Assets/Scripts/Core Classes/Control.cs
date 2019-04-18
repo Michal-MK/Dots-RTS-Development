@@ -30,10 +30,6 @@ public class Control : MonoBehaviour {
 	public static int DebugSceneIndex = 0;
 
 
-	#region Prefab
-	public GameObject profileVis;
-	#endregion
-
 	#region Initializers
 	public static Control Script { get; set; }
 	private void Awake() {
@@ -53,7 +49,7 @@ public class Control : MonoBehaviour {
 		string activeScene = SceneManager.GetActiveScene().name;
 
 		if (activeScene == Scenes.PROFILES) {
-			ProfileManager.Initialize(profileVis, GameObject.Find("Content").transform).ListProfiles();
+			ProfileManager.Instance.ListProfiles();
 		}
 		if (ProfileManager.CurrentProfile == null) {
 			yield return new WaitUntil(() => Global.baseLoaded);
@@ -79,7 +75,7 @@ public class Control : MonoBehaviour {
 		switch (newS.name) {
 
 			case Scenes.PROFILES: {
-				ProfileManager.Initialize(profileVis, GameObject.Find("Content").transform).ListProfiles();
+				ProfileManager.Instance.ListProfiles();
 				break;
 			}
 

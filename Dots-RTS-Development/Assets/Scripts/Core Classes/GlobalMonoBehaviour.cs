@@ -15,6 +15,5 @@ public class GlobalMonoBehaviour : MonoBehaviour {
 		yield return (Sprite)s.asset;
 
 		Global.spriteDictionary.Add(path, (Sprite)s.asset);
-		//print("Got IT");
 	}
 }

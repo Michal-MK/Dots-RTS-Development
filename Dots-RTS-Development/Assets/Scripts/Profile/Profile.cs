@@ -26,14 +26,14 @@ public class Profile {
 
 	public int CompletedCustomLevels { get; set; }
 
-	public Dictionary<Upgrades, int> acquiredUpgrades { get; set; } = new Dictionary<Upgrades, int>();
+	public Dictionary<Upgrades, int> AcquiredUpgrades { get; set; } = new Dictionary<Upgrades, int>();
 
-	public Dictionary<SaveDataCampaign, float> clearedCampaignLevels { get; set; } = new Dictionary<SaveDataCampaign, float>(); //TOTO structure instead of a float
+	public Dictionary<SaveDataCampaign, float> ClearedCampaign { get; set; } = new Dictionary<SaveDataCampaign, float>(); //TOTO structure instead of a float
 
 	public Profile() {
 		foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {
 			if (u != Upgrades.NONE) {
-				acquiredUpgrades.Add(u, 0);
+				AcquiredUpgrades.Add(u, 0);
 			}
 		}
 		CreationDate = DateTime.Now;

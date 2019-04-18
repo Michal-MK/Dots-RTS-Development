@@ -20,14 +20,14 @@ public class UM_Store : Upgrade_Manager {
 		//Subtract total money + add the upgrade to proflie
 		int cost = Upgrade.GetCost((Upgrades)selectedUpgrade);
 
-		foreach (KeyValuePair<Upgrades, int> col in ProfileManager.CurrentProfile.acquiredUpgrades) {
+		foreach (KeyValuePair<Upgrades, int> col in ProfileManager.CurrentProfile.AcquiredUpgrades) {
 			if (col.Key == (Upgrades)selectedUpgrade) {
 				if (cost <= ProfileManager.CurrentProfile.Coins) {
 					ProfileManager.CurrentProfile.Coins -= cost;
-					ProfileManager.CurrentProfile.acquiredUpgrades[col.Key] += 1;
+					ProfileManager.CurrentProfile.AcquiredUpgrades[col.Key] += 1;
 					ProfileManager.SerializeChanges();
 					UI_ReferenceHolder.U_profileMoney.text = ProfileManager.CurrentProfile.Coins + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.acquiredUpgrades[col.Key] + " pcs.";
+					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[col.Key] + " pcs.";
 					return;
 				}
 				else {

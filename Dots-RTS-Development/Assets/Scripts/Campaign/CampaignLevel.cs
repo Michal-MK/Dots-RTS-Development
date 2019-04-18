@@ -40,7 +40,7 @@ public class CampaignLevel : MonoBehaviour {
 			levelName.text = levelInfo.game.levelInfo.levelName;
 		}
 
-		foreach (KeyValuePair<SaveDataCampaign, float> passedLevel in ProfileManager.CurrentProfile.clearedCampaignLevels) {
+		foreach (KeyValuePair<SaveDataCampaign, float> passedLevel in ProfileManager.CurrentProfile.ClearedCampaign) {
 			if (passedLevel.Value != 0f) {
 				passedImg.gameObject.SetActive(true);
 				clearTime.text = string.Format("{0:00}:{1:00}.{2:00} minutes", passedLevel.Value / 60, passedLevel.Value % 60f, passedLevel.Value.ToString().Remove(0, passedLevel.Value.ToString().Length - 2));

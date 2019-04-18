@@ -8,8 +8,8 @@ public class SaveData {
 	public LevelInfo levelInfo;
 	public Dictionary<Team, float> difficulty;
 	public float gameSize;
-    public float savedAtAspect;
-    public Dictionary<Team,AIHolder> clans;
+	public float savedAtAspect;
+	public Dictionary<Team, AIHolder> clans;
 
 }
 
