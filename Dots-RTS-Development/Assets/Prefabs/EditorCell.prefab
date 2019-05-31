@@ -483,14 +483,14 @@ MonoBehaviour:
   upgrades: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
   upgradeSlotFields: {fileID: 212340395696583466}
   upgradeSlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 114791216501477242}
+  - {fileID: 114452951882422556}
+  - {fileID: 114644853477256218}
+  - {fileID: 114044381208619366}
+  - {fileID: 114086690512126892}
+  - {fileID: 114869737456873386}
+  - {fileID: 114132971150161878}
+  - {fileID: 114755726775040490}
 --- !u!1 &1255466852155372
 GameObject:
   m_ObjectHideFlags: 0

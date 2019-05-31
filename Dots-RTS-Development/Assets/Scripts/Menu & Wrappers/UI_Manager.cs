@@ -52,6 +52,8 @@ public class UI_Manager : MonoBehaviour {
 		errorText.gameObject.SetActive(true);
 		errorText.text = "No file found, returing to level select";
 	}
+
+
 	IEnumerator ReturnToLevelSelectIn(float seconds) {
 		yield return new WaitForSeconds(seconds);
 		SceneManager.LoadScene(Scenes.LEVEL_SELECT);
@@ -269,41 +271,28 @@ public class Window {
 	}
 
 	public Window(GameObject window, WindowType type) {
-		_window = window;
-		_type = type;
+		this.window = window;
+		this.type = type;
 		if (type == WindowType.MOVING) {
-			_anim = window.GetComponent<Animator>();
+			animator = window.GetComponent<Animator>();
 			switch (window.name) {
 				case "MenuPanel": {
-					_disableAfterMoving = true;
+					isFlagedForSwithOff = true;
 					return;
 				}
 				default: {
-					_disableAfterMoving = false;
+					isFlagedForSwithOff = false;
 					return;
 				}
 			}
 		}
 	}
 
-	private GameObject _window;
-	private WindowType _type;
-	private Animator _anim;
-	private bool _disableAfterMoving;
+	public GameObject window { get; }
 
-	public GameObject window {
-		get { return _window; }
-	}
+	public WindowType type { get; }
 
-	public WindowType type {
-		get { return _type; }
-	}
+	public Animator animator { get; }
 
-	public Animator animator {
-		get { return _anim; }
-	}
-
-	public bool isFlagedForSwithOff {
-		get { return _disableAfterMoving; }
-	}
+	public bool isFlagedForSwithOff { get; }
 }

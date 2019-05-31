@@ -87,7 +87,6 @@ public class Buttons : MainMenuUI  {
 
 	public void SetSelectedUpgrade() {
 		int selected = UM_Store.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
-		//print(selected);
 
 		if(selected <= 99) {
 			if (selected < Upgrade.TOTAL_OFFENSIVE_UPGRADES) {

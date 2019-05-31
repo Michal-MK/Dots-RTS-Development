@@ -106,8 +106,8 @@ public class LoadFromFile : MonoBehaviour { //TODO Decipher the code
 				init.StartAiInitialization(customSave.clans, customSave.difficulty);
 			}
 			else {
-				SceneManager.LoadScene(Scenes.PROFILES);
-				throw new System.Exception();
+				//SceneManager.LoadScene(Scenes.PROFILES);
+				Debug.Break();
 			}
 		}
 	}

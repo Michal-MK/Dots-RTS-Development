@@ -109,38 +109,38 @@ public class Initialize_AI : MonoBehaviour {
 			//Select AI preset according to the enemy team
 			AI_Behaviour ai;
 			switch ((int)team - 1) {
-				case 0: {
-					ai = aiHolder.AddComponent<AI_0>();
-					break;
-				}
-				case 1: {
-					ai = aiHolder.AddComponent<AI_1>();
-					break;
-				}
-				case 2: {
-					ai = aiHolder.AddComponent<AI_2>();
-					break;
-				}
-				case 3: {
-					ai = aiHolder.AddComponent<AI_3>();
-					break;
-				}
-				case 4: {
-					ai = aiHolder.AddComponent<AI_4>();
-					break;
-				}
-				case 5: {
-					ai = aiHolder.AddComponent<AI_5>();
-					break;
-				}
-				case 6: {
-					ai = aiHolder.AddComponent<AI_6>();
-					break;
-				}
-				case 7: {
-					ai = aiHolder.AddComponent<AI_7>();
-					break;
-				}
+				//case 0: {
+				//	ai = aiHolder.AddComponent<AI_0>();
+				//	break;
+				//}
+				//case 1: {
+				//	ai = aiHolder.AddComponent<AI_1>();
+				//	break;
+				//}
+				//case 2: {
+				//	ai = aiHolder.AddComponent<AI_2>();
+				//	break;
+				//}
+				//case 3: {
+				//	ai = aiHolder.AddComponent<AI_3>();
+				//	break;
+				//}
+				//case 4: {
+				//	ai = aiHolder.AddComponent<AI_4>();
+				//	break;
+				//}
+				//case 5: {
+				//	ai = aiHolder.AddComponent<AI_5>();
+				//	break;
+				//}
+				//case 6: {
+				//	ai = aiHolder.AddComponent<AI_6>();
+				//	break;
+				//}
+				//case 7: {
+				//	ai = aiHolder.AddComponent<AI_7>();
+				//	break;
+				//}
 				default: {
 					ai = aiHolder.AddComponent<AI_Behaviour>();
 					break;

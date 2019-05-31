@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell {
+
 	public MonoBehaviour coroutineRunner;
 	public bool isRegenerating = false;
 	public bool isDecaying = false;
@@ -21,7 +22,6 @@ public class Cell {
 		this.coroutineRunner = coroutineRunner;
 	}
 
-	//Keeps generateing new elements for the cell
 	public IEnumerator GenerateElements() {
 		isRegenerating = true;
 		while (isRegenerating) {
@@ -33,7 +33,6 @@ public class Cell {
 		}
 	}
 
-	//Wrapper for Decaying
 	public void Decay(float decayRate, GameCell superClass) {
 		if (!isDecaying) {
 			isDecaying = true;
@@ -41,16 +40,14 @@ public class Cell {
 		}
 	}
 
-	//Elements start decaying when they go over the cap(max Elements).
 	private IEnumerator DecayElements(float decayRate, GameCell superClass) {
 		float d = decayRate;
 		superClass.StopCoroutine(superClass.generateCoroutine);
-		//print("Stopped");
 		while (isDecaying) {
 			yield return new WaitForSeconds(d);
 			ElementCount--;
 			if (MaxElements - ElementCount > MaxElements * 0.5f) {
-				d = d * 0.5f;
+				d *= 0.5f;
 			}
 			if (ElementCount <= MaxElements) {
 				isDecaying = false;

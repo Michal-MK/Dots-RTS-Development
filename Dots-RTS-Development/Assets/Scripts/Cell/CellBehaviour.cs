@@ -28,7 +28,6 @@ public class CellBehaviour : MonoBehaviour {
 
 	public IEnumerator ScaleCell() {
 		while (true) {
-			//yield return new WaitForSeconds(0.1f);
 			yield return new WaitForEndOfFrame();
 			float mappedValue;
 			if (Cell.ElementCount < 10) {
@@ -60,8 +59,5 @@ public class CellBehaviour : MonoBehaviour {
 		}
 		cellSelectedRenderer.color = (Color)color;
 		cellSelectedRenderer.enabled = true;
-
 	}
-
-
 }

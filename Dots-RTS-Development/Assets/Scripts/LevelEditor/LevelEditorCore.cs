@@ -123,7 +123,6 @@ public class LevelEditorCore : MonoBehaviour {
 
 	private Mode _editorMode;
 	private TeamSetup teamSetup;
-	private bool _isUpdateSentByCell;
 	private Team singleDifficultyInputFieldSpecificTeam;
 	private static LevelEditorCore instance;
 
@@ -466,7 +465,7 @@ public class LevelEditorCore : MonoBehaviour {
 		AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 	}
 
-	//After doubleclicking a team on the round table an input filed pops up where you can adjust the speed
+	//After doubleclicking a team on the round table an input field pops up where you can adjust the speed
 	public void EnableSingleDiffInputField(TeamBox t) {
 
 		aiDifficultySingleInput.gameObject.SetActive(true);
@@ -591,10 +590,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-	public bool isUpdateSentByCell {
-		get { return _isUpdateSentByCell; }
-		set { _isUpdateSentByCell = value; }
-	}
+	public bool isUpdateSentByCell { get; set; }
 
 	public Team team {
 		get { return _team; }
@@ -636,8 +632,8 @@ public class LevelEditorCore : MonoBehaviour {
 			maxInput.text = value.ToString();
 		}
 	}
-	public static bool getOutilneState {
-		get { return _outlineOn; }
-	}
+
+	public static bool getOutilneState => _outlineOn;
+
 	#endregion
 }

@@ -39,7 +39,7 @@ public class ProfileInfo : MonoBehaviour {
 		this.profileName.text = profileName;
 		Texture2D tex = new Texture2D(160, 90);
 		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.Difficulty, p.CurrentCampaignLevel.Devel);
-		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
+		//tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
 		careerLevel.texture = tex;
 	}
 

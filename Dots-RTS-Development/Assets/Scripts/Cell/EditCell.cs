@@ -11,7 +11,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 	public LevelEditorCore core;
 
-	#region PrefabReferences
+	#region Prefab References
 	public SpriteRenderer maxCellRadius;
 	public UM_Editor upgrade_manager;
 	#endregion
@@ -27,6 +27,8 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	#endregion
 
 	public void Awake() {
+		Cell = new Cell(this);
+
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
@@ -131,7 +133,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	public void ToggleCellOutline(bool on) {
 		if (on) {
 			maxCellRadius.enabled = true;
-			maxCellRadius.transform.localScale = new Vector2((2 / maxCellRadius.transform.parent.localScale.x), (2 / maxCellRadius.transform.parent.localScale.x));
+			maxCellRadius.transform.localScale = new Vector2(2 / maxCellRadius.transform.parent.localScale.x, (2 / maxCellRadius.transform.parent.localScale.x));
 			//Debug.LogWarning("I smell hardcoded BS!");
 		}
 		else {
@@ -153,8 +155,6 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	}
 
 	public void OnPointerUp(PointerEventData eventData) {
-
-
 		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
 			if (lookForLongPress == false) {
 				isCellSelected = true;
@@ -171,13 +171,9 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				core.isUpdateSentByCell = false;
 				EnableCircle(Color.magenta);
 			}
-
-
-
 		}
 		longPress = false;
 		lookForLongPress = false;
-
 	}
 
 	public bool isCellSelected {

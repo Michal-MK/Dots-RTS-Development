@@ -137,12 +137,12 @@ public class Control : MonoBehaviour {
 			UI_Manager.AddWindow(new Window(UI_ReferenceHolder.MULTI_menuPanel, Window.WindowType.MOVING));
 			if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 
-				foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
-					img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
-				}
-				foreach (TextMeshProUGUI text in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<TextMeshProUGUI>()) {
-					text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
-				}
+				//foreach (Image img in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<Image>()) {
+				//	img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+				//}
+				//foreach (TextMeshProUGUI text in UI_ReferenceHolder.MULTI_menuPanel.GetComponentsInChildren<TextMeshProUGUI>()) {
+				//	text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+				//}
 				UI_ReferenceHolder.MULTI_menuPanel.GetComponent<Animator>().SetTrigger("Show");
 
 				AnimatorStateInfo s = UI_ReferenceHolder.LE_editorSliderPanel.GetCurrentAnimatorStateInfo(0);

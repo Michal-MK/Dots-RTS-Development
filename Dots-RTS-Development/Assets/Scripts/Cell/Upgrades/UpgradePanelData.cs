@@ -22,13 +22,13 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.GAME || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
-			if (ProfileManager.CurrentProfile == null) {
+			if (ProfileManager.CurrentProfile == null && false) {
 				Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 				SceneManager.LoadScene(Scenes.PROFILES);
 				return;
 			}
 			if (type != Upgrades.NONE) {
-				count = ProfileManager.CurrentProfile.AcquiredUpgrades[type];
+				count = 0;//ProfileManager.CurrentProfile.AcquiredUpgrades[type];
 				UpdateUpgradeOverview();
 			}
 			desc = transform.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();

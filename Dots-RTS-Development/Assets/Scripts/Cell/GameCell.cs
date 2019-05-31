@@ -20,6 +20,8 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	//Add cell to global list
 	public void Awake() {
+		Cell = new Cell(this);
+
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
