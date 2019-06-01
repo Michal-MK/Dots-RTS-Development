@@ -62,6 +62,7 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerClickHandler, IPointerEnter
 		else {
 			//highlightedSlot = this;
 			UpgradePickerInstance.OnPickerClicked += InstallUpgradeDirectly;
+			UpgradePickerInstance.SetSelected(this);
 			UI_Manager.AddWindow(UI_ReferenceHolder.LE_upgradePickerPanel);
 		}
 	}

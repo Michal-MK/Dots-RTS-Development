@@ -249,6 +249,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		}
 
 		Destroy(element.gameObject);
+		sound.AddToSoundQueue(Cell.ElementAttack);
 		UpdateCellInfo();
 	}
 

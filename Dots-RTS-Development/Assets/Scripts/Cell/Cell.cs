@@ -107,7 +107,10 @@ public class Cell {
 	/// <summary>
 	/// Clip to play when an element spawns
 	/// </summary>
-	[HideInInspector]
 	public AudioClip ElementSpawn;
 
+	/// <summary>
+	/// Clip to play when an despawns
+	/// </summary>
+	public AudioClip ElementAttack;
 }

@@ -100,6 +100,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				//Array.Copy(UpgradeSlot.UpgradeInstances, upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length); //TODO
 				UpdateUpgradeVisual();
 			}
+			UpdateVisual();
 		}
 	}
 

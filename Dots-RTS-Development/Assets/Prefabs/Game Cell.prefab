@@ -790,7 +790,8 @@ MonoBehaviour:
     CellRadius: 0
     ElementSpeed: 5
     CellPosition: {x: 0, y: 0, z: 0}
-    ElementSpawn: {fileID: 0}
+    ElementSpawn: {fileID: 8300000, guid: ea99fa6e560fe9742b1fc7f2aba33eb9, type: 3}
+    ElementAttack: {fileID: 8300000, guid: 6060dd095a3b54d4591bf0189fed40d3, type: 3}
   isSelected: 0
   elementObj: {fileID: 1547613517417536, guid: fdd6b23465758b749803e1df238b529a, type: 3}
 --- !u!1 &151761483890593683

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Globalization;
 using System;
+using System.Diagnostics;
 
 public class LevelEditorCore : MonoBehaviour {
 	/// <summary>
@@ -182,7 +183,7 @@ public class LevelEditorCore : MonoBehaviour {
 			if (!teamList.Contains(c.Cell.Team)) {
 				teamList.Add(c.Cell.Team);
 				if (!loadedFromFile) {
-					if(c.Cell.Team != Team.ALLIED) {
+					if (c.Cell.Team != Team.ALLIED) {
 						aiDifficultyDict.Add(c.Cell.Team, defaultDificulty);
 						AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 					}
@@ -240,9 +241,10 @@ public class LevelEditorCore : MonoBehaviour {
 	#region Wrappers
 
 	public void ModeButtonWrapper(int mode) {
-		if (UI_ReferenceHolder.LE_cellPanel.transform.parent.Find("Toggles").GetChild(mode).GetComponent<Toggle>().isOn) {
-			ModeButton((Mode)mode + 1);
+		if (UI_ReferenceHolder.LE_cellPanel == null) {
+			Debugger.Break();
 		}
+		ModeButton((Mode)mode + 1);
 	}
 
 	public void PlaceCellPanelParseFromFieldWrapper(int inputField) {
@@ -322,7 +324,7 @@ public class LevelEditorCore : MonoBehaviour {
 				return;
 			}
 			default: {
-				Debug.LogWarning($"Unknown mode '{mode}' passed");
+				UnityEngine.Debug.LogWarning($"Unknown mode '{mode}' passed");
 				return;
 			}
 		}
@@ -363,9 +365,7 @@ public class LevelEditorCore : MonoBehaviour {
 			case PCPanelAttribute.Upgrades: {
 				panelValueParsed?.Invoke(PCPanelAttribute.Upgrades);
 				return;
-
 			}
-
 		}
 	}
 
@@ -431,7 +431,7 @@ public class LevelEditorCore : MonoBehaviour {
 					aiDifficultyDict.Remove(key);
 					aiDifficultyDict.Add(key, aiDificultyAll);
 				}
-				
+
 			}
 
 		}
@@ -441,7 +441,7 @@ public class LevelEditorCore : MonoBehaviour {
 					aiDifficultyDict.Remove(key);
 					aiDifficultyDict.Add(key, defaultDificulty);
 				}
-				
+
 			}
 
 		}
@@ -489,7 +489,7 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			Camera.main.transform.position = Vector3.zero + Vector3.back * 10;
 			Camera.main.orthographicSize = val;
-			Debug.LogWarning("Not working properly");
+			UnityEngine.Debug.LogWarning("Not working properly");
 			//StartCoroutine(LerpFloat(Camera.main, Camera.main.orthographicSize, val, 1f));
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(Camera.main.aspect);
 		}

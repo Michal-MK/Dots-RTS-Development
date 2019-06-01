@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class PlayManager : MonoBehaviour {
 
 	public static PlaySceneState levelState;
+
 	public enum PlaySceneState {
 		NONE,
 		CAMPAIGN,
@@ -58,8 +59,7 @@ public class PlayManager : MonoBehaviour {
 					if (ai.IsAllyOf(playerScript)) {
 						alliedAIs++;
 					}
-				}
-				
+				}	
 			}
 
 			if (activeAIs == 0 || activeAIs == alliedAIs) {
@@ -85,7 +85,6 @@ public class PlayManager : MonoBehaviour {
 
 	private void FixedUpdate() {
 		time += Time.fixedDeltaTime;
-
 	}
 
 	public void GameOver() {

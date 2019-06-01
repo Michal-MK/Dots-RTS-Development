@@ -14,12 +14,18 @@ public class UpgradePickerInstance : MonoBehaviour,IPointerDownHandler,IPointerC
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (OnPickerClicked != null) {
-			OnPickerClicked(this, new OnPickerClickedEventArgs(/*TODO*/null, /*TODO*/this));
+			OnPickerClicked(this, new OnPickerClickedEventArgs(slot, this));
 			print("Invoked");
+			slot = null;
 		}
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
 		//Necessary for some reason
+	}
+
+	private static UpgradeSlot_Cell slot;
+	internal static void SetSelected(UpgradeSlot_Cell upgradeSlot_Cell) {
+		slot = upgradeSlot_Cell;
 	}
 }

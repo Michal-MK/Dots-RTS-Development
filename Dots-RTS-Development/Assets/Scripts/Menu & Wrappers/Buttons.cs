@@ -150,12 +150,12 @@ public class Buttons : MainMenuUI  {
 
 	public void HighlightSelectedToggle() {
 		Color32 defaultColor = new Color32(255, 196, 4, 255);
-		if (gameObject.GetComponent<Toggle>().isOn) {
-			transform.Find("Text").GetComponent<TextMeshProUGUI>().color = Color.red;
-		}
-		else {
+		//if (gameObject.GetComponent<Toggle>().isOn) {
+		//	transform.Find("Text").GetComponent<TextMeshProUGUI>().color = Color.red;
+		//}
+		//else {
 			transform.Find("Text").GetComponent<TextMeshProUGUI>().color = defaultColor;
-		}
+		//}
 	}
 
 	public void ShowHidePanel(GameObject window) {
