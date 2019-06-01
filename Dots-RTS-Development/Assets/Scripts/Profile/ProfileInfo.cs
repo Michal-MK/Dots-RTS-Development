@@ -38,7 +38,7 @@ public class ProfileInfo : MonoBehaviour {
 		selected = p;
 		this.profileName.text = profileName;
 		Texture2D tex = new Texture2D(160, 90);
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.Difficulty, p.CurrentCampaignLevel.Devel);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.Difficulty, p.CurrentCampaignLevel.LevelID);
 		//tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
 		careerLevel.texture = tex;
 	}
@@ -46,7 +46,7 @@ public class ProfileInfo : MonoBehaviour {
 	public void ShowProfileInfo() {
 		ProfileManager.CurrentProfile = selected;
 
-		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.Difficulty, ProfileManager.CurrentProfile.CurrentCampaignLevel.Devel);
+		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.Difficulty, ProfileManager.CurrentProfile.CurrentCampaignLevel.LevelID);
 
 		if(campaignLevel != null) {
 			Texture2D tex = new Texture2D(160, 90);

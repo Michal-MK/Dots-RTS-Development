@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 
 public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerDownHandler {
 
-	public static List<GameCell> cellsInSelection = new List<GameCell>();                                 //Global list of selected cells
+	public static List<GameCell> cellsInSelection = new List<GameCell>();
 	public static event Control.TeamChanged TeamChanged;
 	public static GameCell lastEnteredCell = null;
 
-	public bool isSelected = false;                                                                                 //Is cell in global selection ?
+	public bool isSelected = false;
 
 	public Coroutine generateCoroutine;
 
@@ -20,8 +20,6 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	//Add cell to global list
 	public void Awake() {
-		Cell = new Cell(this);
-
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
@@ -35,15 +33,16 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 		Cell.CellRadius = col.radius * transform.localScale.x;
 
+		Cell.OnElementDecayed += (s, e) => { UpdateVisual(); };
+		Cell.OnElementGenerated += (s, e) => { UpdateVisual(); };
+
 		PlayManager.cells.Add(this);
-		if (Cell.CellTeam == Team.NEUTRAL) {
+		if (Cell.Team == Team.NEUTRAL) {
 			PlayManager.neutralCells.Add(this);
 		}
 	}
 
-	//Set default
 	private void Start() {
-
 		if (Cell.MaxElements == 0) {
 			Cell.MaxElements = 50;
 		}
@@ -57,14 +56,12 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 			Cell.CellRadius = col.radius * transform.localScale.x;
 		}
 
-		//UpdateCellInfo();
 		StartCoroutine(ScaleCell());
 		sound = GameObject.Find("GameManager").GetComponent<SoundManager>();
 	}
 
-
 	#region Cell Selection/Deselection
-	//Checks the list whether the cell is already selected ? removes it : adds it
+
 	public static void ModifySelection(GameCell cell) {
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			if (cell == cellsInSelection[i]) {
@@ -77,43 +74,34 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		cell.SetSelected();
 	}
 
-	//Selects or deselects a cell
 	public void SetSelected() {
-		if (isSelected) {
-			isSelected = false;
-			elementCountDisplay.color = new Color32(255, 255, 255, 255);
-			cellSelectedRenderer.enabled = false;
-		}
-		else {
-			isSelected = true;
-			elementCountDisplay.color = new Color32(255, 0, 0, 255);
-			cellSelectedRenderer.enabled = true;
-		}
+		isSelected ^= true;
+		cellSelectedRenderer.enabled ^= true;
+		elementCountDisplay.color = elementCountDisplay.color == Color.white ? Color.red : Color.white;
 	}
 
-	//Resets Cell colour and clears the selection list
 	public static void ClearSelection() {
-		//print("Clearing");
 		for (int i = 0; i < cellsInSelection.Count; i++) {
 			cellsInSelection[i].isSelected = false;
-			cellsInSelection[i].elementCountDisplay.color = new Color(1, 1, 1);
+			cellsInSelection[i].elementCountDisplay.color = Color.white;
 			cellsInSelection[i].cellSelectedRenderer.enabled = false;
 		}
 		cellsInSelection.Clear();
 	}
+
 	#endregion
 
 	//Wrapper for cell atacking
 	public void AttackWrapper(GameCell target, Team team) {
 		if (cellsInSelection.Count != 0) {
-			if ((int)team >= 2) {
+			if (team >= Team.ENEMY1) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
 			}
 			else if (team == Team.ALLIED) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
-					cellsInSelection[i].EmpowerCell(target);
+					cellsInSelection[i].AttackCell(target);
 				}
 			}
 			else if (team == Team.NEUTRAL) {
@@ -125,47 +113,28 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		ClearSelection();
 	}
 
-	#region Attack Handling
-
-	//Code to attack selected cell
 	public void AttackCell(GameCell target) {
-		if (Cell.ElementCount > 1) {
-			int numElements = Cell.ElementCount = Cell.ElementCount / 2;
-			for (int i = 0; i < numElements; i++) {
-				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
-				e.target = target;
-				e.attacker = this;
-				e.team = Cell.CellTeam;
-				e.eSpeed = Cell.ElementSpeed;
-			}
-			UpdateCellInfo();
-			sound.AddToSoundQueue(Cell.elementSpawn);
-		}
-	}
-
-	//Called when "attacking" your own cell
-	public void EmpowerCell(GameCell target) {
 		if (Cell.ElementCount > 1 && target != this) {
-			int numElements = Cell.ElementCount = Cell.ElementCount / 2;
+			int numElements = Cell.ElementCount /= 2;
+
 			for (int i = 0; i < numElements; i++) {
-				Element e = Instantiate(elementObj, ElementSpawnPoint(), Quaternion.identity).GetComponent<Element>();
-				e.target = target;
-				e.attacker = this;
-				e.team = Cell.CellTeam;
-				e.eSpeed = Cell.ElementSpeed;
+				Element e = Instantiate(elementObj, transform.position, Quaternion.identity).GetComponent<Element>();
+				e.Target = target;
+				e.Attacker = this;
+				e.Team = Cell.Team;
+				e.Speed = Cell.ElementSpeed;
 			}
 			UpdateCellInfo();
-			sound.AddToSoundQueue(Cell.elementSpawn);
+			sound.AddToSoundQueue(Cell.ElementSpawn);
 		}
 	}
-	#endregion
 
 	#region Element Damage Handling
-	//Called when an element enters a cell, isAllied ? feed the cell : damage the cell
+
 	public void DamageCell(Element element, int amoutOfDamage, Upgrades[] additionalArgs) {
 
 		#region Element Specific Code for Upgrade management -- Offensive Upgrades
-		if (Cell.CellTeam == element.team) {
+		if (Cell.Team == element.Team) {
 			float aidBonus = 0;
 			for (int i = 0; i < uManager.upgrades.Length; i++) {
 				if (uManager.upgrades[i] == Upgrades.DEF_AID_BONUS_CHANCE) {
@@ -269,49 +238,37 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		Cell.ElementCount -= amoutOfDamage;
 
 		if (Cell.ElementCount < 0) {
-			if (TeamChanged != null) {
-				TeamChanged(this, Cell.CellTeam, element.team);
-			}
+			TeamChanged?.Invoke(this, Cell.Team, element.Team);
+
 			if (isSelected) {
 				ModifySelection(this);
 			}
+
 			Cell.ElementCount = -Cell.ElementCount;
-			Cell.CellTeam = element.team;
+			Cell.Team = element.Team;
 		}
+
 		Destroy(element.gameObject);
 		UpdateCellInfo();
 	}
 
-
-	public Vector3 ElementSpawnPoint() {
-		float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
-		float x = Mathf.Sin(angle);
-		float y = Mathf.Cos(angle);
-		return new Vector3(transform.position.x + x * Cell.CellRadius * 0.70f, transform.position.y + y * Cell.CellRadius * 0.70f);
-	}
 	#endregion
 
-
-	//Overriden function to include regeneration call
-	public void UpdateCellInfo(bool calledFromBase = false) {
-
-		if (calledFromBase == false) {
-			//print(!isRegenerating && (cellTeam == enmTeam.ALLIED || (int)cellTeam >=2));
-
-			if (!Cell.isRegenerating && (Cell.CellTeam == Team.ALLIED || (int)Cell.CellTeam >= 2)) {
-				generateCoroutine = StartCoroutine(Cell.GenerateElements());
-			}
-
-			if (Cell.ElementCount > Cell.MaxElements) {
-				Cell.Decay(0.5f, this);
-			}
-			if (isSelected) {
-				cellSelectedRenderer.enabled = true;
-			}
-			else {
-				cellSelectedRenderer.enabled = false;
-			}
+	public void UpdateCellInfo() {
+		if (!Cell.isRegenerating && (Cell.Team == Team.ALLIED || (int)Cell.Team >= 2)) {
+			generateCoroutine = StartCoroutine(Cell.GenerateElements());
 		}
+		if (Cell.ElementCount > Cell.MaxElements) {
+			Cell.Decay(0.5f, this);
+		}
+		if (isSelected) {
+			cellSelectedRenderer.enabled = true;
+		}
+		else {
+			cellSelectedRenderer.enabled = false;
+		}
+		cellSprite.color = CellColours.GetColor(Cell.Team);
+		elementCountDisplay.text = Cell.ElementCount.ToString();
 	}
 
 	Vector3 oldPos = Vector3.zero;
@@ -323,19 +280,18 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		Vector3 vel = transform.position - oldPos;
 
 		if (vel != Vector3.zero) {
-			UpdateCellInfo(false);
+			UpdateCellInfo();
 		}
 	}
 
 	private void Update() {
 		if (Input.GetMouseButtonUp(0) && lastEnteredCell == this) {
-			AttackWrapper(lastEnteredCell, lastEnteredCell.Cell.CellTeam);
+			AttackWrapper(lastEnteredCell, lastEnteredCell.Cell.Team);
 		}
 	}
 
 	private void OnMouseOver() {
-		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed, opposite buttons decrease the values
-		//Adjust max cell size
+		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed
 		if (Input.GetKeyDown(KeyCode.Keypad8)) {
 			if (Cell.MaxElements < 100) {
 				Cell.MaxElements++;
@@ -366,22 +322,20 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-
 		Background.onReleaseClear = false;
 		lastEnteredCell = this;
 
-		if (Input.GetMouseButton(0) && Cell.CellTeam == Team.ALLIED) {
+		if (Input.GetMouseButton(0) && Cell.Team == Team.ALLIED) {
 			ModifySelection(this);
 		}
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		//print("Click " + gameObject.name);
 		ClearSelection();
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
-		if (Cell.CellTeam == Team.ALLIED) {
+		if (Cell.Team == Team.ALLIED) {
 			ModifySelection(this);
 		}
 	}

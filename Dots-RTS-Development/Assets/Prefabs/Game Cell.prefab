@@ -606,7 +606,6 @@ GameObject:
   m_Component:
   - component: {fileID: 73163086344795451}
   - component: {fileID: 67498765633344647}
-  - component: {fileID: 254651776136679191}
   - component: {fileID: 201968472478745017}
   - component: {fileID: 193296297740867429}
   - component: {fileID: 255316141695749137}
@@ -689,25 +688,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &254651776136679191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 151759101606015701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0bfa3bbda2142c45a7a84a92675bc12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cellSprite: {fileID: 67498765633344647}
-  col: {fileID: 201968472478745017}
-  rg: {fileID: 193296297740867429}
-  uManager: {fileID: 0}
-  elementCountDisplay: {fileID: 0}
-  elementCountDisplayRenderer: {fileID: 0}
-  cellSelectedRenderer: {fileID: 0}
 --- !u!58 &201968472478745017
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -798,6 +778,19 @@ MonoBehaviour:
   elementCountDisplay: {fileID: 0}
   elementCountDisplayRenderer: {fileID: 0}
   cellSelectedRenderer: {fileID: 0}
+  Cell:
+    coroutineRunner: {fileID: 0}
+    isRegenerating: 0
+    isDecaying: 0
+    appliedDebuffs: 
+    ElementCount: 0
+    RegenPeriod: 0
+    MaxElements: 0
+    Team: 0
+    CellRadius: 0
+    ElementSpeed: 5
+    CellPosition: {x: 0, y: 0, z: 0}
+    ElementSpawn: {fileID: 0}
   isSelected: 0
   elementObj: {fileID: 1547613517417536, guid: fdd6b23465758b749803e1df238b529a, type: 3}
 --- !u!1 &151761483890593683
@@ -837,7 +830,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 23, y: 23}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &74351716426169561
 CanvasRenderer:
@@ -881,9 +874,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
+  m_SortingOrder: 1
 --- !u!33 &2924919875768228708
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -944,11 +937,11 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 200
   m_fontStyle: 0
-  m_textAlignment: 257
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -979,7 +972,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -9.02948, z: 0, w: -8.668304}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 281985818867577456}
     characterCount: 0

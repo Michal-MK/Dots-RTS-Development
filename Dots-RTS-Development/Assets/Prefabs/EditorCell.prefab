@@ -379,8 +379,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -145.12558, y: 77.18971}
-  m_SizeDelta: {x: 102.4, y: 102.4}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &212889015483235864
 SpriteRenderer:
@@ -465,6 +465,19 @@ MonoBehaviour:
   elementCountDisplay: {fileID: 0}
   elementCountDisplayRenderer: {fileID: 0}
   cellSelectedRenderer: {fileID: 0}
+  Cell:
+    coroutineRunner: {fileID: 0}
+    isRegenerating: 0
+    isDecaying: 0
+    appliedDebuffs: 
+    ElementCount: 0
+    RegenPeriod: 0
+    MaxElements: 0
+    Team: 0
+    CellRadius: 0
+    ElementSpeed: 5
+    CellPosition: {x: 0, y: 0, z: 0}
+    ElementSpawn: {fileID: 0}
   core: {fileID: 0}
   maxCellRadius: {fileID: 212650380036462722}
   upgrade_manager: {fileID: 114980677272127044}
@@ -1285,8 +1298,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_AnchoredPosition: {x: 0, y: -0}
+  m_SizeDelta: {x: 23, y: 23}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &6515085773441090584
 MeshRenderer:
@@ -1322,9 +1335,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -927982021
+  m_SortingLayer: 2
+  m_SortingOrder: 1
 --- !u!33 &2815268342728721378
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1393,11 +1406,11 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 200
   m_fontStyle: 0
-  m_textAlignment: 257
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -1428,7 +1441,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -9.727783, z: 0, w: -9.100189}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4348552837182917950}
     characterCount: 0

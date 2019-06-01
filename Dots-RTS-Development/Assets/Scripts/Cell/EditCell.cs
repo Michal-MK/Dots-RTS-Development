@@ -27,8 +27,6 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	#endregion
 
 	public void Awake() {
-		Cell = new Cell(this);
-
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
@@ -85,8 +83,8 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				FastResize();
 			}
 			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
-				Cell.CellTeam = core.team;
-				if (Cell.CellTeam != Team.ALLIED && Cell.CellTeam != Team.NEUTRAL) {
+				Cell.Team = core.team;
+				if (Cell.Team != Team.ALLIED && Cell.Team != Team.NEUTRAL) {
 					core.AddCell(this);
 				}
 			}
@@ -164,7 +162,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 			}
 			if (isCellSelected) {
 				core.isUpdateSentByCell = true;
-				core.team = Cell.CellTeam;
+				core.team = Cell.Team;
 				core.startingElementCount = Cell.ElementCount;
 				core.regenarationPeriod = Cell.RegenPeriod;
 				core.maxElementCount = Cell.MaxElements;

@@ -41,13 +41,13 @@ public class LoadFromFile : MonoBehaviour { //TODO Decipher the code
 					c.gameObject.transform.position = c.Cell.CellPosition;
 					c.Cell.ElementCount = customSave.cells[j].elementCount;
 					c.Cell.MaxElements = customSave.cells[j].maxElementCount;
-					c.Cell.CellTeam = (Team)customSave.cells[j].team;
+					c.Cell.Team = (Team)customSave.cells[j].team;
 					c.Cell.RegenPeriod = customSave.cells[j].regenerationPeriod;
 
 					GameCell cg = Instantiate(cellPrefab).GetComponent<GameCell>();
 
 					cg.uManager.PreinstallUpgrades(customSave.cells[j].installedUpgrades);
-					cg.gameObject.name = "Cell " + j + " " + c.Cell.CellTeam;
+					cg.gameObject.name = "Cell " + j + " " + c.Cell.Team;
 					cg.enabled = true;
 				}
 				init.StartAiInitialization(customSave.clans, customSave.difficulty);
@@ -68,7 +68,7 @@ public class LoadFromFile : MonoBehaviour { //TODO Decipher the code
 					c.gameObject.transform.position = c.Cell.CellPosition;
 					c.Cell.ElementCount = campaignSave.game.cells[j].elementCount;
 					c.Cell.MaxElements = campaignSave.game.cells[j].maxElementCount;
-					c.Cell.CellTeam = (Team)campaignSave.game.cells[j].team;
+					c.Cell.Team = (Team)campaignSave.game.cells[j].team;
 					c.Cell.RegenPeriod = campaignSave.game.cells[j].regenerationPeriod;
 					//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 
@@ -95,7 +95,7 @@ public class LoadFromFile : MonoBehaviour { //TODO Decipher the code
 					c.gameObject.transform.position = c.Cell.CellPosition;
 					c.Cell.ElementCount = customSave.cells[j].elementCount;
 					c.Cell.MaxElements = customSave.cells[j].maxElementCount;
-					c.Cell.CellTeam = (Team)customSave.cells[j].team;
+					c.Cell.Team = (Team)customSave.cells[j].team;
 					c.Cell.RegenPeriod = customSave.cells[j].regenerationPeriod;
 					//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
 

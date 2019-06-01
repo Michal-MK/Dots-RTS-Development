@@ -44,7 +44,7 @@ public class TeamSetup : MonoBehaviour {
 
 			GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
 			//print(newTeamBox.transform.localPosition);
-			newTeamBox.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(core.teamList[i]);
+			newTeamBox.GetComponent<Image>().color = CellColours.GetColor(core.teamList[i]);
 			teamBoxes.Add(newTeamBox.GetComponent<TeamBox>());
 			teamBoxes[i].team = core.teamList[i];
 			teamBoxes[i].myParrent = gameObject.GetComponent<TeamSetup>();
@@ -219,7 +219,7 @@ public class TeamSetup : MonoBehaviour {
 			GameObject bg = Instantiate(clanBG, roundTable);
 			bgList.Add(bg);
 			Image img = bg.GetComponent<Image>();
-			img.color = ColourTheTeamButtons.GetColorBasedOnTeam((Team)(i + 2));
+			img.color = CellColours.GetColor((Team)(i + 2));
 			RectTransform rt = bg.GetComponent<RectTransform>();
 			rt.anchorMax = Vector2.one;
 			rt.anchorMin = Vector2.zero;

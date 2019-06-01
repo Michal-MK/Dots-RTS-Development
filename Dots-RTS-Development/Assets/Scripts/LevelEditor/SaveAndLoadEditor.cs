@@ -23,6 +23,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		print(PlayManager.levelState);
 
 		SceneManager.LoadScene(Scenes.GAME);
+		Time.timeScale = 1;
 	}
 
 	public void SaveButton() {
@@ -48,10 +49,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		int numAllies = 0;
 		int numEnemies = 0;
 		for (int i = 0; i < core.cellList.Count; i++) {
-			if (core.cellList[i].Cell.CellTeam == Team.ALLIED) {
+			if (core.cellList[i].Cell.Team == Team.ALLIED) {
 				numAllies++;
 			}
-			if ((int)core.cellList[i].Cell.CellTeam >= (int)Team.ENEMY1) {
+			if ((int)core.cellList[i].Cell.Team >= (int)Team.ENEMY1) {
 				numEnemies++;
 			}
 		}
@@ -90,7 +91,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				serCell.pos = new S_Vec3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z };
 				serCell.elementCount = c.Cell.ElementCount;
 				serCell.maxElementCount = c.Cell.MaxElements;
-				serCell.team = (int)c.Cell.CellTeam;
+				serCell.team = (int)c.Cell.Team;
 				serCell.regenerationPeriod = c.Cell.RegenPeriod;
 				serCell.installedUpgrades = c.upgrade_manager.upgrades;
 				save.cells.Add(serCell);
@@ -117,7 +118,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	public void Load(string path) {
 		if (File.Exists(path) != true) {
-			Debug.LogError("No file found at that path");
+			Debug.LogWarning("No file found at that path");
 			return;
 		}
 
@@ -159,10 +160,11 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				c.gameObject.transform.position = c.Cell.CellPosition;
 				c.Cell.ElementCount = save.cells[j].elementCount;
 				c.Cell.MaxElements = save.cells[j].maxElementCount;
-				c.Cell.CellTeam = (Team)save.cells[j].team;
+				c.Cell.Team = (Team)save.cells[j].team;
 				c.Cell.RegenPeriod = save.cells[j].regenerationPeriod;
 				c.upgrade_manager.upgrades = save.cells[j].installedUpgrades;
 				core.AddCell(c, true);
+				c.UpdateVisual();
 			}
 		}
 		if (path == Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + "testLevel.phage") {

@@ -150,7 +150,7 @@ public class Initialize_AI : MonoBehaviour {
 			ai.team = team;
 			ai.isActive = true;
 			AIs.Add(ai);
-			ai.playerScript = playerScript;
+			ai.Player = playerScript;
 	}
 }
 

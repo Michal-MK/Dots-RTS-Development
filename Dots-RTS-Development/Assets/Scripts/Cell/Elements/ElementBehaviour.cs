@@ -6,14 +6,14 @@ class ElementBehaviour : Element {
 	private Vector2 velocity;
     private float wobbleFreqency = 2;
     private float wobbleAmplitude = 0.2f;
-    private float SlowDownFrequency = 3f;
+    private float slowDownFrequency = 3f;
 	private bool destroyOnNextAttack = false;
 
-    //Calculates steering behaviour for the element 
     private void FixedUpdate() {
-        if (DistanceToTarget(target) < target.Cell.CellRadius) {
+        if (DistanceToTarget(Target) < Target.Cell.CellRadius) {
             //Execute this code after collision with target.
-            if (team > 0) {
+
+            if (Team > 0) {
                 ExecuteAttack();
             }
             else {
@@ -27,9 +27,9 @@ class ElementBehaviour : Element {
 			}
         }
 
-        velocity = DirectionToTarget(target) * eSpeed;
+        velocity = DirectionToTarget(Target) * Speed;
 
-        velocity = Mathf.Abs(Mathf.Sin(AdjustedTime() * SlowDownFrequency)) * velocity;
+        velocity = Mathf.Abs(Mathf.Sin(AdjustedTime() * slowDownFrequency)) * velocity;
 
         gameObject.transform.position += (Vector3)ApplySidewaysWobble(velocity);
 	}

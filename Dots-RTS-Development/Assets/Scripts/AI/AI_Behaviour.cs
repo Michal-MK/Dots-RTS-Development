@@ -90,7 +90,7 @@ public class AI_Behaviour : Enemy_AI {
 
 	//Defend from - who
 	private void Defend(GameCell selectedCell, GameCell target) {
-		selectedCell.EmpowerCell(target);
+		selectedCell.AttackCell(target);
 	}
 	#endregion
 

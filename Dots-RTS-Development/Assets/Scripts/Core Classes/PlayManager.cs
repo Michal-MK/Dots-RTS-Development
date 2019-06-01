@@ -70,7 +70,7 @@ public class PlayManager : MonoBehaviour {
 			int playerCells = 0;
 
 			for (int i = 0; i < cells.Count; i++) {
-				if (cells[i].Cell.CellTeam == Team.ALLIED) {
+				if (cells[i].Cell.Team == Team.ALLIED) {
 					playerCells++;
 				}
 			}
@@ -104,7 +104,7 @@ public class PlayManager : MonoBehaviour {
 		isWinner = true;
 		int neutrals = 0;
 		foreach (GameCell c in cells) {
-			if (c.Cell.CellTeam == Team.NEUTRAL) {
+			if (c.Cell.Team == Team.NEUTRAL) {
 				neutrals++;
 			}
 		}
@@ -128,7 +128,7 @@ public class PlayManager : MonoBehaviour {
 			CampaignLevelCode c = ProfileManager.CurrentProfile.CurrentCampaignLevel;
 			ProfileManager.CurrentProfile.CompletedCampaignLevels += 1;
 			ProfileManager.CurrentProfile.ClearedCampaign[CampaignLevel.current.currentSaveData] = time;
-			ProfileManager.CurrentProfile.CurrentCampaignLevel = new CampaignLevelCode(c.Difficulty, c.Devel + 1);
+			ProfileManager.CurrentProfile.CurrentCampaignLevel = new CampaignLevelCode(c.Difficulty, c.LevelID + 1);
 			CampaignLevel.current = null;
 			Destroy(FindObjectOfType<CampaignLevel>().gameObject);
 		}

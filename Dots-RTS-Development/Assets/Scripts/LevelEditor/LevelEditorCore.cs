@@ -80,8 +80,9 @@ public class LevelEditorCore : MonoBehaviour {
 	#endregion
 
 	#region Enums
-	// The current editor mode
+
 	public enum Mode {
+		None,
 		/// <summary>
 		/// In this mode user can use the mouse only for placing new cells to the scene 
 		/// </summary>
@@ -95,7 +96,7 @@ public class LevelEditorCore : MonoBehaviour {
 		/// </summary>
 		DeleteCells
 	};
-	// Input field to prase from
+
 	public enum PCPanelAttribute {
 		/// <summary>
 		/// Starting element count will be parsed from the input field
@@ -117,11 +118,11 @@ public class LevelEditorCore : MonoBehaviour {
 		/// Upgrades will be parsed from UI Upgrade slots
 		/// </summary>
 		Upgrades
-
 	};
+
 	#endregion
 
-	private Mode _editorMode;
+	private Mode _editorMode = Mode.None;
 	private TeamSetup teamSetup;
 	private Team singleDifficultyInputFieldSpecificTeam;
 	private static LevelEditorCore instance;
@@ -161,7 +162,7 @@ public class LevelEditorCore : MonoBehaviour {
 			saveAndLoad.Load(PlayerPrefs.GetString("LoadLevelFilePath"));
 		}
 		//Set defalut mode to placeCells
-		editorMode = Mode.PlaceCells;
+		ModeButton(Mode.PlaceCells);
 	}
 
 	private void OnDestroy() {
@@ -176,13 +177,13 @@ public class LevelEditorCore : MonoBehaviour {
 		if (getOutilneState) {
 			c.ToggleCellOutline(true);
 		}
-		if (c.Cell.CellTeam != Team.NEUTRAL) {
+		if (c.Cell.Team != Team.NEUTRAL) {
 
-			if (!teamList.Contains(c.Cell.CellTeam)) {
-				teamList.Add(c.Cell.CellTeam);
+			if (!teamList.Contains(c.Cell.Team)) {
+				teamList.Add(c.Cell.Team);
 				if (!loadedFromFile) {
-					if(c.Cell.CellTeam != Team.ALLIED) {
-						aiDifficultyDict.Add(c.Cell.CellTeam, defaultDificulty);
+					if(c.Cell.Team != Team.ALLIED) {
+						aiDifficultyDict.Add(c.Cell.Team, defaultDificulty);
 						AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 					}
 				}
@@ -203,14 +204,14 @@ public class LevelEditorCore : MonoBehaviour {
 		cellList.Remove(c);
 		//If a cell is found with the same team then don't remove the clan.
 		foreach (CellBehaviour cell in cellList) {
-			if (cell.Cell.CellTeam == c.Cell.CellTeam) {
+			if (cell.Cell.Team == c.Cell.Team) {
 				return;
 			}
 		}
-		teamSetup.RemoveFromClan(c.Cell.CellTeam);
-		teamList.Remove(c.Cell.CellTeam);
-		if (c.Cell.CellTeam != Team.ALLIED) {
-			aiDifficultyDict.Remove(c.Cell.CellTeam);
+		teamSetup.RemoveFromClan(c.Cell.Team);
+		teamList.Remove(c.Cell.Team);
+		if (c.Cell.Team != Team.ALLIED) {
+			aiDifficultyDict.Remove(c.Cell.Team);
 			AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 		}
 	}
@@ -240,7 +241,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public void ModeButtonWrapper(int mode) {
 		if (UI_ReferenceHolder.LE_cellPanel.transform.parent.Find("Toggles").GetChild(mode).GetComponent<Toggle>().isOn) {
-			ModeButton((Mode)mode);
+			ModeButton((Mode)mode + 1);
 		}
 	}
 
@@ -266,7 +267,7 @@ public class LevelEditorCore : MonoBehaviour {
 			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
 			newCell.name = "Cell " + team;
 			EditCell c = newCell.GetComponent<EditCell>();
-			c.Cell.CellTeam = team;
+			c.Cell.Team = team;
 			c.Cell.MaxElements = maxElementCount;
 			c.Cell.RegenPeriod = regenarationPeriod;
 			c.Cell.ElementCount = startingElementCount;
@@ -278,6 +279,7 @@ public class LevelEditorCore : MonoBehaviour {
 			c.core = this;
 			AddCell(c);
 			c.FastResize();
+			c.UpdateVisual();
 		}
 #endif
 #if (UNITY_ANDROID || UNITY_IOS)
@@ -309,7 +311,6 @@ public class LevelEditorCore : MonoBehaviour {
 		switch (mode) {
 			case Mode.PlaceCells: {
 				Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
-
 				return;
 			}
 			case Mode.EditCells: {
@@ -318,11 +319,10 @@ public class LevelEditorCore : MonoBehaviour {
 			}
 			case Mode.DeleteCells: {
 				Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
-
 				return;
 			}
 			default: {
-				Debug.LogError("Unknown mode passed");
+				Debug.LogWarning($"Unknown mode '{mode}' passed");
 				return;
 			}
 		}
@@ -369,7 +369,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-	//Prses values for saving a level
+	//Parses values for saving a level
 	public void ParseSaveInfo_SavePanel() {
 
 		if (string.IsNullOrEmpty(levelNameInput.text) || levelNameInput.text == " ") {
@@ -389,11 +389,9 @@ public class LevelEditorCore : MonoBehaviour {
 
 	//Parses a value for game size
 	public void ParseGameSize_GameSettingsPanel() {
-		float f = 250;
-		if (float.TryParse(sizeInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out f) && f > 250) {
+		if (float.TryParse(sizeInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out float f) && f > 250) {
 			print(f);
 			gameSize = f;
-
 		}
 		else {
 			gameSize = defaultGameSize;
@@ -409,9 +407,9 @@ public class LevelEditorCore : MonoBehaviour {
 	//Updates team button colour depending on the team for a visual feedback and better representation
 	private void UpdateTeamButtonVisual(Team thisTeam) {
 		Text description = teamButton.Find("TeamDescription").GetComponent<Text>();
-		description.color = ColourTheTeamButtons.GetContrastColorBasedOnTeam(thisTeam);
+		description.color = CellColours.GetContrastColor(thisTeam);
 		description.text = ColourTheTeamButtons.GetDescriptionBasedOnTeam(thisTeam);
-		teamButton.GetComponent<Image>().color = ColourTheTeamButtons.GetColorBasedOnTeam(thisTeam);
+		teamButton.GetComponent<Image>().color = CellColours.GetColor(thisTeam);
 	}
 
 	//Editor setting whethrt cell should show thier maximum size

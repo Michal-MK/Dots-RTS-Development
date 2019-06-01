@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Cell {
 
 	public MonoBehaviour coroutineRunner;
@@ -11,12 +12,9 @@ public class Cell {
 
 	public event EventHandler<int> OnElementGenerated;
 	public event EventHandler<int> OnElementDecayed;
-	public event EventHandler<Team> OnTeamChnged;
 
 
 	public List<Upgrades> appliedDebuffs = new List<Upgrades>();
-
-	public AudioClip elementSpawn;
 
 	public Cell(MonoBehaviour coroutineRunner) {
 		this.coroutineRunner = coroutineRunner;
@@ -28,7 +26,7 @@ public class Cell {
 			yield return new WaitForSeconds(RegenPeriod);
 			if (ElementCount < MaxElements) {
 				ElementCount++;
-				coroutineRunner.SendMessage("UpdateCellInfo", false, SendMessageOptions.DontRequireReceiver);
+				OnElementGenerated?.Invoke(this, ElementCount);
 			}
 		}
 	}
@@ -46,6 +44,7 @@ public class Cell {
 		while (isDecaying) {
 			yield return new WaitForSeconds(d);
 			ElementCount--;
+			OnElementDecayed?.Invoke(this, ElementCount);
 			if (MaxElements - ElementCount > MaxElements * 0.5f) {
 				d *= 0.5f;
 			}
@@ -62,6 +61,7 @@ public class Cell {
 			yield return new WaitForSeconds(timeBetweenTicks);
 			if (ElementCount >= 1) {
 				ElementCount--;
+				OnElementDecayed?.Invoke(this, ElementCount);
 			}
 		}
 		appliedDebuffs.Remove(Upgrades.ATK_DOT);
@@ -70,35 +70,44 @@ public class Cell {
 	/// <summary>
 	/// The elements that are available in selected cell.
 	/// </summary>
-	public int ElementCount { get; set; }
+	public int ElementCount;
 
 	/// <summary>
 	/// How fast will this cell generate new elements.
 	/// </summary>
-	public float RegenPeriod { get; set; }
+	public float RegenPeriod;
 
 	/// <summary>
 	/// The maximum amount of elements this cell can hold.
 	/// </summary>
-	public int MaxElements { get; set; }
+	public int MaxElements;
 
 	/// <summary>
 	/// Team this cell belongs to.
 	/// </summary>
-	public Team CellTeam { get; set; }
+	public Team Team;
 
 	/// <summary>
 	/// The radius of the cell
 	/// </summary>
-	public float CellRadius { get; set; }
+	public float CellRadius;
 
 	/// <summary>
 	/// The speed of elements spawned by this cell
 	/// </summary>
-	public float ElementSpeed { get; set; } = 5;
+	[HideInInspector]
+	public float ElementSpeed = 5;
 
 	/// <summary>
 	/// Cell's position in the world
 	/// </summary>
-	public Vector3 CellPosition { get; set; }
+	[HideInInspector]
+	public Vector3 CellPosition;
+
+	/// <summary>
+	/// Clip to play when an element spawns
+	/// </summary>
+	[HideInInspector]
+	public AudioClip ElementSpawn;
+
 }

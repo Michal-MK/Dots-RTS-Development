@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IAlly {
 
 	private void Start() {
 		foreach (GameCell cell in PlayManager.cells) {
-			if (cell.Cell.CellTeam == Team.ALLIED) {
+			if (cell.Cell.Team == Team.ALLIED) {
 				MyCells.Add(cell);
 			}
 		}

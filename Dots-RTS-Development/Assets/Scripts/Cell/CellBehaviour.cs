@@ -24,8 +24,9 @@ public class CellBehaviour : MonoBehaviour {
 	public SpriteRenderer cellSelectedRenderer;
 	#endregion
 
-	public Cell Cell { get; set; }
+	public Cell Cell;
 
+	//TODO Hardcoded BS Alert
 	public IEnumerator ScaleCell() {
 		while (true) {
 			yield return new WaitForEndOfFrame();
@@ -52,7 +53,11 @@ public class CellBehaviour : MonoBehaviour {
 		}
 	}
 
-	//[System.Obsolete("CreateCircle is no longer supported and was removed HOLY S**** fix it!!!",true)]
+	public void UpdateVisual() {
+		cellSprite.color = CellColours.GetColor(Cell.Team);
+		elementCountDisplay.text = Cell.ElementCount.ToString();
+	}
+
 	public void EnableCircle(Color? color = null) {
 		if (color == null) {
 			color = Color.yellow;
