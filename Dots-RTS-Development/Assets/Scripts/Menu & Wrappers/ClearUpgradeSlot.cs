@@ -5,24 +5,13 @@ using UnityEngine.UI;
 
 public class ClearUpgradeSlot : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public static event EventHandler<UpgradeSlot> OnSlotClear;
+	public UpgradeSlot_UI slot;
 
-	public void OnPointerClick(PointerEventData eventData) {
-		if (OnSlotClear != null) {
-			OnSlotClear(this, transform.parent.GetComponent<UpgradeSlot>());
-			print($"Clearing slot {transform.parent.name } of {transform.parent.parent.name}");
-		}
-	}
+	public void OnPointerClick(PointerEventData eventData) => slot.ClearSlot();
 
-	public void OnPointerDown(PointerEventData eventData) {
-		//Has to be implemented for some reason.
-	}
+	public void OnPointerDown(PointerEventData eventData) {	}
 
-	public void OnPointerEnter(PointerEventData eventData) {
-		GetComponent<Image>().color = new Color(1, 1, 1, 1);
-	}
+	public void OnPointerEnter(PointerEventData eventData) => GetComponent<Image>().color = new Color(1, 1, 1, 1);
 
-	public void OnPointerExit(PointerEventData eventData) {
-		GetComponent<Image>().color = new Color(1, 1, 1, 0.4f);
-	}
+	public void OnPointerExit(PointerEventData eventData) => GetComponent<Image>().color = new Color(1, 1, 1, 0.4f);
 }

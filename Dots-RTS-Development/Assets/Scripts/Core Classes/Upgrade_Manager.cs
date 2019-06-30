@@ -17,7 +17,6 @@ public class Upgrade_Manager : MonoBehaviour {
 	}
 
 	protected virtual void UpgradePreinstallSprites() {
-
 	}
 
 	/// <summary>
@@ -44,6 +43,7 @@ public class Upgrade_Manager : MonoBehaviour {
 	/// </summary>
 	public void UninstallUpgrade(int slot) {
 		upgrades[slot] = Upgrades.NONE;
+		//TODO revert modifications
 	}
 
 	/// <summary>

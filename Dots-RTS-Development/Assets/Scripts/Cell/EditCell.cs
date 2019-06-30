@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 
-	public static event Control.CellSelected OnCellSelected;
-	public static event Control.CellSelected OnCellDeselected;
+	public event EventHandler<EditCell> OnCellSelected;
+	public event EventHandler<EditCell> OnCellDeselected;
 
 	public LevelEditorCore core;
 
@@ -40,13 +40,14 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 		Cell.CellRadius = col.radius * transform.localScale.x;
 		pointerDownAtTime = Mathf.Infinity;
-		LevelEditorCore.modeChange += EditorModeUpdate;
-		LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
+
+		//LevelEditorCore.modeChange += EditorModeUpdate;
+		//LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
 	}
 
 	private void OnDisable() {
-		LevelEditorCore.modeChange -= EditorModeUpdate;
-		LevelEditorCore.panelValueParsed -= RefreshCellFromPanel;
+		//LevelEditorCore.modeChange -= EditorModeUpdate;
+		//LevelEditorCore.panelValueParsed -= RefreshCellFromPanel;
 	}
 
 	public void FastResize() {
@@ -67,41 +68,6 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 		}
 		transform.localScale = new Vector3(mappedValue, mappedValue);
 		Cell.CellRadius = col.radius * transform.localScale.x;
-		if (LevelEditorCore.getOutilneState) {
-			ToggleCellOutline(true);
-		}
-	}
-
-
-
-	private void RefreshCellFromPanel(LevelEditorCore.PCPanelAttribute attribute) {
-		if (isCellSelected && core.isUpdateSentByCell == false) {
-			if (attribute == LevelEditorCore.PCPanelAttribute.Start) {
-
-				Cell.ElementCount = core.startingElementCount;
-
-				FastResize();
-			}
-			if (attribute == LevelEditorCore.PCPanelAttribute.Team) {
-				Cell.Team = core.team;
-				if (Cell.Team != Team.ALLIED && Cell.Team != Team.NEUTRAL) {
-					core.AddCell(this);
-				}
-			}
-			if (attribute == LevelEditorCore.PCPanelAttribute.Max) {
-				Cell.MaxElements = core.maxElementCount;
-
-				FastResize();
-			}
-			if (attribute == LevelEditorCore.PCPanelAttribute.Regen) {
-				Cell.RegenPeriod = core.regenarationPeriod;
-			}
-			if (attribute == LevelEditorCore.PCPanelAttribute.Upgrades) {
-				//Array.Copy(UpgradeSlot.UpgradeInstances, upgrade_manager.upgrades, UpgradeSlot.UpgradeInstances.Length); //TODO
-				UpdateUpgradeVisual();
-			}
-			UpdateVisual();
-		}
 	}
 
 	private void UpdateUpgradeVisual() {
@@ -111,19 +77,20 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 		}
 	}
 
-	private void EditorModeUpdate(LevelEditorCore.Mode mode) {
-		if (isCellSelected == true) {
-			//print(gameObject.name + " is deselecting");
-			isCellSelected = false;
-		}
+	public void UpdateStats() {
+		Cell.ElementCount = core.StartElements;
+		Cell.MaxElements = core.MaxElements;
+		Cell.RegenPeriod = core.Regeneration;
+		FastResize();
+		UpdateVisual();
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
-		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
+		if (core.EditorMode == EditorMode.EditCells) {
 			pointerDownAtTime = Time.time;
 			lookForLongPress = true;
 		}
-		if (core.editorMode == LevelEditorCore.Mode.DeleteCells) {
+		if (core.EditorMode == EditorMode.DeleteCells) {
 			core.RemoveCell(gameObject.GetComponent<EditCell>());
 			Destroy(gameObject);
 		}
@@ -133,7 +100,6 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 		if (on) {
 			maxCellRadius.enabled = true;
 			maxCellRadius.transform.localScale = new Vector2(2 / maxCellRadius.transform.parent.localScale.x, (2 / maxCellRadius.transform.parent.localScale.x));
-			//Debug.LogWarning("I smell hardcoded BS!");
 		}
 		else {
 			maxCellRadius.enabled = false;
@@ -154,7 +120,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	}
 
 	public void OnPointerUp(PointerEventData eventData) {
-		if (core.editorMode == LevelEditorCore.Mode.EditCells) {
+		if (core.EditorMode == EditorMode.EditCells) {
 			if (lookForLongPress == false) {
 				isCellSelected = true;
 			}
@@ -162,12 +128,10 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				isCellSelected = !isCellSelected;
 			}
 			if (isCellSelected) {
-				core.isUpdateSentByCell = true;
-				core.team = Cell.Team;
-				core.startingElementCount = Cell.ElementCount;
-				core.regenarationPeriod = Cell.RegenPeriod;
-				core.maxElementCount = Cell.MaxElements;
-				core.isUpdateSentByCell = false;
+				core.Team = Cell.Team;
+				core.StartElements = Cell.ElementCount;
+				core.Regeneration = Cell.RegenPeriod;
+				core.MaxElements = Cell.MaxElements;
 				EnableCircle(Color.magenta);
 			}
 		}
@@ -178,13 +142,13 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	public bool isCellSelected {
 		get { return _isCellSelected; }
 		set {
-			if (value == true) {
-				OnCellSelected(this);
+			if (value) {
+				OnCellSelected?.Invoke(this,this);
 				cellSelectedRenderer.enabled = true;
 				upgrade_manager.ToggleUpgradeInteraction(true);
 			}
 			else {
-				OnCellDeselected(this);
+				OnCellDeselected?.Invoke(this, this);
 				cellSelectedRenderer.enabled = false;
 				upgrade_manager.ToggleUpgradeInteraction(false);
 			}

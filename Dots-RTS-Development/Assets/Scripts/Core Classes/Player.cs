@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IAlly {
+public class Player : IAlly {
 
 	public Team Team { get; set; } = Team.ALLIED;
 
@@ -11,14 +11,9 @@ public class Player : MonoBehaviour, IAlly {
 
 	public List<GameCell> MyCells { get; } = new List<GameCell>();
 
+	public List<GameCell> Selection { get; } = new List<GameCell>();
 
-	private void Start() {
-		foreach (GameCell cell in PlayManager.cells) {
-			if (cell.Cell.Team == Team.ALLIED) {
-				MyCells.Add(cell);
-			}
-		}
-	}
+
 
 	#region Ally/Target manipulation
 	public bool IsAllyOf(IAlly other) {

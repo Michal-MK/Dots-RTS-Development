@@ -9,7 +9,9 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 
 	public GameObject populateWithPrefab;
 
-	private void Start() {
+	public List<EditorUpgradePicker> Instances { get; set; } = new List<EditorUpgradePicker>();
+
+	public void Initialize() {
 		if (SceneManager.GetActiveScene().name == Scenes.UPGRADE_SHOP) {
 			PopulateStore();
 		}
@@ -27,9 +29,9 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 
 		for (int i = 0; i < Enum.GetValues(typeof(Upgrades)).Length; i++) {
 			if (upgrades[i] != Upgrades.NONE) {
-				UpgradePickerInstance instance = Instantiate(populateWithPrefab, transform).GetComponent<UpgradePickerInstance>();
+				EditorUpgradePicker instance = Instantiate(populateWithPrefab, transform).GetComponent<EditorUpgradePicker>();
 				instance.gameObject.name = upgradeNames[i];
-				instance.upgrade = upgrades[i];
+				instance.Upgrade = upgrades[i];
 
 				if ((int)upgrades[i] <= 99) {
 					instance.UpgradeType = UpgradeType.OFFENSIVE;
@@ -44,6 +46,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 				if (Upgrade.UPGRADE_GRAPHICS.TryGetValue(upgrades[i], out s)) {
 					instance.upgradeImg.sprite = s;
 				}
+				Instances.Add(instance);
 			}
 		}
 	}

@@ -30,14 +30,14 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	protected float expandChoiceProbability = 0;
 	protected float defendChoiceProbability = 0;
 
-	private string s = "";
+	public PlayManager playManager;
 
 	//Sort cells on screen to lists by their team
 	protected virtual void Start() {
 		GameCell.TeamChanged += CellBehaviour_TeamChanged;
 
 		ConsiderAllies();
-
+		playManager = GameObject.Find(nameof(PlayManagerBehaviour)).GetComponent<PlayManagerBehaviour>().Instance;
 		print("AI " + getCurrentAiTeam + " Initialized!");
 	}
 
@@ -46,9 +46,9 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	}
 
 	public void FindRelationWithCells() {
-		for (int i = 0; i < PlayManager.cells.Count; i++) {
+		for (int i = 0; i < playManager.AllCells.Count; i++) {
 
-			GameCell current = PlayManager.cells[i];
+			GameCell current = playManager.AllCells[i];
 
 			if (current.Cell.Team == team) {
 				_aiCells.Add(current);
@@ -60,7 +60,7 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	}
 
 	//AI List sorting logic
-	private void CellBehaviour_TeamChanged(GameCell sender, Team previous, Team current) {
+	private void CellBehaviour_TeamChanged(object sender, CellTeamChangeEventArgs e /*GameCell sender, Team previous, Team current*/) {
 		/*
 		 * We have to cover all cases that can happen -- Only do them when the AI is active
 		 * (1.) Previous was Neutral
@@ -95,55 +95,55 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 		 */
 
 		if (isActive) {
-			if (previous == Team.NEUTRAL) {
+			if (e.Previous == Team.NEUTRAL) {
 
-				Enemy_AI currAI = (Enemy_AI)current;
+				Enemy_AI currAI = playManager.InitializedActors.GetAI(e.Current);
 
 				if (currAI == this) {
 					print("AI took over NEUTRAL---------------------");
 
-					currAI._aiCells.Add(sender);
-					UpdateCellLists(currAI, sender, true, true);
+					currAI._aiCells.Add(e.Cell);
+					UpdateCellLists(currAI, e.Cell, true, true);
 				}
 
 				else if (currAI == null) {
 					print("PLAYER took over NEUTRAL---------------------");
 
-					Player.MyCells.Add(sender);
-					UpdateCellLists(Player, sender, true, true);
+					Player.MyCells.Add(e.Cell);
+					UpdateCellLists(Player, e.Cell, true, true);
 				}
 
-				PlayManager.neutralCells.Remove(sender);
+				playManager.NeutralCells.Remove(e.Cell);
 			}
 
-			if (previous == Team.ALLIED) {
+			if (e.Previous == Team.ALLIED) {
 
-				Player.MyCells.Remove(sender);
-				UpdateCellLists(Player, sender, false, false);
+				Player.MyCells.Remove(e.Cell);
+				UpdateCellLists(Player, e.Cell, false, false);
 
-				Enemy_AI currAI = (Enemy_AI)current;
+				Enemy_AI currAI = playManager.InitializedActors.GetAI(e.Current);
 
 				if (currAI == this) {
 					print("AI took over PLAYER---------------------");
 
-					currAI._aiCells.Add(sender);
-					currAI._targets.Remove(sender);
-					UpdateCellLists(currAI, sender, true, true);
+					currAI._aiCells.Add(e.Cell);
+					currAI._targets.Remove(e.Cell);
+					UpdateCellLists(currAI, e.Cell, true, true);
 				}
 			}
 
-			if ((int)previous >= 2) {
-				Enemy_AI prevAI = (Enemy_AI)previous;
+			if (e.Previous > Team.ALLIED) {
+				Enemy_AI prevAI = playManager.InitializedActors.GetAI(e.Previous);
 
-				if (current == Team.ALLIED) {
+				if (e.Current == Team.ALLIED) {
 					print("PLAYER took over AI---------------------");
 
-					UpdateCellLists(Player, sender, true, true);
+					UpdateCellLists(Player, e.Cell, true, true);
 
 					if (prevAI == this) {
-						prevAI._aiCells.Remove(sender);
+						prevAI._aiCells.Remove(e.Cell);
 
-						UpdateCellLists(prevAI, sender, false, false);
+						UpdateCellLists(prevAI, e.Cell, false, false);
 
 						if (Player.IsAllyOf(prevAI)) {
 							print("Y u took my cell ;.;");
@@ -154,21 +154,21 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 				else {
 					print("AI took over AI---------------------");
 
-					Enemy_AI currAI = (Enemy_AI)current;
+					Enemy_AI currAI = playManager.InitializedActors.GetAI(e.Current);
 
 					if (prevAI == this) {
-						prevAI._aiCells.Remove(sender);
+						prevAI._aiCells.Remove(e.Cell);
 
-						UpdateCellLists(prevAI, sender, false, false);
+						UpdateCellLists(prevAI, e.Cell, false, false);
 
-						if(prevAI._aiCells.Count == 0) {
+						if (prevAI._aiCells.Count == 0) {
 							DisableAI(this);
 						}
 
 						if (prevAI.IsAllyOf(currAI)) {
 							print("Y U Took me cell bro...?");
 							print(prevAI.gameObject.name + " Will be adding as an Ally");
-							currAI._allies.Remove(sender);
+							currAI._allies.Remove(e.Cell);
 						}
 						else if (prevAI.IsTargetOf(currAI)) {
 							print(prevAI.gameObject.name + " Will be adding as a Target");
@@ -176,11 +176,10 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 					}
 
 					if (currAI == this) {
-						currAI._aiCells.Add(sender);
-						currAI._targets.Remove(sender);
+						currAI._aiCells.Add(e.Cell);
+						currAI._targets.Remove(e.Cell);
 
-						UpdateCellLists(currAI, sender, true, true);
-
+						UpdateCellLists(currAI, e.Cell, true, true);
 					}
 				}
 			}
@@ -192,13 +191,13 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 
 	//Update this AI's allies and targets
 	private void ConsiderAllies() {  //Needs revalidtion / rewrite
-		if(gameObject.name == "AI code 1 enemy 2") {
+		if (gameObject.name == "AI code 1 enemy 2") {
 			print("");
 		}
 
 		//Loop through all allied IAllies
 		for (int j = 0; j < Allies.Count; j++) {
-			IAlly currentAlly = Allies[j];																					//print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
+			IAlly currentAlly = Allies[j];                                                                                  //print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
 
 			//Loop though all aiCells of the allied IAlly
 			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
@@ -413,24 +412,5 @@ public class Enemy_AI : MonoBehaviour, IAlly {
 	/// </summary>
 	public Player Player { get; set; }
 
-	/// <summary>
-	/// Cast Cell.enmTeam into a Enemy_AI script
-	/// </summary>
-	public static explicit operator Enemy_AI(Team team) {
-		int index = (int)team - 2;
-		if (index < 0) {
-			return null;
-		}
-		else {
-			foreach (Enemy_AI ai in Initialize_AI.AIs) {
-				if (ai.team == team) {
-					return ai;
-				}
-			}
-			Debug.LogError("AIs doesn't have an ai with team " + team);
-			return null;
-		}
-	}
 	#endregion
-
 }

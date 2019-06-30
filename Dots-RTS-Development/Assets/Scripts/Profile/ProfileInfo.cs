@@ -18,7 +18,7 @@ public class ProfileInfo : MonoBehaviour {
 	#endregion
 
 	public void LoadProfile() {
-		if (Input.GetKey(KeyCode.A)){;
+		if (Input.GetKey(KeyCode.A)) {
 			foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {
 				if (u != Upgrades.NONE) {
 					ProfileManager.CurrentProfile.AcquiredUpgrades[u] = 8;
@@ -26,12 +26,7 @@ public class ProfileInfo : MonoBehaviour {
 			}
 			ProfileManager.SerializeChanges();
 		}
-		if (Control.DebugSceneIndex > 1) {
-			SceneManager.LoadScene(Control.DebugSceneIndex);
-		}
-		else {
-			SceneManager.LoadScene(Scenes.MENU);
-		}
+		SceneLoader.Instance.Load(Scenes.MENU, null);
 	}
 
 	public void InitializeProfile(Profile p, string profileName) {
@@ -48,15 +43,15 @@ public class ProfileInfo : MonoBehaviour {
 
 		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(ProfileManager.CurrentProfile.CurrentCampaignLevel.Difficulty, ProfileManager.CurrentProfile.CurrentCampaignLevel.LevelID);
 
-		if(campaignLevel != null) {
+		if (campaignLevel != null) {
 			Texture2D tex = new Texture2D(160, 90);
 			try {
-				tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
+				tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.LevelPreviewImagePath));
 			}
 			catch (FileNotFoundException e) {
 				print($"File {e.FileName} Not Found! --> No Level texture will be shown.");
 			}
-			UI_ReferenceHolder.PO_OnLevel.text = campaignLevel.game.levelInfo.levelName;
+			UI_ReferenceHolder.PO_OnLevel.text = campaignLevel.Data.SaveMeta.LevelName;
 			UI_ReferenceHolder.PO_OnLevelImage.texture = tex;
 		}
 		else {

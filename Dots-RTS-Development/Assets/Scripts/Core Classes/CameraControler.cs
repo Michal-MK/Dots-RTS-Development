@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public class CameraControler : MonoBehaviour {
-	public Camera c;
 	public RectTransform background;
 
 	private Vector3 defaultPos;
@@ -33,36 +32,36 @@ public class CameraControler : MonoBehaviour {
 
 	void Start() {
 		defaultPos = transform.position;
-		defaultSize = c.orthographicSize;
+		defaultSize = Camera.main.orthographicSize;
 	}
 
 	private void OnBeginUpgrading(Upgrade_Manager sender) {
-		c = Camera.main;
+		Camera cam = Camera.main;
 		if (defaultSize == 0) {
-			c.orthographicSize = defaultSize;
+			cam.orthographicSize = defaultSize;
 			print(defaultSize);
 		}
 
-		c.orthographicSize *= 0.5f;
+		cam.orthographicSize *= 0.5f;
 
 		Vector3 newPos = sender.transform.position + (Vector3.back * 10);
 
 		SpriteRenderer bg = GameObject.Find("Background").GetComponent<SpriteRenderer>();
 
-		camVertDiff = (newPos.y + c.orthographicSize) - (bg.transform.position.y + bg.size.y / 2);
+		camVertDiff = (newPos.y + cam.orthographicSize) - (bg.transform.position.y + bg.size.y / 2);
 		//print("Diff to TOP " + camVertDiff);
 
-		camHorDiff = (newPos.x + c.orthographicSize * c.aspect) - (bg.transform.position.x + bg.size.x / 2);
+		camHorDiff = (newPos.x + cam.orthographicSize * cam.aspect) - (bg.transform.position.x + bg.size.x / 2);
 		//print("Diff to RIGHT " + camHorDiff);
 
-		camHorDiffL = (newPos.x - c.orthographicSize * c.aspect) - (bg.transform.position.x - bg.size.x / 2);
+		camHorDiffL = (newPos.x - cam.orthographicSize * cam.aspect) - (bg.transform.position.x - bg.size.x / 2);
 		//print("Diff to LEFT " + camHorDiffL);
 
-		camVertDiffB = (newPos.y - c.orthographicSize) - (bg.transform.position.y - bg.size.y / 2);
+		camVertDiffB = (newPos.y - cam.orthographicSize) - (bg.transform.position.y - bg.size.y / 2);
 		//print("Diff to BOTTOM " + camVertDiffB);
 
 
-		Vector3 percentage = c.WorldToViewportPoint(newPos);
+		Vector3 percentage = cam.WorldToViewportPoint(newPos);
 
 
 		//RightSide
@@ -87,8 +86,8 @@ public class CameraControler : MonoBehaviour {
 
 		if (percentage.y <= 0.1f) {
 			//print("A");
-			Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.3f));
-			Vector3 pointD = c.ViewportToWorldPoint(new Vector3(0.5f, 0));
+			Vector3 pointU = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.3f));
+			Vector3 pointD = cam.ViewportToWorldPoint(new Vector3(0.5f, 0));
 
 			float d = Vector3.Distance(pointU, pointD);
 
@@ -101,15 +100,15 @@ public class CameraControler : MonoBehaviour {
 		}
 		else {
 			//print("C");
-			Vector3 pointU = c.ViewportToWorldPoint(new Vector3(0.5f, 0.65f));
-			float d = Vector3.Distance(c.transform.position, pointU);
+			Vector3 pointU = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.65f));
+			float d = Vector3.Distance(cam.transform.position, pointU);
 			transform.position = new Vector3(newPos.x, newPos.y - d, newPos.z);
 		}
 	}
 
 	private void OnQuitUpgrading(Upgrade_Manager sender) {
 		//print("Cam Def Size " + defaultSize);
-		c.orthographicSize = defaultSize;
+		Camera.main.orthographicSize = defaultSize;
 		transform.position = defaultPos;
 	}
 }

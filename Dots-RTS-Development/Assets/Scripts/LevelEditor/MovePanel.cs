@@ -19,9 +19,11 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 	#region Events
 	void Start() {
 		Control.RMBPressed += Control_RMBPressed;
+		Control.OnPauseStateChanged += ToggleControlsPanel;
 	}
 	void OnDestroy() {
 		Control.RMBPressed -= Control_RMBPressed;
+		Control.OnPauseStateChanged -= ToggleControlsPanel;
 	}
 	#endregion
 
@@ -57,12 +59,11 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 		}
 		else if (eventData.clickCount == 2) {
 			StartCoroutine(MoveToAnchor(0, 2));
-
 		}
 	}
 
-	public void ToggleControlsPanel() {
-		if (Control.isPaused) {
+	public void ToggleControlsPanel(object sender, bool state) {
+		if (state) {
 			StartCoroutine(MoveToAnchor(0, 2));
 		}
 		else {
@@ -70,32 +71,28 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 		}
 	}
 
-	private void Control_RMBPressed(Vector2 position) {
-		print("Here");
+	private void Control_RMBPressed(object _, EventArgs __) {
 		if (!isMoving) {
-			print("Is Not mowing Mowing");
 			if (!isShown) {
-				print("Is Shown");
 				StartCoroutine(MoveToAnchor(anchorDiffPercent, 2));
 			}
 			else {
-				print("Is not Shown");
 				StartCoroutine(MoveToAnchor(0, 2));
 			}
 		}
 	}
+
+
 	public IEnumerator MoveToAnchor(float topAnchor, float speedMultiplyer) {
 		float initialTopAnchor = CSTransform.anchorMax.y;
 
 		isMoving = true;
 		for (float time = 0; time < 1f; time += Time.unscaledDeltaTime * speedMultiplyer) {
-			//print(time + " " + speedMultiplyer);
 			CSTransform.anchorMin = new Vector2(0, Mathf.SmoothStep(initialTopAnchor - anchorDiffPercent, topAnchor - anchorDiffPercent, time));
 			CSTransform.anchorMax = new Vector2(1, Mathf.SmoothStep(initialTopAnchor, topAnchor, time));
 			yield return null;
 		}
 		isMoving = false;
-		print("Done Mowing");
 
 		if (topAnchor == anchorDiffPercent) {
 			isShown = true;

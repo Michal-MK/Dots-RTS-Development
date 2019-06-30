@@ -1,113 +1,83 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
 
-public class LoadFromFile : MonoBehaviour { //TODO Decipher the code
+public class LoadFromFile : MonoBehaviour {
 
 	public GameObject cellPrefab;
-	public Initialize_AI init;
 
-	private void Start() {
-		if (File.Exists(PlayerPrefs.GetString("LoadLevelFilePath"))) {
-			gameObject.SendMessage("FoundAFile", SendMessageOptions.DontRequireReceiver);
-			Debug.LogWarning("FoundAFile does not have a receiver.");
-		}
-		else {
-			gameObject.SendMessage("NoFileFound");
-			return;
-		}
+	[HideInInspector]
+	public string FilePath { get; set; }
 
-		using (FileStream file = File.Open(PlayerPrefs.GetString("LoadLevelFilePath"), FileMode.Open)) {
+	private PlayManager playManager;
+
+
+
+	public void Load(string filePath, PlayManager instance) {
+		playManager = instance;
+		FilePath = filePath;
+
+		using (FileStream file = File.Open(filePath, FileMode.Open)) {
 			BinaryFormatter formatter = new BinaryFormatter();
 
-			SaveData customSave;
-			SaveDataCampaign campaignSave;
-
-			if (PlayManager.levelState == PlayManager.PlaySceneState.CUSTOM) {
-				customSave = (SaveData)formatter.Deserialize(file);
-				if (customSave.gameSize != 0) {
-					Camera.main.orthographicSize = customSave.gameSize;
-				}
-				GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
-				
-
-				for (int j = 0; j < customSave.cells.Count; j++) {
-
-					GameCell c = cellPrefab.GetComponent<GameCell>();
-
-					c.Cell.CellPosition = (Vector3)customSave.cells[j].pos;
-					c.gameObject.transform.position = c.Cell.CellPosition;
-					c.Cell.ElementCount = customSave.cells[j].elementCount;
-					c.Cell.MaxElements = customSave.cells[j].maxElementCount;
-					c.Cell.Team = (Team)customSave.cells[j].team;
-					c.Cell.RegenPeriod = customSave.cells[j].regenerationPeriod;
-
-					GameCell cg = Instantiate(cellPrefab).GetComponent<GameCell>();
-
-					cg.uManager.PreinstallUpgrades(customSave.cells[j].installedUpgrades);
-					cg.gameObject.name = "Cell " + j + " " + c.Cell.Team;
-					cg.enabled = true;
-				}
-				init.StartAiInitialization(customSave.clans, customSave.difficulty);
+			if (instance.LevelState == PlaySceneState.CAMPAIGN) {
+				LoadCampaign(formatter, file);
 			}
-
-			else if (PlayManager.levelState == PlayManager.PlaySceneState.CAMPAIGN) {
-				campaignSave = (SaveDataCampaign)formatter.Deserialize(file);
-				if (campaignSave.game.gameSize != 0) {
-					Camera.main.orthographicSize = campaignSave.game.gameSize;
-				}
-				GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(campaignSave.game.savedAtAspect);
-
-				for (int j = 0; j < campaignSave.game.cells.Count; j++) {
-
-					GameCell c = Instantiate(cellPrefab).GetComponent<GameCell>();
-
-					c.Cell.CellPosition= (Vector3)campaignSave.game.cells[j].pos;
-					c.gameObject.transform.position = c.Cell.CellPosition;
-					c.Cell.ElementCount = campaignSave.game.cells[j].elementCount;
-					c.Cell.MaxElements = campaignSave.game.cells[j].maxElementCount;
-					c.Cell.Team = (Team)campaignSave.game.cells[j].team;
-					c.Cell.RegenPeriod = campaignSave.game.cells[j].regenerationPeriod;
-					//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
-
-					c.enabled = true;
-
-					c.UpdateCellInfo();
-				}
-				init.StartAiInitialization(campaignSave.game.clans, campaignSave.game.difficulty);
-
-			}
-			else if (PlayManager.levelState == PlayManager.PlaySceneState.PREVIEW) {
-				gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
-				customSave = (SaveData)formatter.Deserialize(file);
-				if (customSave.gameSize != 0) {
-					Camera.main.orthographicSize = customSave.gameSize;
-				}
-				GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(customSave.savedAtAspect);
-
-				for (int j = 0; j < customSave.cells.Count; j++) {
-
-					GameCell c = Instantiate(cellPrefab).GetComponent<GameCell>();
-
-					c.Cell.CellPosition = (Vector3)customSave.cells[j].pos;
-					c.gameObject.transform.position = c.Cell.CellPosition;
-					c.Cell.ElementCount = customSave.cells[j].elementCount;
-					c.Cell.MaxElements = customSave.cells[j].maxElementCount;
-					c.Cell.Team = (Team)customSave.cells[j].team;
-					c.Cell.RegenPeriod = customSave.cells[j].regenerationPeriod;
-					//c.um.upgrades = save.cells[j].installedUpgrades.upgrade;
-
-					c.enabled = true;
-
-					c.UpdateCellInfo();
-				}
-				init.StartAiInitialization(customSave.clans, customSave.difficulty);
+			else if (instance.LevelState == PlaySceneState.CUSTOM) {
+				LoadCustom(formatter, file);
 			}
 			else {
-				//SceneManager.LoadScene(Scenes.PROFILES);
-				Debug.Break();
+				LoadPreview(formatter, file);
+			}
+		}
+	}
+
+	private void LoadPreview(BinaryFormatter formatter, FileStream file) {
+		gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
+		CommonSetup((SaveData)formatter.Deserialize(file));
+	}
+
+	private void LoadCustom(BinaryFormatter formatter, FileStream file) {
+		CommonSetup((SaveData)formatter.Deserialize(file));
+	}
+
+	private void LoadCampaign(BinaryFormatter formatter, FileStream file) {
+		CommonSetup(((SaveDataCampaign)formatter.Deserialize(file)).Data);
+	}
+
+	private void CommonSetup(SaveData data) {
+		if (data.GameSize != 0) {
+			Camera.main.orthographicSize = data.GameSize;
+		}
+
+		GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(data.GameAcpect);
+		SetupCells(data.Cells);
+
+		playManager.InitializedActors.StartAiInitialization(data.Teams, data.Difficulties, playManager);
+	}
+
+	private void SetupCells(List<SerializedCell> cells) {
+		foreach (SerializedCell cell in cells) {
+			GameCell c = Instantiate(cellPrefab).GetComponent<GameCell>();
+			c.Cell.CellPosition = (Vector3)cell.Position;
+			c.gameObject.transform.position = c.Cell.CellPosition;
+
+			c.Cell.ElementCount = cell.Elements;
+			c.Cell.MaxElements = cell.MaximumElements;
+			c.Cell.Team = cell.Team;
+			c.Cell.RegenPeriod = cell.RegenPeriod;
+			c.uManager.PreinstallUpgrades(cell.InstalledUpgrades);
+			c.enabled = true;
+
+			c.UpdateCellInfo();
+			playManager.AllCells.Add(c);
+			if (c.Cell.Team == Team.NEUTRAL) {
+				playManager.NeutralCells.Add(c);
+			}
+			else if (c.Cell.Team == Team.ALLIED) {
+				playManager.Player.MyCells.Add(c);
 			}
 		}
 	}

@@ -62,10 +62,7 @@ public class SaveFileInfo : MonoBehaviour {
 		else {
 			s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
 		}
-
-		PlayManager.levelState = PlayManager.PlaySceneState.CUSTOM;
-		PlayerPrefs.SetString("LoadLevelFilePath", s);
-		SceneManager.LoadScene(Scenes.GAME);
+		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.CUSTOM, s);
 	}
 
 	public void DeleteObject(Transform fileName) {
@@ -104,7 +101,7 @@ public class SaveFileInfo : MonoBehaviour {
 			fileName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name;
 		}
 		saveAndLoadEditor.Load(fileName);
-		UI_Manager.CloseMostRecent(2);
+		WindowManagement.Instance.CloseAll();
 	}
 	#endregion
 }

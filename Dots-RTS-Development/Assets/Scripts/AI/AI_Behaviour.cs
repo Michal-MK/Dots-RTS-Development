@@ -76,7 +76,7 @@ public class AI_Behaviour : Enemy_AI {
 	#region Function to preform ATTACKS, DEFENSES, EXPANSIONS
 	//Expand from - to
 	private void Expand(GameCell selectedCell, GameCell toTarget) {
-		if (PlayManager.neutralCells.Count == 0) {
+		if (playManager.NeutralCells.Count == 0) {
 			print("Expanding to NONE -- return;");
 			return;
 		}
@@ -158,7 +158,7 @@ public class AI_Behaviour : Enemy_AI {
 			}
 
 			//Neutral cell selection
-			if (PlayManager.neutralCells.Count != 0) {
+			if (playManager.NeutralCells.Count != 0) {
 				ss += "Selecting Neutral | ";
 				selectedNeutralCell = ExpandCellSelector();
 			}
@@ -322,8 +322,8 @@ public class AI_Behaviour : Enemy_AI {
 
 		int elementRecord = 99999;
 		int recordIndex = -1;
-		for (int i = 0; i < PlayManager.neutralCells.Count; i++) {
-			current = PlayManager.neutralCells[i];
+		for (int i = 0; i < playManager.NeutralCells.Count; i++) {
+			current = playManager.NeutralCells[i];
 
 			//If there is still posibility to expand just return the curent cell
 			if (UnityEngine.Random.Range(0, 10) < 4) {
@@ -346,7 +346,7 @@ public class AI_Behaviour : Enemy_AI {
 		}
 		//20% return the best cell you found
 		expandChoiceProbability = 0.2f;
-		return PlayManager.neutralCells[recordIndex];
+		return playManager.NeutralCells[recordIndex];
 	}
 
 	public GameCell AiAidSelector() {

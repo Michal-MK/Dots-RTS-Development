@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class MainMenuUI : MonoBehaviour {
@@ -5,9 +6,10 @@ public class MainMenuUI : MonoBehaviour {
 	// Turns OFF the game
 	public void ExitGame() {
 		if (GameEnvironment.IsEditor) {
-			UnityEditor.EditorApplication.isPlaying = false;
+#if UNITY_EDITOR
+			EditorApplication.isPlaying = false;
+#endif
 		}
-
 		Application.Quit();
 	}
 
@@ -22,20 +24,11 @@ public class MainMenuUI : MonoBehaviour {
 		}
 
 		UI_ReferenceHolder.LS_canvasBase.SetActive(false);
-		//UI_ReferenceHolder.centralToMainMenu.SetActive(false);
-		//UI_ReferenceHolder.campaignButton.SetActive(false);
-		//UI_ReferenceHolder.customButton.SetActive(false);
-		//UI_ReferenceHolder.buyUpgradesSceneButton.SetActive(false);
-
 	}
 
 	public void ReturnToDefaultScreen() {
 		UI_ReferenceHolder.LS_rectCampaign.anchoredPosition = new Vector3(-2048, 0);
 		UI_ReferenceHolder.LS_rectCustom.anchoredPosition = new Vector3(2048, 0);
 		UI_ReferenceHolder.LS_canvasBase.SetActive(true);
-		//UI_ReferenceHolder.centralToMainMenu.SetActive(true);
-		//UI_ReferenceHolder.campaignButton.SetActive(true);
-		//UI_ReferenceHolder.customButton.SetActive(true);
-		//UI_ReferenceHolder.buyUpgradesSceneButton.SetActive(true);
 	}
 }

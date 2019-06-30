@@ -19,35 +19,11 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 	#endregion
 
-	#region EditorRefs
-	public static bool IsInLevelEditor;
-	//public static GameObject LE_saveLoadTryLevel;
-	public static GameObject LE_saveInfoPanel;
-	public static GameObject LE_gameSettingsPanel;
-	public static GameObject LE_teamPickerPanel;
-	public static GameObject LE_loadForEditPanel;
-	//public static GameObject LE_editorSettingsPanel;
-	public static GameObject LE_cellInputFields;
-	public static MovePanel LE_cellPanel;
-	public static Animator LE_editorSliderPanel;
-	public static GameObject LE_upgradePickerPanel;
-	//public static GameObject menuPanel;
-
-	#endregion
-
 	#region LevelSelectRefs
 	public static bool IsInLevelSelect;
 	public static RectTransform LS_rectCampaign;
 	public static RectTransform LS_rectCustom;
 	public static GameObject LS_canvasBase;
-	#endregion
-
-	#region LevelPlayerRefs
-	public static bool IsInGame;
-	public static GameObject MULTI_menuPanel;
-	public static RectTransform MULTI_upgradePanel;
-	public static TextMeshProUGUI LP_TypeUpgradeText;
-	public static Image LP_TypeUpgradeImage;
 	#endregion
 
 	#region LevelShareRefs
@@ -107,8 +83,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 
 		IsInDebug = false;
-		IsInGame = false;
-		IsInLevelEditor = false;
 		IsInLevelSelect = false;
 		IsInLevelShare = false;
 		IsInMainMenu = false;
@@ -121,22 +95,6 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				IsInMainMenu = true;
 				return;
 			}
-			case Scenes.LEVEL_EDITOR: { // Editor
-				Transform c = GameObject.Find("Canvas").transform;
-				//LE_editorSettingsPanel = c.Find("EditorSettingsPanel").gameObject;
-				LE_gameSettingsPanel = c.Find("GameSettingsPanel").gameObject;
-				LE_loadForEditPanel = c.Find("LoadPanel").gameObject;
-				LE_saveInfoPanel = c.Find("SavePanel").gameObject;
-				//LE_saveLoadTryLevel = c.Find("SaveOrLoad").gameObject;
-				LE_cellPanel = c.Find("CellPanel/Handle").GetComponent<MovePanel>();
-				LE_teamPickerPanel = c.Find("CellPanel/TeamSelectPanel").gameObject;
-				LE_cellInputFields = c.Find("CellPanel/CellEdit").gameObject;
-				MULTI_menuPanel = c.Find("MenuPanel").gameObject;
-				LE_editorSliderPanel = c.Find("Another Panel").GetComponent<Animator>();
-				LE_upgradePickerPanel = c.Find("UPGRADE_Selection_To_UI").gameObject;
-				IsInLevelEditor = true;
-				return;
-			}
 			case Scenes.LEVEL_SELECT: { // LevelSelect
 				LS_rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 				LS_rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
@@ -144,22 +102,8 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				IsInLevelSelect = true;
 				return;
 			}
-			case Scenes.GAME: { //PlayScene
-				MULTI_menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("UPGRADE_Panel").GetComponent<RectTransform>();
-				LP_TypeUpgradeImage = MULTI_upgradePanel.transform.Find("UPGRADE_Types/TYPE_Holder/TYPE_Image").GetComponent<Image>();
-				LP_TypeUpgradeText = MULTI_upgradePanel.transform.Find("UPGRADE_Types/TYPE_Holder/TYPE_Name").GetComponent<TextMeshProUGUI>();
-				IsInGame = true;
-				return;
-			}
 			case Scenes.LEVEL_SHARE: { //Level Sharing
 				IsInLevelShare = true;
-				return;
-			}
-			case Scenes.DEBUG: { // DebugScene
-				MULTI_menuPanel = GameObject.Find("Canvas").transform.Find("MenuPanel").gameObject;
-				MULTI_upgradePanel = GameObject.Find("CanvasCamera").transform.Find("UPGRADE_Panel").GetComponent<RectTransform>();
-				IsInDebug = true;
 				return;
 			}
 			case Scenes.POST_GAME: { // PostGame Scene

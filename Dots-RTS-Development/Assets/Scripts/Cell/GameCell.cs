@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerDownHandler {
 
 	public static List<GameCell> cellsInSelection = new List<GameCell>();
-	public static event Control.TeamChanged TeamChanged;
+	public static event EventHandler<CellTeamChangeEventArgs> TeamChanged;
+	public event EventHandler<GameCell> OnSelectionAttempt;
 	public static GameCell lastEnteredCell = null;
 
 	public bool isSelected = false;
@@ -32,14 +35,10 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		cellSelectedRenderer = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
 		Cell.CellRadius = col.radius * transform.localScale.x;
+		Cell.coroutineRunner = this;
 
 		Cell.OnElementDecayed += (s, e) => { UpdateVisual(); };
 		Cell.OnElementGenerated += (s, e) => { UpdateVisual(); };
-
-		PlayManager.cells.Add(this);
-		if (Cell.Team == Team.NEUTRAL) {
-			PlayManager.neutralCells.Add(this);
-		}
 	}
 
 	private void Start() {
@@ -238,7 +237,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		Cell.ElementCount -= amoutOfDamage;
 
 		if (Cell.ElementCount < 0) {
-			TeamChanged?.Invoke(this, Cell.Team, element.Team);
+			TeamChanged?.Invoke(this, new CellTeamChangeEventArgs(this, Cell.Team, element.Team));
 
 			if (isSelected) {
 				ModifySelection(this);
@@ -256,7 +255,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	#endregion
 
 	public void UpdateCellInfo() {
-		if (!Cell.isRegenerating && (Cell.Team == Team.ALLIED || (int)Cell.Team >= 2)) {
+		if (!Cell.isRegenerating && Cell.Team >= Team.ALLIED) {
 			generateCoroutine = StartCoroutine(Cell.GenerateElements());
 		}
 		if (Cell.ElementCount > Cell.MaxElements) {
@@ -327,6 +326,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		lastEnteredCell = this;
 
 		if (Input.GetMouseButton(0) && Cell.Team == Team.ALLIED) {
+			OnSelectionAttempt?.Invoke(this, this);
 			ModifySelection(this);
 		}
 	}
@@ -336,6 +336,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
+		OnSelectionAttempt?.Invoke(this, this);
 		if (Cell.Team == Team.ALLIED) {
 			ModifySelection(this);
 		}

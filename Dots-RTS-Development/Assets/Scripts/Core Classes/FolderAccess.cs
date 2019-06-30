@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 
 class FolderAccess {
 	public static XDocument upgradeData;

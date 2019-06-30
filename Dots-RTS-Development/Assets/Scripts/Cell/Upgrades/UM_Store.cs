@@ -32,7 +32,7 @@ public class UM_Store : Upgrade_Manager {
 				}
 				else {
 					anim.GetComponent<TextMeshProUGUI>().text = $"You are missing\n{(cost - ProfileManager.CurrentProfile.Coins)} coins.";
-					anim.Play("Show");
+					anim.Play(AnimatorStates.Show);
 				}
 			}
 		}

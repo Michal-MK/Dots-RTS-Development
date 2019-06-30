@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using System;
 
-public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
+public class UpgradeSlot_UI : UpgradeSlot {
 
 	private Image uiSlot;
 	private Image uiSlotHighlight;
@@ -10,66 +10,44 @@ public class UpgradeSlot_UI : UpgradeSlot, IPointerClickHandler {
 	private Sprite transparent;
 	private Sprite highlight;
 
-	private static bool isSubscribed = false;
+	public LevelEditorUI UI;
 
-	public delegate void UiUpgradeClick(UpgradeSlot_UI slot);
-	public static event UiUpgradeClick OnUIUpgradeSlotClicked;
+	public event EventHandler<UpgradeSlot_UI> OnUIUpgradeSlotClicked;
+
+	//TODO a lot of hardcoded strings for scene references
 
 	// Use this for initialization
 	protected override void Start() {
 		base.Start();
-		if (!isSubscribed) {
-			UpgradePickerInstance.OnPickerClicked += UpgradePickerInstance_OnPickerClicked;
-			ClearUpgradeSlot.OnSlotClear += ClearUpgradeSlot_OnSlotClear;
-			UI_Manager.OnWindowClose += WindowClosed;
-		}
+		OnSlotClicked += UpgradeSlotClicked;
 		uiSlot = transform.Find("UpgradeImg").GetComponent<Image>();
 		uiSlotHighlight = transform.Find("Slot Highlight").GetComponent<Image>();
 
 		transparent = uiSlot.sprite;
 		highlight = uiSlotHighlight.sprite;
 		uiSlotHighlight.sprite = transparent;
-		UpgradeInstances[SlotID] = Type;
 	}
 
-	private void WindowClosed(Window changed) {
-		if(changed.window.name == "UPGRADE_Selection_To_UI") {
-			//highlightedSlot = null;//TODO
-			uiSlotHighlight.sprite = transparent;
-			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
-		}
+	private void UpgradeSlotClicked(object sender, UpgradeSlot e) {
+		UI.upgradeSelector.GetComponent<UpgradeSelector>().Setup(this);
+		OnUIUpgradeSlotClicked?.Invoke(this, this);
 	}
 
-	protected void ClearUpgradeSlot_OnSlotClear(UpgradeSlot clicked) {
-		if (clicked == this) {
-			ClearUpgradeSlot_OnSlotClear(clicked);
-			uiSlot.sprite = transparent;
-			UpgradeInstances[SlotID] = Type = Upgrades.NONE;
-		}
+	public void OnPickerPicked(object _, EditorUpgradePicker e) {
+		Extensions.Find<UpgradeSelector>().Clean(this);
+		Type = e.Upgrade;
+		uiSlot.sprite = e.upgradeImg.sprite;
+		uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
+		uiSlotHighlight.sprite = transparent;
+		Type = e.Upgrade;
 	}
 
-	protected override void OnDestroy() {
-		base.OnDestroy();
-		UpgradePickerInstance.OnPickerClicked -= UpgradePickerInstance_OnPickerClicked;
-		ClearUpgradeSlot.OnSlotClear -= ClearUpgradeSlot_OnSlotClear;
-	}
-
-	public void OnPointerClick(PointerEventData eventData) {
-		OnUIUpgradeSlotClicked?.Invoke(this);
-	}
-
-	private void UpgradePickerInstance_OnPickerClicked(object sendern, OnPickerClickedEventArgs e) {
-		if (e.Slot == this) {
-			Type = e.Instance.upgrade;
-			uiSlot.sprite = e.Instance.upgradeImg.sprite;
-			uiSlotHighlight.GetComponent<Animator>().SetTrigger("Stop");
-			uiSlotHighlight.sprite = transparent;
-			UpgradeInstances[SlotID] = e.Instance.upgrade;
-			UI_ReferenceHolder.LE_upgradePickerPanel.SetActive(false);
-		}
+	public void ClearSlot() {
+		uiSlot.sprite = transparent;
+		Type = Upgrades.NONE;
 	}
 
 	public override void ChangeUpgradeImage(Sprite newSprite) {
-		throw new System.NotImplementedException();
+		/*Pass*/
 	}
 }

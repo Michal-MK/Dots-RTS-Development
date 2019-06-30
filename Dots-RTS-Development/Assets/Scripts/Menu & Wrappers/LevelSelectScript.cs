@@ -59,9 +59,9 @@ public class LevelSelectScript : MonoBehaviour {
 
 				level.time.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
 				try {
-					level.levelName.text = info.levelInfo.levelName;
-					level.author.text = info.levelInfo.creator;
-					level.timeRaw = info.levelInfo.creationTime.ToString();
+					level.levelName.text = info.SaveMeta.LevelName;
+					level.author.text = info.SaveMeta.CreatorName;
+					level.timeRaw = info.SaveMeta.CreationTime.ToString();
 				}
 				catch {
 					error.text += "Error " + saves[i].Name;
@@ -97,18 +97,18 @@ public class LevelSelectScript : MonoBehaviour {
 			j = totalLevels;
 		}
 
-		for (int q = i; q < j; q++) {
-			if (q <= 4) {
-				CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
-				c.gameObject.name = "Level_" + (q + 1);
-				c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
-			}
-			else {
-				CampaignLevel c = Instantiate(campaignObject, campaignViewContent1).GetComponent<CampaignLevel>();
-				c.gameObject.name = "Level_" + (q + 1);
-				c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
-			}
-		}
+		//for (int q = i; q < j; q++) {
+		//	if (q <= 4) {
+		//		CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
+		//		c.gameObject.name = "Level_" + (q + 1);
+		//		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
+		//	}
+		//	else {
+		//		CampaignLevel c = Instantiate(campaignObject, campaignViewContent1).GetComponent<CampaignLevel>();
+		//		c.gameObject.name = "Level_" + (q + 1);
+		//		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
+		//	}
+		//}
 	}
 
 	//Looks for files that are smaller than 100 bytes, happens when download fails.

@@ -63,9 +63,9 @@ public class LevelMarket : MonoBehaviour {
 			try {
 				saves[i].downloadButton = download;
 				saves[i].gameObject.name = contents[i];
-				saves[i].levelNameAndAuthorTM.text = saveInfo.levelInfo.levelName;
-				saves[i].levelNameAndAuthorTM.text += " by <color=#2A8357FF>" + saveInfo.levelInfo.creator;
-				saves[i].timeTM.text = saveInfo.levelInfo.creationTime.ToShortDateString();
+				saves[i].levelNameAndAuthorTM.text = saveInfo.SaveMeta.LevelName;
+				saves[i].levelNameAndAuthorTM.text += " by <color=#2A8357FF>" + saveInfo.SaveMeta.CreatorName;
+				saves[i].timeTM.text = saveInfo.SaveMeta.CreationTime.ToShortDateString();
 			}
 			catch (System.Exception e) {
 				print("Something Failed " + e);

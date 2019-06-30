@@ -11,10 +11,10 @@ public class UM_Editor : Upgrade_Manager {
 	#endregion
 
 	private EditCell currentCell;
-	public UpgradeSlot[] upgradeSlots = new UpgradeSlot[8];
+	public UpgradeSlot_Cell[] upgradeSlots = new UpgradeSlot_Cell[8];
 
-	private void Start() {
-		GameObject uiUpgrades = UI_ReferenceHolder.LE_cellPanel.transform.parent.Find("UI_Upgrades").gameObject;
+	public void SetupUpgrades(LevelEditorUI UI) {
+		GameObject uiUpgrades = UI.upgradePickerButtons;
 
 		int i = 0;
 		foreach (UpgradeSlot slot in uiUpgrades.GetComponentsInChildren<UpgradeSlot>()) {
@@ -26,13 +26,22 @@ public class UM_Editor : Upgrade_Manager {
 		currentCell = GetComponent<EditCell>();
 	}
 
-	private void Slot_OnSlotClicked(object sender, OnUpgradeSlotClickedEventArgs e) {
-		print($"I belong to {(sender as UpgradeSlot).transform.parent.parent.name} you clicked slot {e.SlotID}");
+	private void Slot_OnSlotClicked(object sender, UpgradeSlot e) {
+		print($"I belong to {e.transform.parent.parent.name} you clicked slot {e.SlotID}");
 	}
 
 	private void OnDestroy() {
 		foreach (UpgradeSlot slot in upgradeSlots) {
 			slot.OnSlotClicked -= Slot_OnSlotClicked;
+		}
+	}
+
+	protected override void UpgradePreinstallSprites() {
+		for (int i = 0; i < upgradeSlots.Length; i++) {
+			if (upgrades[i] != Upgrades.NONE) {
+				upgradeSlots[i].selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[upgrades[i]];
+				upgradeSlots[i].selfSprite.size = Vector2.one * 25f;
+			}
 		}
 	}
 

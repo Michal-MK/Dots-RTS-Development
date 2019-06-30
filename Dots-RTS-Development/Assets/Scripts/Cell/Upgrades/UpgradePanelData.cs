@@ -13,12 +13,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	private static UM_InGame currentCell;
 
-	private static bool isSubscribed = false;
 	private static bool isListeningForSlot = true;
-
-	private void OnDestroy() {
-		isSubscribed = false;
-	}
 
 	void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.GAME || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
@@ -94,7 +89,8 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	//Stuff to do with instalation, moving numbers around
 	private void InstallUpgradeTo(object sender, OnUpgradeSlotClickedEventArgs e) {
-		e.Slot.OnSlotClicked -= InstallUpgradeTo;
+		//TODO 
+		//e.Slot.OnSlotClicked -= InstallUpgradeTo;
 		currentCell.InstallUpgrade(currentCell.cell.Cell, e.SlotID, type);
 		count--;
 		UpdateUpgradeOverview();

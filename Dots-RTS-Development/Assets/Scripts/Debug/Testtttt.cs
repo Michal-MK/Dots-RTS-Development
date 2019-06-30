@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Testtttt : MonoBehaviour {
 	public GameObject panel;
@@ -15,23 +16,20 @@ public class Testtttt : MonoBehaviour {
 
 	}
 
-	private void Control_RMBPressed(Vector2 position) {
+	private void Control_RMBPressed(object _, EventArgs __) {
 		if (!isShown) {
-			anim.SetTrigger("Show");
+			anim.SetTrigger(AnimatorStates.Show);
 			isShown = true;
 		}
 		else {
-			anim.SetTrigger("Hide");
+			anim.SetTrigger(AnimatorStates.Hide);
 			isShown = false;
 		}
 	}
 
 	private void LateUpdate() {
 		if (yPos != 0 && yPos != 200) {
-			//print(transform.anchoredPosition - new Vector2(transform.anchoredPosition.x, transform.anchoredPosition.y + yPos));
 			transform.anchoredPosition = (transform.anchoredPosition - new Vector2(transform.anchoredPosition.x, transform.anchoredPosition.y - yPos));
 		}
 	}
-
-
 }

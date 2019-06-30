@@ -4,9 +4,9 @@
 #if UNITY_EDITOR
 		IsEditor = true;
 #elif UNITY_STANDALONE
-			_inStandalone = true;
+			IsStandalone = true;
 #elif UNITY_ANDROID
-			_onAndroid = true;
+			IsAndroid = true;
 #endif
 	}
 
