@@ -6,14 +6,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ProfileInfo : MonoBehaviour {
-
-	public Profile selected;
+	private Profile selected;
 
 	public event EventHandler<OnProfileInfoDeletedEventArgs> OnProfileDeleted;
 
 	#region Prefab References
 	public TextMeshProUGUI profileName;
-	public RawImage careerLevel;
+	public RawImage campaignLevelImg;
 	public GameObject self;
 	#endregion
 
@@ -34,8 +33,16 @@ public class ProfileInfo : MonoBehaviour {
 		this.profileName.text = profileName;
 		Texture2D tex = new Texture2D(160, 90);
 		SaveDataCampaign campaignLevel = FolderAccess.GetCampaignLevel(p.CurrentCampaignLevel.Difficulty, p.CurrentCampaignLevel.LevelID);
-		//tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.preview));
-		careerLevel.texture = tex;
+		try {
+			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + campaignLevel.LevelPreviewImagePath));
+		}
+		catch (FileNotFoundException e) {
+			print($"File {e.FileName} Not Found! --> No Level texture will be shown.");
+		}
+		catch {
+			print($"An error occurred!");
+		}
+		campaignLevelImg.texture = tex;
 	}
 
 	public void ShowProfileInfo() {
@@ -67,7 +74,7 @@ public class ProfileInfo : MonoBehaviour {
 		UI_ReferenceHolder.PS_Canvas.SetActive(false);
 	}
 
-	public void HideProfileInfo() {
+	private void HideProfileInfo() {
 		UI_ReferenceHolder.PO_Canvas.SetActive(false);
 		UI_ReferenceHolder.PS_Canvas.SetActive(true);
 	}

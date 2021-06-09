@@ -6,7 +6,7 @@ public class InitializeActors {
 
 	public GameObject playerData;
 
-	public List<Enemy_AI> AIs = new List<Enemy_AI>();
+	public List<EnemyAI> AIs = new List<EnemyAI>();
 
 	private PlayManager playManager;
 
@@ -27,7 +27,7 @@ public class InitializeActors {
 		}
 
 		List<IAlly> InterfaceList = new List<IAlly>();
-		foreach (Enemy_AI ai in AIs) {
+		foreach (EnemyAI ai in AIs) {
 			InterfaceList.Add(ai);
 		}
 		InterfaceList.Add(playManager.Player);
@@ -66,7 +66,7 @@ public class InitializeActors {
 			}
 		}
 
-		foreach (Enemy_AI ai in AIs) {
+		foreach (EnemyAI ai in AIs) {
 			if (ai != null) {
 				ai.FindRelationWithCells();
 			}
@@ -77,7 +77,7 @@ public class InitializeActors {
 		GameObject aiHolder = new GameObject("AI code " + (int)team + " " + team);
 		//Select AI preset according to the enemy team
 
-		AI_Behaviour ai = aiHolder.AddComponent<AI_Behaviour>();
+		AIBehaviour ai = aiHolder.AddComponent<AIBehaviour>();
 		ai.decisionSpeed = decisionSpeed;
 		ai.playManager = playManager;
 		ai.team = team;
@@ -87,8 +87,8 @@ public class InitializeActors {
 	}
 
 
-	public Enemy_AI GetAI(Team team) {
-		foreach (Enemy_AI ai in AIs) {
+	public EnemyAI GetAI(Team team) {
+		foreach (EnemyAI ai in AIs) {
 			if (ai.Team == team) {
 				return ai;
 			}

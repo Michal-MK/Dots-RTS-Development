@@ -14,13 +14,13 @@ public class Profile {
 
 	public int UserMadeLevels { get; set; }
 
-	public int TotlaContributedLevels { get; set; }
+	public int TotalContributedLevels { get; set; }
 
 	public DateTime CreationDate { get; }
 
 	public string DataFilePath { get; }
 
-	public byte[] LevelImageDataFilePath { get; }
+	public byte[] LevelImageData { get; }
 
 	public int CompletedCampaignLevels { get; set; }
 
@@ -39,7 +39,7 @@ public class Profile {
 		CreationDate = DateTime.Now;
 	}
 
-	public Profile(string profileName, int startingConins = 0) : this() {
+	public Profile(string profileName) : this() {
 		Name = profileName;
 		CurrentCampaignLevel = new CampaignLevelCode(1, 1);
 		char sep = Path.DirectorySeparatorChar;

@@ -1,6 +1,5 @@
-﻿public class AnimatorStates {
-	public const string Hide = "Hide";
-	public const string Show = "Show";
-	public const string Idle = "Idle";
+﻿public static class AnimatorStates {
+	public const string HIDE = "Hide";
+	public const string SHOW = "Show";
+	public const string IDLE = "Idle";
 }
-

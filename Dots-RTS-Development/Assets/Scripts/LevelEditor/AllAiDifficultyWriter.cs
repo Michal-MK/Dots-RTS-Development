@@ -14,13 +14,11 @@ public class AllAiDifficultyWriter : MonoBehaviour {
 		myText.text = "";
 		Dictionary<Team, float>.KeyCollection teams = diffDict.Keys;
 		foreach (Team teamEnm in teams) {
-			//print(team);
-			float diff;
-			if (diffDict.TryGetValue(teamEnm, out diff)) {
+			if (diffDict.TryGetValue(teamEnm, out float diff)) {
 				myText.text += teamEnm + " does an action every " + diff + " seconds \n";
 			}
 			else {
-				myText.text += teamEnm  + "'s difficulty is not assinged \n";
+				myText.text += teamEnm  + "'s difficulty is not assigned \n";
 			}
 		}
 	}

@@ -1,23 +1,23 @@
+using System.Linq;
 using UnityEngine;
 
 public class Upgrade_Manager : MonoBehaviour {
 
 	public static bool isUpgrading = false;
 
-	public Upgrades[] upgrades = new Upgrades[8] {
+	public Upgrades[] upgrades = {
 		Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,
 	};
 
 	/// <summary>
 	/// Adds upgrades from a save file or otherwise defined source
 	/// </summary>
-	public void PreinstallUpgrades(Upgrades[] upgades) {
-		upgrades = upgades;
+	public void PreinstallUpgrades(Upgrades[] preinstallUpgrades) {
+		upgrades = preinstallUpgrades;
 		UpgradePreinstallSprites();
 	}
 
-	protected virtual void UpgradePreinstallSprites() {
-	}
+	protected virtual void UpgradePreinstallSprites() { }
 
 	/// <summary>
 	/// Installs upgrade to set slot
@@ -59,13 +59,8 @@ public class Upgrade_Manager : MonoBehaviour {
 	/// <summary>
 	/// Does the cell have this type of upgrade already?
 	/// </summary>
-	public bool HasUpgade(Upgrades type) {
-		for (int i = 0; i < upgrades.Length; i++) {
-			if (upgrades[i] == type) {
-				return true;
-			}
-		}
-		return false;
+	public bool HasUpgrade(Upgrades type) {
+		return upgrades.Any(t => t == type);
 	}
 
 	/// <summary>
@@ -73,26 +68,15 @@ public class Upgrade_Manager : MonoBehaviour {
 	/// </summary>
 	/// <param name="type"></param>
 	/// <returns>Amount of upgrades of type "type" in this cell.</returns>
-	public int HasUpgrade(Upgrades type) {
-		int _count = 0;
-		for (int i = 0; i < upgrades.Length; i++) {
-			if (upgrades[i] == type) {
-				_count++;
-			}
-		}
-		return _count;
+	public int GetUpgradeCount(Upgrades type) {
+		return upgrades.Count(t => t == type);
 	}
 
 	/// <summary>
 	/// Can player install additional upgrades?
 	/// </summary>
 	public bool HasFreeSlots() {
-		for (int i = 0; i < upgrades.Length; i++) {
-			if (upgrades[i] == Upgrades.NONE) {
-				return true;
-			}
-		}
-		return false;
+		return upgrades.Any(t => t == Upgrades.NONE);
 	}
 
 	public int GetFirstFreeSlot() {

@@ -1,4 +1,5 @@
 ﻿public interface IPauseableScene {
 
-	void SetPaused(object sender, bool state);
+	void Unpause(object sender);
+	void Pause(object sender);
 }

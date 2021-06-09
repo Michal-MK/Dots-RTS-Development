@@ -17,8 +17,8 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	public void TryLevel() {
 		string path = Save(true);
-		Extensions.Find<LevelEditScenePauseHandler>().SetPaused(this, false);
-		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.PREVIEW, path);
+		Extensions.Find<LevelEditScenePauseHandler>().Unpause(this);
+		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.Preview, path);
 		Time.timeScale = 1;
 	}
 
@@ -71,13 +71,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 					Elements = c.Cell.ElementCount,
 					MaximumElements = c.Cell.MaxElements,
 					Team = c.Cell.Team,
-					RegenPeriod = c.Cell.RegenPeriod,
+					RegenerationPeriod = c.Cell.RegenPeriod,
 					InstalledUpgrades = c.upgrade_manager.upgrades
 				};
 				save.Cells.Add(serCell);
 			}
 
-			save.GameAcpect = Camera.main.aspect;
+			save.GameAspect = Camera.main.aspect;
 			save.Difficulties = core.aiDifficultyDict;
 
 			save.GameSize = core.GameSize;
@@ -113,7 +113,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 				c.Cell.ElementCount = save.Cells[j].Elements;
 				c.Cell.MaxElements = save.Cells[j].MaximumElements;
 				c.Cell.Team = save.Cells[j].Team;
-				c.Cell.RegenPeriod = save.Cells[j].RegenPeriod;
+				c.Cell.RegenPeriod = save.Cells[j].RegenerationPeriod;
 				c.upgrade_manager.upgrades = save.Cells[j].InstalledUpgrades;
 				core.AddCell(c, true);
 				c.UpdateVisual();

@@ -23,21 +23,21 @@ public class WindowManagement : MonoBehaviour {
 
 	public int WindowCount => activeWindows.Count;
 
-	public int RealWindowCount = 0;
+	public int realWindowCount = 0;
 
 	public void AddWindow(Window win, bool show = true) {
 		if (activeWindows.ContainsKey(win.GetHashCode())) {
 			return;
 		}
-		RealWindowCount++;
+		realWindowCount++;
 		activeWindows.Add(win.GetHashCode(), win);
 		hashOrder.Push(win.GetHashCode());
-		if (win.WinType == WindowType.ACTIVATING) {
+		if (win.WinType == WindowType.Activating) {
 			win.WindowObject.SetActive(show);
 		}
 		else {
 			win.WindowObject.SetActive(show);
-			win.Animator.SetTrigger(AnimatorStates.Show);
+			win.Animator.SetTrigger(AnimatorStates.SHOW);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class WindowManagement : MonoBehaviour {
 		int hash = hashOrder.Peek();
 		Window win = activeWindows[hash];
 
-		if (win.WinType == WindowType.ACTIVATING) {
+		if (win.WinType == WindowType.Activating) {
 			win.WindowObject.SetActive(false);
 			hashOrder.Pop();
 			activeWindows.Remove(hash);
@@ -56,14 +56,14 @@ public class WindowManagement : MonoBehaviour {
 		else {
 			CloseAnimatingWindow(win);
 		}
-		RealWindowCount--;
+		realWindowCount--;
 		OnWindowChange?.Invoke(null, new WindowChangeEventArgs { Changed = win, IsOpening = false });
 	}
 
 	private IEnumerator DisableAfterAnimation(Window window) {
 		Button trigger = window.WindowTrigger as Button;
 
-		window.Animator.SetTrigger(AnimatorStates.Hide);
+		window.Animator.SetTrigger(AnimatorStates.HIDE);
 		if (trigger != null) {
 			trigger.enabled = false;
 		}
@@ -78,7 +78,7 @@ public class WindowManagement : MonoBehaviour {
 	}
 
 	private void CloseAnimatingWindow(Window win) {
-		win.Animator.SetTrigger(AnimatorStates.Hide);
+		win.Animator.SetTrigger(AnimatorStates.HIDE);
 		if (win.ShouldDisable) {
 			StartCoroutine(DisableAfterAnimation(win));
 		}
@@ -93,18 +93,18 @@ public class WindowManagement : MonoBehaviour {
 		foreach (int winHash in activeWindows.Keys) {
 			Window win = activeWindows[winHash];
 
-			if (win.WinType == WindowType.ACTIVATING) {
+			if (win.WinType == WindowType.Activating) {
 				win.WindowObject.SetActive(false);
 				int hash = hashOrder.Pop();
 			}
 			else {
 				CloseAnimatingWindow(win);
 			}
-			RealWindowCount--;
+			realWindowCount--;
 			OnWindowChange?.Invoke(null, new WindowChangeEventArgs { Changed = win, IsOpening = false });
 		}
 		activeWindows.Clear();
-		RealWindowCount = 0;
+		realWindowCount = 0;
 		Time.timeScale = 1;
 		Control.Script.PauseAttempt(null);
 	}
@@ -113,14 +113,14 @@ public class WindowManagement : MonoBehaviour {
 		foreach (int winHash in activeWindows.Keys) {
 			Window win = activeWindows[winHash];
 			if (win.WindowObject == window) {
-				if (win.WinType == WindowType.ACTIVATING) {
+				if (win.WinType == WindowType.Activating) {
 					win.WindowObject.SetActive(false);
 				}
 				else {
 					CloseAnimatingWindow(win);
 				}
 				activeWindows = new Dictionary<int, Window>(activeWindows.Where(w => w.Value.WindowObject != window).ToDictionary(w => w.Key, w => w.Value));
-				RealWindowCount--;
+				realWindowCount--;
 				OnWindowChange?.Invoke(null, new WindowChangeEventArgs { Changed = win, IsOpening = false });
 			}
 		}

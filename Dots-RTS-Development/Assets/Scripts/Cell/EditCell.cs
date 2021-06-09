@@ -17,12 +17,12 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	#endregion
 
 
-	private bool _isCellSelected = false;
+	private bool isCellSelected;
 
-	#region Press legth detection
+	#region Press length detection
 	private float pointerDownAtTime;
 	private bool longPress;
-	private float longPressTreshold = 0.8f;
+	private const float LONG_PRESS_THRESHOLD = 0.8f;
 	private bool lookForLongPress;
 	#endregion
 
@@ -40,14 +40,6 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 		Cell.CellRadius = col.radius * transform.localScale.x;
 		pointerDownAtTime = Mathf.Infinity;
-
-		//LevelEditorCore.modeChange += EditorModeUpdate;
-		//LevelEditorCore.panelValueParsed += RefreshCellFromPanel;
-	}
-
-	private void OnDisable() {
-		//LevelEditorCore.modeChange -= EditorModeUpdate;
-		//LevelEditorCore.panelValueParsed -= RefreshCellFromPanel;
 	}
 
 	public void FastResize() {
@@ -73,7 +65,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	private void UpdateUpgradeVisual() {
 		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
 			upgrade_manager.upgradeSlots[i].Type = upgrade_manager.upgrades[i];
-			upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[upgrade_manager.upgrades[i]]);
+			upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[upgrade_manager.upgrades[i]]);
 		}
 	}
 
@@ -90,7 +82,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 			pointerDownAtTime = Time.time;
 			lookForLongPress = true;
 		}
-		if (core.EditorMode == EditorMode.DeleteCells) {
+		else if (core.EditorMode == EditorMode.DeleteCells) {
 			core.RemoveCell(gameObject.GetComponent<EditCell>());
 			Destroy(gameObject);
 		}
@@ -108,7 +100,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 	private void Update() {
 		if (lookForLongPress) {
-			if (Time.time - pointerDownAtTime > longPressTreshold) {
+			if (Time.time - pointerDownAtTime > LONG_PRESS_THRESHOLD) {
 				longPress = true;
 				EnableCircle(Color.green);
 				lookForLongPress = false;
@@ -122,12 +114,12 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	public void OnPointerUp(PointerEventData eventData) {
 		if (core.EditorMode == EditorMode.EditCells) {
 			if (lookForLongPress == false) {
-				isCellSelected = true;
+				IsCellSelected = true;
 			}
 			else {
-				isCellSelected = !isCellSelected;
+				IsCellSelected = !IsCellSelected;
 			}
-			if (isCellSelected) {
+			if (IsCellSelected) {
 				core.Team = Cell.Team;
 				core.StartElements = Cell.ElementCount;
 				core.Regeneration = Cell.RegenPeriod;
@@ -139,8 +131,8 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 		lookForLongPress = false;
 	}
 
-	public bool isCellSelected {
-		get { return _isCellSelected; }
+	public bool IsCellSelected {
+		get => isCellSelected;
 		set {
 			if (value) {
 				OnCellSelected?.Invoke(this,this);
@@ -152,7 +144,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				cellSelectedRenderer.enabled = false;
 				upgrade_manager.ToggleUpgradeInteraction(false);
 			}
-			_isCellSelected = value;
+			isCellSelected = value;
 		}
 	}
 }

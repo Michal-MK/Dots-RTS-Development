@@ -34,16 +34,16 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 				instance.Upgrade = upgrades[i];
 
 				if ((int)upgrades[i] <= 99) {
-					instance.UpgradeType = UpgradeType.OFFENSIVE;
+					instance.UpgradeType = UpgradeType.Offensive;
 				}
 				else if ((int)upgrades[i] >= 100 && (int)upgrades[i] < 199) {
-					instance.UpgradeType = UpgradeType.DEFENSIVE;
+					instance.UpgradeType = UpgradeType.Defensive;
 				}
 				else {
-					instance.UpgradeType = UpgradeType.UTILITY;
+					instance.UpgradeType = UpgradeType.Utility;
 				}
 				Sprite s;
-				if (Upgrade.UPGRADE_GRAPHICS.TryGetValue(upgrades[i], out s)) {
+				if (Upgrade.UpgradeGraphics.TryGetValue(upgrades[i], out s)) {
 					instance.upgradeImg.sprite = s;
 				}
 				Instances.Add(instance);
@@ -73,7 +73,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		foreach (Image i in transform.Find("UPGRADE_Panel/ATK_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "ATK_Upgrades" && i.gameObject.name != "Image") {
 				try {
-					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+					i.sprite = Upgrade.UpgradeGraphics[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
 				catch (KeyNotFoundException) {
 					i.sprite = FolderAccess.GetNIYImage();
@@ -83,7 +83,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		foreach (Image i in transform.Find("UPGRADE_Panel/DEF_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "DEF_Upgrades" && i.gameObject.name != "Image") {
 				try {
-					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+					i.sprite = Upgrade.UpgradeGraphics[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
 				catch (KeyNotFoundException) {
 					i.sprite = FolderAccess.GetNIYImage();
@@ -93,7 +93,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		foreach (Image i in transform.Find("UPGRADE_Panel/UTIL_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "UTIL_Upgrades" && i.gameObject.name != "Image") {
 				try {
-					i.sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
+					i.sprite = Upgrade.UpgradeGraphics[(Upgrades)(int.Parse(string.Format(i.gameObject.name).Remove(0, 8)))];
 				}
 				catch (KeyNotFoundException) {
 					i.sprite = FolderAccess.GetNIYImage();

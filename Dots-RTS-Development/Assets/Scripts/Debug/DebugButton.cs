@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DebugButton : MonoBehaviour {
 
-	public Enemy_AI aiScript;
+	public EnemyAI aiScript;
 
 	public void ListMembers() {
 		//print("Targets-----------------------------------------");

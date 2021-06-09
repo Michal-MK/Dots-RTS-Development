@@ -1,7 +1,7 @@
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ProfileManager {
@@ -10,13 +10,13 @@ public class ProfileManager {
 
 	public static bool ProfileSelected => CurrentProfile != null;
 
-	public static ProfileManager Instance { get; set; }
+	public static ProfileManager Instance { get; private set; }
 
 	private readonly GameObject profileVisual;
 	private readonly Transform parentTransform;
 
-	private Button createProfile_Button;
-	private GameObject profileCreation;
+	private Button createProfileButton;
+	private readonly GameObject profileCreation;
 
 	public static ProfileManager Initialize(ProfileManagerBehaviour behaviour) {
 		if(Instance != null) {
@@ -29,8 +29,8 @@ public class ProfileManager {
 		Instance = this;
 		profileVisual = behaviour.profileVisual;
 		parentTransform = behaviour.listTransform;
-		createProfile_Button = GameObject.Find("NoProfiles").GetComponent<Button>();
-		createProfile_Button.gameObject.SetActive(false);
+		createProfileButton = GameObject.Find("NoProfiles").GetComponent<Button>();
+		createProfileButton.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
 	}
@@ -39,49 +39,43 @@ public class ProfileManager {
 		ListProfiles();
 	}
 
-	public void ProfileSelection() {
-		Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-		SceneManager.LoadScene(Scenes.PROFILES);
-	}
-
 	public void ListProfiles() {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
 
 		foreach (ProfileInfo pF in parentTransform?.GetComponentsInChildren<ProfileInfo>()) {
-			GameObject.Destroy(pF.gameObject);
+			Object.Destroy(pF.gameObject);
 		}
 
 		if (files.Length == 0) {
 			Debug.Log("No Profiles Found");
-			if (createProfile_Button == null) {
-				createProfile_Button = GameObject.Find("Content").transform.Find("NoProfiles").GetComponent<Button>();
+			if (createProfileButton == null) {
+				createProfileButton = GameObject.Find("Content").transform.Find("NoProfiles").GetComponent<Button>();
 			}
-			createProfile_Button.gameObject.SetActive(true);
-			createProfile_Button.onClick.RemoveAllListeners();
-			createProfile_Button.onClick.AddListener(() => ShowProfileCreation());
+			createProfileButton.gameObject.SetActive(true);
+			createProfileButton.onClick.RemoveAllListeners();
+			createProfileButton.onClick.AddListener(ShowProfileCreation);
 			return;
 		}
 
 		BinaryFormatter bf = new BinaryFormatter();
 
 		foreach (FileInfo f in files) {
-			using (FileStream fs = File.Open(f.FullName, FileMode.Open)) {
-				Profile p = (Profile)bf.Deserialize(fs);
-				ProfileInfo pI = GameObject.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
-				pI.name = f.FullName;
-				pI.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
-				pI.InitializeProfile(p, p.Name);
-			}
+			using FileStream fs = File.Open(f.FullName, FileMode.Open);
+			Profile p = (Profile)bf.Deserialize(fs);
+			ProfileInfo pI = Object.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
+			pI.name = f.FullName;
+			pI.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
+			pI.InitializeProfile(p, p.Name);
 		}
 	}
 
 	public void ShowProfileCreation() {
-		createProfile_Button.gameObject.SetActive(false);
+		createProfileButton.gameObject.SetActive(false);
 		profileCreation.SetActive(true);
 		Button creationB = GameObject.Find("CreateProfileButton").GetComponent<Button>();
 		creationB.onClick.RemoveAllListeners();
-		creationB.onClick.AddListener(() => CreateNewProfile());
+		creationB.onClick.AddListener(CreateNewProfile);
 		Debug.Log("Create");
 	}
 
@@ -91,13 +85,9 @@ public class ProfileManager {
 		if (name.Length < 3) {
 			Debug.Log("Invalid name");
 		}
-		foreach (char ch in Path.GetInvalidFileNameChars()) {
-			for (int i = 0; i < name.Length; i++) {
-				if (name[i] == ch) {
-					Debug.Log("Contains Invalid Character");
-					return;
-				}
-			}
+		if (Path.GetInvalidFileNameChars().Any(ch => name.Any(t => t == ch))) {
+			Debug.Log("Contains Invalid Character");
+			return;
 		}
 
 		BinaryFormatter bf = new BinaryFormatter();
@@ -114,8 +104,7 @@ public class ProfileManager {
 
 	public static void SerializeChanges() {
 		BinaryFormatter bf = new BinaryFormatter();
-		using (FileStream fs = new FileStream(CurrentProfile.DataFilePath, FileMode.Open)) {
-			bf.Serialize(fs, CurrentProfile);
-		}
+		using FileStream fs = new FileStream(CurrentProfile.DataFilePath, FileMode.Open);
+		bf.Serialize(fs, CurrentProfile);
 	}
 }

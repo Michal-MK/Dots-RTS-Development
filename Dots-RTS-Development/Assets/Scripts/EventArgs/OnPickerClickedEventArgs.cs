@@ -6,8 +6,8 @@ public class OnPickerClickedEventArgs : EventArgs {
 		Instance = instance;
 	}
 
-	public UpgradeSlot Slot { get; set; }
+	public UpgradeSlot Slot { get; }
 
-	public EditorUpgradePicker Instance { get; set; }
+	public EditorUpgradePicker Instance { get; }
 
 }

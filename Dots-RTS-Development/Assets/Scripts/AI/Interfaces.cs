@@ -14,5 +14,3 @@ public interface IAlly {
 	void AddTarget(IAlly target);
 	void RemoveTarget(IAlly target);
 }
-
-

@@ -3,12 +3,12 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Global {
-	public static bool baseLoaded = false;
-	public static Dictionary<string, Sprite> spriteDictionary = new Dictionary<string, Sprite>();
+public static class Global {
+	public static bool baseLoaded;
+	public static readonly Dictionary<string, Sprite> spriteDictionary = new Dictionary<string, Sprite>();
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-	static async void Start() {
+	static void Start() {
 
 		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves");
@@ -20,17 +20,23 @@ public class Global {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		}
 
-		List<Task> tasks = new List<Task>();
-		tasks.Add(Upgrade.FillUpgradeSpriteDict());
+		List<Task> tasks = new List<Task> { Upgrade.FillUpgradeSpriteDict() };
 
-		await Task.WhenAll(tasks);
-
-		baseLoaded = true;
+		try {
+			_ = Task.Run(async () => {
+				await Task.WhenAll(tasks);
+				baseLoaded = true;
+			});
+		}
+		catch {
+			// TODO Log
+			Application.Quit(1);
+		}
 	}
 }
 
 namespace UnityEngine.SceneManagement {
-	class Scenes {
+	public static class Scenes {
 		public const string PROFILES = "Profiles";
 		public const string MENU = "Main_Menu";
 		public const string LEVEL_EDITOR = "Level_Editor";

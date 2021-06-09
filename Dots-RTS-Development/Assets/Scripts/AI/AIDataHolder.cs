@@ -1,32 +1,32 @@
-﻿public class AI_Data_Holder {
+﻿public class AIDataHolder {
 
 	public enum RelationToAI {
-		ALLY,
-		TARGET,
-		SELF,
-		PLAYER
+		Ally,
+		Target,
+		Self,
+		Player
 	}
 
-	public AI_Data_Holder(Enemy_AI AI, GameCell cell) {
+	public AIDataHolder(EnemyAI AI, GameCell cell) {
 		this.AI = AI;
 		Sender = cell;
-		Relation = RelationToAI.SELF;
+		Relation = RelationToAI.Self;
 	}
 
-	public AI_Data_Holder(GameCell cell) {
+	public AIDataHolder(GameCell cell) {
 		AI = null;
 		Sender = cell;
-		Relation = RelationToAI.PLAYER;
+		Relation = RelationToAI.Player;
 	}
 
 	/// <summary>
 	/// When we create a new Holder object, and transform it, the initial AI is changed and the reference is updated to refer to "sender" in relation to initial AI
 	/// </summary>
 	/// <param name="data">The data to modify</param>
-	/// <param name="target">The Ally we are changing reference to</param>
-	public static AI_Data_Holder TransformForAlly(AI_Data_Holder data, Enemy_AI ally) {
+	/// <param name="ally">The Ally we are changing reference to</param>
+	public static AIDataHolder TransformForAlly(AIDataHolder data, EnemyAI ally) {
 		data.AI = ally;
-		data.Relation = RelationToAI.ALLY;
+		data.Relation = RelationToAI.Ally;
 
 		return data;
 	}
@@ -36,9 +36,9 @@
 	/// </summary>
 	/// <param name="data">The data to modify</param>
 	/// <param name="target">The Target we are changing reference to</param>
-	public static AI_Data_Holder TransformForTarget(AI_Data_Holder data, Enemy_AI target) {
+	public static AIDataHolder TransformForTarget(AIDataHolder data, EnemyAI target) {
 		data.AI = target;
-		data.Relation = RelationToAI.TARGET;
+		data.Relation = RelationToAI.Target;
 
 		return data;
 	}
@@ -46,7 +46,7 @@
 	/// <summary>
 	/// The AI for which this configuration is valid
 	/// </summary>
-	public Enemy_AI AI { get; private set; }
+	public EnemyAI AI { get; private set; }
 
 	/// <summary>
 	/// Get the cell that triggered creation of this script

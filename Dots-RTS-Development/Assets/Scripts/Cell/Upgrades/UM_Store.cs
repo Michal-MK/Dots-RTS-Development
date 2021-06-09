@@ -17,7 +17,7 @@ public class UM_Store : Upgrade_Manager {
 		Animator anim = GameObject.Find("Warning").GetComponent<Animator>();
 		//Preform some highlights
 
-		//Subtract total money + add the upgrade to proflie
+		//Subtract total money + add the upgrade to profile
 		int cost = Upgrade.GetCost((Upgrades)selectedUpgrade);
 
 		foreach (KeyValuePair<Upgrades, int> col in ProfileManager.CurrentProfile.AcquiredUpgrades) {
@@ -32,10 +32,9 @@ public class UM_Store : Upgrade_Manager {
 				}
 				else {
 					anim.GetComponent<TextMeshProUGUI>().text = $"You are missing\n{(cost - ProfileManager.CurrentProfile.Coins)} coins.";
-					anim.Play(AnimatorStates.Show);
+					anim.Play(AnimatorStates.SHOW);
 				}
 			}
 		}
-
 	}
 }

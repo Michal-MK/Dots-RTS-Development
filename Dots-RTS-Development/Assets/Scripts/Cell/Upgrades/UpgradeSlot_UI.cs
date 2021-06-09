@@ -16,7 +16,7 @@ public class UpgradeSlot_UI : UpgradeSlot {
 
 	//TODO a lot of hardcoded strings for scene references
 
-	// Use this for initialization
+
 	protected override void Start() {
 		base.Start();
 		OnSlotClicked += UpgradeSlotClicked;

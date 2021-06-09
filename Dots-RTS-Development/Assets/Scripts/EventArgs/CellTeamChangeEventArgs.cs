@@ -2,13 +2,13 @@
 
 public class CellTeamChangeEventArgs : EventArgs {
 
-	public CellTeamChangeEventArgs(GameCell cell, Team prev, Team curr) {
+	public CellTeamChangeEventArgs(GameCell cell, Team prev, Team cur) {
 		Cell = cell;
 		Previous = prev;
-		Current = curr;
+		Current = cur;
 	}
 
-	public GameCell Cell { get; set; }
-	public Team Previous { get; set; }
-	public Team Current { get; set; }
+	public GameCell Cell { get; }
+	public Team Previous { get; }
+	public Team Current { get; }
 }

@@ -1,5 +1,4 @@
 ﻿public enum EditorMode {
-	None,
 	/// <summary>
 	/// In this mode user can use the mouse only for placing new cells to the scene 
 	/// </summary>
@@ -9,7 +8,7 @@
 	/// </summary>
 	EditCells,
 	/// <summary>
-	/// In this mode user can use the mouse only for removeing the cell by clicking on it
+	/// In this mode user can use the mouse only for removing the cell by clicking on it
 	/// </summary>
 	DeleteCells
 };

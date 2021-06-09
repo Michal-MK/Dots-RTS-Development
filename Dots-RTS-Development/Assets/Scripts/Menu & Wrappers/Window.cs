@@ -3,27 +3,25 @@
 public class Window {
 
 	public enum WindowType {
-		ANIMATING,
-		ACTIVATING,
+		Animating,
+		Activating,
 	}
 
 	public Window(GameObject window, object sender) {
 		WindowObject = window;
-		WinType = WindowType.ACTIVATING;
+		WinType = WindowType.Activating;
 		WindowTrigger = sender;
 	}
 
 	public Window(GameObject window, Animator windowAnimator, bool disableAfterAnim, object sender) {
 		WindowObject = window;
 		Animator = windowAnimator;
-		WinType = WindowType.ANIMATING;
+		WinType = WindowType.Animating;
 		ShouldDisable = disableAfterAnim;
 		WindowTrigger = sender;
 	}
 
 	public GameObject WindowObject { get; }
-
-	public bool IsActive => WindowObject.activeInHierarchy;
 
 	public WindowType WinType { get; }
 

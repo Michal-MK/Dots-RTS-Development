@@ -14,7 +14,6 @@ public class PlayFieldSetup : MonoBehaviour {
 	public BoxCollider2D leftC;
 
 
-	// Use this for initialization
 	IEnumerator Start() {
 		Camera c = Camera.main;
 		if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_Editor") {

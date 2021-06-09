@@ -14,9 +14,7 @@ public class LevelMarket : MonoBehaviour {
 
 	private ServerAccess server = new ServerAccess();
 	private List<SaveFileInfo> saves = new List<SaveFileInfo>();
-	//private string savesPath;
-	private SaveData saveInfo = null;
-	//private bool isRefeshing = false;
+	private SaveData saveInfo;
 
 
 	// Use this for initialization

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AI_Behaviour : Enemy_AI {
+public class AIBehaviour : EnemyAI {
 
 	private enum Decision { EXPAND, ATTACK, HELP };
 
@@ -105,11 +105,11 @@ public class AI_Behaviour : Enemy_AI {
 			 * If this AI has cells to select from, run a procedure that will chose one cell with which the AI will work this cycle.
 			 * Else this AI will shut down.
 			 */
-			if (_aiCells.Count != 0) {
+			if (aiCells.Count != 0) {
 				ss += "Selecting | ";
 				selectedAiCell = AiCellSelector();
 				//If we have exactly one cell in the pool, we cant select others, no halping each other is possible.
-				if (_aiCells.Count == 1) {
+				if (aiCells.Count == 1) {
 					isAlone = true;
 					ss += "Alone | ";
 				}
@@ -144,7 +144,7 @@ public class AI_Behaviour : Enemy_AI {
 			}
 
 			//Target selection
-			if (_targets.Count != 0) {
+			if (targets.Count != 0) {
 				ss += "Selecting Target | ";
 				selectedTargetCell = TargetCellSelector();
 			}
@@ -226,8 +226,8 @@ public class AI_Behaviour : Enemy_AI {
 		int recordIndex = -1;
 		GameCell current;
 
-		for (int i = 0; i < _aiCells.Count; i++) {
-			current = _aiCells[i];
+		for (int i = 0; i < aiCells.Count; i++) {
+			current = aiCells[i];
 
 			//Find the best cell to work with (the most elements)
 			if (current.Cell.ElementCount > elementRecordAI) {
@@ -242,20 +242,20 @@ public class AI_Behaviour : Enemy_AI {
 			}
 		}
 		//If the biggest cell has more than "x" elements 80% return it
-		if (elementRecordAI > aICellSelectElementTreshold) {
+		if (elementRecordAI > aICellSelectElementThreshold) {
 			if (UnityEngine.Random.Range(0, 10) < 6) {
 				ss += "Selected cell above threshold | ";
-				return _aiCells[recordIndex];
+				return aiCells[recordIndex];
 			}
 			else {
 				ss += "Cells above treshold exist, but were not selected | ";
 				//If a target that can be overtaken exists still try to attack
-				for (int i = 0; i < _aiCells.Count; i++) {
-					for (int j = 0; j < _targets.Count; j++) {
-						if ((_aiCells[i].Cell.ElementCount * 0.5f) > ((_targets[j].Cell.ElementCount) + 1)) {
+				for (int i = 0; i < aiCells.Count; i++) {
+					for (int j = 0; j < targets.Count; j++) {
+						if ((aiCells[i].Cell.ElementCount * 0.5f) > ((targets[j].Cell.ElementCount) + 1)) {
 							if (UnityEngine.Random.Range(0, 10) < 6) {
 								ss += "Selected Cell with guaranteed Overtake | ";
-								return _aiCells[i];
+								return aiCells[i];
 							}
 							else {
 								ss += "NO selection in second Chance | ";
@@ -264,12 +264,12 @@ public class AI_Behaviour : Enemy_AI {
 						}
 					}
 				}
-				ss += "NO selection above " + aICellSelectElementTreshold + " treshold REALISM PLS | ";
+				ss += "NO selection above " + aICellSelectElementThreshold + " treshold REALISM PLS | ";
 				return null;
 			}
 		}
 		else {
-			ss += "NO cell (highest " + elementRecordAI + ") above " + aICellSelectElementTreshold + " treshold | ";
+			ss += "NO cell (highest " + elementRecordAI + ") above " + aICellSelectElementThreshold + " treshold | ";
 			return null;
 		}
 	}
@@ -285,8 +285,8 @@ public class AI_Behaviour : Enemy_AI {
 
 		GameCell current;
 
-		for (int i = 0; i < _targets.Count; i++) {
-			current = _targets[i];
+		for (int i = 0; i < targets.Count; i++) {
+			current = targets[i];
 
 			//Just return curent cell
 			if (UnityEngine.Random.Range(0, 10) < 2) {
@@ -309,11 +309,11 @@ public class AI_Behaviour : Enemy_AI {
 		//70% return the best target
 		if (UnityEngine.Random.Range(0, 10) < 7) {
 			attackChoiceProbability = 0.7f;
-			return _targets[recordIndex];
+			return targets[recordIndex];
 		}
 		else {
 			attackChoiceProbability = 0f;
-			return _targets[recordIndex];
+			return targets[recordIndex];
 		}
 	}
 
@@ -355,8 +355,8 @@ public class AI_Behaviour : Enemy_AI {
 
 		int elementRecord = 99999;
 		int recordIndex = -1;
-		for (int i = 0; i < _aiCells.Count; i++) {
-			current = _aiCells[i];
+		for (int i = 0; i < aiCells.Count; i++) {
+			current = aiCells[i];
 			//Locate a cell with the lest amount of elements
 			if (current.Cell.ElementCount < elementRecord) {
 				if (current != selectedAiCell) {
@@ -368,7 +368,7 @@ public class AI_Behaviour : Enemy_AI {
 			if (current.Cell.ElementCount < 5) {
 				if (UnityEngine.Random.Range(0, 10) < 5) {
 					if (current != selectedAiCell) {
-						if (Mathf.Abs(selectedAiCell.Cell.ElementCount - current.Cell.ElementCount) > aICellAidElementTreshold) {
+						if (Mathf.Abs(selectedAiCell.Cell.ElementCount - current.Cell.ElementCount) > aICellAidElementThreshold) {
 							defendChoiceProbability = 0.5f;
 						}
 						else {
@@ -386,18 +386,18 @@ public class AI_Behaviour : Enemy_AI {
 		}
 		// 40% return the best cell you found
 		if (UnityEngine.Random.Range(0, 10) < 4) {
-			if (Mathf.Abs(selectedAiCell.Cell.ElementCount - _aiCells[recordIndex].Cell.ElementCount) > aICellAidElementTreshold) {
+			if (Mathf.Abs(selectedAiCell.Cell.ElementCount - aiCells[recordIndex].Cell.ElementCount) > aICellAidElementThreshold) {
 				defendChoiceProbability = 0.6f;
 			}
 			else {
 				defendChoiceProbability = 0.2f;
 			}
-			return _aiCells[recordIndex];
+			return aiCells[recordIndex];
 		}
 		//Helping not recommended
 		else {
 			defendChoiceProbability = 0f;
-			return _aiCells[recordIndex];
+			return aiCells[recordIndex];
 		}
 	}
 

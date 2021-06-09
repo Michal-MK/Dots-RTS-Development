@@ -15,7 +15,7 @@ public class Buttons : MainMenuUI {
 		Extensions.Find<LevelEditorCore>().CellsFitToScreen = toggle.isOn;
 	}
 
-	public void PauseGameorEscape(Button sender) {
+	public void PauseGameOrEscape(Button sender) {
 		Control.Script.PauseAttempt(sender);
 	}
 
@@ -34,7 +34,7 @@ public class Buttons : MainMenuUI {
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
 					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
-					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)selected];
+					GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
 				}
 			}
 			else {
@@ -53,7 +53,7 @@ public class Buttons : MainMenuUI {
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
 					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
-					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)selected];
+					GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
 				}
 			}
 			else {
@@ -72,7 +72,7 @@ public class Buttons : MainMenuUI {
 					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
 					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
 					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
-					GetComponent<Image>().sprite = Upgrade.UPGRADE_GRAPHICS[(Upgrades)selected];
+					GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
 				}
 			}
 			else {
@@ -87,11 +87,11 @@ public class Buttons : MainMenuUI {
 
 	public void ShowHidePanel(GameObject window) {
 		if (window.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
-			window.GetComponent<Animator>().SetTrigger(AnimatorStates.Hide);
+			window.GetComponent<Animator>().SetTrigger(AnimatorStates.HIDE);
 			WindowManagement.Instance.CloseWindow(window);
 		}
 		else {
-			window.GetComponent<Animator>().SetTrigger(AnimatorStates.Show);
+			window.GetComponent<Animator>().SetTrigger(AnimatorStates.SHOW);
 			WindowManagement.Instance.AddWindow(new Window(window, window.GetComponent<Animator>(), false, null));
 		}
 	}

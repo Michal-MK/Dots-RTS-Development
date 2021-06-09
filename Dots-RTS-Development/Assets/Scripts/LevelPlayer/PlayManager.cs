@@ -51,7 +51,7 @@ public class PlayManager {
 			if (activeAIs == 0 || activeAIs == activeAlliedAIs) {
 				//TODO Delay ?
 				Stop();
-				if (LevelState == PlaySceneState.PREVIEW) {
+				if (LevelState == PlaySceneState.Preview) {
 					Behaviour.EditLevel();
 					return;
 				}
@@ -81,13 +81,13 @@ public class PlayManager {
 	}
 
 	public void GameOver() {
-		Result.isWinner = false;
+		Result.Winner = false;
 		Result.GameplayTime = DateTime.Now - _startTime;
 		SceneLoader.Instance.Load(Scenes.POST_GAME, () => { });
 	}
 
 	public void YouWon() {
-		Result.isWinner = true;
+		Result.Winner = true;
 
 		SceneLoader.Instance.Load(Scenes.POST_GAME, () => { });
 

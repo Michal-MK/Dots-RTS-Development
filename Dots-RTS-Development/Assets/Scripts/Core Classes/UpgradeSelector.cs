@@ -2,16 +2,18 @@
 
 public class UpgradeSelector : MonoBehaviour {
 
-	public void Setup(UpgradeSlot_UI upgradeSlot_UI) {
+	// TODO The same code is repeated infinitely many times here...
+	public void Setup(UpgradeSlot_UI upgradeSlot) {
 		gameObject.SetActive(true);
 
 		PopulateUpgradeVisuals visuals = transform.Find("_/UpgradeGrid").GetComponent<PopulateUpgradeVisuals>();
+
 		if (visuals.Instances.Count == 0) {
 			visuals.Initialize();
 		}
 
-		foreach (var pick in visuals.Instances) {
-			pick.OnPickerClicked += upgradeSlot_UI.OnPickerPicked;
+		foreach (EditorUpgradePicker pick in visuals.Instances) {
+			pick.OnPickerClicked += upgradeSlot.OnPickerPicked;
 		}
 	}
 
@@ -24,7 +26,7 @@ public class UpgradeSelector : MonoBehaviour {
 			visuals.Initialize();
 		}
 
-		foreach (var pick in visuals.Instances) {
+		foreach (EditorUpgradePicker pick in visuals.Instances) {
 			pick.OnPickerClicked += upgradeSlot.InstallUpgradeDirectly;
 		}
 	}
@@ -33,21 +35,23 @@ public class UpgradeSelector : MonoBehaviour {
 		gameObject.SetActive(false);
 
 		PopulateUpgradeVisuals visuals = transform.Find("_/UpgradeGrid").GetComponent<PopulateUpgradeVisuals>();
+
 		if (visuals.Instances.Count == 0) {
 			visuals.Initialize();
 		}
 
-		foreach (var pick in visuals.Instances) {
+		foreach (EditorUpgradePicker pick in visuals.Instances) {
 			pick.OnPickerClicked -= upgradeSlot.InstallUpgradeDirectly;
 		}
 	}
 
-	public void Clean(UpgradeSlot_UI upgradeSlot_UI) {
+	public void Clean(UpgradeSlot_UI upgradeSlot) {
 		gameObject.SetActive(false);
+
 		PopulateUpgradeVisuals visuals = transform.Find("_/UpgradeGrid").GetComponent<PopulateUpgradeVisuals>();
 
-		foreach (var pick in visuals.Instances) {
-			pick.OnPickerClicked -= upgradeSlot_UI.OnPickerPicked;
+		foreach (EditorUpgradePicker pick in visuals.Instances) {
+			pick.OnPickerClicked -= upgradeSlot.OnPickerPicked;
 		}
 	}
 }

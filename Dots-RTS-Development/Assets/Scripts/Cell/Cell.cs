@@ -7,8 +7,8 @@ using UnityEngine;
 public class Cell {
 
 	public MonoBehaviour coroutineRunner;
-	public bool isRegenerating = false;
-	public bool isDecaying = false;
+	public bool isRegenerating;
+	public bool isDecaying;
 
 	public event EventHandler<int> OnElementGenerated;
 	public event EventHandler<int> OnElementDecayed;
@@ -32,21 +32,20 @@ public class Cell {
 	}
 
 	public void Decay(float decayRate, GameCell superClass) {
-		if (!isDecaying) {
-			isDecaying = true;
-			coroutineRunner.StartCoroutine(DecayElements(decayRate, superClass));
-		}
+		if (isDecaying) return;
+
+		isDecaying = true;
+		coroutineRunner.StartCoroutine(DecayElements(decayRate, superClass));
 	}
 
 	private IEnumerator DecayElements(float decayRate, GameCell superClass) {
-		float d = decayRate;
 		superClass.StopCoroutine(superClass.generateCoroutine);
 		while (isDecaying) {
-			yield return new WaitForSeconds(d);
+			yield return new WaitForSeconds(decayRate);
 			ElementCount--;
 			OnElementDecayed?.Invoke(this, ElementCount);
 			if (MaxElements - ElementCount > MaxElements * 0.5f) {
-				d *= 0.5f;
+				decayRate *= 0.5f;
 			}
 			if (ElementCount <= MaxElements) {
 				isDecaying = false;
@@ -110,7 +109,7 @@ public class Cell {
 	public AudioClip ElementSpawn;
 
 	/// <summary>
-	/// Clip to play when an despawns
+	/// Clip to play when an de-spawns
 	/// </summary>
 	public AudioClip ElementAttack;
 }

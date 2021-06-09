@@ -13,7 +13,7 @@ public class Upgrade : MonoBehaviour {
 	public const int TOTAL_DEFENSIVE_UPGRADES = 4;
 	public const int TOTAL_UTILITY_UPGRADES = 2;
 
-	public const int TOTAL_UPGRADES = TOTAL_DEFENSIVE_UPGRADES + TOTAL_OFFENSIVE_UPGRADES + TOTAL_UTILITY_UPGRADES;
+	private const int TOTAL_UPGRADES = TOTAL_DEFENSIVE_UPGRADES + TOTAL_OFFENSIVE_UPGRADES + TOTAL_UTILITY_UPGRADES;
 
 
 	/*
@@ -24,7 +24,7 @@ public class Upgrade : MonoBehaviour {
 	 */
 
 
-	public static Dictionary<Upgrades, int> UPGRADE_COST = new Dictionary<Upgrades, int>() {
+	private static readonly Dictionary<Upgrades, int> UpgradeCosts = new Dictionary<Upgrades, int>() {
 		{Upgrades.NONE, 0 },
 		{Upgrades.ATK_DOT, 4 },
 		{Upgrades.ATK_CRITICAL_CHANCE, 6 },
@@ -41,14 +41,13 @@ public class Upgrade : MonoBehaviour {
 
 	};
 
-	public static Dictionary<Upgrades, Sprite> UPGRADE_GRAPHICS = new Dictionary<Upgrades, Sprite>() {
+	public static readonly Dictionary<Upgrades, Sprite> UpgradeGraphics = new Dictionary<Upgrades, Sprite>() {
 		{Upgrades.NONE, null } ,
 		{Upgrades.ATK_DOT, null },
 		{Upgrades.ATK_CRITICAL_CHANCE, null },
 		{Upgrades.ATK_DOUBLE_DAMAGE, null },
 		{Upgrades.ATK_SLOW_REGENERATION, null },
 
-		//{Upgrades.NONE_DEFENCE, null },
 		{Upgrades.DEF_ELEMENT_RESIST_CHANCE,null },
 		{Upgrades.DEF_REFLECTION, null},
 		{Upgrades.UTIL_FASTER_REGENERATION, null },
@@ -88,12 +87,12 @@ public class Upgrade : MonoBehaviour {
 		Sprite[] sprites = await Task.WhenAll(t);
 
 		for (int i = 0; i < sprites.Length; i++) {
-			UPGRADE_GRAPHICS[(Upgrades)values[i]] = sprites[i];
+			UpgradeGraphics[(Upgrades)values[i]] = sprites[i];
 		}
 	}
 
 	public static int GetCost(Upgrades upgrade) {
-		foreach (KeyValuePair<Upgrades, int> kvp in UPGRADE_COST) {
+		foreach (KeyValuePair<Upgrades, int> kvp in UpgradeCosts) {
 			if (kvp.Key == upgrade) {
 				return kvp.Value;
 			}

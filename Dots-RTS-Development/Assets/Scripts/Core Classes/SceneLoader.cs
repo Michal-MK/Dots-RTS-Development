@@ -7,7 +7,7 @@ public class SceneLoader : MonoBehaviour {
 	public static SceneLoader Instance { get; private set; }
 	public event EventHandler OnSceneChanged;
 
-	private Action _postLoadExec;
+	private Action postLoad;
 
 	public void Init() {
 		Instance = this;
@@ -15,12 +15,12 @@ public class SceneLoader : MonoBehaviour {
 	}
 
 	private void SceneLoaded(Scene scene, LoadSceneMode loadMode) {
-		_postLoadExec?.Invoke();
+		postLoad?.Invoke();
 		OnSceneChanged?.Invoke(this, EventArgs.Empty);
 	}
 
-	public void Load(string sceneName, Action postLoad, bool resetTimeScale = true) {
-		_postLoadExec = postLoad;
+	public void Load(string sceneName, Action afterLoad, bool resetTimeScale = true) {
+		postLoad = afterLoad;
 		SceneManager.LoadScene(sceneName);
 		Time.timeScale = resetTimeScale ? 1 : Time.timeScale;
 	}

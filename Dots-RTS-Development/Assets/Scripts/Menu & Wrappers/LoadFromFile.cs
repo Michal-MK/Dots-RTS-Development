@@ -22,10 +22,10 @@ public class LoadFromFile : MonoBehaviour {
 		using (FileStream file = File.Open(filePath, FileMode.Open)) {
 			BinaryFormatter formatter = new BinaryFormatter();
 
-			if (instance.LevelState == PlaySceneState.CAMPAIGN) {
+			if (instance.LevelState == PlaySceneState.Campaign) {
 				LoadCampaign(formatter, file);
 			}
-			else if (instance.LevelState == PlaySceneState.CUSTOM) {
+			else if (instance.LevelState == PlaySceneState.Custom) {
 				LoadCustom(formatter, file);
 			}
 			else {
@@ -52,7 +52,7 @@ public class LoadFromFile : MonoBehaviour {
 			Camera.main.orthographicSize = data.GameSize;
 		}
 
-		GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(data.GameAcpect);
+		GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(data.GameAspect);
 		SetupCells(data.Cells);
 
 		playManager.InitializedActors.StartAiInitialization(data.Teams, data.Difficulties, playManager);
@@ -67,7 +67,7 @@ public class LoadFromFile : MonoBehaviour {
 			c.Cell.ElementCount = cell.Elements;
 			c.Cell.MaxElements = cell.MaximumElements;
 			c.Cell.Team = cell.Team;
-			c.Cell.RegenPeriod = cell.RegenPeriod;
+			c.Cell.RegenPeriod = cell.RegenerationPeriod;
 			c.uManager.PreinstallUpgrades(cell.InstalledUpgrades);
 			c.enabled = true;
 

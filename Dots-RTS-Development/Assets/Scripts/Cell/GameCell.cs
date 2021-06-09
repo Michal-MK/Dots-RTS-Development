@@ -90,7 +90,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	#endregion
 
-	//Wrapper for cell atacking
+	//Wrapper for cell attacking
 	public void AttackWrapper(GameCell target, Team team) {
 		if (cellsInSelection.Count != 0) {
 			if (team >= Team.ENEMY1) {
@@ -118,13 +118,13 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 			for (int i = 0; i < numElements; i++) {
 				Element e = Instantiate(elementObj, transform.position, Quaternion.identity).GetComponent<Element>();
-				e.Target = target;
-				e.Attacker = this;
-				e.Team = Cell.Team;
-				e.Speed = Cell.ElementSpeed;
+				e.target = target;
+				e.attacker = this;
+				e.team = Cell.Team;
+				e.speed = Cell.ElementSpeed;
 			}
 			UpdateCellInfo();
-			sound.AddToSoundQueue(Cell.ElementSpawn);
+			sound.PlaySound(Cell.ElementSpawn);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	public void DamageCell(Element element, int amoutOfDamage, Upgrades[] additionalArgs) {
 
 		#region Element Specific Code for Upgrade management -- Offensive Upgrades
-		if (Cell.Team == element.Team) {
+		if (Cell.Team == element.team) {
 			float aidBonus = 0;
 			for (int i = 0; i < uManager.upgrades.Length; i++) {
 				if (uManager.upgrades[i] == Upgrades.DEF_AID_BONUS_CHANCE) {
@@ -221,7 +221,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		}
 		if (reflectChance != 0) {
 			if (Random.Range(0f, 1f) < reflectChance) {
-				element.Refelcted();
+				element.Reflected();
 				return;
 			}
 		}
@@ -237,18 +237,18 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		Cell.ElementCount -= amoutOfDamage;
 
 		if (Cell.ElementCount < 0) {
-			TeamChanged?.Invoke(this, new CellTeamChangeEventArgs(this, Cell.Team, element.Team));
+			TeamChanged?.Invoke(this, new CellTeamChangeEventArgs(this, Cell.Team, element.team));
 
 			if (isSelected) {
 				ModifySelection(this);
 			}
 
 			Cell.ElementCount = -Cell.ElementCount;
-			Cell.Team = element.Team;
+			Cell.Team = element.team;
 		}
 
 		Destroy(element.gameObject);
-		sound.AddToSoundQueue(Cell.ElementAttack);
+		sound.PlaySound(Cell.ElementAttack);
 		UpdateCellInfo();
 	}
 
@@ -261,17 +261,13 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		if (Cell.ElementCount > Cell.MaxElements) {
 			Cell.Decay(0.5f, this);
 		}
-		if (isSelected) {
-			cellSelectedRenderer.enabled = true;
-		}
-		else {
-			cellSelectedRenderer.enabled = false;
-		}
+		cellSelectedRenderer.enabled = isSelected;
+
 		cellSprite.color = CellColours.GetColor(Cell.Team);
 		elementCountDisplay.text = Cell.ElementCount.ToString();
 	}
 
-	Vector3 oldPos = Vector3.zero;
+	private Vector3 oldPos = Vector3.zero;
 	private void FixedUpdate() {
 		if (oldPos == Vector3.zero) {
 			oldPos = transform.position;

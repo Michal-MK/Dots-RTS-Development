@@ -39,7 +39,7 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerEnterHandler, IPointerExitH
 	public void InstallUpgradeDirectly(object _, EditorUpgradePicker e) {
 		print("Selected " + e.Upgrade);
 		uManager.upgrades[SlotID] = Type = e.Upgrade;
-		selfSprite.sprite = Upgrade.UPGRADE_GRAPHICS[Type];
+		selfSprite.sprite = Upgrade.UpgradeGraphics[Type];
 		selfSprite.size = Vector2.one * 25f;
 		Extensions.Find<LevelEditorUI>().upgradeSelector.GetComponent<UpgradeSelector>().Clean(this);
 	}

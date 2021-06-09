@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public class Player : IAlly {
 
-	public Team Team { get; set; } = Team.ALLIED;
+	public Team Team => Team.ALLIED;
 
 	public List<IAlly> Targets { get; set; } = new List<IAlly>();
 

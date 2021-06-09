@@ -18,11 +18,11 @@ public class Testtttt : MonoBehaviour {
 
 	private void Control_RMBPressed(object _, EventArgs __) {
 		if (!isShown) {
-			anim.SetTrigger(AnimatorStates.Show);
+			anim.SetTrigger(AnimatorStates.SHOW);
 			isShown = true;
 		}
 		else {
-			anim.SetTrigger(AnimatorStates.Hide);
+			anim.SetTrigger(AnimatorStates.HIDE);
 			isShown = false;
 		}
 	}

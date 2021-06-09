@@ -64,9 +64,9 @@ public class LevelEditorCore : MonoBehaviour {
 
 
 	private void Start() {
-		UI.startingElementCount.onValueChanged.AddListener((e) => { if (int.TryParse(e, out int value)) { StartElements = value; InputChanged(); } });
-		UI.maxElementCount.onValueChanged.AddListener((e) => { if (int.TryParse(e, out int value)) { MaxElements = value; InputChanged(); } });
-		UI.regenerationSpeed.onValueChanged.AddListener((e) => { if (int.TryParse(e, out int value)) { Regeneration = value; InputChanged(); } });
+		UI.startingElementCount.onValueChanged.AddListener(e => { if (int.TryParse(e, out int value)) { StartElements = value; InputChanged(); } });
+		UI.maxElementCount.onValueChanged.AddListener(e => { if (int.TryParse(e, out int value)) { MaxElements = value; InputChanged(); } });
+		UI.regenerationSpeed.onValueChanged.AddListener(e => { if (int.TryParse(e, out int value)) { Regeneration = value; InputChanged(); } });
 
 		Team = DEFAULT_TEAM;
 		StartElements = DEFAULT_INITIAL_ELEMENTS;
@@ -116,7 +116,7 @@ public class LevelEditorCore : MonoBehaviour {
 			for (int i = 0; i < c.upgrade_manager.upgradeSlots.Length; i++) {
 				if (c.upgrade_manager.upgrades[i] != Upgrades.NONE) {
 					c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
-					c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+					c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[c.upgrade_manager.upgrades[i]]);
 				}
 			}
 			c.core = this;
@@ -203,7 +203,7 @@ public class LevelEditorCore : MonoBehaviour {
 			c.upgrade_manager.upgrades = UIUpgradeSlots.Upgrades;
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
 				c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
-				c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
+				c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[c.upgrade_manager.upgrades[i]]);
 			}
 			c.core = this;
 			AddCell(c);
@@ -233,14 +233,14 @@ public class LevelEditorCore : MonoBehaviour {
 		//#endif
 	}
 
-	//Switches the cusror mode 
+	//Switches the cursor mode 
 	public void ModeButton(EditorMode mode) {
 		EditorMode = mode;
 		switch (mode) {
 			case EditorMode.PlaceCells: {
 				Cursor.SetCursor(cursors[0], Vector2.zero, CursorMode.Auto);
 				while (selectedCellList.Count != 0)
-					selectedCellList[0].isCellSelected = false;
+					selectedCellList[0].IsCellSelected = false;
 				return;
 			}
 			case EditorMode.EditCells: {
@@ -250,7 +250,7 @@ public class LevelEditorCore : MonoBehaviour {
 			case EditorMode.DeleteCells: {
 				Cursor.SetCursor(cursors[1], Vector2.zero, CursorMode.Auto);
 				while (selectedCellList.Count != 0)
-					selectedCellList[0].isCellSelected = false;
+					selectedCellList[0].IsCellSelected = false;
 				return;
 			}
 		}

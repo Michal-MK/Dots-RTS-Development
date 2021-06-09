@@ -2,12 +2,11 @@
 using UnityEngine;
 
 public class UpgradeSlotCollection {
-
-	public UpgradeSlot[] UpgradeSlots { get; set; }
+	private readonly UpgradeSlot[] upgradeSlots;
 
 	public UpgradeSlotCollection(Transform holder) {
-		UpgradeSlots = holder.GetComponentsInChildren<UpgradeSlot>();
+		upgradeSlots = holder.GetComponentsInChildren<UpgradeSlot>();
 	}
 
-	public Upgrades[] Upgrades => UpgradeSlots.Select(s => s.Type).ToArray();
+	public Upgrades[] Upgrades => upgradeSlots.Select(s => s.Type).ToArray();
 }

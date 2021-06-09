@@ -7,7 +7,7 @@ public class SaveData {
 	public SaveMeta SaveMeta { get; set; }
 	public Dictionary<Team, float> Difficulties { get; set; }
 	public float GameSize { get; set; }
-	public float GameAcpect { get; set; }
+	public float GameAspect { get; set; }
 	public Dictionary<Team, AIHolder> Teams { get; set; }
 }
 

@@ -6,6 +6,6 @@ public class SerializedCell {
 	public int Elements { get; set; }
 	public int MaximumElements { get; set; }
 	public Team Team { get; set; }
-	public float RegenPeriod { get; set; }
+	public float RegenerationPeriod { get; set; }
 	public Upgrades[] InstalledUpgrades { get; set; }
 }

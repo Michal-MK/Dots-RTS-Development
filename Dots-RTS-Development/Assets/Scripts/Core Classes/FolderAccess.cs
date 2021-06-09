@@ -1,6 +1,6 @@
+using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
@@ -16,19 +16,18 @@ class FolderAccess {
 		return files;
 	}
 
-	public static T GetAsociatedScript<T>(string filePath) {
+	public static T GetAssociatedScript<T>(string filePath) {
 		try {
-			using (FileStream file = new FileStream(filePath, FileMode.Open)) {
-				BinaryFormatter bf = new BinaryFormatter();
+			using FileStream file = new FileStream(filePath, FileMode.Open);
+			BinaryFormatter bf = new BinaryFormatter();
 
-				T data = (T)bf.Deserialize(file);
-				file.Close();
-				return data;
-			}
+			T data = (T)bf.Deserialize(file);
+			file.Close();
+			return data;
 		}
 		catch(FileNotFoundException e) {
 			Debug.Log("File " + e.FileName + " not found!");
-			return default(T);
+			return default;
 		}
 	}
 
@@ -42,54 +41,8 @@ class FolderAccess {
 	}
 
 	public static SaveDataCampaign GetCampaignLevel(int difficulty, int level) {
-		SaveDataCampaign cLevel = GetAsociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + level + ".pwl");
-		if(cLevel == default(SaveDataCampaign)) {
-			return null;
-		}
+		SaveDataCampaign cLevel = GetAssociatedScript<SaveDataCampaign>(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + difficulty + Path.DirectorySeparatorChar + "Level_" + level + ".pwl");
 		return cLevel;
-	}
-
-	[System.Obsolete("Use newer method using LINQ to XML : GetUpgrade_____()", true)]
-	public static string[] GetUpgradeInfo(int upgrade) {
-		using (XmlReader xml = XmlReader.Create(Application.dataPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeDesc.xml")) {
-			while (xml.Read()) {
-				if (xml.NodeType == XmlNodeType.Element) {
-					if (xml.GetAttribute("id") == upgrade.ToString()) {
-						using (XmlReader inner = xml.ReadSubtree()) {
-
-							bool foundDesc = false;
-							bool foundName = false;
-							string[] upgradeInfo = new string[3];
-
-							while (inner.Read()) {
-								if (foundName) {
-									upgradeInfo[0] = inner.Value;
-								}
-								if (foundDesc) {
-									upgradeInfo[1] = inner.Value;
-									upgradeInfo[2] = Upgrade.GetCost((Upgrades)upgrade).ToString();
-									return upgradeInfo;
-								}
-								if (inner.LocalName == "name" && string.IsNullOrEmpty(upgradeInfo[0])) {
-									foundName = true;
-								}
-								else {
-									foundName = false;
-								}
-								if (inner.LocalName == "desc" && string.IsNullOrEmpty(upgradeInfo[1])) {
-									foundDesc = true;
-								}
-								else {
-									foundDesc = false;
-								}
-							}
-						}
-					}
-				}
-			}
-			Debug.LogWarning("No Upgrade of type " + (Upgrades)upgrade + " found!");
-			return null;
-		}
 	}
 
 	private static void RetrieveXmlUpgradeData() {
@@ -101,13 +54,13 @@ class FolderAccess {
 			RetrieveXmlUpgradeData();
 		}
 
-		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
-									  where (int)upgradeName.Attribute("id") == (int)type
-									  select upgradeName.Element("name").Value;
+		IEnumerable<string> strings = upgradeData.Descendants("Upgrade")
+			.Where(upgradeName => (int) upgradeName.Attribute("id") == (int) type)
+			.Select(upgradeName => upgradeName.Element("name").Value);
 		try {
 			return strings.First();
 		}
-		catch (System.InvalidOperationException) {
+		catch (InvalidOperationException) {
 			return "Missing entry for " + type;
 		}
 	}
@@ -117,13 +70,13 @@ class FolderAccess {
 			RetrieveXmlUpgradeData();
 		}
 
-		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
-									  where (int)upgradeName.Attribute("id") == (int)type
-									  select upgradeName.Element("funcName").Value;
+		IEnumerable<string> strings = upgradeData.Descendants("Upgrade")
+			.Where(upgradeName => (int) upgradeName.Attribute("id") == (int) type)
+			.Select(upgradeName => upgradeName.Element("funcName").Value);
 		try {
 			return strings.First();
 		}
-		catch (System.InvalidOperationException) {
+		catch (InvalidOperationException) {
 			return "Missing entry for " + type;
 		}
 	}
@@ -134,13 +87,13 @@ class FolderAccess {
 			RetrieveXmlUpgradeData();
 		}
 
-		IEnumerable<string> strings = from upgradeName in upgradeData.Descendants("Upgrade")
-									  where (int)upgradeName.Attribute("id") == (int)type
-									  select upgradeName.Element("desc").Value;
+		IEnumerable<string> strings = upgradeData.Descendants("Upgrade")
+			.Where(upgradeName => (int) upgradeName.Attribute("id") == (int) type)
+			.Select(upgradeName => upgradeName.Element("desc").Value);
 		try {
 			return strings.First();
 		}
-		catch (System.InvalidOperationException) {
+		catch (InvalidOperationException) {
 			return "Missing entry for " + type;
 		}
 	}
@@ -154,9 +107,8 @@ class FolderAccess {
 			RetrieveXmlUpgradeData();
 		}
 
-		IEnumerable<XElement> data = from upgradeName in upgradeData.Descendants("Upgrade")
-									 where (int)upgradeName.Attribute("id") == (int)type
-									 select upgradeName;
+		IEnumerable<XElement> data = upgradeData.Descendants("Upgrade")
+			.Where(upgradeName => (int) upgradeName.Attribute("id") == (int) type).ToList();
 
 		string[] stringData = new string[2];
 

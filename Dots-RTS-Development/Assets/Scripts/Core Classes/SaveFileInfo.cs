@@ -32,7 +32,7 @@ public class SaveFileInfo : MonoBehaviour {
 		newTarget(this);
 	}
 
-	//TO-DO Replace Fixed Update with someting more efficient
+	//TODO Replace Fixed Update with something more efficient
 	private void FixedUpdate() {
 		if (downloadButton != null) {
 			if (downloadButton.name == this.gameObject.name) {
@@ -62,7 +62,7 @@ public class SaveFileInfo : MonoBehaviour {
 		else {
 			s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
 		}
-		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.CUSTOM, s);
+		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.Custom, s);
 	}
 
 	public void DeleteObject(Transform fileName) {

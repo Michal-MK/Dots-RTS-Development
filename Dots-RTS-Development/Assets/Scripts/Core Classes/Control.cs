@@ -89,7 +89,13 @@ public class Control : MonoBehaviour {
 	}
 
 	public void PauseAttempt(object sender) {
-		pauseHandlers?.SetPaused(sender, !isPaused);
+		if (isPaused) {
+			pauseHandlers?.Unpause(sender);
+		}
+		else {
+			pauseHandlers?.Pause(sender);
+		}
+		isPaused ^= true;
 		OnPauseStateChanged?.Invoke(this, isPaused);
 	}
 

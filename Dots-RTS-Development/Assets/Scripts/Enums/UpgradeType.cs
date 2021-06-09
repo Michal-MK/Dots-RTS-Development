@@ -1,5 +1,5 @@
 ﻿public enum UpgradeType {
-	OFFENSIVE = 0,
-	DEFENSIVE = 100,
-	UTILITY = 200,
+	Offensive = 0,
+	Defensive = 100,
+	Utility = 200,
 }

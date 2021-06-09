@@ -63,10 +63,10 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 			GetComponent<Image>().color = new Color(1, 1, 1, 1);
 			transform.Find("UpgradeCount").gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
 		}
-		typeImage.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+		typeImage.sprite = Upgrade.UpgradeGraphics[type];
 	}
 
-	//Upgrade Instalation Logic
+	//Upgrade installation Logic
 	public void OnPointerClick(PointerEventData eventData) {
 		if (SceneManager.GetActiveScene().name != Scenes.PROFILES) {
 			if (currentCell.HasFreeSlots() && count > 0) {
@@ -87,7 +87,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		}
 	}
 
-	//Stuff to do with instalation, moving numbers around
+	//Stuff to do with installation, moving numbers around
 	private void InstallUpgradeTo(object sender, OnUpgradeSlotClickedEventArgs e) {
 		//TODO 
 		//e.Slot.OnSlotClicked -= InstallUpgradeTo;
@@ -96,11 +96,11 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		UpdateUpgradeOverview();
 		if (sender == null) {
 			SpriteRenderer s = currentCell.transform.Find("UpgradeSlots/" + e.Slot).GetComponent<SpriteRenderer>();
-			s.sprite = Upgrade.UPGRADE_GRAPHICS[type];
+			s.sprite = Upgrade.UpgradeGraphics[type];
 			s.size = Vector2.one * 25;
 		}
 		else {
-			e.Slot.ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[type]);
+			e.Slot.ChangeUpgradeImage(Upgrade.UpgradeGraphics[type]);
 		}
 		currentCell.slotRender.color = new Color(1, 1, 1, 0.25f);
 		isListeningForSlot = true;

@@ -1,6 +1,6 @@
 ﻿public enum PlaySceneState {
-	NONE,
-	CAMPAIGN,
-	CUSTOM,
-	PREVIEW
+	None,
+	Campaign,
+	Custom,
+	Preview
 }
