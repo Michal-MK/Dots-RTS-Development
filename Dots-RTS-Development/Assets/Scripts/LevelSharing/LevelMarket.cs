@@ -20,7 +20,7 @@ public class LevelMarket : MonoBehaviour {
 	// Use this for initialization
 	private async void Start() {
 
-		List<string> contents = await server.GetContentsAsync();
+		List<string> contents = await server.GetLevelsAsync();
 
 		DirectoryInfo tempFolder = new DirectoryInfo(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
 		FileInfo[] infos = tempFolder.GetFiles();

@@ -47,7 +47,7 @@ public class SaveFileInfo : MonoBehaviour {
 	#region Server Specific
 
 	public async void DownloadLevel(Transform filename) {
-		await serverAccess.DownloadFTPAsync(filename.name);
+		await serverAccess.DownloadAsync(filename.name);
 	}
 
 	#endregion
@@ -78,14 +78,14 @@ public class SaveFileInfo : MonoBehaviour {
 	}
 
 	public async void UploadLevel(Transform fileName) {
-		List<string> contents = await serverAccess.GetContentsAsync();
+		List<string> contents = await serverAccess.GetLevelsAsync();
 		for (int i = 0; i < contents.Count; i++) {
 			if (contents[i] == fileName.name) {
 				print("File with this name already exists. Upload cancelled.");
 				return;
 			}
 		}
-		serverAccess.UploadFileFTP(fileName.name);
+		serverAccess.UploadLevel(fileName.name);
 	}
 
 	#endregion

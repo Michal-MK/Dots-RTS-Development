@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PhageWars.Server {
 	public class FileManager {
 
-		const string LEVELS_PATH = "levels";
+		private const string LEVELS_PATH = "levels";
 
 		private static string BaseLevelsPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LEVELS_PATH);
 
@@ -19,18 +18,25 @@ namespace PhageWars.Server {
 
 		public static byte[] GetLevel(string levelName) {
 			string path = Path.Combine(BaseLevelsPath, levelName);
-			if (File.Exists(path)) {
-				return File.ReadAllBytes(path);
-			}
-			return default;
+			return File.Exists(path) ? File.ReadAllBytes(path) : default;
+		}
+
+		public static List<string> GetLevelNames() {
+			return new DirectoryInfo(BaseLevelsPath).GetFiles("*.pwl").Select(s => s.Name).ToList();
 		}
 
 		public static string GetLevelAbsPath(string levelName) {
 			string path = Path.Combine(BaseLevelsPath, levelName);
+			return File.Exists(path) ? path : null;
+		}
+
+		public static bool StoreLevel(string name, string levelData) {
+			string path = Path.Combine(BaseLevelsPath, name);
 			if (File.Exists(path)) {
-				return path;
+				return false;
 			}
-			return null;
+			File.WriteAllText(path + ".pwl", levelData);
+			return true;
 		}
 	}
 }

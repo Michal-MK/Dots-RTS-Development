@@ -14,9 +14,20 @@ namespace PhageWars.Server.Controllers {
 			_logger = logger;
 		}
 
-		[HttpGet]
+		[HttpGet(nameof(Level))]
 		public FileContentResult Level(string name) {
-			return new FileContentResult(FileManager.GetLevel(name), MediaTypeNames.Application.Octet) { FileDownloadName = name };
+			return new(FileManager.GetLevel(name), MediaTypeNames.Application.Octet) { FileDownloadName = name };
+		}
+		
+		[HttpGet]
+		public JsonResult Levels() {
+			return new(FileManager.GetLevelNames());
+		}	
+		
+		[HttpPost(nameof(UploadLevel))]
+		public StatusCodeResult UploadLevel(string name, string levelData) {
+			FileManager.StoreLevel(name, levelData);
+			return new OkResult();
 		}
 	}
 }
