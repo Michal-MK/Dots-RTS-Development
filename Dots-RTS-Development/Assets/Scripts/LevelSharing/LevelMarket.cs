@@ -47,13 +47,9 @@ public class LevelMarket : MonoBehaviour {
 			if (isFilePresentLocaly) {
 				tasks[j] = GetFileLocalyAsync(infos[index].Name, s);
 			}
-			else {
-				print("Getting level info " + contents[j]);
-				tasks[j] = server.GetLevelInfoAsync(contents[j]);
-			}
 		}
 		await Task.WhenAll(tasks);
-		print("INfos Lenght after " + infos.Length);
+		print("Infos Length after " + infos.Length);
 		for (int i = 0; i < tasks.Length; i++) {
 
 			saveInfo = tasks[i].Result;
