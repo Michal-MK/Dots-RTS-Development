@@ -1,59 +1,74 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LevelMarket : MonoBehaviour {
+
 	public GameObject save;
 	public Transform scrollViewContent;
 	public Button download;
-	public static GameObject selectedSave = null;
 
-	private ServerAccess server = new ServerAccess();
-	private List<SaveFileInfo> saves = new List<SaveFileInfo>();
+	private GameObject selectedSave;
+	public GameObject SelectedSave {
+		get => selectedSave;
+		set {
+			selectedSave = value;
+			download.interactable = value != null;
+		}
+	}
+
+	private readonly ServerAccess server = new ServerAccess();
+	private readonly List<SaveFileInfo> saves = new List<SaveFileInfo>();
 	private SaveData saveInfo;
 
 
-	// Use this for initialization
 	private async void Start() {
 
 		List<string> contents = await server.GetLevelsAsync();
 
 		DirectoryInfo tempFolder = new DirectoryInfo(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
 		FileInfo[] infos = tempFolder.GetFiles();
-		print(infos.Length);
 		FileInfo[] persistentInfos = new DirectoryInfo(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar).GetFiles();
 		Task<SaveData>[] tasks = new Task<SaveData>[contents.Count];
 
 		for (int j = 0; j < contents.Count; j++) {
 			SaveFileInfo s = Instantiate(save, scrollViewContent).GetComponent<SaveFileInfo>();
+			s.Market = this;
 			s.gameObject.SetActive(false);
 			saves.Add(s);
 
-			bool isFilePresentLocaly = false;
+			bool isFilePresentLocally = false;
 			int index = -1;
 			for (int i = 0; i < infos.Length; i++) {
 				print(infos[i].Name + "  " + contents[j]);
 				if (infos[i].Name == contents[j]) {
 					print("Exists");
-					isFilePresentLocaly = true;
+					isFilePresentLocally = true;
 					index = i;
 					break;
 				}
 			}
-			if (isFilePresentLocaly) {
-				tasks[j] = GetFileLocalyAsync(infos[index].Name, s);
+			if (isFilePresentLocally) {
+				// TODO
+			}
+			else {
+				tasks[j] = server.DownloadAsync(contents[j]);
 			}
 		}
 		await Task.WhenAll(tasks);
-		print("Infos Length after " + infos.Length);
+		//print("Infos Length after " + infos.Length);
 		for (int i = 0; i < tasks.Length; i++) {
 
 			saveInfo = tasks[i].Result;
-
+			print(saveInfo);
+			print(contents[i]);
+			print(saveInfo.SaveMeta.LevelName);
+			print(saveInfo.SaveMeta.CreatorName);
+			print(saveInfo.SaveMeta.CreationTime.ToShortDateString());
 			try {
 				saves[i].downloadButton = download;
 				saves[i].gameObject.name = contents[i];
@@ -68,58 +83,25 @@ public class LevelMarket : MonoBehaviour {
 			saveInfo = null;
 		}
 
-		for (int i = 0; i < saves.Count; i++) {
-			for (int j = 0; j < persistentInfos.Length; j++) {
-				if (saves[i].gameObject.name == persistentInfos[j].Name) {
-					saves[i].isSavedLocaly = true;
-					saves[i].indicator.color = Color.green;
-					break;
-				}
+		foreach (SaveFileInfo sfi in saves) {
+			if (persistentInfos.Any(persisted => sfi.gameObject.name == persisted.Name)) {
+				sfi.isSavedLocally = true;
+				sfi.indicator.color = Color.green;
 			}
 		}
 	}
 
-
-	//Unusable since you can't do it asynchronously
-	public async Task<SaveData> GetFileLocalyAsync(string fileName, SaveFileInfo saveInfoScript) {
-
-		string filePath = Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName;
-		return await DeserializeObjectAsync<SaveData>(new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true));
-		//BinaryFormatter bf = new BinaryFormatter();
-		//using (FileStream fs = File.Open(filePath, FileMode.Open)) {
-		//	SaveData data = (SaveData)bf.Deserialize(fs);
-		//	return data;
-		//
-		//
-		//		fs.Close();
-
-		//		saveInfoScript.gameObject.name = fileName;
-		//		saveInfoScript.levelName.text = data.levelInfo.levelName;
-		//		saveInfoScript.author.text = data.levelInfo.creator;
-
-		//		saves.Add(saveInfoScript);
-		//		saveInfo = null;
-		//		try {
-		//			saveInfoScript.time.text = data.levelInfo.creationTime.ToShortDateString();
-		//		}
-		//		catch (System.Exception e) {
-		//			print(fileName + " " + e);
-		//		}
-		//		print("Got File Locally");
-		//	}
+	public void DownloadLevel() {
+		if (SelectedSave == null) return;
+		
+		download.interactable = false;
+		File.Copy(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name,
+				  Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name);
+		SelectedSave.GetComponent<SaveFileInfo>().indicator.color = Color.green;
 	}
 
+	
 	public void RefreshLevels() {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-	}
-
-	public static Task<T> DeserializeObjectAsync<T>(FileStream stream) {
-		return Task.Run(() => {
-			BinaryFormatter bf = new BinaryFormatter();
-			T type = (T)bf.Deserialize(stream);
-			stream.Close();
-			stream.Dispose();
-			return type;
-		});
 	}
 }

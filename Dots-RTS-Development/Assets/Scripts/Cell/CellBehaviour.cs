@@ -13,7 +13,7 @@ public class CellBehaviour : MonoBehaviour {
 	public Rigidbody2D rg;
 
 	[HideInInspector]
-	public Upgrade_Manager uManager;
+	public UpgradeManager uManager;
 
 	[HideInInspector]
 	public TextMeshPro elementCountDisplay;
@@ -31,15 +31,15 @@ public class CellBehaviour : MonoBehaviour {
 		while (true) {
 			yield return new WaitForEndOfFrame();
 			float mappedValue;
-			if (Cell.ElementCount < 10) {
+			if (Cell.elementCount < 10) {
 				mappedValue = 1;
 			}
-			else if (Cell.ElementCount >= 10 && Cell.ElementCount <= Cell.MaxElements) {
-				mappedValue = Map.MapFloat(Cell.ElementCount, 10, Cell.MaxElements, 1f, 2f);
+			else if (Cell.elementCount >= 10 && Cell.elementCount <= Cell.maxElements) {
+				mappedValue = Map.MapFloat(Cell.elementCount, 10, Cell.maxElements, 1f, 2f);
 			}
 			else {
-				if (Cell.ElementCount < 1000) {
-					mappedValue = Map.MapFloat(Cell.ElementCount, Cell.MaxElements, 999f, 2f, 4f);
+				if (Cell.elementCount < 1000) {
+					mappedValue = Map.MapFloat(Cell.elementCount, Cell.maxElements, 999f, 2f, 4f);
 				}
 				else {
 					mappedValue = 4;
@@ -49,13 +49,13 @@ public class CellBehaviour : MonoBehaviour {
 				transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(mappedValue, mappedValue), f);
 				yield return null;
 			}
-			Cell.CellRadius = col.radius * transform.localScale.x;
+			Cell.cellRadius = col.radius * transform.localScale.x;
 		}
 	}
 
 	public void UpdateVisual() {
-		cellSprite.color = CellColours.GetColor(Cell.Team);
-		elementCountDisplay.text = Cell.ElementCount.ToString();
+		cellSprite.color = CellColours.GetColor(Cell.team);
+		elementCountDisplay.text = Cell.elementCount.ToString();
 	}
 
 	public void EnableCircle(Color? color = null) {

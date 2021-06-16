@@ -99,13 +99,13 @@ public class LevelEditorCore : MonoBehaviour {
 			c.ToggleCellOutline(true);
 		}
 
-		if (c.Cell.Team != Team.NEUTRAL) {
+		if (c.Cell.team != Team.NEUTRAL) {
 
-			if (!teamList.Contains(c.Cell.Team)) {
-				teamList.Add(c.Cell.Team);
+			if (!teamList.Contains(c.Cell.team)) {
+				teamList.Add(c.Cell.team);
 				if (!loadedFromFile) {
-					if (c.Cell.Team != Team.ALLIED) {
-						aiDifficultyDict.Add(c.Cell.Team, DEFAULT_DIFFICULTY);
+					if (c.Cell.team != Team.ALLIED) {
+						aiDifficultyDict.Add(c.Cell.team, DEFAULT_DIFFICULTY);
 						AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 					}
 				}
@@ -139,14 +139,14 @@ public class LevelEditorCore : MonoBehaviour {
 
 		//If a cell is found with the same team then don't remove the clan.
 		foreach (CellBehaviour cell in cellList) {
-			if (cell.Cell.Team == c.Cell.Team) {
+			if (cell.Cell.team == c.Cell.team) {
 				return;
 			}
 		}
-		teamSetup.RemoveFromClan(c.Cell.Team);
-		teamList.Remove(c.Cell.Team);
-		if (c.Cell.Team != Team.ALLIED) {
-			aiDifficultyDict.Remove(c.Cell.Team);
+		teamSetup.RemoveFromClan(c.Cell.team);
+		teamList.Remove(c.Cell.team);
+		if (c.Cell.team != Team.ALLIED) {
+			aiDifficultyDict.Remove(c.Cell.team);
 			AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 		}
 	}
@@ -188,18 +188,17 @@ public class LevelEditorCore : MonoBehaviour {
 
 	//Cell placing logic
 	private void Update() {
-#if (UNITY_EDITOR || UNITY_STANDALONE)
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && EditorMode == EditorMode.PlaceCells) {
 			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
 
 			newCell.name = "Cell " + Team;
 			EditCell c = newCell.GetComponent<EditCell>();
-			c.GetComponent<UM_Editor>().SetupUpgrades(UI);
-			c.Cell.Team = Team;
-			c.Cell.MaxElements = MaxElements;
-			c.Cell.RegenPeriod = Regeneration;
-			c.Cell.ElementCount = StartElements;
+			c.GetComponent<EditorUpgradeManager>().SetupUpgrades(UI);
+			c.Cell.team = Team;
+			c.Cell.maxElements = MaxElements;
+			c.Cell.regenPeriod = Regeneration;
+			c.Cell.elementCount = StartElements;
 			c.upgrade_manager.upgrades = UIUpgradeSlots.Upgrades;
 			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
 				c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
@@ -210,27 +209,6 @@ public class LevelEditorCore : MonoBehaviour {
 			c.FastResize();
 			c.UpdateVisual();
 		}
-#endif
-		//#if (UNITY_ANDROID || UNITY_IOS)
-		//		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && editorMode == Mode.PlaceCells) {
-		//			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		//			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
-		//			EditCell c = newCell.GetComponent<EditCell>();
-		//			c.cellTeam = team;
-		//			c.maxElements = maxElementCount;
-		//			c.regenPeriod = regenarationPeriod;
-		//			c.elementCount = startingElementCount;
-		//			c.upgrade_manager.upgrades = UpgradeSlot.getAssignedUpgrades;
-		//			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
-		//				c.upgrade_manager.upgrade_Slots[i].type = c.upgrade_manager.upgrades[i];
-		//				c.upgrade_manager.upgrade_Slots[i].ChangeUpgradeImage(Upgrade.UPGRADE_GRAPHICS[c.upgrade_manager.upgrades[i]]);
-		//			}
-		//			c.core = this;
-		//			c.FastResize();
-		//			AddCell(c);
-		//		c.FastResize();
-		//		}
-		//#endif
 	}
 
 	//Switches the cursor mode 
@@ -403,33 +381,33 @@ public class LevelEditorCore : MonoBehaviour {
 		float adjustBy = 0;
 
 		foreach (EditCell cell in cellList) {
-			if (cell.Cell.CellRadius * 0.33f > adjustBy) {
-				adjustBy = cell.Cell.CellRadius * 0.33f;
+			if (cell.Cell.cellRadius * 0.33f > adjustBy) {
+				adjustBy = cell.Cell.cellRadius * 0.33f;
 			}
 		}
 
 		if (cells.Count == 1) {
 			Vector3 pos = cells[0].transform.position;
-			lowestX = pos.x - cells[0].Cell.CellRadius;
-			highestX = pos.x + cells[0].Cell.CellRadius;
-			lowestY = pos.y - cells[0].Cell.CellRadius;
-			highestY = pos.y + cells[0].Cell.CellRadius;
+			lowestX = pos.x - cells[0].Cell.cellRadius;
+			highestX = pos.x + cells[0].Cell.cellRadius;
+			lowestY = pos.y - cells[0].Cell.cellRadius;
+			highestY = pos.y + cells[0].Cell.cellRadius;
 		}
 		else {
 			foreach (CellBehaviour cell in cells) {
 				Vector3 cellPos = cell.transform.position;
-				if (cellPos.x - cell.Cell.CellRadius < lowestX) {
-					lowestX = cellPos.x - cell.Cell.CellRadius;
+				if (cellPos.x - cell.Cell.cellRadius < lowestX) {
+					lowestX = cellPos.x - cell.Cell.cellRadius;
 
 				}
-				if (cellPos.x + cell.Cell.CellRadius > highestX) {
-					highestX = cellPos.x + cell.Cell.CellRadius;
+				if (cellPos.x + cell.Cell.cellRadius > highestX) {
+					highestX = cellPos.x + cell.Cell.cellRadius;
 				}
-				if (cellPos.y - cell.Cell.CellRadius < lowestY) {
-					lowestY = cellPos.y - cell.Cell.CellRadius;
+				if (cellPos.y - cell.Cell.cellRadius < lowestY) {
+					lowestY = cellPos.y - cell.Cell.cellRadius;
 				}
-				if (cellPos.y + cell.Cell.CellRadius > highestY) {
-					highestY = cellPos.y + cell.Cell.CellRadius;
+				if (cellPos.y + cell.Cell.cellRadius > highestY) {
+					highestY = cellPos.y + cell.Cell.cellRadius;
 				}
 			}
 		}

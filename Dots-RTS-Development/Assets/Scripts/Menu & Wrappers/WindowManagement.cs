@@ -21,9 +21,7 @@ public class WindowManagement : MonoBehaviour {
 
 	public event EventHandler<WindowChangeEventArgs> OnWindowChange;
 
-	public int WindowCount => activeWindows.Count;
-
-	public int realWindowCount = 0;
+	public int realWindowCount;
 
 	public void AddWindow(Window win, bool show = true) {
 		if (activeWindows.ContainsKey(win.GetHashCode())) {
@@ -126,4 +124,3 @@ public class WindowManagement : MonoBehaviour {
 		}
 	}
 }
-

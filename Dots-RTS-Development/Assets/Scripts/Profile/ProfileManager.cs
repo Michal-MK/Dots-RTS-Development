@@ -18,11 +18,11 @@ public class ProfileManager {
 	private Button createProfileButton;
 	private readonly GameObject profileCreation;
 
-	public static ProfileManager Initialize(ProfileManagerBehaviour behaviour) {
+	public static void Initialize(ProfileManagerBehaviour behaviour) {
 		if(Instance != null) {
-			return Instance;
+			return;
 		}
-		return Instance = new ProfileManager(behaviour);
+		Instance = new ProfileManager(behaviour);
 	}
 
 	private ProfileManager(ProfileManagerBehaviour behaviour) {

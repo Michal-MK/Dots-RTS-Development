@@ -23,7 +23,8 @@ public class Element : MonoBehaviour {
 		float angle = Random.Range(0, 2 * Mathf.PI);
 		float x = Mathf.Sin(angle);
 		float y = Mathf.Cos(angle);
-		return new Vector3(transform.position.x + x * attacker.Cell.CellRadius * 0.5f, transform.position.y + y * attacker.Cell.CellRadius * 0.5f);
+		Vector3 position = transform.position;
+		return new Vector3(position.x + x * attacker.Cell.cellRadius * 0.5f, position.y + y * attacker.Cell.cellRadius * 0.5f);
 	}
 
 	protected void ExecuteAttack() {
@@ -60,7 +61,7 @@ public class Element : MonoBehaviour {
 		GameCell temp = attacker;
 		attacker = target;
 		target = temp;
-		team = attacker.Cell.Team;
+		team = attacker.Cell.team;
 		reflected = true;
 	}
 }

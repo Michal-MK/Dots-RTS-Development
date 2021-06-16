@@ -23,26 +23,26 @@ public class PlayManager {
 
 	public GameResult Result { get; set; }
 
-	private bool _check;
-	private DateTime _startTime;
+	private bool check;
+	private DateTime startTime;
 
 	public async Task Start() {
 		LoadFromFile loader = GameObject.Find(nameof(LoadFromFile)).GetComponent<LoadFromFile>();
 		loader.Load(FilePath, this);
 		SetupCellSelection();
 		Result = new GameResult();
-		_startTime = DateTime.Now;
 
-		_check = true;
+		startTime = DateTime.Now;
+		check = true;
 		await GameState(CheckFrequency);
 	}
 
-	public void Stop() {
-		_check = false;
+	private void Stop() {
+		check = false;
 	}
 
-	public async Task GameState(int checkFreq) {
-		while (_check) {
+	private async Task GameState(int checkFreq) {
+		while (check) {
 			await Task.Delay(checkFreq);
 
 			int activeAIs = InitializedActors.AIs.Count(ai => ai.isActive);
@@ -67,26 +67,24 @@ public class PlayManager {
 	}
 
 	private void SetupCellSelection() {
-		foreach (GameCell cell in AllCells) {
-			if(cell.Cell.Team == Team.ALLIED) {
-				cell.OnSelectionAttempt += AttemptCellSelection;
-			}
+		foreach (GameCell cell in AllCells.Where(cell => cell.Cell.team == Team.ALLIED)) {
+			cell.OnSelectionAttempt += AttemptCellSelection;
 		}
 	}
 
 	private void AttemptCellSelection(object sender, GameCell e) {
-		if(e.Cell.Team == Team.ALLIED) {
+		if (e.Cell.team == Team.ALLIED) {
 			Player.Selection.Add(e);
 		}
 	}
 
-	public void GameOver() {
+	private void GameOver() {
 		Result.Winner = false;
-		Result.GameplayTime = DateTime.Now - _startTime;
+		Result.GameplayTime = DateTime.Now - startTime;
 		SceneLoader.Instance.Load(Scenes.POST_GAME, () => { });
 	}
 
-	public void YouWon() {
+	private void YouWon() {
 		Result.Winner = true;
 
 		SceneLoader.Instance.Load(Scenes.POST_GAME, () => { });
@@ -94,6 +92,7 @@ public class PlayManager {
 		if (NeutralCells.Count == 0) {
 			Result.IsDomination = true;
 		}
+
 		//if (CampaignLevel.current != null) {
 		//	CampaignLevelCode c = ProfileManager.CurrentProfile.CurrentCampaignLevel;
 		//	ProfileManager.CurrentProfile.CompletedCampaignLevels += 1;

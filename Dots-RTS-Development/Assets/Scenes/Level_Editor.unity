@@ -7076,7 +7076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cccf7b01c0895f2409ccb77538004e49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RealWindowCount: 0
+  realWindowCount: 0
 --- !u!4 &723004862
 Transform:
   m_ObjectHideFlags: 0
@@ -16940,8 +16940,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1784811836}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: PauseGameorEscape
+        m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
+        m_MethodName: PauseGameOrEscape
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1784811837}

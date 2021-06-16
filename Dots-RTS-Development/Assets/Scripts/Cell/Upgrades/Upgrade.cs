@@ -59,13 +59,12 @@ public class Upgrade : MonoBehaviour {
 
 	public static async Task<Sprite> GetSprite(Upgrades type) {
 		try {
-			using (FileStream fs = new FileStream(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png", FileMode.Open, FileAccess.Read, FileShare.Read, 4069, true)) {
-				byte[] result = new byte[fs.Length];
-				await fs.ReadAsync(result, 0, (int)fs.Length);
-				Texture2D tex = new Texture2D(1024, 1024);
-				tex.LoadImage(result);
-				return Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 1024), Vector2.one * 0.5f);
-			}
+			using FileStream fs = new FileStream(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "UpgradeImages" + Path.DirectorySeparatorChar + FolderAccess.GetUpgradeFunctionalName(type) + ".png", FileMode.Open, FileAccess.Read, FileShare.Read, 4069, true);
+			byte[] result = new byte[fs.Length];
+			await fs.ReadAsync(result, 0, (int)fs.Length);
+			Texture2D tex = new Texture2D(1024, 1024);
+			tex.LoadImage(result);
+			return Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 1024), Vector2.one * 0.5f);
 		}
 		catch (FileNotFoundException) {
 			return FolderAccess.GetNIYImage();

@@ -24,7 +24,7 @@ public class Buttons : MainMenuUI {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = UM_Store.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
+		int selected = StoreUpgradeManager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
 
 		if (selected <= 99) {
 			if (selected < Upgrade.TOTAL_OFFENSIVE_UPGRADES) {
@@ -45,7 +45,7 @@ public class Buttons : MainMenuUI {
 				GetComponent<Image>().sprite = FolderAccess.GetNIYImage();
 			}
 		}
-		else if (selected > 99 && selected <= 199) {
+		else if (selected <= 199) {
 			if (selected < 100 + Upgrade.TOTAL_DEFENSIVE_UPGRADES) {
 				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
 				if (upgradeInfo != null) {

@@ -62,9 +62,8 @@ public class ProfileInfo : MonoBehaviour {
 			UI_ReferenceHolder.PO_OnLevelImage.texture = tex;
 		}
 		else {
-			print($"Loaded level is {campaignLevel}!");
+			print($"Loaded level is NULL!");
 			UI_ReferenceHolder.PO_OnLevel.text = "No level found!";
-
 		}
 
 		UI_ReferenceHolder.PO_Name.text = ProfileManager.CurrentProfile.Name;

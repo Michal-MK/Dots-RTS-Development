@@ -6,7 +6,7 @@ namespace Conversions {
 	public static class BasicConversions {
 
 		public static Vector2 PolarToCartesian(float angle, float r) {
-			return new Vector2(Mathf.Sin(angle) * (r), Mathf.Cos(angle) * (r));
+			return new Vector2(Mathf.Sin(angle) * r, Mathf.Cos(angle) * r);
 		}
 
 		public static List<List<Team>> CDToActualClans(Dictionary<Team, AIHolder> dict) {
@@ -22,7 +22,6 @@ namespace Conversions {
 				clanJ.Sort();
 				bool newClan = true;
 				foreach (List<Team> clan in actualClans) {
-
 					if (clanJ.Contains(clan[0])) {
 						newClan = false;
 						break;

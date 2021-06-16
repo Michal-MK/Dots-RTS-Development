@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SaveFileInfo : MonoBehaviour {
-	public bool isSavedLocaly = false;
+	public bool isSavedLocally;
 
 	public Button downloadButton;
 	public Text levelName;
@@ -22,14 +23,13 @@ public class SaveFileInfo : MonoBehaviour {
 	public SaveAndLoadEditor saveAndLoadEditor;
 	public string timeRaw;
 
-	public static event Control.NewSelectionForDownload newTarget;
+	private readonly ServerAccess serverAccess = new ServerAccess();
 
-	public ServerAccess serverAccess = new ServerAccess();
+	public LevelMarket Market { get; set; }
 
 
 	public void SetAsTarget() {
-		LevelMarket.selectedSave = this.gameObject;
-		newTarget(this);
+		Market.SelectedSave = gameObject;
 	}
 
 	//TODO Replace Fixed Update with something more efficient
@@ -54,13 +54,13 @@ public class SaveFileInfo : MonoBehaviour {
 
 	#region Local
 
-	public void LoadLevel(Transform levelName) {
+	public void LoadLevel(Transform lvlName) {
 		string s;
 		if (GameEnvironment.IsAndroid) {
-			s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+			s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + lvlName.name;
 		}
 		else {
-			s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name;
+			s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + lvlName.name;
 		}
 		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.Custom, s);
 	}

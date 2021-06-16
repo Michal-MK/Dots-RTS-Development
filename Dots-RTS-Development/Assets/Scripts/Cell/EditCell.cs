@@ -13,7 +13,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 	#region Prefab References
 	public SpriteRenderer maxCellRadius;
-	public UM_Editor upgrade_manager;
+	public EditorUpgradeManager upgrade_manager;
 	#endregion
 
 
@@ -30,7 +30,7 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
-		uManager = GetComponent<Upgrade_Manager>();
+		uManager = GetComponent<UpgradeManager>();
 
 		GameObject count = transform.Find("Count").gameObject;
 		elementCountDisplay = count.GetComponent<TextMeshPro>();
@@ -38,28 +38,28 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 		cellSelectedRenderer = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
-		Cell.CellRadius = col.radius * transform.localScale.x;
+		Cell.cellRadius = col.radius * transform.localScale.x;
 		pointerDownAtTime = Mathf.Infinity;
 	}
 
 	public void FastResize() {
 		float mappedValue;
-		if (Cell.ElementCount < 10) {
+		if (Cell.elementCount < 10) {
 			mappedValue = 1;
 		}
-		else if (Cell.ElementCount >= 10 && Cell.ElementCount <= Cell.MaxElements) {
-			mappedValue = Map.MapFloat(Cell.ElementCount, 10, Cell.MaxElements, 1f, 2f);
+		else if (Cell.elementCount >= 10 && Cell.elementCount <= Cell.maxElements) {
+			mappedValue = Map.MapFloat(Cell.elementCount, 10, Cell.maxElements, 1f, 2f);
 		}
 		else {
-			if (Cell.ElementCount < 1000) {
-				mappedValue = Map.MapFloat(Cell.ElementCount, Cell.MaxElements, 999f, 2f, 4f);
+			if (Cell.elementCount < 1000) {
+				mappedValue = Map.MapFloat(Cell.elementCount, Cell.maxElements, 999f, 2f, 4f);
 			}
 			else {
 				mappedValue = 4;
 			}
 		}
 		transform.localScale = new Vector3(mappedValue, mappedValue);
-		Cell.CellRadius = col.radius * transform.localScale.x;
+		Cell.cellRadius = col.radius * transform.localScale.x;
 	}
 
 	private void UpdateUpgradeVisual() {
@@ -70,9 +70,9 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	}
 
 	public void UpdateStats() {
-		Cell.ElementCount = core.StartElements;
-		Cell.MaxElements = core.MaxElements;
-		Cell.RegenPeriod = core.Regeneration;
+		Cell.elementCount = core.StartElements;
+		Cell.maxElements = core.MaxElements;
+		Cell.regenPeriod = core.Regeneration;
 		FastResize();
 		UpdateVisual();
 	}
@@ -120,10 +120,10 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 				IsCellSelected = !IsCellSelected;
 			}
 			if (IsCellSelected) {
-				core.Team = Cell.Team;
-				core.StartElements = Cell.ElementCount;
-				core.Regeneration = Cell.RegenPeriod;
-				core.MaxElements = Cell.MaxElements;
+				core.Team = Cell.team;
+				core.StartElements = Cell.elementCount;
+				core.Regeneration = Cell.regenPeriod;
+				core.MaxElements = Cell.maxElements;
 				EnableCircle(Color.magenta);
 			}
 		}

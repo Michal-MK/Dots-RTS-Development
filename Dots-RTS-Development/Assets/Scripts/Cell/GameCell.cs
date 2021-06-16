@@ -26,7 +26,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
 		rg = GetComponent<Rigidbody2D>();
-		uManager = GetComponent<Upgrade_Manager>();
+		uManager = GetComponent<UpgradeManager>();
 
 		GameObject count = transform.Find("Count").gameObject;
 		elementCountDisplay = count.GetComponent<TextMeshPro>();
@@ -34,7 +34,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 		cellSelectedRenderer = transform.Find("Selected").GetComponent<SpriteRenderer>();
 
-		Cell.CellRadius = col.radius * transform.localScale.x;
+		Cell.cellRadius = col.radius * transform.localScale.x;
 		Cell.coroutineRunner = this;
 
 		Cell.OnElementDecayed += (s, e) => { UpdateVisual(); };
@@ -42,17 +42,17 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	}
 
 	private void Start() {
-		if (Cell.MaxElements == 0) {
-			Cell.MaxElements = 50;
+		if (Cell.maxElements == 0) {
+			Cell.maxElements = 50;
 		}
-		if (Cell.ElementCount == 0) {
-			Cell.ElementCount = 10;
+		if (Cell.elementCount == 0) {
+			Cell.elementCount = 10;
 		}
-		if (Cell.RegenPeriod == 0) {
-			Cell.RegenPeriod = 0.3f;
+		if (Cell.regenPeriod == 0) {
+			Cell.regenPeriod = 0.3f;
 		}
-		if (Cell.CellRadius == 0) {
-			Cell.CellRadius = col.radius * transform.localScale.x;
+		if (Cell.cellRadius == 0) {
+			Cell.cellRadius = col.radius * transform.localScale.x;
 		}
 
 		StartCoroutine(ScaleCell());
@@ -113,18 +113,18 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	}
 
 	public void AttackCell(GameCell target) {
-		if (Cell.ElementCount > 1 && target != this) {
-			int numElements = Cell.ElementCount /= 2;
+		if (Cell.elementCount > 1 && target != this) {
+			int numElements = Cell.elementCount /= 2;
 
 			for (int i = 0; i < numElements; i++) {
 				Element e = Instantiate(elementObj, transform.position, Quaternion.identity).GetComponent<Element>();
 				e.target = target;
 				e.attacker = this;
-				e.team = Cell.Team;
-				e.speed = Cell.ElementSpeed;
+				e.team = Cell.team;
+				e.speed = Cell.elementSpeed;
 			}
 			UpdateCellInfo();
-			sound.PlaySound(Cell.ElementSpawn);
+			sound.PlaySound(Cell.elementSpawn);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	public void DamageCell(Element element, int amoutOfDamage, Upgrades[] additionalArgs) {
 
 		#region Element Specific Code for Upgrade management -- Offensive Upgrades
-		if (Cell.Team == element.team) {
+		if (Cell.team == element.team) {
 			float aidBonus = 0;
 			for (int i = 0; i < uManager.upgrades.Length; i++) {
 				if (uManager.upgrades[i] == Upgrades.DEF_AID_BONUS_CHANCE) {
@@ -142,14 +142,14 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 			}
 			if (aidBonus != 0) {
 				if (Random.Range(0f, 1f) < aidBonus) {
-					Cell.ElementCount += 2;
+					Cell.elementCount += 2;
 				}
 				else {
-					Cell.ElementCount += 1;
+					Cell.elementCount += 1;
 				}
 			}
 			else {
-				Cell.ElementCount += 1;
+				Cell.elementCount += 1;
 			}
 			Destroy(element.gameObject);
 			UpdateCellInfo();
@@ -197,7 +197,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		if (slowRegenStrength != 0) {
 			if (!Cell.appliedDebuffs.Contains(Upgrades.ATK_SLOW_REGENERATION)) {
 				Cell.appliedDebuffs.Add(Upgrades.ATK_SLOW_REGENERATION);
-				Cell.RegenPeriod *= 1.33f;
+				Cell.regenPeriod *= 1.33f;
 			}
 		}
 		#endregion
@@ -234,37 +234,37 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 		#endregion
 
-		Cell.ElementCount -= amoutOfDamage;
+		Cell.elementCount -= amoutOfDamage;
 
-		if (Cell.ElementCount < 0) {
-			TeamChanged?.Invoke(this, new CellTeamChangeEventArgs(this, Cell.Team, element.team));
+		if (Cell.elementCount < 0) {
+			TeamChanged?.Invoke(this, new CellTeamChangeEventArgs(this, Cell.team, element.team));
 
 			if (isSelected) {
 				ModifySelection(this);
 			}
 
-			Cell.ElementCount = -Cell.ElementCount;
-			Cell.Team = element.team;
+			Cell.elementCount = -Cell.elementCount;
+			Cell.team = element.team;
 		}
 
 		Destroy(element.gameObject);
-		sound.PlaySound(Cell.ElementAttack);
+		sound.PlaySound(Cell.elementAttack);
 		UpdateCellInfo();
 	}
 
 	#endregion
 
 	public void UpdateCellInfo() {
-		if (!Cell.isRegenerating && Cell.Team >= Team.ALLIED) {
+		if (!Cell.isRegenerating && Cell.team >= Team.ALLIED) {
 			generateCoroutine = StartCoroutine(Cell.GenerateElements());
 		}
-		if (Cell.ElementCount > Cell.MaxElements) {
+		if (Cell.elementCount > Cell.maxElements) {
 			Cell.Decay(0.5f, this);
 		}
 		cellSelectedRenderer.enabled = isSelected;
 
-		cellSprite.color = CellColours.GetColor(Cell.Team);
-		elementCountDisplay.text = Cell.ElementCount.ToString();
+		cellSprite.color = CellColours.GetColor(Cell.team);
+		elementCountDisplay.text = Cell.elementCount.ToString();
 	}
 
 	private Vector3 oldPos = Vector3.zero;
@@ -282,36 +282,36 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	private void Update() {
 		if (Input.GetMouseButtonUp(0) && lastEnteredCell == this) {
-			AttackWrapper(lastEnteredCell, lastEnteredCell.Cell.Team);
+			AttackWrapper(lastEnteredCell, lastEnteredCell.Cell.team);
 		}
 	}
 
 	private void OnMouseOver() {
 		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed
 		if (Input.GetKeyDown(KeyCode.Keypad8)) {
-			if (Cell.MaxElements < 100) {
-				Cell.MaxElements++;
-				print(Cell.MaxElements);
+			if (Cell.maxElements < 100) {
+				Cell.maxElements++;
+				print(Cell.maxElements);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Keypad2)) {
-			if (Cell.MaxElements >= 2) {
-				Cell.MaxElements--;
-				print(Cell.MaxElements);
+			if (Cell.maxElements >= 2) {
+				Cell.maxElements--;
+				print(Cell.maxElements);
 			}
 		}
 
 		//Adjust cell regeneration rate
 		if (Input.GetKeyDown(KeyCode.Keypad6)) {
-			if (Cell.RegenPeriod < 10) {
-				Cell.RegenPeriod += 0.5f;
-				print(Cell.RegenPeriod);
+			if (Cell.regenPeriod < 10) {
+				Cell.regenPeriod += 0.5f;
+				print(Cell.regenPeriod);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Keypad4)) {
-			if (Cell.RegenPeriod > 0.5f) {
-				Cell.RegenPeriod -= 0.5f;
-				print(Cell.RegenPeriod);
+			if (Cell.regenPeriod > 0.5f) {
+				Cell.regenPeriod -= 0.5f;
+				print(Cell.regenPeriod);
 			}
 		}
 		#endregion
@@ -321,7 +321,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		Background.onReleaseClear = false;
 		lastEnteredCell = this;
 
-		if (Input.GetMouseButton(0) && Cell.Team == Team.ALLIED) {
+		if (Input.GetMouseButton(0) && Cell.team == Team.ALLIED) {
 			OnSelectionAttempt?.Invoke(this, this);
 			ModifySelection(this);
 		}
@@ -333,7 +333,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	public void OnPointerDown(PointerEventData eventData) {
 		OnSelectionAttempt?.Invoke(this, this);
-		if (Cell.Team == Team.ALLIED) {
+		if (Cell.team == Team.ALLIED) {
 			ModifySelection(this);
 		}
 	}

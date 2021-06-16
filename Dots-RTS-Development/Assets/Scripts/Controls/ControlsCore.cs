@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ControlsCore : MonoBehaviour {
 	// this contains the reference orientation
-	public Vector3 DeviceOrientOrigin;
-	// used to make a deadzone
+	public Vector3 deviceOrientOrigin;
+	// used to make a dead-zone
 	public float accelerometerDeadzone;
 	public Vector3 accelerometerDelta;
 
@@ -13,8 +14,8 @@ public class ControlsCore : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (Vector3.Magnitude(Input.acceleration - DeviceOrientOrigin) > accelerometerDeadzone) {
-			accelerometerDelta = Input.acceleration - DeviceOrientOrigin;
+		if (Vector3.Magnitude(Input.acceleration - deviceOrientOrigin) > accelerometerDeadzone) {
+			accelerometerDelta = Input.acceleration - deviceOrientOrigin;
 		}
 		else {
 			accelerometerDelta = Vector2.zero;
@@ -29,6 +30,6 @@ public class ControlsCore : MonoBehaviour {
 
 	//Call this to refresh the default point of orientation
 	public void RefreshOrientation() {
-		DeviceOrientOrigin = Input.acceleration;
+		deviceOrientOrigin = Input.acceleration;
 	}
 }

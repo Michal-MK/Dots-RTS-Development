@@ -7,12 +7,12 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerEnterHandler, IPointerExitH
 	public SpriteRenderer selfSprite;
 	public SpriteRenderer clearUpgrade;
 
-	private UM_Editor uManager;
+	private EditorUpgradeManager uManager;
 
 	protected override void Start() {
 		base.Start();
 		OnSlotClicked += UpgradeSlotClicked;
-		uManager = transform.parent.parent.GetComponent<UM_Editor>(); //What?? 
+		uManager = transform.parent.parent.GetComponent<EditorUpgradeManager>(); //What?? 
 	}
 
 	private void UpgradeSlotClicked(object sender, UpgradeSlot e) {

@@ -7,18 +7,18 @@ public class EnemyAI : MonoBehaviour, IAlly {
 
 	public bool isActive = true;
 
-	public readonly int aICellSelectElementThreshold = 10;
-	public readonly int aICellAidElementThreshold = 10;
+	protected readonly int aICellSelectElementThreshold = 10;
+	protected readonly int aICellAidElementThreshold = 10;
 	public float decisionSpeed = 1f;
 
 	public Team team;
 
-	public readonly List<GameCell> targets = new List<GameCell>();            //Cells this AI will attack -- aiCells of Target
-	public readonly List<GameCell> aiCells = new List<GameCell>();            //This AIs cells
-	public readonly List<GameCell> allies = new List<GameCell>();             //Cells this AI will not attack -- aiCells of Ally
+	protected readonly List<GameCell> targets = new List<GameCell>();            //Cells this AI will attack -- aiCells of Target
+	protected readonly List<GameCell> aiCells = new List<GameCell>();            //This AIs cells
+	private readonly List<GameCell> allies = new List<GameCell>();             //Cells this AI will not attack -- aiCells of Ally
 
-	protected readonly List<IAlly> alliesOfThisAI = new List<IAlly>();
-	protected List<IAlly> targetsOfThisAI = new List<IAlly>();
+	private readonly List<IAlly> alliesOfThisAI = new List<IAlly>();
+	private List<IAlly> targetsOfThisAI = new List<IAlly>();
 
 	protected GameCell selectedAiCell;                                       //Selected AI cell that will perform the action.
 	protected GameCell selectedTargetCell;                                   //Selected target that can be attacked
@@ -46,10 +46,10 @@ public class EnemyAI : MonoBehaviour, IAlly {
 
 	public void FindRelationWithCells() {
 		foreach (GameCell current in playManager.AllCells) {
-			if (current.Cell.Team == team) {
+			if (current.Cell.team == team) {
 				aiCells.Add(current);
 			}
-			else if (current.Cell.Team != Team.NEUTRAL) {
+			else if (current.Cell.team != Team.NEUTRAL) {
 				targets.Add(current);
 			}
 		}
@@ -186,21 +186,18 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	}
 
 	//Update this AI's allies and targets
-	private void ConsiderAllies() {  //Needs re-validation / rewrite
+	private void ConsiderAllies() {
+		//Needs re-validation / rewrite
 		if (gameObject.name == "AI code 1 enemy 2") {
 			print("");
 		}
 
 		//Loop through all allied IAllies
-		for (int j = 0; j < Allies.Count; j++) {
-			IAlly currentAlly = Allies[j];                                                                                  //print("My ally " + getAiAllies[j] + " has " + alliesOfThisAI[j].MyCells.Count + " cells.  " + gameObject.name);
-
+		foreach (IAlly currentAlly in Allies) {
 			//Loop though all aiCells of the allied IAlly
-			for (int k = 0; k < currentAlly.MyCells.Count; k++) {
-				GameCell currentCellOfTheAlliedAI = currentAlly.MyCells[k];                                            //Loop though all the targets of this AI
-
+			foreach (GameCell currentCellOfTheAlliedAI in currentAlly.MyCells) {
 				for (int l = 0; l < targets.Count; l++) {
-					GameCell thisAIsTarget = targets[l];                                                              //print("Comparing " + currentCellOfTheAlliedAI + " to " + currentAlly);
+					GameCell thisAIsTarget = targets[l];
 
 					//If aiCell of the other AI and target of this AI are the same cell do Stuff
 					if (currentCellOfTheAlliedAI == thisAIsTarget) {

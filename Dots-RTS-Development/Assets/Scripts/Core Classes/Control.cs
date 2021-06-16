@@ -6,12 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Control : MonoBehaviour {
 
-	#region Delegates
-
-	public delegate void NewSelectionForDownload(SaveFileInfo sender);
-
-	#endregion
-
 	public static bool isPaused = false;
 	public static IPauseableScene pauseHandlers;
 	public static event EventHandler RMBPressed;

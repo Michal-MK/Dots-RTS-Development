@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class AllAiDifficultyWriter : MonoBehaviour {
 
-	public static Text myText;
+	private static Text myText;
 
 	public static void RedoText(Dictionary<Team,float> diffDict) {
 		if (myText == null) {

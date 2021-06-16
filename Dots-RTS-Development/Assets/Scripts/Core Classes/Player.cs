@@ -12,8 +12,7 @@ public class Player : IAlly {
 
 	public List<GameCell> Selection { get; } = new List<GameCell>();
 
-
-
+	
 	#region Ally/Target manipulation
 	public bool IsAllyOf(IAlly other) {
 		return Allies.Contains(other);

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class Cell {
@@ -23,10 +24,10 @@ public class Cell {
 	public IEnumerator GenerateElements() {
 		isRegenerating = true;
 		while (isRegenerating) {
-			yield return new WaitForSeconds(RegenPeriod);
-			if (ElementCount < MaxElements) {
-				ElementCount++;
-				OnElementGenerated?.Invoke(this, ElementCount);
+			yield return new WaitForSeconds(regenPeriod);
+			if (elementCount < maxElements) {
+				elementCount++;
+				OnElementGenerated?.Invoke(this, elementCount);
 			}
 		}
 	}
@@ -42,12 +43,12 @@ public class Cell {
 		superClass.StopCoroutine(superClass.generateCoroutine);
 		while (isDecaying) {
 			yield return new WaitForSeconds(decayRate);
-			ElementCount--;
-			OnElementDecayed?.Invoke(this, ElementCount);
-			if (MaxElements - ElementCount > MaxElements * 0.5f) {
+			elementCount--;
+			OnElementDecayed?.Invoke(this, elementCount);
+			if (maxElements - elementCount > maxElements * 0.5f) {
 				decayRate *= 0.5f;
 			}
-			if (ElementCount <= MaxElements) {
+			if (elementCount <= maxElements) {
 				isDecaying = false;
 				isRegenerating = false;
 			}
@@ -58,9 +59,9 @@ public class Cell {
 		appliedDebuffs.Add(Upgrades.ATK_DOT);
 		for (int i = 0; i < totalDamageInflicted; i++) {
 			yield return new WaitForSeconds(timeBetweenTicks);
-			if (ElementCount >= 1) {
-				ElementCount--;
-				OnElementDecayed?.Invoke(this, ElementCount);
+			if (elementCount >= 1) {
+				elementCount--;
+				OnElementDecayed?.Invoke(this, elementCount);
 			}
 		}
 		appliedDebuffs.Remove(Upgrades.ATK_DOT);
@@ -69,47 +70,47 @@ public class Cell {
 	/// <summary>
 	/// The elements that are available in selected cell.
 	/// </summary>
-	public int ElementCount;
+	public int elementCount;
 
 	/// <summary>
 	/// How fast will this cell generate new elements.
 	/// </summary>
-	public float RegenPeriod;
+	public float regenPeriod;
 
 	/// <summary>
 	/// The maximum amount of elements this cell can hold.
 	/// </summary>
-	public int MaxElements;
+	public int maxElements;
 
 	/// <summary>
 	/// Team this cell belongs to.
 	/// </summary>
-	public Team Team;
+	public Team team;
 
 	/// <summary>
 	/// The radius of the cell
 	/// </summary>
-	public float CellRadius;
+	public float cellRadius;
 
 	/// <summary>
 	/// The speed of elements spawned by this cell
 	/// </summary>
 	[HideInInspector]
-	public float ElementSpeed = 5;
+	public float elementSpeed = 5;
 
 	/// <summary>
 	/// Cell's position in the world
 	/// </summary>
 	[HideInInspector]
-	public Vector3 CellPosition;
+	public Vector3 cellPosition;
 
 	/// <summary>
 	/// Clip to play when an element spawns
 	/// </summary>
-	public AudioClip ElementSpawn;
+	public AudioClip elementSpawn;
 
 	/// <summary>
 	/// Clip to play when an de-spawns
 	/// </summary>
-	public AudioClip ElementAttack;
+	public AudioClip elementAttack;
 }

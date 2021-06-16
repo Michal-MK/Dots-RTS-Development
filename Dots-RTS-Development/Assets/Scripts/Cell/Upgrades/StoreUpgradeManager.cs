@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class UM_Store : Upgrade_Manager {
+public class StoreUpgradeManager : UpgradeManager {
 
 	/// <summary>
 	/// Selected item in the upgrade shop.
@@ -30,10 +30,8 @@ public class UM_Store : Upgrade_Manager {
 					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[col.Key] + " pcs.";
 					return;
 				}
-				else {
-					anim.GetComponent<TextMeshProUGUI>().text = $"You are missing\n{(cost - ProfileManager.CurrentProfile.Coins)} coins.";
-					anim.Play(AnimatorStates.SHOW);
-				}
+				anim.GetComponent<TextMeshProUGUI>().text = $"You are missing\n{(cost - ProfileManager.CurrentProfile.Coins)} coins.";
+				anim.Play(AnimatorStates.SHOW);
 			}
 		}
 	}

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Conversions;
@@ -17,60 +19,46 @@ public class TeamSetup : MonoBehaviour {
 	public Dictionary<Team, AIHolder> clanDict = new Dictionary<Team, AIHolder>();
 
 	private float diffAngle;
-	[HideInInspector]
-	public float roundTableR;
+	[HideInInspector] public float roundTableR;
 
-	#region Dictionary debug tool
-	//Dictionary<Cell.enmTeam, AIHolder>.KeyCollection keys = newDict.Keys;
-	//	foreach (Cell.enmTeam team in keys) {
-	//		string s = "";
-	//AIHolder hold = new AIHolder();
-	//newDict.TryGetValue(team, out hold);
-	//		foreach(Cell.enmTeam t in hold.targets) {
-	//			s += (" " + t + " ");
-
-	//		}
-	//		print(team + " has targets:" + s );
-			
-	//	}
-	#endregion
-
-	void OnEnable() {
-		print(GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor); 
+	private void OnEnable() {
+		print(GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor);
 		roundTableR = ((roundTable.rect.width * 0.5f)) - teamGOPrefab.GetComponent<RectTransform>().sizeDelta.x;
 
 
 		for (int i = 0; i < core.teamList.Count; i++) {
 
 			GameObject newTeamBox = Instantiate(teamGOPrefab, roundTable.transform);
+
 			//print(newTeamBox.transform.localPosition);
 			newTeamBox.GetComponent<Image>().color = CellColours.GetColor(core.teamList[i]);
 			teamBoxes.Add(newTeamBox.GetComponent<TeamBox>());
 			teamBoxes[i].team = core.teamList[i];
-			teamBoxes[i].myParrent = gameObject.GetComponent<TeamSetup>();
+			teamBoxes[i].myParent = gameObject.GetComponent<TeamSetup>();
 		}
 
 		diffAngle = (2 * Mathf.PI) / teamBoxes.Count;
 		float nextAngle = 0;
 
-		for (int i = 0; i < teamBoxes.Count; i++) {
-			teamBoxes[i].transform.localPosition = BasicConversions.PolarToCartesian(nextAngle, roundTableR);
+		foreach (TeamBox t in teamBoxes) {
+			t.transform.localPosition = BasicConversions.PolarToCartesian(nextAngle, roundTableR);
 
-			teamBoxes[i].myAngle = (nextAngle);
+			t.myAngle = nextAngle;
 			nextAngle += diffAngle;
-			teamBoxes[i].AllThingsSet();
+			t.AllThingsSet();
 		}
 		UpdateRoundTableVisuals();
 
 		//PASS
-		foreach (KeyValuePair<Team,AIHolder> item in clanDict) {
+		foreach (KeyValuePair<Team, AIHolder> item in clanDict) {
 			print(item.Key + " " + item.Value);
 		}
 
 	}
+
 	public void OnDisable() {
-		for (int i = 0; i < teamBoxes.Count; i++) {
-			Destroy(teamBoxes[i].gameObject);
+		foreach (TeamBox t in teamBoxes) {
+			Destroy(t.gameObject);
 		}
 		teamBoxes.Clear();
 	}
@@ -80,11 +68,11 @@ public class TeamSetup : MonoBehaviour {
 		Team indexClosest = Team.NEUTRAL;
 		teamBox.transform.position = teamBox.initialPos;
 
-		for (int i = 0; i < teamBoxes.Count; i++) {          //Debug.Log(i);
-			float dist = Vector2.Distance(teamBoxes[i].initialPos, pos);
+		foreach (TeamBox t in teamBoxes) {
+			float dist = Vector2.Distance(t.initialPos, pos);
 			if (dist < lowestDistFound) {
 				lowestDistFound = dist;
-				indexClosest = teamBoxes[i].team;
+				indexClosest = t.team;
 			}
 		}
 		float distToX = Vector2.Distance(leaveClanButtonGo.transform.position, pos);
@@ -96,7 +84,7 @@ public class TeamSetup : MonoBehaviour {
 			return;
 		}
 		RemoveFromClan(teamBox.team);
-		CreateAClan(teamBox.team, indexClosest);
+		CreateClan(teamBox.team, indexClosest);
 	}
 
 	public void RemoveFromClan(Team firstTeam) {
@@ -109,20 +97,17 @@ public class TeamSetup : MonoBehaviour {
 		foreach (Team j in keys) {
 			print(j + " Key");
 
-			AIHolder alliesOfJ;
-			clanDict.TryGetValue(j, out alliesOfJ);
+			clanDict.TryGetValue(j, out AIHolder alliesOfJ);
 			if (alliesOfJ.allies.Contains(firstTeam)) {
 				alliesOfJ.allies.Remove(firstTeam);
 
 				changes.Add(j, alliesOfJ);
 			}
-
 		}
 
 		Dictionary<Team, AIHolder>.KeyCollection changesKeys = changes.Keys;
 		foreach (Team k in changesKeys) {
-			AIHolder value;
-			changes.TryGetValue(k, out value);
+			changes.TryGetValue(k, out AIHolder value);
 
 			clanDict.Remove(k);
 
@@ -135,22 +120,24 @@ public class TeamSetup : MonoBehaviour {
 
 	}
 
-	void CreateAClan(Team firstTeam, Team secondTeam) {
+	private void CreateClan(Team firstTeam, Team secondTeam) {
 		print("Creating a clan " + firstTeam + " " + secondTeam);
 		BindTwo(firstTeam, secondTeam);
 		BindTwo(secondTeam, firstTeam);
 		CheckAndAddOtherTeams(firstTeam, secondTeam);
+
 		// MoveTeamBoxToLeftOf(mySpawns[MySpawnsIndexFromTeam(firstTeam)], mySpawns[MySpawnsIndexFromTeam(secondTeam)]);
 		UpdateRoundTableVisuals();
 
 	}
-	void BindTwo(Team first, Team second) {
+
+	private void BindTwo(Team first, Team second) {
 		AIHolder tempAllies = new AIHolder();
 		if (clanDict.ContainsKey(first)) {
 
 			clanDict.TryGetValue(first, out tempAllies);
 
-			if (!AlreadyIsInAllyHolder(tempAllies, second)) {
+			if (!tempAllies.allies.Any(t => t == second)) {
 				tempAllies.allies.Add(second);
 
 				clanDict.Remove(first);
@@ -164,56 +151,53 @@ public class TeamSetup : MonoBehaviour {
 		}
 	}
 
-	
-
-	void CheckAndAddOtherTeams(Team firstTeam, Team secondTeam) {
-		AIHolder firstTeamFriends;
-		clanDict.TryGetValue(firstTeam, out firstTeamFriends);
-
-		AIHolder secondTeamFriends;
-		clanDict.TryGetValue(secondTeam, out secondTeamFriends);
+	private void CheckAndAddOtherTeams(Team firstTeam, Team secondTeam) {
+		clanDict.TryGetValue(firstTeam, out AIHolder firstTeamFriends);
+		clanDict.TryGetValue(secondTeam, out AIHolder secondTeamFriends);
 
 		List<Team> misses = new List<Team>();
-		for (int y = 0; y < secondTeamFriends.allies.Count; y++) {
-			if (!firstTeamFriends.allies.Contains(secondTeamFriends.allies[y])) {
-				misses.Add(secondTeamFriends.allies[y]);
+		foreach (Team t in secondTeamFriends.allies) {
+			if (!firstTeamFriends.allies.Contains(t)) {
+				misses.Add(t);
 			}
 		}
 		foreach (Team miss in misses) {
 			if (miss != firstTeam && miss != secondTeam) {
-				CreateAClan(firstTeam, miss);
+				CreateClan(firstTeam, miss);
 			}
 		}
 
 		misses.Clear();
-		for (int x = 0; x < firstTeamFriends.allies.Count; x++) {
-			if (!secondTeamFriends.allies.Contains(firstTeamFriends.allies[x])) {
-				misses.Add(firstTeamFriends.allies[x]);
+		foreach (Team t in firstTeamFriends.allies) {
+			if (!secondTeamFriends.allies.Contains(t)) {
+				misses.Add(t);
+
 				//print("Miss is " + firstTeamFriendsList[x]);
 			}
 		}
 		foreach (Team miss in misses) {
 			//Debug.Log("like This: " + miss + " " + secondTeam);
 			if (miss != secondTeam && miss != firstTeam) {
-				CreateAClan(miss, secondTeam);
+				CreateClan(miss, secondTeam);
 			}
 		}
 	}
-	static void DestroyAllInList(List<GameObject> list) {
-		for (int i = 0; i < list.Count; i++) {
-			Destroy(list[i]);
+
+	private static void DestroyAllInList(List<GameObject> list) {
+		foreach (GameObject go in list) {
+			Destroy(go);
 		}
 	}
 
-	public void UpdateRoundTableVisuals() {
+	private void UpdateRoundTableVisuals() {
 
 		DestroyAllInList(bgList);
-		
+
 		List<TeamBox> newList = new List<TeamBox>(teamBoxes);
 
 		float angle = 0;
 
-		
+
 		List<List<Team>> actualClans = BasicConversions.CDToActualClans(clanDict);
 		for (int i = 0; i < actualClans.Count; i++) {
 			GameObject bg = Instantiate(clanBG, roundTable);
@@ -228,18 +212,13 @@ public class TeamSetup : MonoBehaviour {
 			float lastTeamBoxAngle = 0;
 
 			foreach (Team j in actualClans[i]) {
-
-
-				foreach (TeamBox t in teamBoxes) {
-					if (t.team == j) {
-						//Debug.Log(t.team);
-						t.transform.localPosition = BasicConversions.PolarToCartesian(angle, roundTableR);
-						t.myAngle = angle;
-						t.AllThingsSet();
-						img.fillAmount += 1f / teamBoxes.Count;
-						lastTeamBoxAngle = Mathf.Rad2Deg * (angle + diffAngle / 2);
-						newList.Remove(t);
-					}
+				foreach (TeamBox t in teamBoxes.Where(t => t.team == j)) {
+					t.transform.localPosition = BasicConversions.PolarToCartesian(angle, roundTableR);
+					t.myAngle = angle;
+					t.AllThingsSet();
+					img.fillAmount += 1f / teamBoxes.Count;
+					lastTeamBoxAngle = Mathf.Rad2Deg * (angle + diffAngle / 2);
+					newList.Remove(t);
 				}
 				angle += diffAngle;
 			}
@@ -252,68 +231,17 @@ public class TeamSetup : MonoBehaviour {
 			t.AllThingsSet();
 			angle += diffAngle;
 		}
-
-
 	}
 
-
-	public static bool AlreadyIsInAllyHolder(AIHolder list, Team value) {
-		for (int i = 0; i < list.allies.Count; i++) {
-			if (list.allies[i] == value) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
-
-	public int MySpawnsIndexFromTeam(Team team) {
-		int output = -1;
-		for (int i = 0; i < teamBoxes.Count; i++) {
-			TeamBox spawn = teamBoxes[i];
-			if (spawn.team == team) {
-				output = i;
-				break;
-			}
-		}
-		if (output == -1) {
-			Debug.LogError("Nothing in mySpawns falls under team " + team);
-		}
-		return output;
-	}
-
-	public int MySpawnsIndexFromAngle(float RawAngle) {
-		float angle = RawAngle;
-		if (Mathf.Round(angle * 10) / 10 >= Mathf.Round(2 * Mathf.PI * 10) / 10) {
-			angle -= 2 * Mathf.PI;
-		}
-		int output = -1;
-		for (int i = 0; i < teamBoxes.Count; i++) {
-			TeamBox spawn = teamBoxes[i];
-			if (Mathf.Round(spawn.myAngle * 10) / 10 == Mathf.Round(angle * 10) / 10) {
-				output = i;
-				break;
-			}
-		}
-		if (output == -1) {
-			Debug.LogError("Nothing in teamBoxes has angle " + angle);
-		}
-		return output;
-	}
-
-	public Dictionary<Team,AIHolder> DictWithAllInfo() {
+	public Dictionary<Team, AIHolder> DictWithAllInfo() {
 		Dictionary<Team, AIHolder> newDict = new Dictionary<Team, AIHolder>();
-		Dictionary<Team, AIHolder>.KeyCollection TeamKeys = clanDict.Keys;
+		Dictionary<Team, AIHolder>.KeyCollection teamKeys = clanDict.Keys;
 		List<Team> noClaners = new List<Team>(core.teamList);
-		foreach (Team team in TeamKeys) {
+		foreach (Team team in teamKeys) {
 			noClaners.Remove(team);
-			AIHolder holder = new AIHolder();
-			if(clanDict.TryGetValue(team, out holder) == false) {
-				Debug.LogError("This can't happen");
-				clanDict.Add(team, holder);
-			}
+			clanDict.TryGetValue(team, out AIHolder holder);
 			holder.targets = new List<Team>(core.teamList);
+
 			//print(" targets start " + holder.targets.Count);
 			//print(" allies " + holder.allies.Count);
 			holder.targets.Remove(team);
@@ -321,13 +249,14 @@ public class TeamSetup : MonoBehaviour {
 				holder.targets.Remove(ally);
 				//print("this runs this time");
 			}
+
 			//print("targets ends at " + holder.targets.Count);
 			if (holder.targets.Count + holder.allies.Count != core.teamList.Count - 1) {
 				Debug.LogError("Targets&Allies don't add up to AllTeams");
 			}
 
 			newDict.Add(team, holder);
-			
+
 		}
 		foreach (Team team in noClaners) {
 			AIHolder newAiHolder = new AIHolder();
@@ -335,15 +264,11 @@ public class TeamSetup : MonoBehaviour {
 			newAiHolder.targets.Remove(team);
 			newDict.Add(team, newAiHolder);
 		}
-		
-		
 		return newDict;
-
-		
-	} 
+	}
 }
 
-[System.Serializable]
+[Serializable]
 public class AIHolder {
 	public List<Team> allies = new List<Team>();
 	public List<Team> targets = new List<Team>();

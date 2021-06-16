@@ -38,15 +38,15 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 	}
 
 	public void OnEndDrag(PointerEventData eventData) {
-		float cursorPerCent = eventData.position.y / Screen.height;
+		float cursorPercent = eventData.position.y / Screen.height;
 		HidePanelHint.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 10);
-		if (cursorPerCent < 0.125f) {
+		if (cursorPercent < 0.125f) {
 			CSTransform.anchorMin = new Vector2(0, 0);
 			CSTransform.anchorMax = new Vector2(1, anchorDiffPercent);
 
 
 		}
-		else if (cursorPerCent > 0.875f) {
+		else if (cursorPercent > 0.875f) {
 			CSTransform.anchorMin = new Vector2(0, 1 - anchorDiffPercent);
 			CSTransform.anchorMax = new Vector2(1, 1f);
 			HidePanelHint.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -200);
@@ -62,7 +62,7 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 		}
 	}
 
-	public void ToggleControlsPanel(object sender, bool state) {
+	private void ToggleControlsPanel(object sender, bool state) {
 		if (state) {
 			StartCoroutine(MoveToAnchor(0, 2));
 		}
@@ -72,18 +72,16 @@ public class MovePanel : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDra
 	}
 
 	private void Control_RMBPressed(object _, EventArgs __) {
-		if (!isMoving) {
-			if (!isShown) {
-				StartCoroutine(MoveToAnchor(anchorDiffPercent, 2));
-			}
-			else {
-				StartCoroutine(MoveToAnchor(0, 2));
-			}
+		if (isMoving) return;
+		if (!isShown) {
+			StartCoroutine(MoveToAnchor(anchorDiffPercent, 2));
+		}
+		else {
+			StartCoroutine(MoveToAnchor(0, 2));
 		}
 	}
 
-
-	public IEnumerator MoveToAnchor(float topAnchor, float speedMultiplyer) {
+	private IEnumerator MoveToAnchor(float topAnchor, float speedMultiplyer) {
 		float initialTopAnchor = CSTransform.anchorMax.y;
 
 		isMoving = true;

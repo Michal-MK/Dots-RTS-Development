@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class UM_Editor : Upgrade_Manager {
+public class EditorUpgradeManager : UpgradeManager {
 
 	#region Unity UI
 
@@ -12,8 +12,8 @@ public class UM_Editor : Upgrade_Manager {
 
 	public readonly UpgradeSlot_Cell[] upgradeSlots = new UpgradeSlot_Cell[8];
 
-	public void SetupUpgrades(LevelEditorUI UI) {
-		GameObject uiUpgrades = UI.upgradePickerButtons;
+	public void SetupUpgrades(LevelEditorUI ui) {
+		GameObject uiUpgrades = ui.upgradePickerButtons;
 
 		int i = 0;
 		foreach (UpgradeSlot slot in uiUpgrades.GetComponentsInChildren<UpgradeSlot>()) {
@@ -36,10 +36,9 @@ public class UM_Editor : Upgrade_Manager {
 
 	protected override void UpgradePreinstallSprites() {
 		for (int i = 0; i < upgradeSlots.Length; i++) {
-			if (upgrades[i] != Upgrades.NONE) {
-				upgradeSlots[i].selfSprite.sprite = Upgrade.UpgradeGraphics[upgrades[i]];
-				upgradeSlots[i].selfSprite.size = Vector2.one * 25f;
-			}
+			if (upgrades[i] == Upgrades.NONE) continue;
+			upgradeSlots[i].selfSprite.sprite = Upgrade.UpgradeGraphics[upgrades[i]];
+			upgradeSlots[i].selfSprite.size = Vector2.one * 25f;
 		}
 	}
 

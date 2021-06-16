@@ -32,11 +32,10 @@ class FolderAccess {
 	}
 
 	public static Sprite GetNIYImage() {
-		if (NIY == null) {
-			Texture2D tex = new Texture2D(512, 512);
-			tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "NIY.png"));
-			NIY = Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 512), Vector2.one * 0.5f);
-		}
+		if (NIY != null) return NIY;
+		Texture2D tex = new Texture2D(512, 512);
+		tex.LoadImage(File.ReadAllBytes(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "NIY.png"));
+		NIY = Sprite.Create(tex, new Rect(Vector2.zero, Vector2.one * 512), Vector2.one * 0.5f);
 		return NIY;
 	}
 
@@ -117,4 +116,3 @@ class FolderAccess {
 		return stringData;
 	}
 }
-

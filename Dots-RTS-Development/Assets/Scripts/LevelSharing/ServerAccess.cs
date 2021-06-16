@@ -1,24 +1,25 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class ServerAccess {
 
 	public async Task<List<string>> GetLevelsAsync() {
-		HttpWebRequest request = WebRequest.CreateHttp(new Uri("http://192.168.88.5:5000/Levels"));
+		HttpWebRequest request = WebRequest.CreateHttp(new Uri("http://192.168.88.5:5000/Level"));
 
 		try {
 			using WebResponse response = await request.GetResponseAsync();
 			using StreamReader s = new StreamReader(response.GetResponseStream());
-			return JsonUtility.FromJson<List<string>>(await s.ReadToEndAsync());
+			string content = await s.ReadToEndAsync();
+			JArray objects = JArray.Parse(content);
+			return objects.ToObject<List<string>>();
 		}
 		catch (Exception e) {
-			UnityEngine.Debug.Log(e);
+			Debug.Log(e);
 		}
 		return null;
 	}
@@ -27,7 +28,7 @@ public class ServerAccess {
 	/// Gets a file from a server
 	/// </summary>
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
-	public async Task<string> DownloadAsync(string fileName, bool temp = false) {
+	public async Task<SaveData> DownloadAsync(string fileName, bool temp = false) {
 		string tempPath;
 		string persistentPath;
 		if (GameEnvironment.IsAndroid) {
@@ -39,14 +40,13 @@ public class ServerAccess {
 			persistentPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
 		}
 
-		string hostname = "http://192.168.88.5:5000/Level?name=" + fileName;
+		string hostname = "http://192.168.88.5:5000/Level/Level?name=" + fileName;
 
 		HttpWebRequest req = WebRequest.CreateHttp(hostname);
 
 		try {
 			WebResponse response = await req.GetResponseAsync();
-			UnityEngine.Debug.Log(fileName);
-			response = (FtpWebResponse)response;
+			Debug.Log(fileName);
 
 			using Stream s = response.GetResponseStream();
 
@@ -64,12 +64,12 @@ public class ServerAccess {
 				await file.WriteAsync(buffer, 0, readCount);
 				readCount = await s.ReadAsync(buffer, 0, buffer.Length);
 			}
-			UnityEngine.Debug.Log("Successfully downloaded file" + file.Name + "  - Async");
-			return file.Name;
+			Debug.Log("Successfully downloaded file" + file.Name + "  - Async");
+			return new SaveData() { SaveMeta = new SaveMeta(fileName, "Test", DateTime.Now) };
 		}
 		catch (Exception e) {
-			UnityEngine.Debug.LogError(e);
-			return "";
+			Debug.LogError(e);
+			return default;
 		}
 	}
 
@@ -86,7 +86,7 @@ public class ServerAccess {
 #endif
 
 		string inputFilePath = persistentPath + fileName;
-		string hostname = "http://192.168.88.5:5000/UploadLevel?name=" + fileName;
+		string hostname = "http://192.168.88.5:5000/Level/UploadLevel?name=" + fileName;
 
 		HttpWebRequest req = WebRequest.CreateHttp(hostname);
 		byte[] data = File.ReadAllBytes(inputFilePath);

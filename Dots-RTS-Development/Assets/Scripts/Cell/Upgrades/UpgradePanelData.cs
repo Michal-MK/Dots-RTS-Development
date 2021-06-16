@@ -11,17 +11,12 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 	public Image typeImage;
 	private TextMeshProUGUI desc;
 
-	private static UM_InGame currentCell;
+	private static InGameUpgradeManager currentCell;
 
 	private static bool isListeningForSlot = true;
 
-	void Start() {
+	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.GAME || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
-			if (ProfileManager.CurrentProfile == null && false) {
-				Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-				SceneManager.LoadScene(Scenes.PROFILES);
-				return;
-			}
 			if (type != Upgrades.NONE) {
 				count = 0;//ProfileManager.CurrentProfile.AcquiredUpgrades[type];
 				UpdateUpgradeOverview();
@@ -30,7 +25,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		}
 	}
 
-	private void Upgrade_Manager_OnUpgradeQuit(object sender, UM_InGame e) {
+	private void Upgrade_Manager_OnUpgradeQuit(object sender, InGameUpgradeManager e) {
 		e.OnUpgradeQuit -= Upgrade_Manager_OnUpgradeQuit;
 
 		print($"Upgrade Quit {e.gameObject.name}");
@@ -38,11 +33,11 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 		foreach (BoxCollider2D col in e.slotHolder.GetComponentsInChildren<BoxCollider2D>()) {
 			col.enabled = false;
 		}
-		Upgrade_Manager.isUpgrading = false;
+		UpgradeManager.isUpgrading = false;
 		currentCell = null;
 	}
 
-	private void Upgrade_Manager_OnUpgradeBegin(object sender, UM_InGame e) {
+	private void Upgrade_Manager_OnUpgradeBegin(object sender, InGameUpgradeManager e) {
 		e.OnUpgradeQuit += Upgrade_Manager_OnUpgradeQuit;
 
 		print("Upgrade Begin " + e.gameObject.name);

@@ -71,7 +71,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 	#endregion
 
-	void OnEnable() {
+	private void OnEnable() {
 		SceneManager_activeSceneChanged(SceneManager.GetActiveScene(), SceneManager.GetActiveScene());
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 	}

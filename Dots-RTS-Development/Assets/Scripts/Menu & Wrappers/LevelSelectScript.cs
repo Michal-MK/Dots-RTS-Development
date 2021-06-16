@@ -20,11 +20,10 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public SaveAndLoadEditor saveAndLoadEditor;
 
-	public static List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
+	public static readonly List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
 
 	public int onPage = 0;
 	public int totalPages = 1;
-
 
 	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.LEVEL_SELECT) {
@@ -35,8 +34,9 @@ public class LevelSelectScript : MonoBehaviour {
 			ListCustomSaves();
 		}
 	}
+	
 	//Display all saves that you can find in the scroll view
-	public void ListCustomSaves() {
+	private void ListCustomSaves() {
 
 		if (GameEnvironment.IsAndroid) {
 			saveDir = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves";
@@ -48,31 +48,28 @@ public class LevelSelectScript : MonoBehaviour {
 		error.text = "";
 		FileInfo[] saves = d.GetFiles("*.phage");
 		BinaryFormatter bf = new BinaryFormatter();
-		CheckCorruption(saves);
-		for (int i = 0; i < saves.Length; i++) {
-			using (FileStream file = saves[i].Open(FileMode.Open)) {
-				SaveData info = (SaveData)bf.Deserialize(file);
-				file.Close();
-				SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
-				level.gameObject.SetActive(false);
-				level.name = saves[i].Name;
+		foreach (FileInfo fileInfo in saves) {
+			using FileStream file = fileInfo.Open(FileMode.Open);
+			SaveData info = (SaveData)bf.Deserialize(file);
+			file.Close();
+			SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
+			level.gameObject.SetActive(false);
+			level.name = fileInfo.Name;
 
-				level.time.text = string.Format("{0:dd/MM/yy H:mm:ss}", saves[i].CreationTime);
-				try {
-					level.levelName.text = info.SaveMeta.LevelName;
-					level.author.text = info.SaveMeta.CreatorName;
-					level.timeRaw = info.SaveMeta.CreationTime.ToString();
-				}
-				catch {
-					error.text += "Error " + saves[i].Name;
-				}
-				if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
-					level.saveAndLoadEditor = saveAndLoadEditor;
-				}
-				displayedSaves.Add(level);
-				level.gameObject.SetActive(true);
-
+			level.time.text = $"{fileInfo.CreationTime:dd/MM/yy H:mm:ss}";
+			try {
+				level.levelName.text = info.SaveMeta.LevelName;
+				level.author.text = info.SaveMeta.CreatorName;
+				level.timeRaw = info.SaveMeta.CreationTime.ToString();
 			}
+			catch {
+				error.text += "Error " + fileInfo.Name;
+			}
+			if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
+				level.saveAndLoadEditor = saveAndLoadEditor;
+			}
+			displayedSaves.Add(level);
+			level.gameObject.SetActive(true);
 		}
 	}
 
@@ -88,35 +85,25 @@ public class LevelSelectScript : MonoBehaviour {
 			Destroy(g.gameObject);
 		}
 
-		int i = onPage * 10;
-		int j;
-		if (totalLevels > 10) {
-			j = 10;
-		}
-		else {
-			j = totalLevels;
-		}
-
-		//for (int q = i; q < j; q++) {
-		//	if (q <= 4) {
-		//		CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
-		//		c.gameObject.name = "Level_" + (q + 1);
-		//		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
-		//	}
-		//	else {
-		//		CampaignLevel c = Instantiate(campaignObject, campaignViewContent1).GetComponent<CampaignLevel>();
-		//		c.gameObject.name = "Level_" + (q + 1);
-		//		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
-		//	}
-		//}
-	}
-
-	//Looks for files that are smaller than 100 bytes, happens when download fails.
-	private void CheckCorruption(FileInfo[] saves) {
-		foreach (FileInfo i in saves) {
-			if (i.Length <= 100) {
-				i.Delete();
-			}
-		}
+		// int i = onPage * 10;
+		// int j;
+		// if (totalLevels > 10) {
+		// 	j = 10;
+		// }
+		// else {
+		// 	j = totalLevels;
+		// }
+		// for (int q = i; q < j; q++) {
+		// 	if (q <= 4) {
+		// 		CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
+		// 		c.gameObject.name = "Level_" + (q + 1);
+		// 		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
+		// 	}
+		// 	else {
+		// 		CampaignLevel c = Instantiate(campaignObject, campaignViewContent1).GetComponent<CampaignLevel>();
+		// 		c.gameObject.name = "Level_" + (q + 1);
+		// 		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
+		// 	}
+		// }
 	}
 }

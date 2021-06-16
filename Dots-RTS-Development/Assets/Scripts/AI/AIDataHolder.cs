@@ -7,8 +7,8 @@
 		Player
 	}
 
-	public AIDataHolder(EnemyAI AI, GameCell cell) {
-		this.AI = AI;
+	public AIDataHolder(EnemyAI ai, GameCell cell) {
+		AI = ai;
 		Sender = cell;
 		Relation = RelationToAI.Self;
 	}

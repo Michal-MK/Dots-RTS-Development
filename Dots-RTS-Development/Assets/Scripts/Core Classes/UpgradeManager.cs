@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Upgrade_Manager : MonoBehaviour {
+public class UpgradeManager : MonoBehaviour {
 
 	public static bool isUpgrading = false;
 
@@ -27,11 +27,11 @@ public class Upgrade_Manager : MonoBehaviour {
 		if ((int)upgrade >= 200) {
 			switch (upgrade) {
 				case Upgrades.UTIL_FASTER_ELEMENT_SPEED: {
-					cell.ElementSpeed += 3;
+					cell.elementSpeed += 3;
 					return;
 				}
 				case Upgrades.UTIL_FASTER_REGENERATION: {
-					cell.RegenPeriod -= 0.4f;
+					cell.regenPeriod -= 0.4f;
 					return;
 				}
 			}

@@ -8,7 +8,7 @@ public static class Global {
 	public static readonly Dictionary<string, Sprite> spriteDictionary = new Dictionary<string, Sprite>();
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-	static void Start() {
+	private static void Start() {
 
 		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves");

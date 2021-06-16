@@ -4,13 +4,13 @@ using UnityEngine;
 public class ElementBehaviour : Element {
 
 	private Vector2 velocity;
-	private float wobbleFrequency = 2;
-	private float wobbleAmplitude = 0.2f;
-	private float slowDownFrequency = 3f;
+	private const float WOBBLE_FREQUENCY = 2;
+	private const float WOBBLE_AMPLITUDE = 0.2f;
+	private const float SLOW_DOWN_FREQUENCY = 3f;
 	private bool destroyOnNextAttack;
 
 	private void FixedUpdate() {
-		if (DistanceToTarget(target) < target.Cell.CellRadius) {
+		if (DistanceToTarget(target) < target.Cell.cellRadius) {
 			//Execute this code after collision with target.
 
 			if (team > 0) {
@@ -26,7 +26,7 @@ public class ElementBehaviour : Element {
 
 		velocity = DirectionToTarget(target) * speed;
 
-		velocity = Mathf.Abs(Mathf.Sin((Time.time + randomTimeOffset) * slowDownFrequency)) * velocity;
+		velocity = Mathf.Abs(Mathf.Sin((Time.time + randomTimeOffset) * SLOW_DOWN_FREQUENCY)) * velocity;
 
 		gameObject.transform.position += (Vector3)ApplySidewaysWobble(velocity);
 	}
@@ -43,7 +43,7 @@ public class ElementBehaviour : Element {
 
 	private Vector2 ApplySidewaysWobble(Vector2 input) {
 		Vector2 normal = new Vector2(input.y, -input.x);
-		normal *= Mathf.Sin((Time.time + randomTimeOffset) * wobbleFrequency) * wobbleAmplitude;
+		normal *= Mathf.Sin((Time.time + randomTimeOffset) * WOBBLE_FREQUENCY) * WOBBLE_AMPLITUDE;
 
 		return input + normal;
 	}

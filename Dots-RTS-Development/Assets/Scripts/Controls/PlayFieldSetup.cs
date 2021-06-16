@@ -13,8 +13,7 @@ public class PlayFieldSetup : MonoBehaviour {
 	public BoxCollider2D bottomC;
 	public BoxCollider2D leftC;
 
-
-	IEnumerator Start() {
+	private IEnumerator Start() {
 		Camera c = Camera.main;
 		if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_Editor") {
 			yield return new WaitForEndOfFrame();
@@ -23,13 +22,17 @@ public class PlayFieldSetup : MonoBehaviour {
 
 		yield return new WaitForSeconds(0.5f);
 
-		top.transform.position = new Vector3(c.transform.position.x, c.transform.position.y + c.orthographicSize);
-		bottom.transform.position = new Vector3(c.transform.position.x, c.transform.position.y - c.orthographicSize);
-		right.transform.position = new Vector3(c.transform.position.x + c.orthographicSize * c.aspect, c.transform.position.y);
-		left.transform.position = new Vector3(c.transform.position.x - c.orthographicSize * c.aspect, c.transform.position.y);
+		Vector3 pos = c.transform.position;
+		float camOrtho = c.orthographicSize;
+		float size = camOrtho * c.aspect;
+		
+		top.transform.position = new Vector3(pos.x, pos.y + camOrtho);
+		bottom.transform.position = new Vector3(pos.x, pos.y - camOrtho);
+		right.transform.position = new Vector3(pos.x + size, pos.y);
+		left.transform.position = new Vector3(pos.x - size, pos.y);
 
-		topC.size = bottomC.size = new Vector2(c.orthographicSize * c.aspect * 2, 1);
-		rightC.size = leftC.size = new Vector2(1, c.orthographicSize * 2);
+		topC.size = bottomC.size = new Vector2(size * 2, 1);
+		rightC.size = leftC.size = new Vector2(1, camOrtho * 2);
 
 
 	}

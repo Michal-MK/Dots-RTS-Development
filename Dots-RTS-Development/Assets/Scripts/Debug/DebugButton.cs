@@ -20,8 +20,8 @@ public class DebugButton : MonoBehaviour {
 	}
 
 	public void B() {
-		print(GameObject.Find("Cell NEUTRAL").GetComponent<UM_Editor>().upgrades.Length);
-		GameObject.Find("Cell NEUTRAL").GetComponent<UM_Editor>().upgrades[8] = Upgrades.ATK_DOT;
+		print(GameObject.Find("Cell NEUTRAL").GetComponent<EditorUpgradeManager>().upgrades.Length);
+		GameObject.Find("Cell NEUTRAL").GetComponent<EditorUpgradeManager>().upgrades[8] = Upgrades.ATK_DOT;
 	}
 
 	public void C() {
@@ -31,7 +31,7 @@ public class DebugButton : MonoBehaviour {
 		//}
 		print("---------------------------------------------------");
 		print("CELL");
-		foreach (Upgrades u in GameObject.Find("Cell NEUTRAL").GetComponent<UM_Editor>().upgrades) {
+		foreach (Upgrades u in GameObject.Find("Cell NEUTRAL").GetComponent<EditorUpgradeManager>().upgrades) {
 			print(u);
 		}
 		print("---------------------------------------------------");

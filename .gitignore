@@ -13,6 +13,7 @@ Logs
 /Dots-RTS-Development/.vsconfig
 
 .vs
+.idea
 *.user
 
 

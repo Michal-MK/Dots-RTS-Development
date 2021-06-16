@@ -18,9 +18,6 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		else if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 			PopulateEditorPicker();
 		}
-		else {
-			Populate(transform);
-		}
 	}
 
 	private void PopulateEditorPicker() {
@@ -51,24 +48,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		}
 	}
 
-	public void Populate(Transform parent) {
-		//foreach (UpgradePanelData data in parent.GetComponentsInChildren<UpgradePanelData>()) {
-		//	foreach (KeyValuePair<Upgrades, int> owned in ProfileManager.CurrentProfile.AcquiredUpgrades) {
-		//		if (owned.Key == data.type) {
-		//			data.count = owned.Value;
-
-		//			data.name = FolderAccess.GetUpgradeName(owned.Key);
-		//			data.UpdateUpgradeOverview();
-		//		}
-		//		else if (data.type == Upgrades.NONE) {
-		//			data.UpdateUpgradeOverview();
-		//		}
-		//	}
-		//}
-		//StartCoroutine(CYCLES());
-	}
-
-	public void PopulateStore() {
+	private void PopulateStore() {
 
 		foreach (Image i in transform.Find("UPGRADE_Panel/ATK_Upgrades").GetComponentsInChildren<Image>()) {
 			if (i.gameObject.name != "ATK_Upgrades" && i.gameObject.name != "Image") {

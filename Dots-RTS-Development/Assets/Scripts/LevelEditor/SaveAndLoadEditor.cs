@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
 public class SaveAndLoadEditor : MonoBehaviour {
 
-	public Text ErrorMessages;
+	public Text errorMessages;
 	public LevelEditorCore core;
 	public TeamSetup teams;
 	public GameObject prefab;
@@ -28,7 +29,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 	private string BuildPath(bool isTemp) {
 		DateTime dt = DateTime.Now;
-		string fileName = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
+		string fileName = $"{dt.Year}-{dt.Month}-{dt.Day}-{dt.Hour}-{dt.Minute}-{dt.Second}";
 
 		if (isTemp) {
 			fileName += "testLevel";
@@ -49,14 +50,14 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		string filePath = BuildPath(temp);
 
 		//Check amount of player and enemy cells
-		if (core.cellList.Count(c => c.Cell.Team == Team.ALLIED) == 0 || core.cellList.Count(c => c.Cell.Team > Team.ALLIED) == 0) { 
-			ErrorMessages.text = "Your level is missing an enemy or player cell!";
+		if (core.cellList.Count(c => c.Cell.team == Team.ALLIED) == 0 || core.cellList.Count(c => c.Cell.team > Team.ALLIED) == 0) { 
+			errorMessages.text = "Your level is missing an enemy or player cell!";
 			return "";
 		}
 
-		ErrorMessages.text += $"File Name: {filePath}.\n"; ;
-		ErrorMessages.text += $"Level Name: {core.LevelName}.\n";
-		ErrorMessages.text += "Author: {core.AuthorName}.\n";
+		errorMessages.text += $"File Name: {filePath}.\n"; ;
+		errorMessages.text += $"Level Name: {core.LevelName}.\n";
+		errorMessages.text += "Author: {core.AuthorName}.\n";
 
 		BinaryFormatter formatter = new BinaryFormatter();
 
@@ -68,10 +69,10 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 				SerializedCell serCell = new SerializedCell {
 					Position = new SerializedVector3 { x = c.transform.position.x, y = c.transform.position.y, z = c.transform.position.z },
-					Elements = c.Cell.ElementCount,
-					MaximumElements = c.Cell.MaxElements,
-					Team = c.Cell.Team,
-					RegenerationPeriod = c.Cell.RegenPeriod,
+					Elements = c.Cell.elementCount,
+					MaximumElements = c.Cell.maxElements,
+					Team = c.Cell.team,
+					RegenerationPeriod = c.Cell.regenPeriod,
 					InstalledUpgrades = c.upgrade_manager.upgrades
 				};
 				save.Cells.Add(serCell);
@@ -107,13 +108,13 @@ public class SaveAndLoadEditor : MonoBehaviour {
 
 				EditCell c = Instantiate(prefab).GetComponent<EditCell>();
 
-				c.Cell.CellPosition = (Vector3)save.Cells[j].Position;
-				c.gameObject.transform.position = c.Cell.CellPosition;
+				c.Cell.cellPosition = (Vector3)save.Cells[j].Position;
+				c.gameObject.transform.position = c.Cell.cellPosition;
 
-				c.Cell.ElementCount = save.Cells[j].Elements;
-				c.Cell.MaxElements = save.Cells[j].MaximumElements;
-				c.Cell.Team = save.Cells[j].Team;
-				c.Cell.RegenPeriod = save.Cells[j].RegenerationPeriod;
+				c.Cell.elementCount = save.Cells[j].Elements;
+				c.Cell.maxElements = save.Cells[j].MaximumElements;
+				c.Cell.team = save.Cells[j].Team;
+				c.Cell.regenPeriod = save.Cells[j].RegenerationPeriod;
 				c.upgrade_manager.upgrades = save.Cells[j].InstalledUpgrades;
 				core.AddCell(c, true);
 				c.UpdateVisual();

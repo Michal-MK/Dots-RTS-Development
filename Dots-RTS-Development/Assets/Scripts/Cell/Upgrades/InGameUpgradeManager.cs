@@ -2,12 +2,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UM_InGame : Upgrade_Manager, IPointerClickHandler {
+public class InGameUpgradeManager : UpgradeManager, IPointerClickHandler {
 
-	private static UM_InGame currentCell;
+	private static InGameUpgradeManager currentCell;
 
-	public event EventHandler<UM_InGame> OnUpgradeBegin;
-	public event EventHandler<UM_InGame> OnUpgradeQuit;
+	public event EventHandler<InGameUpgradeManager> OnUpgradeBegin;
+	public event EventHandler<InGameUpgradeManager> OnUpgradeQuit;
 
 	public GameCell cell;
 	public SpriteRenderer slotRender;

@@ -29,13 +29,12 @@ public class CameraControler : MonoBehaviour {
 		isSubscribed = false;
 	}
 
-
-	void Start() {
+	private void Start() {
 		defaultPos = transform.position;
 		defaultSize = Camera.main.orthographicSize;
 	}
 
-	private void OnBeginUpgrading(Upgrade_Manager sender) {
+	private void OnBeginUpgrading(UpgradeManager sender) {
 		Camera cam = Camera.main;
 		if (defaultSize == 0) {
 			cam.orthographicSize = defaultSize;
@@ -106,7 +105,7 @@ public class CameraControler : MonoBehaviour {
 		}
 	}
 
-	private void OnQuitUpgrading(Upgrade_Manager sender) {
+	private void OnQuitUpgrading(UpgradeManager sender) {
 		//print("Cam Def Size " + defaultSize);
 		Camera.main.orthographicSize = defaultSize;
 		transform.position = defaultPos;
