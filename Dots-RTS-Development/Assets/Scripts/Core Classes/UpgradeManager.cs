@@ -5,9 +5,11 @@ public class UpgradeManager : MonoBehaviour {
 
 	public static bool isUpgrading = false;
 
-	public Upgrades[] upgrades = {
-		Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,
+	[SerializeField] private Upgrades[] upgrades = {
+		Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE,
 	};
+
+	public Upgrades[] InstalledUpgrades => upgrades;
 
 	/// <summary>
 	/// Adds upgrades from a save file or otherwise defined source
@@ -43,6 +45,7 @@ public class UpgradeManager : MonoBehaviour {
 	/// </summary>
 	public void UninstallUpgrade(int slot) {
 		upgrades[slot] = Upgrades.NONE;
+
 		//TODO revert modifications
 	}
 
@@ -56,6 +59,7 @@ public class UpgradeManager : MonoBehaviour {
 			}
 		}
 	}
+
 	/// <summary>
 	/// Does the cell have this type of upgrade already?
 	/// </summary>

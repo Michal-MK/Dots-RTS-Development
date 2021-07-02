@@ -73,7 +73,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 					MaximumElements = c.Cell.maxElements,
 					Team = c.Cell.team,
 					RegenerationPeriod = c.Cell.regenPeriod,
-					InstalledUpgrades = c.upgrade_manager.upgrades
+					InstalledUpgrades = c.UpgradeManager.InstalledUpgrades
 				};
 				save.Cells.Add(serCell);
 			}
@@ -104,18 +104,17 @@ public class SaveAndLoadEditor : MonoBehaviour {
 			teams.clanDict = save.Teams;
 
 
-			for (int j = 0; j < save.Cells.Count; j++) {
-
+			foreach (SerializedCell savedCell in save.Cells) {
 				EditCell c = Instantiate(prefab).GetComponent<EditCell>();
 
-				c.Cell.cellPosition = (Vector3)save.Cells[j].Position;
 				c.gameObject.transform.position = c.Cell.cellPosition;
 
-				c.Cell.elementCount = save.Cells[j].Elements;
-				c.Cell.maxElements = save.Cells[j].MaximumElements;
-				c.Cell.team = save.Cells[j].Team;
-				c.Cell.regenPeriod = save.Cells[j].RegenerationPeriod;
-				c.upgrade_manager.upgrades = save.Cells[j].InstalledUpgrades;
+				c.Cell.cellPosition = (Vector3)savedCell.Position;
+				c.Cell.elementCount = savedCell.Elements;
+				c.Cell.maxElements = savedCell.MaximumElements;
+				c.Cell.team = savedCell.Team;
+				c.Cell.regenPeriod = savedCell.RegenerationPeriod;
+				c.UpgradeManager.PreinstallUpgrades(savedCell.InstalledUpgrades);
 				core.AddCell(c, true);
 				c.UpdateVisual();
 			}

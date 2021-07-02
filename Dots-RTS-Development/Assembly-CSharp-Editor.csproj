@@ -714,6 +714,9 @@
      <Reference Include="Unity.PlasticSCM.Editor">
      <HintPath>D:/Repositories/Dots-RTS-Development/Dots-RTS-Development/Library/ScriptAssemblies/Unity.PlasticSCM.Editor.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.Rider.Editor">
+     <HintPath>D:/Repositories/Dots-RTS-Development/Dots-RTS-Development/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+     </Reference>
      <Reference Include="Analytics">
      <HintPath>D:/Repositories/Dots-RTS-Development/Dots-RTS-Development/Library/ScriptAssemblies/Analytics.dll</HintPath>
      </Reference>
@@ -728,9 +731,6 @@
      </Reference>
      <Reference Include="com.unity.multiplayer-hlapi.Runtime">
      <HintPath>D:/Repositories/Dots-RTS-Development/Dots-RTS-Development/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
-     </Reference>
-     <Reference Include="Unity.Rider.Editor">
-     <HintPath>D:/Repositories/Dots-RTS-Development/Dots-RTS-Development/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
      </Reference>
   </ItemGroup>
   <ItemGroup>

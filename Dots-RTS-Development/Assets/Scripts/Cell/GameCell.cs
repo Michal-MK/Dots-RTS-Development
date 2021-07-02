@@ -135,8 +135,8 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		#region Element Specific Code for Upgrade management -- Offensive Upgrades
 		if (Cell.team == element.team) {
 			float aidBonus = 0;
-			for (int i = 0; i < uManager.upgrades.Length; i++) {
-				if (uManager.upgrades[i] == Upgrades.DEF_AID_BONUS_CHANCE) {
+			for (int i = 0; i < uManager.InstalledUpgrades.Length; i++) {
+				if (uManager.InstalledUpgrades[i] == Upgrades.DEF_AID_BONUS_CHANCE) {
 					aidBonus += 0.2f;
 				}
 			}
@@ -205,9 +205,9 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		#region Cell Specific Code for Upgrade management -- Defensive upgrades
 		float resistChance = 0;
 		float reflectChance = 0;
-		for (int i = 0; i < uManager.upgrades.Length; i++) {
-			if (uManager.upgrades[i] != Upgrades.NONE && (int)uManager.upgrades[i] >= 100 && (int)uManager.upgrades[i] < 200) {
-				switch (uManager.upgrades[i]) {
+		for (int i = 0; i < uManager.InstalledUpgrades.Length; i++) {
+			if (uManager.InstalledUpgrades[i] != Upgrades.NONE && (int)uManager.InstalledUpgrades[i] >= 100 && (int)uManager.InstalledUpgrades[i] < 200) {
+				switch (uManager.InstalledUpgrades[i]) {
 					case Upgrades.DEF_ELEMENT_RESIST_CHANCE: {
 						resistChance += 0.1f;
 						break;

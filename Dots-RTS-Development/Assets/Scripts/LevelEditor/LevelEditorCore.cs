@@ -22,10 +22,10 @@ public class LevelEditorCore : MonoBehaviour {
 
 	public UpgradeSlotCollection UIUpgradeSlots;
 
-	[HideInInspector]
-	public Texture2D[] cursors;
+	[HideInInspector] public Texture2D[] cursors;
 
 	#region Parsed value for each input field
+
 	//Cell Editting Panel
 	public Team Team;
 	public int MaxElements;
@@ -62,11 +62,25 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#endregion
 
-
 	private void Start() {
-		UI.startingElementCount.onValueChanged.AddListener(e => { if (int.TryParse(e, out int value)) { StartElements = value; InputChanged(); } });
-		UI.maxElementCount.onValueChanged.AddListener(e => { if (int.TryParse(e, out int value)) { MaxElements = value; InputChanged(); } });
-		UI.regenerationSpeed.onValueChanged.AddListener(e => { if (int.TryParse(e, out int value)) { Regeneration = value; InputChanged(); } });
+		UI.startingElementCount.onValueChanged.AddListener(e => {
+			if (int.TryParse(e, out int value)) {
+				StartElements = value;
+				InputChanged();
+			}
+		});
+		UI.maxElementCount.onValueChanged.AddListener(e => {
+			if (int.TryParse(e, out int value)) {
+				MaxElements = value;
+				InputChanged();
+			}
+		});
+		UI.regenerationSpeed.onValueChanged.AddListener(e => {
+			if (int.TryParse(e, out int value)) {
+				Regeneration = value;
+				InputChanged();
+			}
+		});
 
 		Team = DEFAULT_TEAM;
 		StartElements = DEFAULT_INITIAL_ELEMENTS;
@@ -87,8 +101,8 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-
 	#region Functions to add or remove a cell from the static list
+
 	public void AddCell(EditCell c, bool loadedFromFile = false) {
 
 		cellList.Add(c);
@@ -113,10 +127,10 @@ public class LevelEditorCore : MonoBehaviour {
 
 		}
 		if (loadedFromFile) {
-			for (int i = 0; i < c.upgrade_manager.upgradeSlots.Length; i++) {
-				if (c.upgrade_manager.upgrades[i] != Upgrades.NONE) {
-					c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
-					c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[c.upgrade_manager.upgrades[i]]);
+			for (int i = 0; i < c.UpgradeManager.upgradeSlots.Length; i++) {
+				if (c.UpgradeManager.InstalledUpgrades[i] != Upgrades.NONE) {
+					c.UpgradeManager.upgradeSlots[i].Type = c.UpgradeManager.InstalledUpgrades[i];
+					c.UpgradeManager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[c.UpgradeManager.InstalledUpgrades[i]]);
 				}
 			}
 			c.core = this;
@@ -150,9 +164,11 @@ public class LevelEditorCore : MonoBehaviour {
 			AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 		}
 	}
+
 	#endregion
 
 	#region Event subscribers
+
 	private void EditCell_OnCellSelected(object sender, EditCell cell) {
 		if (!selectedCellList.Contains(cell)) {
 			selectedCellList.Add(cell);
@@ -168,12 +184,13 @@ public class LevelEditorCore : MonoBehaviour {
 			FitCellsOnScreen(selectedCellList);
 		}
 	}
+
 	#endregion
 
 	#region Wrappers
 
 	public void ModeButtonWrapper(int mode) {
-		ModeButton((EditorMode)mode + 1);
+		ModeButton((EditorMode)mode);
 	}
 
 	public void TeamSelectedButtonWrapper(int thisTeam) {
@@ -188,27 +205,32 @@ public class LevelEditorCore : MonoBehaviour {
 
 	//Cell placing logic
 	private void Update() {
-		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && EditorMode == EditorMode.PlaceCells) {
-			Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
+		if (!Input.GetMouseButtonDown(0) || EventSystem.current.IsPointerOverGameObject() || EditorMode != EditorMode.PlaceCells) return;
 
-			newCell.name = "Cell " + Team;
-			EditCell c = newCell.GetComponent<EditCell>();
-			c.GetComponent<EditorUpgradeManager>().SetupUpgrades(UI);
-			c.Cell.team = Team;
-			c.Cell.maxElements = MaxElements;
-			c.Cell.regenPeriod = Regeneration;
-			c.Cell.elementCount = StartElements;
-			c.upgrade_manager.upgrades = UIUpgradeSlots.Upgrades;
-			for (int i = 0; i < c.upgrade_manager.upgrades.Length; i++) {
-				c.upgrade_manager.upgradeSlots[i].Type = c.upgrade_manager.upgrades[i];
-				c.upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[c.upgrade_manager.upgrades[i]]);
-			}
-			c.core = this;
-			AddCell(c);
-			c.FastResize();
-			c.UpdateVisual();
+		Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		GameObject newCell = Instantiate(cellPrefab, pos, Quaternion.identity);
+
+		newCell.name = "Cell " + Team;
+		EditCell editCell = newCell.GetComponent<EditCell>();
+		editCell.GetComponent<EditorUpgradeManager>().SetupUpgrades(UI);
+
+		Cell internalCell = editCell.Cell;
+
+		internalCell.team = Team;
+		internalCell.maxElements = MaxElements;
+		internalCell.regenPeriod = Regeneration;
+		internalCell.elementCount = StartElements;
+
+		EditorUpgradeManager upgrades = editCell.UpgradeManager;
+		upgrades.PreinstallUpgrades(UIUpgradeSlots.Upgrades);
+		for (int i = 0; i < upgrades.InstalledUpgrades.Length; i++) {
+			upgrades.upgradeSlots[i].Type = upgrades.InstalledUpgrades[i];
+			upgrades.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[upgrades.InstalledUpgrades[i]]);
 		}
+		editCell.core = this;
+		AddCell(editCell);
+		editCell.FastResize();
+		editCell.UpdateVisual();
 	}
 
 	//Switches the cursor mode 
@@ -234,10 +256,9 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 	}
 
-
 	public void ApplyAllToSelection() {
 		foreach (EditCell cell in selectedCellList) {
-			cell.upgrade_manager.PreinstallUpgrades(UIUpgradeSlots.Upgrades);
+			cell.UpgradeManager.PreinstallUpgrades(UIUpgradeSlots.Upgrades);
 			cell.UpdateStats();
 			cell.UpdateVisual();
 		}
@@ -366,7 +387,6 @@ public class LevelEditorCore : MonoBehaviour {
 			GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(Camera.main.aspect);
 		}
 	}
-
 
 	//Calculation of camera size and position for zooming onto a cell
 	public void FitCellsOnScreen(List<EditCell> cells) {

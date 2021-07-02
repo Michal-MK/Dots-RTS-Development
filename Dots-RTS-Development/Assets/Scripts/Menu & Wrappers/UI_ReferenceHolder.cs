@@ -91,22 +91,22 @@ public class UI_ReferenceHolder : MonoBehaviour {
 		IsInUpgradeStore = false;
 
 		switch (newS.name) {
-			case Scenes.MENU: { //Main Menu
+			case Scenes.MENU: {
 				IsInMainMenu = true;
 				return;
 			}
-			case Scenes.LEVEL_SELECT: { // LevelSelect
+			case Scenes.LEVEL_SELECT: {
 				LS_rectCampaign = GameObject.Find("Canvas_Campaign").GetComponent<RectTransform>();
 				LS_rectCustom = GameObject.Find("Canvas_CustomLevels").GetComponent<RectTransform>();
 				LS_canvasBase = GameObject.Find("Canvas_Base");
 				IsInLevelSelect = true;
 				return;
 			}
-			case Scenes.LEVEL_SHARE: { //Level Sharing
+			case Scenes.LEVEL_SHARE: {
 				IsInLevelShare = true;
 				return;
 			}
-			case Scenes.POST_GAME: { // PostGame Scene
+			case Scenes.POST_GAME: {
 				PG_resultingJudgdement = GameObject.Find("Result").GetComponent<TextMeshProUGUI>();
 				PG_didDominate = GameObject.Find("Domination").GetComponent<TextMeshProUGUI>();
 				PG_totalTimeToClear = GameObject.Find("Time").GetComponent<TextMeshProUGUI>();
@@ -114,7 +114,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				IsInPostGame = true;
 				return;
 			}
-			case Scenes.PROFILES: { //Profiles
+			case Scenes.PROFILES: {
 				PS_Canvas = GameObject.Find("Canvases").transform.Find("PS_Canvas").gameObject;
 				PO_Canvas = GameObject.Find("Canvases").transform.Find("PO_Canvas").gameObject;
 
@@ -132,7 +132,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 				IsInProfileSelect = true;
 				return;
 			}
-			case Scenes.UPGRADE_SHOP: { //Upgrade Shop
+			case Scenes.UPGRADE_SHOP: {
 				U_buyButton = GameObject.Find("Buy").GetComponent<Button>();
 				U_upgradeNameHolder = GameObject.Find("Upgrade_Name").GetComponent<TextMeshProUGUI>();
 				U_upgradeDescHolder = GameObject.Find("Upgrade_Desc").GetComponent<TextMeshProUGUI>();

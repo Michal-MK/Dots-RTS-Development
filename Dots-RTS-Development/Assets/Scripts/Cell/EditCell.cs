@@ -5,25 +5,28 @@ using UnityEngine.EventSystems;
 
 public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 
-
 	public event EventHandler<EditCell> OnCellSelected;
 	public event EventHandler<EditCell> OnCellDeselected;
 
 	public LevelEditorCore core;
 
-	#region Prefab References
-	public SpriteRenderer maxCellRadius;
-	public EditorUpgradeManager upgrade_manager;
-	#endregion
+	[SerializeField]
+	private SpriteRenderer maxCellRadius;
+	
+	[SerializeField]
+	private EditorUpgradeManager upgradeManager;
 
-
+	public EditorUpgradeManager UpgradeManager => upgradeManager;
+	
 	private bool isCellSelected;
 
 	#region Press length detection
+	
 	private float pointerDownAtTime;
 	private bool longPress;
 	private const float LONG_PRESS_THRESHOLD = 0.8f;
 	private bool lookForLongPress;
+	
 	#endregion
 
 	public void Awake() {
@@ -63,9 +66,9 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	}
 
 	private void UpdateUpgradeVisual() {
-		for (int i = 0; i < upgrade_manager.upgrades.Length; i++) {
-			upgrade_manager.upgradeSlots[i].Type = upgrade_manager.upgrades[i];
-			upgrade_manager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[upgrade_manager.upgrades[i]]);
+		for (int i = 0; i < upgradeManager.InstalledUpgrades.Length; i++) {
+			upgradeManager.upgradeSlots[i].Type = upgradeManager.InstalledUpgrades[i];
+			upgradeManager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[upgradeManager.InstalledUpgrades[i]]);
 		}
 	}
 
@@ -91,7 +94,9 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 	public void ToggleCellOutline(bool on) {
 		if (on) {
 			maxCellRadius.enabled = true;
-			maxCellRadius.transform.localScale = new Vector2(2 / maxCellRadius.transform.parent.localScale.x, (2 / maxCellRadius.transform.parent.localScale.x));
+			Transform radiusTransform = maxCellRadius.transform;
+			float newScale = 2 / radiusTransform.parent.localScale.x;
+			radiusTransform.localScale = new Vector2(newScale, newScale);
 		}
 		else {
 			maxCellRadius.enabled = false;
@@ -137,12 +142,12 @@ public class EditCell : CellBehaviour, IPointerDownHandler, IPointerUpHandler {
 			if (value) {
 				OnCellSelected?.Invoke(this,this);
 				cellSelectedRenderer.enabled = true;
-				upgrade_manager.ToggleUpgradeInteraction(true);
+				upgradeManager.ToggleUpgradeInteraction(true);
 			}
 			else {
 				OnCellDeselected?.Invoke(this, this);
 				cellSelectedRenderer.enabled = false;
-				upgrade_manager.ToggleUpgradeInteraction(false);
+				upgradeManager.ToggleUpgradeInteraction(false);
 			}
 			isCellSelected = value;
 		}

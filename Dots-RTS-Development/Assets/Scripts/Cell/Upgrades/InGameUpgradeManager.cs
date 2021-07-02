@@ -26,8 +26,8 @@ public class InGameUpgradeManager : UpgradeManager, IPointerClickHandler {
 
 	protected override void UpgradePreinstallSprites() {
 		for (int i = 0; i < slotHolders.Length; i++) {
-			if (upgrades[i] != Upgrades.NONE) {
-				slotHolders[i].GetComponent<SpriteRenderer>().sprite = Upgrade.UpgradeGraphics[upgrades[i]];
+			if (InstalledUpgrades[i] != Upgrades.NONE) {
+				slotHolders[i].GetComponent<SpriteRenderer>().sprite = Upgrade.UpgradeGraphics[InstalledUpgrades[i]];
 				slotHolders[i].GetComponent<SpriteRenderer>().size = Vector2.one * 25f;
 			}
 		}

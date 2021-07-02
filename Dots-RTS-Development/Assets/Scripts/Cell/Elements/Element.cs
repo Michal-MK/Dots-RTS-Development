@@ -15,7 +15,7 @@ public class Element : MonoBehaviour {
 	private void Start() {
 		randomTimeOffset = Random.Range(0, 50);
 		attacker.UpdateCellInfo();
-		debuffs = attacker.uManager.upgrades;
+		debuffs = attacker.uManager.InstalledUpgrades;
 		transform.position = ElementSpawnPoint();
 	}
 

@@ -18,7 +18,7 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerEnterHandler, IPointerExitH
 	private void UpgradeSlotClicked(object sender, UpgradeSlot e) {
 		if (Type != Upgrades.NONE) {
 			print($"Clicked on slot {e.gameObject.name} invoked by {e.SlotID} in {transform.parent.name}");
-			uManager.upgrades[SlotID] = Type = Upgrades.NONE;
+			uManager.InstalledUpgrades[SlotID] = Type = Upgrades.NONE;
 			clearUpgrade.color = new Color(1, 1, 1, 0);
 			selfSprite.sprite = null;
 		}
@@ -38,7 +38,7 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerEnterHandler, IPointerExitH
 
 	public void InstallUpgradeDirectly(object _, EditorUpgradePicker e) {
 		print("Selected " + e.Upgrade);
-		uManager.upgrades[SlotID] = Type = e.Upgrade;
+		uManager.InstalledUpgrades[SlotID] = Type = e.Upgrade;
 		selfSprite.sprite = Upgrade.UpgradeGraphics[Type];
 		selfSprite.size = Vector2.one * 25f;
 		Extensions.Find<LevelEditorUI>().upgradeSelector.GetComponent<UpgradeSelector>().Clean(this);

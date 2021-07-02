@@ -4,13 +4,13 @@ public class EditorUpgradeManager : UpgradeManager {
 
 	#region Unity UI
 
-	private readonly SpriteRenderer[] uiUpgradeSlotsSprite = new SpriteRenderer[8];
-	private readonly BoxCollider2D[] uiUpgradeSlotColider = new BoxCollider2D[8];
-	private SpriteRenderer upgradeSlotFields;
+	public SpriteRenderer[] uiUpgradeSlotsSprite = new SpriteRenderer[8];
+	public BoxCollider2D[] uiUpgradeSlotColider = new BoxCollider2D[8];
+	public SpriteRenderer upgradeSlotFields;
 
 	#endregion
 
-	public readonly UpgradeSlot_Cell[] upgradeSlots = new UpgradeSlot_Cell[8];
+	public UpgradeSlot_Cell[] upgradeSlots = new UpgradeSlot_Cell[8];
 
 	public void SetupUpgrades(LevelEditorUI ui) {
 		GameObject uiUpgrades = ui.upgradePickerButtons;
@@ -36,8 +36,8 @@ public class EditorUpgradeManager : UpgradeManager {
 
 	protected override void UpgradePreinstallSprites() {
 		for (int i = 0; i < upgradeSlots.Length; i++) {
-			if (upgrades[i] == Upgrades.NONE) continue;
-			upgradeSlots[i].selfSprite.sprite = Upgrade.UpgradeGraphics[upgrades[i]];
+			if (InstalledUpgrades[i] == Upgrades.NONE) continue;
+			upgradeSlots[i].selfSprite.sprite = Upgrade.UpgradeGraphics[InstalledUpgrades[i]];
 			upgradeSlots[i].selfSprite.size = Vector2.one * 25f;
 		}
 	}
