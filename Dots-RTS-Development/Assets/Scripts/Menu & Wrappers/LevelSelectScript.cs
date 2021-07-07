@@ -10,7 +10,7 @@ public class LevelSelectScript : MonoBehaviour {
 	private string saveDir;
 
 	public GameObject levelObject;
-	public GameObject campaignObject;
+	public GameObject campaignObject; // TODO
 
 	public Transform scrollViewContent;
 	public Transform campaignViewContent0;
@@ -20,10 +20,7 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public SaveAndLoadEditor saveAndLoadEditor;
 
-	public static readonly List<SaveFileInfo> displayedSaves = new List<SaveFileInfo>();
-
-	public int onPage = 0;
-	public int totalPages = 1;
+	public static readonly List<SaveFileInfo> DISPLAYED_SAVES = new List<SaveFileInfo>();
 
 	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.LEVEL_SELECT) {
@@ -34,16 +31,10 @@ public class LevelSelectScript : MonoBehaviour {
 			ListCustomSaves();
 		}
 	}
-	
-	//Display all saves that you can find in the scroll view
-	private void ListCustomSaves() {
 
-		if (GameEnvironment.IsAndroid) {
-			saveDir = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves";
-		}
-		else {
-			saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves";
-		}
+	private void ListCustomSaves() {
+		saveDir = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves";
+
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		error.text = "";
 		FileInfo[] saves = d.GetFiles("*.phage");
@@ -68,15 +59,13 @@ public class LevelSelectScript : MonoBehaviour {
 			if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 				level.saveAndLoadEditor = saveAndLoadEditor;
 			}
-			displayedSaves.Add(level);
+			DISPLAYED_SAVES.Add(level);
 			level.gameObject.SetActive(true);
 		}
 	}
 
 	public void ListCampaignLevels(int diff) {
 		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + diff;
-		DirectoryInfo d = new DirectoryInfo(saveDir);
-		int totalLevels = d.GetFiles("*.pwl").Length;
 
 		foreach (CampaignLevel g in campaignViewContent0.GetComponentsInChildren<CampaignLevel>()) {
 			Destroy(g.gameObject);
@@ -84,26 +73,5 @@ public class LevelSelectScript : MonoBehaviour {
 		foreach (CampaignLevel g in campaignViewContent1.GetComponentsInChildren<CampaignLevel>()) {
 			Destroy(g.gameObject);
 		}
-
-		// int i = onPage * 10;
-		// int j;
-		// if (totalLevels > 10) {
-		// 	j = 10;
-		// }
-		// else {
-		// 	j = totalLevels;
-		// }
-		// for (int q = i; q < j; q++) {
-		// 	if (q <= 4) {
-		// 		CampaignLevel c = Instantiate(campaignObject, campaignViewContent0).GetComponent<CampaignLevel>();
-		// 		c.gameObject.name = "Level_" + (q + 1);
-		// 		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
-		// 	}
-		// 	else {
-		// 		CampaignLevel c = Instantiate(campaignObject, campaignViewContent1).GetComponent<CampaignLevel>();
-		// 		c.gameObject.name = "Level_" + (q + 1);
-		// 		c.levelPath = saveDir + Path.DirectorySeparatorChar + c.gameObject.name + ".pwl";
-		// 	}
-		// }
 	}
 }

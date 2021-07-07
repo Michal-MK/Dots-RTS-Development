@@ -12,9 +12,9 @@ public class LevelSorting : MonoBehaviour {
 		SaveFileInfo[] saves;
 
 		if (isAscending)
-			saves = LevelSelectScript.displayedSaves.OrderBy(save => save.levelName.text).ToArray();
+			saves = LevelSelectScript.DISPLAYED_SAVES.OrderBy(save => save.levelName.text).ToArray();
 		else
-			saves = LevelSelectScript.displayedSaves.OrderByDescending(save => save.levelName.text).ToArray();
+			saves = LevelSelectScript.DISPLAYED_SAVES.OrderByDescending(save => save.levelName.text).ToArray();
 
 		Spawn(saves);
 	}
@@ -25,9 +25,9 @@ public class LevelSorting : MonoBehaviour {
 		SaveFileInfo[] saves;
 
 		if (isAscending)
-			saves = LevelSelectScript.displayedSaves.OrderBy(save => save.author.text).ToArray();
+			saves = LevelSelectScript.DISPLAYED_SAVES.OrderBy(save => save.author.text).ToArray();
 		else
-			saves = LevelSelectScript.displayedSaves.OrderByDescending(save => save.author.text).ToArray();
+			saves = LevelSelectScript.DISPLAYED_SAVES.OrderByDescending(save => save.author.text).ToArray();
 
 		Spawn(saves);
 	}
@@ -38,19 +38,19 @@ public class LevelSorting : MonoBehaviour {
 		SaveFileInfo[] saves;
 
 		if (isAscending)
-			saves = LevelSelectScript.displayedSaves.OrderBy(save => Convert.ToDateTime(save.timeRaw)).ToArray();
+			saves = LevelSelectScript.DISPLAYED_SAVES.OrderBy(save => Convert.ToDateTime(save.timeRaw)).ToArray();
 		else
-			saves = LevelSelectScript.displayedSaves.OrderByDescending(save => Convert.ToDateTime(save.timeRaw)).ToArray();
+			saves = LevelSelectScript.DISPLAYED_SAVES.OrderByDescending(save => Convert.ToDateTime(save.timeRaw)).ToArray();
 
 		Spawn(saves);
 	}
 
 	private void Spawn(SaveFileInfo[] saves) {
 		foreach (SaveFileInfo save in saves) {
-			LevelSelectScript.displayedSaves.Remove(save);
+			LevelSelectScript.DISPLAYED_SAVES.Remove(save);
 			SaveFileInfo g = Instantiate(save, GameObject.Find("Content").transform);
 			g.gameObject.name = save.name;
-			LevelSelectScript.displayedSaves.Add(g);
+			LevelSelectScript.DISPLAYED_SAVES.Add(g);
 			Destroy(save.gameObject);
 		}
 	}

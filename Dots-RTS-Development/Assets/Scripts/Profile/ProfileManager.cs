@@ -1,34 +1,39 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class ProfileManager {
 
 	public static Profile CurrentProfile { get; set; }
 
-	public static bool ProfileSelected => CurrentProfile != null;
-
 	public static ProfileManager Instance { get; private set; }
 
-	private readonly GameObject profileVisual;
-	private readonly Transform parentTransform;
+	private ProfileManagerBehaviour behaviour;
 
 	private Button createProfileButton;
 	private readonly GameObject profileCreation;
 
-	public static void Initialize(ProfileManagerBehaviour behaviour) {
-		if(Instance != null) {
-			return;
+	public static ProfileManager Initialize() {
+		if (Instance != null) {
+			return Instance;
 		}
-		Instance = new ProfileManager(behaviour);
+		Instance = new ProfileManager();
+		SceneLoader.Instance.OnSceneChanged += Instance.OnOnSceneChanged;
+		return Instance;
 	}
 
-	private ProfileManager(ProfileManagerBehaviour behaviour) {
-		Instance = this;
-		profileVisual = behaviour.profileVisual;
-		parentTransform = behaviour.listTransform;
+	private void OnOnSceneChanged(object sender, SceneChangedEventArgs e) {
+		if (e.Name != Scenes.PROFILES) return;
+
+		behaviour = UI_ReferenceHolder.ProfilesBehaviour;
+	}
+
+	private ProfileManager() {
 		createProfileButton = GameObject.Find("NoProfiles").GetComponent<Button>();
 		createProfileButton.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
@@ -43,7 +48,7 @@ public class ProfileManager {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
 
-		foreach (ProfileInfo pF in parentTransform?.GetComponentsInChildren<ProfileInfo>()) {
+		foreach (ProfileInfo pF in behaviour.listTransform.GetComponentsInChildren<ProfileInfo>()) {
 			Object.Destroy(pF.gameObject);
 		}
 
@@ -63,7 +68,7 @@ public class ProfileManager {
 		foreach (FileInfo f in files) {
 			using FileStream fs = File.Open(f.FullName, FileMode.Open);
 			Profile p = (Profile)bf.Deserialize(fs);
-			ProfileInfo pI = Object.Instantiate(profileVisual, parentTransform).GetComponent<ProfileInfo>();
+			ProfileInfo pI = Object.Instantiate(behaviour.profileVisual, behaviour.listTransform).GetComponent<ProfileInfo>();
 			pI.name = f.FullName;
 			pI.OnProfileDeleted += ProfileInfo_OnProfileDeleted;
 			pI.InitializeProfile(p, p.Name);

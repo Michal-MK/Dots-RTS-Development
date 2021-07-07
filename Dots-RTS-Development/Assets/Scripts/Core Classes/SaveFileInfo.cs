@@ -73,7 +73,7 @@ public class SaveFileInfo : MonoBehaviour {
 			File.Delete(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
 		}
 
-		LevelSelectScript.displayedSaves.Remove(this);
+		LevelSelectScript.DISPLAYED_SAVES.Remove(this);
 		Destroy(gameObject);
 	}
 

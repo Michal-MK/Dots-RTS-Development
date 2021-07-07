@@ -8,6 +8,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#region References
 
 	#region MainMenuRefs
+
 	public static bool IsInMainMenu;
 	public static TextMeshProUGUI MM_gameName;
 	public static TextMeshProUGUI MM_gameVersion;
@@ -20,35 +21,45 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region LevelSelectRefs
+
 	public static bool IsInLevelSelect;
 	public static RectTransform LS_rectCampaign;
 	public static RectTransform LS_rectCustom;
 	public static GameObject LS_canvasBase;
+
 	#endregion
 
 	#region LevelShareRefs
+
 	public static bool IsInLevelShare;
+
 	#endregion
 
 	#region DebugRefs
+
 	public static bool IsInDebug;
+
 	//public static GameObject menuPanel;
 	//public static RectTransform upgradePanel;
 
 	#endregion
 
 	#region PostGame
+
 	public static bool IsInPostGame;
 	public static TextMeshProUGUI PG_resultingJudgdement;
 	public static TextMeshProUGUI PG_didDominate;
 	public static TextMeshProUGUI PG_totalTimeToClear;
 	public static TextMeshProUGUI PG_totalCoinsAwarded;
+
 	#endregion
 
 	#region ProfileRefs
+
 	public static bool IsInProfileSelect;
 	public static GameObject PS_Canvas;
 	public static GameObject PO_Canvas;
+	public static ProfileManagerBehaviour ProfilesBehaviour;
 	public static TextMeshProUGUI PO_Name;
 	public static TextMeshProUGUI PO_OnLevel;
 	public static RawImage PO_OnLevelImage;
@@ -60,6 +71,7 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	#endregion
 
 	#region Upgrade Store
+
 	public static bool IsInUpgradeStore;
 	public static Button U_buyButton;
 	public static TextMeshProUGUI U_upgradeNameHolder;
@@ -68,7 +80,9 @@ public class UI_ReferenceHolder : MonoBehaviour {
 	public static TextMeshProUGUI U_upgradesOwnedHolder;
 	public static TextMeshProUGUI U_profileMoney;
 	public static TextMeshProUGUI U_profileNameUpgradeStore;
+
 	#endregion
+
 	#endregion
 
 	private void OnEnable() {
@@ -120,15 +134,17 @@ public class UI_ReferenceHolder : MonoBehaviour {
 
 				PO_Name = PO_Canvas.transform.Find("PO_Name").GetComponent<TextMeshProUGUI>();
 
-				PO_OnLevel = PO_Canvas.transform.Find("TopLeft_Panel_CampaignLevel/PO_OnLevel").GetComponent<TextMeshProUGUI>();                    /*GameObject.Find("PO_OnLevel").GetComponent<TextMeshProUGUI>();*/
-				PO_OnLevelImage = PO_Canvas.transform.Find("TopLeft_Panel_CampaignLevel/PO_OnLevelImage").GetComponent<RawImage>();                 /*GameObject.Find("PO_OnLevelImage").GetComponent<RawImage>();*/
+				PO_OnLevel = PO_Canvas.transform.Find("TopLeft_Panel_CampaignLevel/PO_OnLevel").GetComponent<TextMeshProUGUI>();
+				PO_OnLevelImage = PO_Canvas.transform.Find("TopLeft_Panel_CampaignLevel/PO_OnLevelImage").GetComponent<RawImage>();
 
-				PO_CurrentCoins = PO_Canvas.transform.Find("TopRight_Panel_GeneralInfo/PO_CurrentCoins").GetComponent<TextMeshProUGUI>();           /*GameObject.Find("PO_CurrentCoins").GetComponent<TextMeshProUGUI>();*/
-				PO_GamesPlayed = PO_Canvas.transform.Find("TopRight_Panel_GeneralInfo/PO_GamesPlayed").GetComponent<TextMeshProUGUI>();             /*GameObject.Find("PO_GamesPlayed").GetComponent<TextMeshProUGUI>();*/
+				PO_CurrentCoins = PO_Canvas.transform.Find("TopRight_Panel_GeneralInfo/PO_CurrentCoins").GetComponent<TextMeshProUGUI>();
+				PO_GamesPlayed = PO_Canvas.transform.Find("TopRight_Panel_GeneralInfo/PO_GamesPlayed").GetComponent<TextMeshProUGUI>();
 
-				PO_AcquiredUpgrades = PO_Canvas.transform.Find("BottomLeft_Panel_Uprades/PO_AcquiredUpgrades").transform;                           /*GameObject.Find("PO_AcquiredUpgrades").transform;*/
+				PO_AcquiredUpgrades = PO_Canvas.transform.Find("BottomLeft_Panel_Uprades/PO_AcquiredUpgrades").transform;
 
-				PO_DeleteProfile = PO_Canvas.transform.Find("BottomRight_Panel_Buttons/PO_DeleteProfile").GetComponent<ProfileInfo>();              /*GameObject.Find("PO_DeleteProfile").GetComponent<ProfileInfo>();*/
+				PO_DeleteProfile = PO_Canvas.transform.Find("BottomRight_Panel_Buttons/PO_DeleteProfile").GetComponent<ProfileInfo>();
+
+				ProfilesBehaviour = GameObject.Find("_ProfilesManager").GetComponent<ProfileManagerBehaviour>();
 				IsInProfileSelect = true;
 				return;
 			}

@@ -95,7 +95,6 @@ public class Cell {
 	/// <summary>
 	/// The speed of elements spawned by this cell
 	/// </summary>
-	[HideInInspector]
 	public float elementSpeed = 5;
 
 	/// <summary>

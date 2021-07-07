@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class Background : MonoBehaviour, IPointerEnterHandler {
 
-	public static bool onReleaseClear = true;
+	public static bool onReleaseClear = false;
 
 	public void OnPointerEnter(PointerEventData eventData) {
 		if (!Input.GetMouseButton(0)) return;
@@ -12,7 +12,8 @@ public class Background : MonoBehaviour, IPointerEnterHandler {
 	}
 
 	private void Update() {
-		if (!onReleaseClear && !Input.GetMouseButtonUp(0)) return;
-		GameCell.ClearSelection();
+		bool lmbState = !Input.GetMouseButtonUp(0);
+		if (!onReleaseClear && lmbState) return;
+		//GameCell.ClearSelection(); TODO
 	}
 }

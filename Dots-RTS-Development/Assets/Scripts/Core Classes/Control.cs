@@ -6,12 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class Control : MonoBehaviour {
 
-	public static bool isPaused = false;
+	public static bool isPaused;
 	public static IPauseableScene pauseHandlers;
 	public static event EventHandler RMBPressed;
 	public static event EventHandler<bool> OnPauseStateChanged;
-
-	public static int DebugSceneIndex = 0;
 
 	#region Initializers
 
@@ -21,7 +19,7 @@ public class Control : MonoBehaviour {
 		if (Script == null) {
 			Script = this;
 			GetComponent<SceneLoader>().Init();
-			print("Scene loader init");
+			print("Control script initialized.");
 			DontDestroyOnLoad(gameObject);
 		}
 		else if (Script != this) {
@@ -30,27 +28,25 @@ public class Control : MonoBehaviour {
 	}
 
 	private IEnumerator Start() {
-
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 
 		string activeScene = SceneManager.GetActiveScene().name;
 
-		if (activeScene == Scenes.PROFILES) {
-			ProfileManager.Instance.ListProfiles();
-		}
-		if (ProfileManager.CurrentProfile == null) {
+		if (activeScene == Scenes.SPLASH) {
 			yield return new WaitUntil(() => Global.baseLoaded);
+			SceneManager.LoadScene(Scenes.PROFILES);
+			yield break;
+		}
 
-			if (activeScene == Scenes.SPLASH) {
-				SceneManager.LoadScene(Scenes.PROFILES);
-			}
-			if (activeScene == Scenes.MENU) {
-				DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
-				SceneManager.LoadScene(Scenes.PROFILES);
+		// DEBUG
+		if (Application.isEditor) {
+			if (ProfileManager.CurrentProfile == null) {
+				if (activeScene == Scenes.MENU) {
+					SceneManager.LoadScene(Scenes.PROFILES);
+				}
 			}
 		}
 	}
-
 
 	private void OnDestroy() {
 		SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
@@ -67,7 +63,6 @@ public class Control : MonoBehaviour {
 			case Scenes.MENU: {
 
 				if (ProfileManager.CurrentProfile == null) {
-					DebugSceneIndex = 0;
 					SceneManager.LoadScene(Scenes.PROFILES);
 					break;
 				}
@@ -76,7 +71,7 @@ public class Control : MonoBehaviour {
 			}
 			case Scenes.LEVEL_SELECT: {
 
-				LevelSelectScript.displayedSaves.Clear();
+				LevelSelectScript.DISPLAYED_SAVES.Clear();
 				break;
 			}
 		}
@@ -105,4 +100,3 @@ public class Control : MonoBehaviour {
 		}
 	}
 }
-

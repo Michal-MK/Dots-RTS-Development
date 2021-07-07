@@ -1033,7 +1033,7 @@ GameObject:
   - component: {fileID: 254290016}
   - component: {fileID: 254290015}
   m_Layer: 0
-  m_Name: ProfilesManager
+  m_Name: _ProfilesManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1743,7 +1743,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2114136303}
   m_HandleRect: {fileID: 2114136302}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

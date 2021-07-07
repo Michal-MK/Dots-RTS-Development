@@ -8,7 +8,6 @@ public class ProfileData : MonoBehaviour {
 			UI_ReferenceHolder.U_profileMoney.text = $"{ProfileManager.CurrentProfile.Coins} coins";
 		}
 		else {
-			Control.DebugSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			SceneManager.LoadScene("Profiles");
 		}
 	}

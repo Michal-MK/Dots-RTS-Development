@@ -4,6 +4,7 @@
 bin
 obj
 /Build
+/Dots-RTS-Development/*.csproj
 /Dots-RTS-Development/Assets/StreamingAssets/Saves
 /Dots-RTS-Development/Assets/TextMesh Pro
 /Dots-RTS-Development/Assets/BulkRename

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour {
 
 	public static SceneLoader Instance { get; private set; }
-	public event EventHandler OnSceneChanged;
+	public event EventHandler<SceneChangedEventArgs> OnSceneChanged;
 
 	private Action postLoad;
 
@@ -16,7 +16,7 @@ public class SceneLoader : MonoBehaviour {
 
 	private void SceneLoaded(Scene scene, LoadSceneMode loadMode) {
 		postLoad?.Invoke();
-		OnSceneChanged?.Invoke(this, EventArgs.Empty);
+		OnSceneChanged?.Invoke(this, new SceneChangedEventArgs(scene.name, loadMode));
 	}
 
 	public void Load(string sceneName, Action afterLoad, bool resetTimeScale = true) {
