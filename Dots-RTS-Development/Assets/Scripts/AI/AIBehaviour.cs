@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 
 public class AIBehaviour : EnemyAI {
-
 	private enum Decision {
-		EXPAND,
-		ATTACK,
-		HELP
+		Expand,
+		Attack,
+		Help
 	};
 
-	private string ss = "";
-	public bool printOutLog;
+	private readonly StringBuilder sb = new StringBuilder();
+	public bool printLog;
 
 	protected override void Start() {
 		base.Start();
@@ -18,47 +18,46 @@ public class AIBehaviour : EnemyAI {
 	}
 
 	private Decision CalculateBestChoice() {
-
-		ss += "ATK = " + attackChoiceProbability + "EXP = " + expandChoiceProbability + "DEF = " + defendChoiceProbability + " | ";
-		ss += "SELECTED AI = " + selectedAiCell + " TARGET = " + selectedTargetCell + " DEFENSE =  " + selectedAiCellForAid + " EXPAND = " + selectedNeutralCell + " | ";
+		sb.AppendLine("ATK = " + attackChoiceProbability + ", EXP = " + expandChoiceProbability + ", DEF = " + defendChoiceProbability + " | ");
+		sb.AppendLine("SELECTED AI = " + selectedAiCell + " TARGET = " + selectedTargetCell + " DEFENSE =  " + selectedAiCellForAid + " EXPAND = " + selectedNeutralCell + " | ");
 		if (attackChoiceProbability > expandChoiceProbability) {
-			ss += "ATTACK++ ? | ";
+			sb.Append("ATTACK++ ? | ");
 			if ((defendChoiceProbability > expandChoiceProbability) && (defendChoiceProbability > attackChoiceProbability)) {
-				ss += "defense ++ | ";
+				sb.Append("DEFEND++ | ");
 				if (Random.Range(0, 10) < 5) {
-					ss += "def 50% | ";
-					return Decision.HELP;
+					sb.Append("def 50% | ");
+					return Decision.Help;
 				}
 				if (Random.Range(0, 10) < 5) {
-					ss += "atk 25% | ";
-					return Decision.ATTACK;
+					sb.Append("atk 25% | ");
+					return Decision.Attack;
 				}
-				ss += "exp 25% | ";
-				return Decision.EXPAND;
+				sb.Append("exp 25% | ");
+				return Decision.Expand;
 			}
-			ss += "attack++ | ";
+			sb.Append("attack++ | ");
 			if (Random.Range(0, 10) < 7.5f) {
-				ss += "atk 75% | ";
-				return Decision.ATTACK;
+				sb.Append("atk 75% | ");
+				return Decision.Attack;
 			}
 			if (Random.Range(0, 10) < 5) {
-				ss += "def 12.5% | ";
-				return Decision.HELP;
+				sb.Append("def 12.5% | ");
+				return Decision.Help;
 			}
-			ss += "exp 12.5% | ";
-			return Decision.EXPAND;
+			sb.Append("exp 12.5% | ");
+			return Decision.Expand;
 		}
-		ss += "EXPAND++ ? | ";
+		sb.Append("EXPAND++ ? | ");
 		if (Random.Range(0, 10) < 8) {
-			ss += "exp 80% | ";
-			return Decision.EXPAND;
+			sb.Append("exp 80% | ");
+			return Decision.Expand;
 		}
 		if (Random.Range(0, 10) < 5) {
-			ss += "atk 10% | ";
-			return Decision.ATTACK;
+			sb.Append("atk 10% | ");
+			return Decision.Attack;
 		}
-		ss += "def 10% | ";
-		return Decision.HELP;
+		sb.Append("def 10% | ");
+		return Decision.Help;
 	}
 
 	#region Function to preform ATTACKS, DEFENSES, EXPANSIONS
@@ -96,117 +95,116 @@ public class AIBehaviour : EnemyAI {
 			 * Else this AI will shut down.
 			 */
 			if (aiCells.Count != 0) {
-				ss += "Selecting | ";
+				sb.Append("Selecting | ");
 				selectedAiCell = AiCellSelector();
 
 				//If we have exactly one cell in the pool, we cant select others, no halping each other is possible.
 				if (aiCells.Count == 1) {
 					isAlone = true;
-					ss += "Alone | ";
+					sb.Append("Alone | ");
 				}
 				else {
-					ss += "Not Alone | ";
+					sb.Append("Not Alone | ");
 				}
 			}
 			else {
 				isActive = false;
-				ss += "No AI cell Selestion, DONE!";
-				if (printOutLog) {
-					print(ss);
+				sb.Append("No AI cell Selection, DONE!");
+				if (printLog) {
+					print(sb);
 				}
-				ss = "";
+				sb.Clear();
 				yield break;
 			}
 
 			if (selectedAiCell == null) {
-				ss += "Could not Select Cell";
+				sb.Append("Could not Select Cell");
 
-				if (printOutLog) {
-					print(ss);
+				if (printLog) {
+					print(sb);
 				}
-				ss = "";
+				sb.Clear();
 				continue;
 			}
 
 			//Aid selection
 			if (!isAlone) {
-				ss += "Selecting Friend | ";
+				sb.Append("Selecting Friend | ");
 				selectedAiCellForAid = AiAidSelector();
 			}
 
 			//Target selection
 			if (targets.Count != 0) {
-				ss += "Selecting Target | ";
+				sb.Append("Selecting Target | ");
 				selectedTargetCell = TargetCellSelector();
 			}
 			else {
-				ss += "No TARGET cell Selection, DONE!";
-				if (printOutLog) {
-					print(ss);
+				sb.Append("No TARGET cell Selection, DONE!");
+				if (printLog) {
+					print(sb);
 				}
-				ss = "";
+				sb.Clear();
 				yield break;
 			}
 
 			//Neutral cell selection
 			if (playManager.NeutralCells.Count != 0) {
-				ss += "Selecting Neutral | ";
+				sb.Append("Selecting Neutral | ");
 				selectedNeutralCell = ExpandCellSelector();
 			}
 			else {
-				ss += "No Neutrals exist | ";
+				sb.Append("No Neutrals exist | ");
 				selectedNeutralCell = null;
 			}
 
 
-			ss += "Calculating choices | ";
+			sb.Append("Calculating choices | ");
 			Decision factor = CalculateBestChoice();
 
 			//If these combinations are met the script will fail.. we have to redo the selection
-			if (selectedNeutralCell == null && factor == Decision.EXPAND) {
-				ss += "Expanding with no free cells, DONE!";
-				if (printOutLog) {
-					print(ss);
+			if (selectedNeutralCell == null && factor == Decision.Expand) {
+				sb .Append("Expanding with no free cells, DONE!");
+				if (printLog) {
+					print(sb);
 				}
-				ss = "";
+				sb .Clear();
 				continue;
 			}
-			if (isAlone == true && factor == Decision.HELP) {
-				ss += "Aiding with no allies, DONE!";
-				if (printOutLog) {
-					print(ss);
+			if (isAlone == true && factor == Decision.Help) {
+				sb.Append("Aiding with no allies, DONE!");
+				if (printLog) {
+					print(sb);
 				}
-				ss = "";
+				sb.Clear();
 				continue;
 			}
-			if (selectedTargetCell == null && factor == Decision.ATTACK) {
-				ss += "Attacking with no targets, DONE!";
-				if (printOutLog) {
-					print(ss);
+			if (selectedTargetCell == null && factor == Decision.Attack) {
+				sb.Append("Attacking with no targets, DONE!");
+				if (printLog) {
+					print(sb);
 				}
-				ss = "";
+				sb.Clear();
 				continue;
 			}
 
 
-			if (factor == Decision.EXPAND) {
-				ss += "Expanding as " + selectedAiCell + " to " + selectedNeutralCell + " END ";
+			if (factor == Decision.Expand) {
+				sb.Append("Expanding as " + selectedAiCell + " to " + selectedNeutralCell + " END ");
 				Expand(selectedAiCell, selectedNeutralCell);
 
 			}
-			else if (factor == Decision.ATTACK) {
-				ss += "Attacking as " + selectedAiCell + " cell " + selectedTargetCell + " END ";
+			else if (factor == Decision.Attack) {
+				sb.Append("Attacking as " + selectedAiCell + " cell " + selectedTargetCell + " END ");
 				Attack(selectedAiCell, selectedTargetCell);
-
 			}
 			else {
-				ss += "Aiding as " + selectedAiCell + " teammates cell " + selectedAiCellForAid + " END ";
+				sb.Append("Aiding as " + selectedAiCell + " teammates cell " + selectedAiCellForAid + " END ");
 				Defend(selectedAiCell, selectedAiCellForAid);
 			}
-			if (printOutLog) {
-				print(ss);
+			if (printLog) {
+				print(sb);
 			}
-			ss = "";
+			sb.Clear();
 		}
 	}
 
@@ -227,7 +225,7 @@ public class AIBehaviour : EnemyAI {
 
 			//Just return current cell
 			if (Random.Range(0, 10) < 1) {
-				ss += "Selected 10% chance | ";
+				sb.Append("Selected 10% chance | ");
 				return current;
 			}
 		}
@@ -235,28 +233,28 @@ public class AIBehaviour : EnemyAI {
 		//If the biggest cell has more than "x" elements 80% return it
 		if (elementRecordAI > aICellSelectElementThreshold) {
 			if (Random.Range(0, 10) < 6) {
-				ss += "Selected cell above threshold | ";
+				sb.Append("Selected cell above threshold | ");
 				return aiCells[recordIndex];
 			}
-			ss += "Cells above treshold exist, but were not selected | ";
+			sb.Append("Cells above treshold exist, but were not selected | ");
 
 			//If a target that can be overtaken exists still try to attack
 			foreach (GameCell ais in aiCells) {
 				foreach (GameCell t in targets) {
 					if (ais.Cell.elementCount * 0.5f > t.Cell.elementCount + 1) {
 						if (Random.Range(0, 10) < 6) {
-							ss += "Selected Cell with guaranteed Overtake | ";
+							sb.Append("Selected Cell with guaranteed Overtake | ");
 							return ais;
 						}
-						ss += "NO selection in second Chance | ";
+						sb.Append("NO selection in second Chance | ");
 						return null;
 					}
 				}
 			}
-			ss += "NO selection above " + aICellSelectElementThreshold + " treshold REALISM PLS | ";
+			sb.Append("NO selection above " + aICellSelectElementThreshold + " treshold REALISM PLS | ");
 			return null;
 		}
-		ss += "NO cell (highest " + elementRecordAI + ") above " + aICellSelectElementThreshold + " treshold | ";
+		sb.Append("NO cell (highest " + elementRecordAI + ") above " + aICellSelectElementThreshold + " treshold | ");
 		return null;
 	}
 
@@ -304,7 +302,7 @@ public class AIBehaviour : EnemyAI {
 
 	private GameCell ExpandCellSelector() {
 
-		int elementRecord = 99999;
+		int elementRecord = int.MaxValue;
 		int recordIndex = -1;
 		for (int i = 0; i < playManager.NeutralCells.Count; i++) {
 			GameCell current = playManager.NeutralCells[i];

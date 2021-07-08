@@ -17,9 +17,6 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	protected readonly List<GameCell> aiCells = new List<GameCell>();            //This AIs cells
 	private readonly List<GameCell> allies = new List<GameCell>();             //Cells this AI will not attack -- aiCells of Ally
 
-	private readonly List<IAlly> alliesOfThisAI = new List<IAlly>();
-	private List<IAlly> targetsOfThisAI = new List<IAlly>();
-
 	protected GameCell selectedAiCell;                                       //Selected AI cell that will perform the action.
 	protected GameCell selectedTargetCell;                                   //Selected target that can be attacked
 	protected GameCell selectedNeutralCell;                                  //Selected cell for expansion
@@ -302,32 +299,16 @@ public class EnemyAI : MonoBehaviour, IAlly {
 
 	private void DisableAI(EnemyAI ai) {
 		ai.isActive = false;
-		print("AI " + ai.gameObject.name + " was deactivaed, No cells remain.");
+		print("AI " + ai.gameObject.name + " was deactivated, No cells remain.");
 	}
 
 	#region IAlly implementation
-	public Team Team {
-		get {
-			return team;
-		}
-	}
 
-	public List<IAlly> Targets {
-		get {
-			return targetsOfThisAI;
-		}
-		set {
-			targetsOfThisAI = value;
-		}
-	}
-	public List<IAlly> Allies {
-		get {
-			return alliesOfThisAI;
-		}
-		set {
-			targetsOfThisAI = value;
-		}
-	}
+	public Team Team => team;
+
+	public List<IAlly> Targets { get; set; } = new List<IAlly>();
+
+	public List<IAlly> Allies { get; set; } = new List<IAlly>();
 
 	public bool IsAllyOf(IAlly other) {
 		return Allies.Contains(other);
@@ -344,27 +325,27 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	/// <summary>
 	/// Get a list containing all allies of this AI
 	/// </summary>
-	private List<EnemyAI> AIAllies => alliesOfThisAI.OfType<EnemyAI>().ToList();
+	private List<EnemyAI> AIAllies => Allies.OfType<EnemyAI>().ToList();
 
 	/// <summary>
 	/// Get a list containing all targets of this AI
 	/// </summary>
-	private List<EnemyAI> AITargets => targetsOfThisAI.OfType<EnemyAI>().ToList();
+	private List<EnemyAI> AITargets => Targets.OfType<EnemyAI>().ToList();
 
 	public List<GameCell> MyCells => aiCells;
 
 
 	public void AddAlly(IAlly ally) {
-		alliesOfThisAI.Add(ally);
+		Allies.Add(ally);
 	}
 	public void RemoveAlly(IAlly ally) {
-		alliesOfThisAI.Remove(ally);
+		Allies.Remove(ally);
 	}
 	public void AddTarget(IAlly target) {
-		targetsOfThisAI.Add(target);
+		Targets.Add(target);
 	}
 	public void RemoveTarget(IAlly target) {
-		targetsOfThisAI.Remove(target);
+		Targets.Remove(target);
 	}
 
 	/// <summary>
