@@ -67,10 +67,10 @@ public class LoadFromFile : MonoBehaviour {
 
 			c.UpdateCellInfo();
 			playManager.AllCells.Add(c);
-			if (c.Cell.team == Team.NEUTRAL) {
+			if (c.Cell.team == Team.Neutral) {
 				playManager.NeutralCells.Add(c);
 			}
-			else if (c.Cell.team == Team.ALLIED) {
+			else if (c.Cell.team == Team.Allied) {
 				playManager.Player.MyCells.Add(c);
 			}
 		}

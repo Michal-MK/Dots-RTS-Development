@@ -50,7 +50,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		string filePath = BuildPath(temp);
 
 		//Check amount of player and enemy cells
-		if (core.cellList.Count(c => c.Cell.team == Team.ALLIED) == 0 || core.cellList.Count(c => c.Cell.team > Team.ALLIED) == 0) { 
+		if (core.cellList.Count(c => c.Cell.team == Team.Allied) == 0 || core.cellList.Count(c => c.Cell.team > Team.Allied) == 0) { 
 			errorMessages.text = "Your level is missing an enemy or player cell!";
 			return "";
 		}

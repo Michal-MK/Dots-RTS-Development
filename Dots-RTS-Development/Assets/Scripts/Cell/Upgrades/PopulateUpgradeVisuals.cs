@@ -25,7 +25,7 @@ public class PopulateUpgradeVisuals : MonoBehaviour {
 		string[] upgradeNames = Enum.GetNames(typeof(Upgrades));
 
 		for (int i = 0; i < Enum.GetValues(typeof(Upgrades)).Length; i++) {
-			if (upgrades[i] != Upgrades.NONE) {
+			if (upgrades[i] != Upgrades.None) {
 				EditorUpgradePicker instance = Instantiate(populateWithPrefab, transform).GetComponent<EditorUpgradePicker>();
 				instance.gameObject.name = upgradeNames[i];
 				instance.Upgrade = upgrades[i];

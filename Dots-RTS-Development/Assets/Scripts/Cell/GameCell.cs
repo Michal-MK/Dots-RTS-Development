@@ -93,17 +93,17 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	//Wrapper for cell attacking
 	public void AttackWrapper(GameCell target, Team team) {
 		if (cellsInSelection.Count != 0) {
-			if (team >= Team.ENEMY1) {
+			if (team >= Team.Enemy1) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
 			}
-			else if (team == Team.ALLIED) {
+			else if (team == Team.Allied) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
 			}
-			else if (team == Team.NEUTRAL) {
+			else if (team == Team.Neutral) {
 				for (int i = 0; i < cellsInSelection.Count; i++) {
 					cellsInSelection[i].AttackCell(target);
 				}
@@ -136,7 +136,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		if (Cell.team == element.team) {
 			float aidBonus = 0;
 			for (int i = 0; i < uManager.InstalledUpgrades.Length; i++) {
-				if (uManager.InstalledUpgrades[i] == Upgrades.DEF_AID_BONUS_CHANCE) {
+				if (uManager.InstalledUpgrades[i] == Upgrades.DefAidBonusChance) {
 					aidBonus += 0.2f;
 				}
 			}
@@ -162,30 +162,30 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 		for (int i = 0; i < additionalArgs.Length; i++) {
 			switch (additionalArgs[i]) {
-				case Upgrades.NONE: {
+				case Upgrades.None: {
 					//Nothing to Change
 					break;
 				}
-				case Upgrades.ATK_DOT: {
+				case Upgrades.AtkDot: {
 					DOTStrength += 1;
 					break;
 				}
-				case Upgrades.ATK_CRITICAL_CHANCE: {
+				case Upgrades.AtkCriticalChance: {
 					critChance += 0.2f;
 					break;
 				}
-				case Upgrades.ATK_DOUBLE_DAMAGE: {
+				case Upgrades.AtkDoubleDamage: {
 					//Nothing to Change
 					break;
 				}
-				case Upgrades.ATK_SLOW_REGENERATION: {
+				case Upgrades.AtkSlowRegeneration: {
 					slowRegenStrength += 1;
 					break;
 				}
 			}
 		}
 		if (DOTStrength != 0) {
-			if (!Cell.appliedDebuffs.Contains(Upgrades.ATK_DOT)) {
+			if (!Cell.appliedDebuffs.Contains(Upgrades.AtkDot)) {
 				StartCoroutine(Cell.DoT(1, 4 * DOTStrength));
 			}
 		}
@@ -195,8 +195,8 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 			}
 		}
 		if (slowRegenStrength != 0) {
-			if (!Cell.appliedDebuffs.Contains(Upgrades.ATK_SLOW_REGENERATION)) {
-				Cell.appliedDebuffs.Add(Upgrades.ATK_SLOW_REGENERATION);
+			if (!Cell.appliedDebuffs.Contains(Upgrades.AtkSlowRegeneration)) {
+				Cell.appliedDebuffs.Add(Upgrades.AtkSlowRegeneration);
 				Cell.regenPeriod *= 1.33f;
 			}
 		}
@@ -206,13 +206,13 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		float resistChance = 0;
 		float reflectChance = 0;
 		for (int i = 0; i < uManager.InstalledUpgrades.Length; i++) {
-			if (uManager.InstalledUpgrades[i] != Upgrades.NONE && (int)uManager.InstalledUpgrades[i] >= 100 && (int)uManager.InstalledUpgrades[i] < 200) {
+			if (uManager.InstalledUpgrades[i] != Upgrades.None && (int)uManager.InstalledUpgrades[i] >= 100 && (int)uManager.InstalledUpgrades[i] < 200) {
 				switch (uManager.InstalledUpgrades[i]) {
-					case Upgrades.DEF_ELEMENT_RESIST_CHANCE: {
+					case Upgrades.DefElementResistChance: {
 						resistChance += 0.1f;
 						break;
 					}
-					case Upgrades.DEF_REFLECTION: {
+					case Upgrades.DefReflection: {
 						reflectChance += 0.1f;
 						break;
 					}
@@ -255,7 +255,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	#endregion
 
 	public void UpdateCellInfo() {
-		if (!Cell.isRegenerating && Cell.team >= Team.ALLIED) {
+		if (!Cell.isRegenerating && Cell.team >= Team.Allied) {
 			generateCoroutine = StartCoroutine(Cell.GenerateElements());
 		}
 		if (Cell.elementCount > Cell.maxElements) {
@@ -321,7 +321,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		Background.onReleaseClear = false;
 		lastEnteredCell = this;
 
-		if (Input.GetMouseButton(0) && Cell.team == Team.ALLIED) {
+		if (Input.GetMouseButton(0) && Cell.team == Team.Allied) {
 			OnSelectionAttempt?.Invoke(this, this);
 			ModifySelection(this);
 		}
@@ -333,7 +333,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	public void OnPointerDown(PointerEventData eventData) {
 		OnSelectionAttempt?.Invoke(this, this);
-		if (Cell.team == Team.ALLIED) {
+		if (Cell.team == Team.Allied) {
 			ModifySelection(this);
 		}
 	}

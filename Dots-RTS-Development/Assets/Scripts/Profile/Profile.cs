@@ -32,7 +32,7 @@ public class Profile {
 
 	public Profile() {
 		foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {
-			if (u != Upgrades.NONE) {
+			if (u != Upgrades.None) {
 				AcquiredUpgrades.Add(u, 0);
 			}
 		}

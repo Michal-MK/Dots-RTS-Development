@@ -1,47 +1,46 @@
 ﻿public enum Upgrades {
-	NONE = -1,
+	None = -1,
 	/// <summary>
 	/// [NO_STACKING] - Inflicts variable amount of damage over set time.		IMPLEMENTED
 	/// </summary>
-	ATK_DOT,
+	AtkDot,
 	/// <summary>
 	/// [STACKING] - Adds a chance to double element damage.		IMPLEMENTED
 	/// </summary>
-	ATK_CRITICAL_CHANCE,
+	AtkCriticalChance,
 	/// <summary>
 	/// [NO_STACKING] - 100% chance to double element damage.		IMPLEMENTED
 	/// </summary>
-	ATK_DOUBLE_DAMAGE,
+	AtkDoubleDamage,
 	/// <summary>
 	/// Undecided - Slows cell regenaration by a factor of 1.25.		IMPLEMENTED
 	/// </summary>
-	ATK_SLOW_REGENERATION,
+	AtkSlowRegeneration,
 
 	/// <summary>
 	/// [STACKING] - Adds a chance to not take damage from incoming element.		IMPLEMENTED NOT FULLY TESTED
 	/// </summary>
-	DEF_ELEMENT_RESIST_CHANCE = 100,
+	DefElementResistChance = 100,
 	/// <summary>
 	/// [NO_STACKING] - Adds a chance to reflect element back at atacker, element changes team to that of the attacked cell.
 	/// </summary>
-	DEF_REFLECTION,
+	DefReflection,
 	/// <summary>
 	/// [NO_STACKING]. [TEMPORARY] - Removes this cell from possible targets of enemy AI, lasts for set amount of time.		IMPLEMENTED NOT FULLY TESTED
 	/// </summary>
-	DEF_CAMOUFLAGE,
+	DefCamouflage,
 	/// <summary>
 	/// [NO_STACKING] - incoming elements of the same team have a chance to contain one extra element.		IMPLEMENTED NOT FULLY TESTED
 	/// </summary>
-	DEF_AID_BONUS_CHANCE,
+	DefAidBonusChance,
 
 
 	/// <summary>
 	/// [STACKING] - Increases the speed of elements.
 	/// </summary>
-	UTIL_FASTER_ELEMENT_SPEED = 200,
+	UtilFasterElementSpeed = 200,
 	/// <summary>
 	/// [STACKING] - Increases cell regeneration rate.		IMPLEMENETED NOT FULLY TESTED IMBALANCED
 	/// </summary>
-	UTIL_FASTER_REGENERATION,
-
+	UtilFasterRegeneration,
 }

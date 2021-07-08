@@ -21,7 +21,7 @@ public class DebugButton : MonoBehaviour {
 
 	public void B() {
 		print(GameObject.Find("Cell NEUTRAL").GetComponent<EditorUpgradeManager>().InstalledUpgrades.Length);
-		GameObject.Find("Cell NEUTRAL").GetComponent<EditorUpgradeManager>().InstalledUpgrades[8] = Upgrades.ATK_DOT;
+		GameObject.Find("Cell NEUTRAL").GetComponent<EditorUpgradeManager>().InstalledUpgrades[8] = Upgrades.AtkDot;
 	}
 
 	public void C() {
@@ -46,14 +46,14 @@ public class DebugButton : MonoBehaviour {
 		}
 	}
 	public void D() {
-		a[0] = Upgrades.ATK_DOT;
+		a[0] = Upgrades.AtkDot;
 	}
 
 	public Upgrades[] b = new Upgrades[8] {
-		Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,
+		Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,
 	};
 
 	private static Upgrades[] a = new Upgrades[8] {
-		Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,
+		Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,
 	};
 }

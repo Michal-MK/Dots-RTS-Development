@@ -2,6 +2,11 @@
 
 public class WindowChangeEventArgs : EventArgs {
 
-	public Window Changed { get; set; }
-	public bool IsOpening { get; set; }
+	public WindowChangeEventArgs(Window changed, bool isOpening) {
+		Changed = changed;
+		IsOpening = isOpening;
+	}
+	
+	public Window Changed { get; }
+	public bool IsOpening { get; }
 }

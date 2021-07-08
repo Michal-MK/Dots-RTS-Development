@@ -6,7 +6,7 @@ public class UpgradeManager : MonoBehaviour {
 	public static bool isUpgrading = false;
 
 	[SerializeField] private Upgrades[] upgrades = {
-		Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE, Upgrades.NONE,
+		Upgrades.None, Upgrades.None, Upgrades.None, Upgrades.None, Upgrades.None, Upgrades.None, Upgrades.None, Upgrades.None,
 	};
 
 	public Upgrades[] InstalledUpgrades => upgrades;
@@ -28,11 +28,11 @@ public class UpgradeManager : MonoBehaviour {
 		upgrades[slot] = upgrade;
 		if ((int)upgrade >= 200) {
 			switch (upgrade) {
-				case Upgrades.UTIL_FASTER_ELEMENT_SPEED: {
+				case Upgrades.UtilFasterElementSpeed: {
 					cell.elementSpeed += 3;
 					return;
 				}
-				case Upgrades.UTIL_FASTER_REGENERATION: {
+				case Upgrades.UtilFasterRegeneration: {
 					cell.regenPeriod -= 0.4f;
 					return;
 				}
@@ -44,7 +44,7 @@ public class UpgradeManager : MonoBehaviour {
 	/// Uninstalls upgrade by slot
 	/// </summary>
 	public void UninstallUpgrade(int slot) {
-		upgrades[slot] = Upgrades.NONE;
+		upgrades[slot] = Upgrades.None;
 
 		//TODO revert modifications
 	}
@@ -55,7 +55,7 @@ public class UpgradeManager : MonoBehaviour {
 	public void UninstallUpgrade(Upgrades type) {
 		for (int i = 0; i < upgrades.Length; i++) {
 			if (upgrades[i] == type) {
-				upgrades[i] = Upgrades.NONE;
+				upgrades[i] = Upgrades.None;
 			}
 		}
 	}
@@ -80,12 +80,12 @@ public class UpgradeManager : MonoBehaviour {
 	/// Can player install additional upgrades?
 	/// </summary>
 	public bool HasFreeSlots() {
-		return upgrades.Any(t => t == Upgrades.NONE);
+		return upgrades.Any(t => t == Upgrades.None);
 	}
 
 	public int GetFirstFreeSlot() {
 		for (int i = 0; i < upgrades.Length; i++) {
-			if (upgrades[i] == Upgrades.NONE) {
+			if (upgrades[i] == Upgrades.None) {
 				return i;
 			}
 		}

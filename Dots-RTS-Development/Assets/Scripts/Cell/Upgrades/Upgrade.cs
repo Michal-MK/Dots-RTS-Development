@@ -25,36 +25,36 @@ public class Upgrade : MonoBehaviour {
 
 
 	private static readonly Dictionary<Upgrades, int> UpgradeCosts = new Dictionary<Upgrades, int>() {
-		{Upgrades.NONE, 0 },
-		{Upgrades.ATK_DOT, 4 },
-		{Upgrades.ATK_CRITICAL_CHANCE, 6 },
-		{Upgrades.ATK_DOUBLE_DAMAGE, 8 },
-		{Upgrades.ATK_SLOW_REGENERATION, 10 },
+		{Upgrades.None, 0 },
+		{Upgrades.AtkDot, 4 },
+		{Upgrades.AtkCriticalChance, 6 },
+		{Upgrades.AtkDoubleDamage, 8 },
+		{Upgrades.AtkSlowRegeneration, 10 },
 
-		{Upgrades.DEF_ELEMENT_RESIST_CHANCE, 5 },
-		{Upgrades.DEF_REFLECTION, 12 },
-		{Upgrades.UTIL_FASTER_REGENERATION, 8 },
-		{Upgrades.DEF_CAMOUFLAGE, 6 },
-		{Upgrades.DEF_AID_BONUS_CHANCE, 10 },
+		{Upgrades.DefElementResistChance, 5 },
+		{Upgrades.DefReflection, 12 },
+		{Upgrades.UtilFasterRegeneration, 8 },
+		{Upgrades.DefCamouflage, 6 },
+		{Upgrades.DefAidBonusChance, 10 },
 
-		{Upgrades.UTIL_FASTER_ELEMENT_SPEED, 4 },
+		{Upgrades.UtilFasterElementSpeed, 4 },
 
 	};
 
 	public static readonly Dictionary<Upgrades, Sprite> UpgradeGraphics = new Dictionary<Upgrades, Sprite>() {
-		{Upgrades.NONE, null } ,
-		{Upgrades.ATK_DOT, null },
-		{Upgrades.ATK_CRITICAL_CHANCE, null },
-		{Upgrades.ATK_DOUBLE_DAMAGE, null },
-		{Upgrades.ATK_SLOW_REGENERATION, null },
+		{Upgrades.None, null } ,
+		{Upgrades.AtkDot, null },
+		{Upgrades.AtkCriticalChance, null },
+		{Upgrades.AtkDoubleDamage, null },
+		{Upgrades.AtkSlowRegeneration, null },
 
-		{Upgrades.DEF_ELEMENT_RESIST_CHANCE,null },
-		{Upgrades.DEF_REFLECTION, null},
-		{Upgrades.UTIL_FASTER_REGENERATION, null },
-		{Upgrades.DEF_CAMOUFLAGE,null },
-		{Upgrades.DEF_AID_BONUS_CHANCE,null },
+		{Upgrades.DefElementResistChance,null },
+		{Upgrades.DefReflection, null},
+		{Upgrades.UtilFasterRegeneration, null },
+		{Upgrades.DefCamouflage,null },
+		{Upgrades.DefAidBonusChance,null },
 
-		{Upgrades.UTIL_FASTER_ELEMENT_SPEED,null },
+		{Upgrades.UtilFasterElementSpeed,null },
 	};
 
 	public static async Task<Sprite> GetSprite(Upgrades type) {

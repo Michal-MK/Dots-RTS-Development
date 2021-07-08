@@ -7,11 +7,11 @@ using UnityEngine;
 
 public class Test : MonoBehaviour {
 	public Dictionary<Upgrades, int> test = new Dictionary<Upgrades, int>() {
-		{Upgrades.NONE, 0 },
-		{Upgrades.ATK_CRITICAL_CHANCE, 0 },
-		{Upgrades.ATK_DOT, 0 },
-		{Upgrades.ATK_DOUBLE_DAMAGE, 0 },
-		{Upgrades.ATK_SLOW_REGENERATION, 0 },
+		{Upgrades.None, 0 },
+		{Upgrades.AtkCriticalChance, 0 },
+		{Upgrades.AtkDot, 0 },
+		{Upgrades.AtkDoubleDamage, 0 },
+		{Upgrades.AtkSlowRegeneration, 0 },
 
 	};
 

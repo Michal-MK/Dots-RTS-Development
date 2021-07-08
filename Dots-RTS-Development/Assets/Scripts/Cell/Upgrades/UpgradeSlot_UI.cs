@@ -44,7 +44,7 @@ public class UpgradeSlot_UI : UpgradeSlot {
 
 	public void ClearSlot() {
 		uiSlot.sprite = transparent;
-		Type = Upgrades.NONE;
+		Type = Upgrades.None;
 	}
 
 	public override void ChangeUpgradeImage(Sprite newSprite) {

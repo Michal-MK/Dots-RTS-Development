@@ -13,8 +13,7 @@ public class InitializeActors {
 		playManager = instance;
 
 		//Make an ai for every team contained in the clan dictionary
-		Dictionary<Team, AIHolder>.KeyCollection teams = clanDict.Keys;
-		foreach (Team team in teams) {
+		foreach (Team team in clanDict.Keys) {
 			if ((int)team < 2) continue;
 
 			if (difficultyDict.TryGetValue(team, out float diff) == false) {

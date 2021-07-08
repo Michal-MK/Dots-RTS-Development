@@ -2,7 +2,7 @@
 
 public class Player : IAlly {
 
-	public Team Team => Team.ALLIED;
+	public Team Team => Team.Allied;
 
 	public List<IAlly> Targets { get; set; } = new List<IAlly>();
 

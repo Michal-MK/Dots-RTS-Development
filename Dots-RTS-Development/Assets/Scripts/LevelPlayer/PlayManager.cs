@@ -67,13 +67,13 @@ public class PlayManager {
 	}
 
 	private void SetupCellSelection() {
-		foreach (GameCell cell in AllCells.Where(cell => cell.Cell.team == Team.ALLIED)) {
+		foreach (GameCell cell in AllCells.Where(cell => cell.Cell.team == Team.Allied)) {
 			cell.OnSelectionAttempt += AttemptCellSelection;
 		}
 	}
 
 	private void AttemptCellSelection(object sender, GameCell e) {
-		if (e.Cell.team == Team.ALLIED) {
+		if (e.Cell.team == Team.Allied) {
 			Player.Selection.Add(e);
 		}
 	}

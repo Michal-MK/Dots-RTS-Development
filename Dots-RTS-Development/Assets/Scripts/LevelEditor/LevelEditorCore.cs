@@ -49,7 +49,7 @@ public class LevelEditorCore : MonoBehaviour {
 
 	#region Default value for each input field
 
-	private const Team DEFAULT_TEAM = Team.NEUTRAL;
+	private const Team DEFAULT_TEAM = Team.Neutral;
 	private const int DEFAULT_MAX_ELEMENTS = 50;
 	private const int DEFAULT_INITIAL_ELEMENTS = 10;
 	private const float DEFAULT_REGEN = 2f;
@@ -113,12 +113,12 @@ public class LevelEditorCore : MonoBehaviour {
 			c.ToggleCellOutline(true);
 		}
 
-		if (c.Cell.team != Team.NEUTRAL) {
+		if (c.Cell.team != Team.Neutral) {
 
 			if (!teamList.Contains(c.Cell.team)) {
 				teamList.Add(c.Cell.team);
 				if (!loadedFromFile) {
-					if (c.Cell.team != Team.ALLIED) {
+					if (c.Cell.team != Team.Allied) {
 						aiDifficultyDict.Add(c.Cell.team, DEFAULT_DIFFICULTY);
 						AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 					}
@@ -128,7 +128,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		if (loadedFromFile) {
 			for (int i = 0; i < c.UpgradeManager.upgradeSlots.Length; i++) {
-				if (c.UpgradeManager.InstalledUpgrades[i] != Upgrades.NONE) {
+				if (c.UpgradeManager.InstalledUpgrades[i] != Upgrades.None) {
 					c.UpgradeManager.upgradeSlots[i].Type = c.UpgradeManager.InstalledUpgrades[i];
 					c.UpgradeManager.upgradeSlots[i].ChangeUpgradeImage(Upgrade.UpgradeGraphics[c.UpgradeManager.InstalledUpgrades[i]]);
 				}
@@ -159,7 +159,7 @@ public class LevelEditorCore : MonoBehaviour {
 		}
 		teamSetup.RemoveFromClan(c.Cell.team);
 		teamList.Remove(c.Cell.team);
-		if (c.Cell.team != Team.ALLIED) {
+		if (c.Cell.team != Team.Allied) {
 			aiDifficultyDict.Remove(c.Cell.team);
 			AllAiDifficultyWriter.RedoText(aiDifficultyDict);
 		}
@@ -321,7 +321,7 @@ public class LevelEditorCore : MonoBehaviour {
 	/// Refreshes the Ai difficulty
 	/// </summary>
 	/// <param name="team">the team this applies to, 0 = all</param>
-	public void AiDiffHandler(Team team = Team.NEUTRAL) {
+	public void AiDiffHandler(Team team = Team.Neutral) {
 		if (float.TryParse(UI.aiDifficultyAllInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out GlobalAIDifficulty) && team == 0) {
 			foreach (Team key in teamList) {
 				if (aiDifficultyDict.ContainsKey(key)) {

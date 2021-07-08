@@ -17,8 +17,7 @@ namespace Conversions {
 			foreach (Team j in keys) {
 				AIHolder value;
 				dict.TryGetValue(j, out value);
-				List<Team> clanJ = new List<Team>(value.allies);
-				clanJ.Add(j);
+				List<Team> clanJ = new List<Team>(value.allies) { j };
 				clanJ.Sort();
 				bool newClan = true;
 				foreach (List<Team> clan in actualClans) {

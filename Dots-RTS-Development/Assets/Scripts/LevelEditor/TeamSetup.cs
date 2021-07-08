@@ -65,7 +65,7 @@ public class TeamSetup : MonoBehaviour {
 
 	public void TeamBoxPosChange(Vector2 pos, TeamBox teamBox) {
 		float lowestDistFound = Mathf.Infinity;
-		Team indexClosest = Team.NEUTRAL;
+		Team indexClosest = Team.Neutral;
 		teamBox.transform.position = teamBox.initialPos;
 
 		foreach (TeamBox t in teamBoxes) {

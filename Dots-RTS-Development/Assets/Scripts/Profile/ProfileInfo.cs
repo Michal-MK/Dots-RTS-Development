@@ -19,7 +19,7 @@ public class ProfileInfo : MonoBehaviour {
 	public void LoadProfile() {
 		if (Input.GetKey(KeyCode.A)) {
 			foreach (Upgrades u in Enum.GetValues(typeof(Upgrades))) {
-				if (u != Upgrades.NONE) {
+				if (u != Upgrades.None) {
 					ProfileManager.CurrentProfile.AcquiredUpgrades[u] = 8;
 				}
 			}

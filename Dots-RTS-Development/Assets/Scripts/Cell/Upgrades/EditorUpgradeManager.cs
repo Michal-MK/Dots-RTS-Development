@@ -36,7 +36,7 @@ public class EditorUpgradeManager : UpgradeManager {
 
 	protected override void UpgradePreinstallSprites() {
 		for (int i = 0; i < upgradeSlots.Length; i++) {
-			if (InstalledUpgrades[i] == Upgrades.NONE) continue;
+			if (InstalledUpgrades[i] == Upgrades.None) continue;
 			upgradeSlots[i].selfSprite.sprite = Upgrade.UpgradeGraphics[InstalledUpgrades[i]];
 			upgradeSlots[i].selfSprite.size = Vector2.one * 25f;
 		}

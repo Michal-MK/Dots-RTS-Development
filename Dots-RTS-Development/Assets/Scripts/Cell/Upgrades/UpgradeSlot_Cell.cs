@@ -16,9 +16,9 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerEnterHandler, IPointerExitH
 	}
 
 	private void UpgradeSlotClicked(object sender, UpgradeSlot e) {
-		if (Type != Upgrades.NONE) {
+		if (Type != Upgrades.None) {
 			print($"Clicked on slot {e.gameObject.name} invoked by {e.SlotID} in {transform.parent.name}");
-			uManager.InstalledUpgrades[SlotID] = Type = Upgrades.NONE;
+			uManager.InstalledUpgrades[SlotID] = Type = Upgrades.None;
 			clearUpgrade.color = new Color(1, 1, 1, 0);
 			selfSprite.sprite = null;
 		}
@@ -47,7 +47,7 @@ public class UpgradeSlot_Cell : UpgradeSlot, IPointerEnterHandler, IPointerExitH
 	#region Pointer events
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		if (Type != Upgrades.NONE) {
+		if (Type != Upgrades.None) {
 			clearUpgrade.color = new Color(1, 1, 1, 1);
 		}
 	}

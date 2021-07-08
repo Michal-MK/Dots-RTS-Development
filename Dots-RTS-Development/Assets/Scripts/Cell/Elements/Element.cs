@@ -29,24 +29,24 @@ public class Element : MonoBehaviour {
 
 	protected void ExecuteAttack() {
 		Upgrades[] infection = {
-			Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE,Upgrades.NONE
+			Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None,Upgrades.None
 		};
 
 		for (int i = 0; i < debuffs.Length; i++) {
 			switch (debuffs[i]) {
-				case Upgrades.ATK_DOUBLE_DAMAGE: {
+				case Upgrades.AtkDoubleDamage: {
 					damage *= 2;
 					break;
 				}
-				case Upgrades.ATK_SLOW_REGENERATION: {
+				case Upgrades.AtkSlowRegeneration: {
 					infection[i] = debuffs[i];
 					break;
 				}
-				case Upgrades.ATK_CRITICAL_CHANCE: {
+				case Upgrades.AtkCriticalChance: {
 					infection[i] = debuffs[i];
 					break;
 				}
-				case Upgrades.ATK_DOT: {
+				case Upgrades.AtkDot: {
 					infection[i] = debuffs[i];
 					break;
 				}

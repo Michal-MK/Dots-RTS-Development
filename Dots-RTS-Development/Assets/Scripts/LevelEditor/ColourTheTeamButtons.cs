@@ -15,8 +15,8 @@ public class ColourTheTeamButtons : MonoBehaviour {
 
 	public static string GetDescriptionBasedOnTeam(Team team) {
 		return team switch {
-			Team.NEUTRAL => "Neutral",
-			Team.ALLIED  => "Ally",
+			Team.Neutral => "Neutral",
+			Team.Allied  => "Ally",
 			_            => "Enemy"
 		};
 	}

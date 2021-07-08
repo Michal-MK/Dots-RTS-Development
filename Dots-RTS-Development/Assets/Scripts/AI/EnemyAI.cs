@@ -13,14 +13,14 @@ public class EnemyAI : MonoBehaviour, IAlly {
 
 	public Team team;
 
-	protected readonly List<GameCell> targets = new List<GameCell>();            //Cells this AI will attack -- aiCells of Target
-	protected readonly List<GameCell> aiCells = new List<GameCell>();            //This AIs cells
-	private readonly List<GameCell> allies = new List<GameCell>();             //Cells this AI will not attack -- aiCells of Ally
+	protected readonly List<GameCell> targets = new List<GameCell>();           //Cells this AI will attack
+	protected readonly List<GameCell> aiCells = new List<GameCell>();           //Cells this AI owns
+	private readonly List<GameCell> allies = new List<GameCell>();              //Cells this AI will not attack
 
-	protected GameCell selectedAiCell;                                       //Selected AI cell that will perform the action.
-	protected GameCell selectedTargetCell;                                   //Selected target that can be attacked
-	protected GameCell selectedNeutralCell;                                  //Selected cell for expansion
-	protected GameCell selectedAiCellForAid = null;                          //Selected cell for empowering
+	protected GameCell selectedAiCell;											//Selected cell that will perform the action.
+	protected GameCell selectedTargetCell;										//Selected cell that can be attacked
+	protected GameCell selectedNeutralCell;										//Selected cell for expansion
+	protected GameCell selectedAiCellForAid = null;								//Selected cell for empowering
 
 	protected float attackChoiceProbability = 0;
 	protected float expandChoiceProbability = 0;
@@ -28,7 +28,6 @@ public class EnemyAI : MonoBehaviour, IAlly {
 
 	public PlayManager playManager;
 
-	//Sort cells on screen to lists by their team
 	protected virtual void Start() {
 		GameCell.TeamChanged += CellBehaviour_TeamChanged;
 
@@ -46,7 +45,8 @@ public class EnemyAI : MonoBehaviour, IAlly {
 			if (current.Cell.team == team) {
 				aiCells.Add(current);
 			}
-			else if (current.Cell.team != Team.NEUTRAL) {
+			else if (current.Cell.team != Team.Neutral) {
+				// TODO this assumes that no allies exist
 				targets.Add(current);
 			}
 		}
@@ -88,7 +88,7 @@ public class EnemyAI : MonoBehaviour, IAlly {
 		 */
 
 		if (isActive) {
-			if (e.Previous == Team.NEUTRAL) {
+			if (e.Previous == Team.Neutral) {
 
 				EnemyAI currAI = playManager.InitializedActors.GetAI(e.Current);
 
@@ -109,7 +109,7 @@ public class EnemyAI : MonoBehaviour, IAlly {
 				playManager.NeutralCells.Remove(e.Cell);
 			}
 
-			if (e.Previous == Team.ALLIED) {
+			if (e.Previous == Team.Allied) {
 
 				Player.MyCells.Remove(e.Cell);
 				UpdateCellLists(Player, e.Cell, false, false);
@@ -125,10 +125,10 @@ public class EnemyAI : MonoBehaviour, IAlly {
 				}
 			}
 
-			if (e.Previous > Team.ALLIED) {
+			if (e.Previous > Team.Allied) {
 				EnemyAI prevAI = playManager.InitializedActors.GetAI(e.Previous);
 
-				if (e.Current == Team.ALLIED) {
+				if (e.Current == Team.Allied) {
 					print("PLAYER took over AI---------------------");
 
 					UpdateCellLists(Player, e.Cell, true, true);

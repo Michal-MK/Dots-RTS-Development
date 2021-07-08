@@ -17,7 +17,7 @@ public class UpgradePanelData : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
 	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.GAME || SceneManager.GetActiveScene().name == Scenes.DEBUG) {
-			if (type != Upgrades.NONE) {
+			if (type != Upgrades.None) {
 				count = 0;//ProfileManager.CurrentProfile.AcquiredUpgrades[type];
 				UpdateUpgradeOverview();
 			}

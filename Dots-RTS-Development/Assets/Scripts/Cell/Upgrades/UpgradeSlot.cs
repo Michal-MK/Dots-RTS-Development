@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 public abstract class UpgradeSlot : MonoBehaviour, IPointerDownHandler, IPointerClickHandler {
 
 	public int SlotID { get; set; }
-	public Upgrades Type { get; set; } = Upgrades.NONE;
+	public Upgrades Type { get; set; } = Upgrades.None;
 
 	public event EventHandler<UpgradeSlot> OnSlotClicked;
 

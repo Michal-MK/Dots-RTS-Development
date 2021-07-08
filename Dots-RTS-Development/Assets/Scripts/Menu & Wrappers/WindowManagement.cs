@@ -55,7 +55,7 @@ public class WindowManagement : MonoBehaviour {
 			CloseAnimatingWindow(win);
 		}
 		realWindowCount--;
-		OnWindowChange?.Invoke(null, new WindowChangeEventArgs { Changed = win, IsOpening = false });
+		OnWindowChange?.Invoke(null, new WindowChangeEventArgs(win, false));
 	}
 
 	private IEnumerator DisableAfterAnimation(Window window) {
@@ -82,7 +82,6 @@ public class WindowManagement : MonoBehaviour {
 		}
 	}
 
-
 	private void SceneChanged(object sender, EventArgs e) {
 		activeWindows.Clear();
 	}
@@ -99,7 +98,7 @@ public class WindowManagement : MonoBehaviour {
 				CloseAnimatingWindow(win);
 			}
 			realWindowCount--;
-			OnWindowChange?.Invoke(null, new WindowChangeEventArgs { Changed = win, IsOpening = false });
+			OnWindowChange?.Invoke(null, new WindowChangeEventArgs(win, false));
 		}
 		activeWindows.Clear();
 		realWindowCount = 0;
@@ -119,7 +118,7 @@ public class WindowManagement : MonoBehaviour {
 				}
 				activeWindows = new Dictionary<int, Window>(activeWindows.Where(w => w.Value.WindowObject != window).ToDictionary(w => w.Key, w => w.Value));
 				realWindowCount--;
-				OnWindowChange?.Invoke(null, new WindowChangeEventArgs { Changed = win, IsOpening = false });
+				OnWindowChange?.Invoke(null, new WindowChangeEventArgs(win, false));
 			}
 		}
 	}

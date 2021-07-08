@@ -56,7 +56,7 @@ public class Cell {
 	}
 
 	public IEnumerator DoT(float timeBetweenTicks, int totalDamageInflicted) {
-		appliedDebuffs.Add(Upgrades.ATK_DOT);
+		appliedDebuffs.Add(Upgrades.AtkDot);
 		for (int i = 0; i < totalDamageInflicted; i++) {
 			yield return new WaitForSeconds(timeBetweenTicks);
 			if (elementCount >= 1) {
@@ -64,7 +64,7 @@ public class Cell {
 				OnElementDecayed?.Invoke(this, elementCount);
 			}
 		}
-		appliedDebuffs.Remove(Upgrades.ATK_DOT);
+		appliedDebuffs.Remove(Upgrades.AtkDot);
 	}
 
 	/// <summary>
