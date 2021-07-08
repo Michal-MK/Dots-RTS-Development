@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 [Serializable]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class SaveData {
-	public List<SerializedCell> Cells { get; set; } = new List<SerializedCell>();
-	public SaveMeta SaveMeta { get; set; }
-	public Dictionary<Team, float> Difficulties { get; set; }
-	public float GameSize { get; set; }
-	public float GameAspect { get; set; }
-	public Dictionary<Team, AIHolder> Teams { get; set; }
+	public List<SerializedCell> Cells = new List<SerializedCell>();
+	public SaveMeta SaveMeta;
+	public float GameSize;
+	public float GameAspect;
+	public List<SerializedAI> Teams;
 }
-

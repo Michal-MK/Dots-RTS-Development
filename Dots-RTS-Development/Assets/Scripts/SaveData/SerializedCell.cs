@@ -1,11 +1,13 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 [Serializable]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class SerializedCell {
-	public SerializedVector3 Position { get; set; }
-	public int Elements { get; set; }
-	public int MaximumElements { get; set; }
-	public Team Team { get; set; }
-	public float RegenerationPeriod { get; set; }
-	public Upgrades[] InstalledUpgrades { get; set; }
+	public SerializedVector3 Position;
+	public int Elements;
+	public int MaximumElements;
+	public Team Team;
+	public float RegenerationPeriod;
+	public Upgrades[] InstalledUpgrades;
 }

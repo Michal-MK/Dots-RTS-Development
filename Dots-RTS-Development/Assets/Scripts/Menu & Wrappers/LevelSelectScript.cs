@@ -38,11 +38,9 @@ public class LevelSelectScript : MonoBehaviour {
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		error.text = "";
 		FileInfo[] saves = d.GetFiles("*.phage");
-		BinaryFormatter bf = new BinaryFormatter();
+		
 		foreach (FileInfo fileInfo in saves) {
-			using FileStream file = fileInfo.Open(FileMode.Open);
-			SaveData info = (SaveData)bf.Deserialize(file);
-			file.Close();
+			SaveData info = JsonUtility.FromJson<SaveData>(fileInfo.FullName);
 			SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
 			level.gameObject.SetActive(false);
 			level.name = fileInfo.Name;

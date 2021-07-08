@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using Conversions;
 
 public class TeamSetup : MonoBehaviour {
-
 	public LevelEditorCore core;
 	public GameObject teamGOPrefab;
 	public RectTransform leaveClanButtonGo;
@@ -233,7 +232,7 @@ public class TeamSetup : MonoBehaviour {
 		}
 	}
 
-	public Dictionary<Team, AIHolder> DictWithAllInfo() {
+	public List<SerializedAI> DictWithAllInfo(Dictionary<Team, float> diffs) {
 		Dictionary<Team, AIHolder> newDict = new Dictionary<Team, AIHolder>();
 		Dictionary<Team, AIHolder>.KeyCollection teamKeys = clanDict.Keys;
 		List<Team> noClaners = new List<Team>(core.teamList);
@@ -247,6 +246,7 @@ public class TeamSetup : MonoBehaviour {
 			holder.targets.Remove(team);
 			foreach (Team ally in holder.allies) {
 				holder.targets.Remove(ally);
+
 				//print("this runs this time");
 			}
 
@@ -264,7 +264,10 @@ public class TeamSetup : MonoBehaviour {
 			newAiHolder.targets.Remove(team);
 			newDict.Add(team, newAiHolder);
 		}
-		return newDict;
+		return newDict.Select(s => new SerializedAI {
+			Team = s.Key, ConfigHolder = s.Value,
+			Difficulty = diffs.ContainsKey(s.Key) ? diffs[s.Key] : 1.0f
+		}).ToList();
 	}
 }
 

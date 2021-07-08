@@ -1,44 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class LoadFromFile : MonoBehaviour {
-
 	public GameObject cellPrefab;
 
 	private PlayManager playManager;
-	
+
 	public void Load(string filePath, PlayManager instance) {
 		playManager = instance;
 
-		using FileStream file = File.Open(filePath, FileMode.Open);
-		BinaryFormatter formatter = new BinaryFormatter();
-
 		if (instance.LevelState == PlaySceneState.Campaign) {
-			LoadCampaign(formatter, file);
+			LoadCampaign(filePath);
 		}
 		else if (instance.LevelState == PlaySceneState.Custom) {
-			LoadCustom(formatter, file);
+			LoadCustom(filePath);
 		}
 		else {
-			LoadPreview(formatter, file);
+			LoadPreview(filePath);
 		}
 	}
 
-	private void LoadPreview(IFormatter formatter, Stream file) {
+	private void LoadPreview(string filePath) {
 		gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
-		CommonSetup((SaveData)formatter.Deserialize(file));
+		CommonSetup(JsonUtility.FromJson<SaveData>(File.ReadAllText(filePath)));
 	}
 
-	private void LoadCustom(IFormatter formatter, Stream file) {
-		CommonSetup((SaveData)formatter.Deserialize(file));
+	private void LoadCustom(string filePath) {
+		CommonSetup(JsonUtility.FromJson<SaveData>(File.ReadAllText(filePath)));
 	}
 
-	private void LoadCampaign(IFormatter formatter, Stream file) {
-		CommonSetup(((SaveDataCampaign)formatter.Deserialize(file)).Data);
+	private void LoadCampaign(string filePath) {
+		CommonSetup(JsonUtility.FromJson<SaveDataCampaign>(File.ReadAllText(filePath)).Data);
 	}
 
 	private void CommonSetup(SaveData data) {
@@ -49,7 +46,10 @@ public class LoadFromFile : MonoBehaviour {
 		GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(data.GameAspect);
 		SetupCells(data.Cells);
 
-		playManager.InitializedActors.StartAiInitialization(data.Teams, data.Difficulties, playManager);
+		playManager.InitializedActors.StartAiInitialization(
+			data.Teams.ToDictionary(d1 => d1.Team, d2 => d2.ConfigHolder),
+			data.Teams.ToDictionary(d1 => d1.Team, d2 => d2.Difficulty),
+			playManager);
 	}
 
 	private void SetupCells(List<SerializedCell> cells) {

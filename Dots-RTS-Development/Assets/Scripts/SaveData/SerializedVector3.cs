@@ -3,6 +3,14 @@ using UnityEngine;
 
 [Serializable]
 public class SerializedVector3 {
+	public SerializedVector3() { }
+
+	public SerializedVector3(Vector3 vec) {
+		x = vec.x;
+		y = vec.y;
+		z = vec.z;
+	}
+
 	public float x, y, z;
 
 	public static explicit operator Vector3(SerializedVector3 v) {

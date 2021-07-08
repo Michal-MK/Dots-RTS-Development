@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 public class ProfileManager {
-
 	public static Profile CurrentProfile { get; set; }
 
 	public static ProfileManager Instance { get; private set; }
@@ -16,7 +15,7 @@ public class ProfileManager {
 	private ProfileManagerBehaviour behaviour;
 
 	private Button createProfileButton;
-	private readonly GameObject profileCreation;
+	private GameObject profileCreation;
 
 	public static ProfileManager Initialize() {
 		if (Instance != null) {
@@ -27,24 +26,24 @@ public class ProfileManager {
 		return Instance;
 	}
 
+	private ProfileManager() { }
+
 	private void OnOnSceneChanged(object sender, SceneChangedEventArgs e) {
 		if (e.Name != Scenes.PROFILES) return;
 
 		behaviour = UI_ReferenceHolder.ProfilesBehaviour;
-	}
-
-	private ProfileManager() {
 		createProfileButton = GameObject.Find("NoProfiles").GetComponent<Button>();
 		createProfileButton.gameObject.SetActive(false);
 		profileCreation = GameObject.Find("ProfileCreation");
 		profileCreation.SetActive(false);
+		ListProfiles();
 	}
 
 	private void ProfileInfo_OnProfileDeleted(object sender, OnProfileInfoDeletedEventArgs pInfo) {
 		ListProfiles();
 	}
 
-	public void ListProfiles() {
+	private void ListProfiles() {
 		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		FileInfo[] files = dir.GetFiles("*.gp");
 

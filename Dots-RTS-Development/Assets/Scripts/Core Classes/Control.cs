@@ -19,6 +19,7 @@ public class Control : MonoBehaviour {
 		if (Script == null) {
 			Script = this;
 			GetComponent<SceneLoader>().Init();
+			ProfileManager.Initialize();
 			print("Control script initialized.");
 			DontDestroyOnLoad(gameObject);
 		}
@@ -35,16 +36,6 @@ public class Control : MonoBehaviour {
 		if (activeScene == Scenes.SPLASH) {
 			yield return new WaitUntil(() => Global.baseLoaded);
 			SceneManager.LoadScene(Scenes.PROFILES);
-			yield break;
-		}
-
-		// DEBUG
-		if (Application.isEditor) {
-			if (ProfileManager.CurrentProfile == null) {
-				if (activeScene == Scenes.MENU) {
-					SceneManager.LoadScene(Scenes.PROFILES);
-				}
-			}
 		}
 	}
 
@@ -56,22 +47,12 @@ public class Control : MonoBehaviour {
 
 	private void SceneManager_activeSceneChanged(Scene oldS, Scene newS) {
 		switch (newS.name) {
-			case Scenes.PROFILES: {
-				ProfileManager.Instance.ListProfiles();
-				break;
-			}
 			case Scenes.MENU: {
-
 				if (ProfileManager.CurrentProfile == null) {
 					SceneManager.LoadScene(Scenes.PROFILES);
 					break;
 				}
 				GameObject.Find("Profile_Name_Menu").GetComponent<TextMeshProUGUI>().SetText("Welcome: " + ProfileManager.CurrentProfile.Name);
-				break;
-			}
-			case Scenes.LEVEL_SELECT: {
-
-				LevelSelectScript.DISPLAYED_SAVES.Clear();
 				break;
 			}
 		}
