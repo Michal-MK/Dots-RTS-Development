@@ -65,7 +65,6 @@ public class Control : MonoBehaviour {
 		else {
 			pauseHandlers?.Pause(sender);
 		}
-		isPaused ^= true;
 		OnPauseStateChanged?.Invoke(this, isPaused);
 	}
 

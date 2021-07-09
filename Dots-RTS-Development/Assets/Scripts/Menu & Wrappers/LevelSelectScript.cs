@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -40,7 +41,7 @@ public class LevelSelectScript : MonoBehaviour {
 		FileInfo[] saves = d.GetFiles("*.phage");
 		
 		foreach (FileInfo fileInfo in saves) {
-			SaveData info = JsonUtility.FromJson<SaveData>(fileInfo.FullName);
+			SaveData info = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(fileInfo.FullName));
 			SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
 			level.gameObject.SetActive(false);
 			level.name = fileInfo.Name;

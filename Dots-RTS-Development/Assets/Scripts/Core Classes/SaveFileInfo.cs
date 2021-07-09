@@ -27,7 +27,6 @@ public class SaveFileInfo : MonoBehaviour {
 
 	public LevelMarket Market { get; set; }
 
-
 	public void SetAsTarget() {
 		Market.SelectedSave = gameObject;
 	}
@@ -55,24 +54,12 @@ public class SaveFileInfo : MonoBehaviour {
 	#region Local
 
 	public void LoadLevel(Transform lvlName) {
-		string s;
-		if (GameEnvironment.IsAndroid) {
-			s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + lvlName.name;
-		}
-		else {
-			s = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + lvlName.name;
-		}
+		string s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + lvlName.name;
 		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.Custom, s);
 	}
 
 	public void DeleteObject(Transform fileName) {
-		if (GameEnvironment.IsAndroid) {
-			File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
-		}
-		else {
-			File.Delete(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + fileName.name);
-		}
-
+		File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
 		LevelSelectScript.DISPLAYED_SAVES.Remove(this);
 		Destroy(gameObject);
 	}
@@ -103,5 +90,6 @@ public class SaveFileInfo : MonoBehaviour {
 		saveAndLoadEditor.Load(fileName);
 		WindowManagement.Instance.CloseAll();
 	}
+
 	#endregion
 }

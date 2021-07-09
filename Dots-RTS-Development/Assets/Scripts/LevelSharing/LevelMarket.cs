@@ -32,7 +32,7 @@ public class LevelMarket : MonoBehaviour {
 
 		DirectoryInfo tempFolder = new DirectoryInfo(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
 		FileInfo[] infos = tempFolder.GetFiles();
-		FileInfo[] persistentInfos = new DirectoryInfo(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar).GetFiles();
+		FileInfo[] persistentInfos = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar).GetFiles();
 		Task<SaveData>[] tasks = new Task<SaveData>[contents.Count];
 
 		for (int j = 0; j < contents.Count; j++) {

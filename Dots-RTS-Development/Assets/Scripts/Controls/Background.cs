@@ -12,8 +12,9 @@ public class Background : MonoBehaviour, IPointerEnterHandler {
 	}
 
 	private void Update() {
-		bool lmbState = !Input.GetMouseButtonUp(0);
-		if (!onReleaseClear && lmbState) return;
-		//GameCell.ClearSelection(); TODO
+		if (!Input.GetMouseButton(0) && onReleaseClear) {
+			GameCell.ClearSelection();
+			onReleaseClear = true;
+		}
 	}
 }

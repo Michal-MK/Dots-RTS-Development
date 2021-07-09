@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class LoadFromFile : MonoBehaviour {
@@ -27,15 +28,15 @@ public class LoadFromFile : MonoBehaviour {
 
 	private void LoadPreview(string filePath) {
 		gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
-		CommonSetup(JsonUtility.FromJson<SaveData>(File.ReadAllText(filePath)));
+		CommonSetup(JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(filePath)));
 	}
 
 	private void LoadCustom(string filePath) {
-		CommonSetup(JsonUtility.FromJson<SaveData>(File.ReadAllText(filePath)));
+		CommonSetup(JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(filePath)));
 	}
 
 	private void LoadCampaign(string filePath) {
-		CommonSetup(JsonUtility.FromJson<SaveDataCampaign>(File.ReadAllText(filePath)).Data);
+		CommonSetup(JsonConvert.DeserializeObject<SaveDataCampaign>(File.ReadAllText(filePath)).Data);
 	}
 
 	private void CommonSetup(SaveData data) {

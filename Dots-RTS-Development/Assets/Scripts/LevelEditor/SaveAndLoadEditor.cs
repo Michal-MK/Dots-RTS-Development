@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,34 +51,35 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		errorMessages.text += $"Level Name: {core.LevelName}.\n";
 		errorMessages.text += $"Author: {core.AuthorName}.\n";
 
-		using StreamWriter file = File.CreateText(filePath);
-		SaveData save = new SaveData();
+		using (StreamWriter file = File.CreateText(filePath)) {
+			SaveData save = new SaveData();
 
-		foreach (EditCell c in core.cellList) {
-			SerializedCell serCell = new SerializedCell {
-				Position = new SerializedVector3(c.transform.position),
-				Elements = c.Cell.elementCount,
-				MaximumElements = c.Cell.maxElements,
-				Team = c.Cell.team,
-				RegenerationPeriod = c.Cell.regenPeriod,
-				InstalledUpgrades = c.UpgradeManager.InstalledUpgrades
-			};
-			save.Cells.Add(serCell);
+			foreach (EditCell c in core.cellList) {
+				SerializedCell serCell = new SerializedCell {
+					Position = new SerializedVector3(c.transform.position),
+					Elements = c.Cell.elementCount,
+					MaximumElements = c.Cell.maxElements,
+					Team = c.Cell.team,
+					RegenerationPeriod = c.Cell.regenPeriod,
+					InstalledUpgrades = c.UpgradeManager.InstalledUpgrades
+				};
+				save.Cells.Add(serCell);
+			}
+
+			save.GameAspect = Camera.main.aspect;
+
+			save.GameSize = core.GameSize;
+			save.SaveMeta = new SaveMeta(core.LevelName, core.AuthorName, DateTime.Now);
+			save.Teams = teams.DictWithAllInfo(core.aiDifficultyDict);
+			file.Write(JsonConvert.SerializeObject(save));
 		}
-
-		save.GameAspect = Camera.main.aspect;
-
-		save.GameSize = core.GameSize;
-		save.SaveMeta = new SaveMeta(core.LevelName, core.AuthorName, DateTime.Now);
-		save.Teams = teams.DictWithAllInfo(core.aiDifficultyDict);
-		file.Write(JsonUtility.ToJson(save));
 		return filePath;
 	}
 
 	public void Load(string path) {
 		core.ResetScene();
 
-		SaveData save = JsonUtility.FromJson<SaveData>(File.ReadAllText(path));
+		SaveData save = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(path));
 
 		core.GameSize = save.GameSize;
 		core.aiDifficultyDict = save.Teams.ToDictionary(d1 => d1.Team, d2 => d2.Difficulty);
