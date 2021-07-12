@@ -2,58 +2,58 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using UnityEngine;
 
 public class LoadFromFile : MonoBehaviour {
 	public GameObject cellPrefab;
 
-	private PlayManager playManager;
+	private PlayManagerBehaviour playManager;
 
-	public void Load(string filePath, PlayManager instance) {
+	public PlaySceneConfig Load(string filePath, PlayManagerBehaviour instance) {
 		playManager = instance;
 
 		if (instance.LevelState == PlaySceneState.Campaign) {
-			LoadCampaign(filePath);
+			return LoadCampaign(filePath);
 		}
-		else if (instance.LevelState == PlaySceneState.Custom) {
-			LoadCustom(filePath);
+		if (instance.LevelState == PlaySceneState.Custom) {
+			return LoadCustom(filePath);
 		}
-		else {
-			LoadPreview(filePath);
-		}
+		return LoadPreview(filePath);
 	}
 
-	private void LoadPreview(string filePath) {
+	private PlaySceneConfig LoadPreview(string filePath) {
 		gameObject.SendMessage("ChangeLayoutToPreview", SendMessageOptions.DontRequireReceiver);
-		CommonSetup(JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(filePath)));
+		return CommonSetup(JsonUtility.FromJson<SaveData>(File.ReadAllText(filePath)));
 	}
 
-	private void LoadCustom(string filePath) {
-		CommonSetup(JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(filePath)));
+	private PlaySceneConfig LoadCustom(string filePath) {
+		return CommonSetup(JsonUtility.FromJson<SaveData>(File.ReadAllText(filePath)));
 	}
 
-	private void LoadCampaign(string filePath) {
-		CommonSetup(JsonConvert.DeserializeObject<SaveDataCampaign>(File.ReadAllText(filePath)).Data);
+	private PlaySceneConfig LoadCampaign(string filePath) {
+		return CommonSetup(JsonUtility.FromJson<SaveDataCampaign>(File.ReadAllText(filePath)).Data);
 	}
 
-	private void CommonSetup(SaveData data) {
+	private PlaySceneConfig CommonSetup(SaveData data) {
 		if (data.GameSize != 0) {
 			Camera.main.orthographicSize = data.GameSize;
 		}
 
 		GameObject.Find("Borders").GetComponent<PlayFieldSetup>().ResizeBackground(data.GameAspect);
-		SetupCells(data.Cells);
+		PlaySceneConfig ret = SetupCells(data.Cells);
 
 		playManager.InitializedActors.StartAiInitialization(
 			data.Teams.ToDictionary(d1 => d1.Team, d2 => d2.ConfigHolder),
 			data.Teams.ToDictionary(d1 => d1.Team, d2 => d2.Difficulty),
 			playManager);
+		
+		return ret;
 	}
 
-	private void SetupCells(List<SerializedCell> cells) {
+	private PlaySceneConfig SetupCells(List<SerializedCell> cells) {
+		Dictionary<Team, int> counts = new Dictionary<Team, int>();
+		PlaySceneConfig ret = new PlaySceneConfig();
 		foreach (SerializedCell cell in cells) {
 			GameCell c = Instantiate(cellPrefab).GetComponent<GameCell>();
 			c.Cell.cellPosition = (Vector3)cell.Position;
@@ -74,6 +74,16 @@ public class LoadFromFile : MonoBehaviour {
 			else if (c.Cell.team == Team.Allied) {
 				playManager.Player.MyCells.Add(c);
 			}
+			if (!counts.ContainsKey(cell.Team)) {
+				counts[cell.Team] = 1;
+			}
+			else {
+				counts[cell.Team]++;
+			}
+			c.gameObject.name = $"Cell: {c.Cell.team} ({counts[cell.Team]})";
+			ret.Cells.Add(c);
 		}
+
+		return ret;
 	}
 }

@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class ServerAccess {
-
 	public async Task<List<string>> GetLevelsAsync() {
 		HttpWebRequest request = WebRequest.CreateHttp(new Uri("http://192.168.88.5:5000/Level"));
 
@@ -29,16 +29,6 @@ public class ServerAccess {
 	/// </summary>
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public async Task<SaveData> DownloadAsync(string fileName, bool temp = false) {
-		string tempPath;
-		string persistentPath;
-		if (GameEnvironment.IsAndroid) {
-			tempPath = Application.temporaryCachePath;
-			persistentPath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-		}
-		else {
-			tempPath = Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-			persistentPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-		}
 
 		string hostname = "http://192.168.88.5:5000/Level/Level?name=" + fileName;
 
@@ -52,10 +42,10 @@ public class ServerAccess {
 
 			string inputFilePath;
 			if (temp) {
-				inputFilePath = tempPath + fileName;
+				inputFilePath = Paths.CachedLevel(fileName);
 			}
 			else {
-				inputFilePath = persistentPath + fileName;
+				inputFilePath = Paths.SavedLevel(fileName);
 			}
 			using FileStream file = File.Create(inputFilePath);
 			byte[] buffer = new byte[4096];
@@ -79,18 +69,14 @@ public class ServerAccess {
 	/// <param name="fileName">Send just the Object's name, not the full path.</param>
 	public void UploadLevel(string fileName) {
 
-#if (UNITY_ANDROID || UNITY_IOS)
-		string persistentPath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-#else
-		string persistentPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-#endif
-
-		string inputFilePath = persistentPath + fileName;
-		string hostname = "http://192.168.88.5:5000/Level/UploadLevel?name=" + fileName;
+		string inputFilePath = Paths.SavedLevel(fileName);
+		string hostname = $"http://192.168.88.5:5000/Level/UploadLevel?name={fileName}&levelData={File.ReadAllText(inputFilePath)}";
 
 		HttpWebRequest req = WebRequest.CreateHttp(hostname);
-		byte[] data = File.ReadAllBytes(inputFilePath);
-		req.GetRequestStream().Write(data, 0, data.Length);
-		req.GetResponse();
+		req.Method = WebRequestMethods.Http.Post;
+		req.ContentLength = 0;
+		
+		HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+		Debug.Log(resp.StatusCode);
 	}
 }

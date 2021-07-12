@@ -1,33 +1,30 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CellBehaviour : MonoBehaviour {
+public class CellBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
 	#region Prefab References
-	[HideInInspector]
-	public SpriteRenderer cellSprite;
-	[HideInInspector]
-	public CircleCollider2D col;
-	[HideInInspector]
-	public Rigidbody2D rg;
 
-	[HideInInspector]
-	public UpgradeManager uManager;
+	[HideInInspector] public SpriteRenderer cellSprite;
+	[HideInInspector] public CircleCollider2D col;
+	[HideInInspector] public Rigidbody2D rg;
 
-	[HideInInspector]
-	public TextMeshPro elementCountDisplay;
-	[HideInInspector]
-	public MeshRenderer elementCountDisplayRenderer;
+	[HideInInspector] public UpgradeManager uManager;
 
-	[HideInInspector]
-	public SpriteRenderer cellSelectedRenderer;
+	[HideInInspector] public TextMeshPro elementCountDisplay;
+	[HideInInspector] public MeshRenderer elementCountDisplayRenderer;
+
+	[HideInInspector] public SpriteRenderer cellSelectedRenderer;
+
 	#endregion
 
 	public Cell Cell;
 
 	//TODO Hardcoded BS Alert
-	public IEnumerator ScaleCell() {
+	protected IEnumerator ScaleCell() {
 		while (true) {
 			yield return new WaitForEndOfFrame();
 			float mappedValue;
@@ -58,11 +55,31 @@ public class CellBehaviour : MonoBehaviour {
 		elementCountDisplay.text = Cell.elementCount.ToString();
 	}
 
-	public void EnableCircle(Color? color = null) {
-		if (color == null) {
-			color = Color.yellow;
-		}
+	protected void EnableCircle(Color? color = null) {
+		color ??= Color.yellow;
 		cellSelectedRenderer.color = (Color)color;
 		cellSelectedRenderer.enabled = true;
 	}
+
+	#region MouseUp over self
+
+	private bool mouseOver;
+
+	private void Update() {
+		if (Input.GetMouseButtonUp(0) && mouseOver) {
+			OnMouseButtonUp();
+		}
+	}
+
+	public virtual void OnPointerEnter(PointerEventData eventData) {
+		mouseOver = true;
+	}
+
+	public virtual void OnPointerExit(PointerEventData eventData) {
+		mouseOver = false;
+	}
+
+	protected virtual void OnMouseButtonUp() { }
+
+	#endregion
 }

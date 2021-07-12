@@ -657,7 +657,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -276.64133, y: 32.688293}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 102.4, y: 102.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &67498765633344647
@@ -798,7 +798,6 @@ MonoBehaviour:
     cellPosition: {x: 0, y: 0, z: 0}
     elementSpawn: {fileID: 0}
     elementAttack: {fileID: 0}
-  isSelected: 0
   elementObj: {fileID: 1547613517417536, guid: fdd6b23465758b749803e1df238b529a, type: 3}
 --- !u!1 &151761483890593683
 GameObject:

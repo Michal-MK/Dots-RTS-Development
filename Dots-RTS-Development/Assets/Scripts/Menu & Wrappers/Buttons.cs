@@ -24,18 +24,18 @@ public class Buttons : MainMenuUI {
 	}
 
 	public void SetSelectedUpgrade() {
-		int selected = StoreUpgradeManager.selectedUpgrade = (int.Parse(string.Format(gameObject.name).Remove(0, 8)));
+		int selected = StoreUpgradeManager.selectedUpgrade = int.Parse(gameObject.name.Remove(0, 8));
 
 		if (selected <= 99) {
 			if (selected < Upgrade.TOTAL_OFFENSIVE_UPGRADES) {
-				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
-				if (upgradeInfo != null) {
-					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
-					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
-					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
-					GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
-				}
+				UpgradeData upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
+				
+				if (upgradeInfo == null) return;
+				UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo.Name;
+				UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo.Description;
+				UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected) + " coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected] + " pcs";
+				GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
 			}
 			else {
 				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
@@ -47,14 +47,14 @@ public class Buttons : MainMenuUI {
 		}
 		else if (selected <= 199) {
 			if (selected < 100 + Upgrade.TOTAL_DEFENSIVE_UPGRADES) {
-				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
-				if (upgradeInfo != null) {
-					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
-					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
-					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
-					GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
-				}
+				UpgradeData upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
+				if (upgradeInfo == null) return;
+				
+				UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo.Name;
+				UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo.Description;
+				UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected) + " coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected] + " pcs";
+				GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
 			}
 			else {
 				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";
@@ -66,14 +66,14 @@ public class Buttons : MainMenuUI {
 		}
 		else {
 			if (selected < 200 + Upgrade.TOTAL_UTILITY_UPGRADES) {
-				string[] upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
-				if (upgradeInfo != null) {
-					UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo[0];
-					UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo[1];
-					UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected).ToString() + " coins";
-					UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected].ToString() + " pcs";
-					GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
-				}
+				UpgradeData upgradeInfo = FolderAccess.GetUpgrade((Upgrades)selected);
+				if (upgradeInfo == null) return;
+				
+				UI_ReferenceHolder.U_upgradeNameHolder.text = upgradeInfo.Name;
+				UI_ReferenceHolder.U_upgradeDescHolder.text = upgradeInfo.Description;
+				UI_ReferenceHolder.U_upgradeCostHolder.text = Upgrade.GetCost((Upgrades)selected) + " coins";
+				UI_ReferenceHolder.U_upgradesOwnedHolder.text = ProfileManager.CurrentProfile.AcquiredUpgrades[(Upgrades)selected] + " pcs";
+				GetComponent<Image>().sprite = Upgrade.UpgradeGraphics[(Upgrades)selected];
 			}
 			else {
 				UI_ReferenceHolder.U_upgradeNameHolder.text = "Nothing Yet";

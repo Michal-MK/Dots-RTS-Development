@@ -26,18 +26,18 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	protected float expandChoiceProbability = 0;
 	protected float defendChoiceProbability = 0;
 
-	public PlayManager playManager;
+	public PlayManagerBehaviour playManager;
 
 	protected virtual void Start() {
-		GameCell.TeamChanged += CellBehaviour_TeamChanged;
+		// GameCell.TeamChanged += CellBehaviour_TeamChanged;
 
 		ConsiderAllies();
-		playManager = GameObject.Find(nameof(PlayManagerBehaviour)).GetComponent<PlayManagerBehaviour>().Instance;
+		playManager = GameObject.Find(nameof(PlayManagerBehaviour)).GetComponent<PlayManagerBehaviour>();
 		print("AI " + team + " Initialized!");
 	}
 
 	protected void OnDestroy() {
-		GameCell.TeamChanged -= CellBehaviour_TeamChanged;
+		// GameCell.TeamChanged -= CellBehaviour_TeamChanged;
 	}
 
 	public void FindRelationWithCells() {
@@ -53,7 +53,7 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	}
 
 	//AI List sorting logic
-	private void CellBehaviour_TeamChanged(object sender, CellTeamChangeEventArgs e /*GameCell sender, Team previous, Team current*/) {
+	public void CellBehaviour_TeamChanged(object sender, CellTeamChangeEventArgs e /*GameCell sender, Team previous, Team current*/) {
 		/*
 		 * We have to cover all cases that can happen -- Only do them when the AI is active
 		 * (1.) Previous was Neutral
@@ -178,7 +178,7 @@ public class EnemyAI : MonoBehaviour, IAlly {
 			}
 		}
 		else {
-			GameCell.TeamChanged -= CellBehaviour_TeamChanged;
+			// GameCell.TeamChanged -= CellBehaviour_TeamChanged;
 		}
 	}
 
@@ -211,49 +211,41 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	/// </summary>
 	/// <param name="data">The data to process</param>
 	/// <param name="isAdding">Is the selected process addition or deletion</param>
-	/// <param name="ai">The Ai to operate on, default points to the one specified in DataHolder</param>
-	private void ProcessData(AIDataHolder data, bool isAdding, EnemyAI ai = null) {
-
-		if (ai == null) {
-			ai = data.AI;
-		}
-		else if (ai != data.AI) {
-			throw new Exception("AI mismatch, trying to apply data for " + ai.gameObject.name + " to " + data.AI.gameObject.name);
-		}
-
+	public void ProcessData(AIDataHolder data, bool isAdding) {
+	
 		switch (data.Relation) {
 			case AIDataHolder.RelationToAI.Self: {
 				if (isAdding) {
-					if (!ai.aiCells.Contains(data.Sender)) {
-						ai.aiCells.Add(data.Sender);
+					if (!MyCells.Contains(data.Sender)) {
+						MyCells.Add(data.Sender);
 					}
 				}
 				else {
-					ai.aiCells.Remove(data.Sender);
+					MyCells.Remove(data.Sender);
 				}
 				break;
 			}
 			case AIDataHolder.RelationToAI.Target: {
 				if (isAdding) {
-					if (!ai.targets.Contains(data.Sender)) {
-						ai.targets.Add(data.Sender);
-						ai.allies.Remove(data.Sender);
+					if (!targets.Contains(data.Sender)) {
+						targets.Add(data.Sender);
+						allies.Remove(data.Sender);
 					}
 				}
 				else {
-					ai.targets.Remove(data.Sender);
+					targets.Remove(data.Sender);
 				}
 				break;
 			}
 			case AIDataHolder.RelationToAI.Ally: {
 				if (isAdding) {
-					if (!ai.allies.Contains(data.Sender)) {
-						ai.allies.Add(data.Sender);
-						ai.targets.Remove(data.Sender);
+					if (!allies.Contains(data.Sender)) {
+						allies.Add(data.Sender);
+						targets.Remove(data.Sender);
 					}
 				}
 				else {
-					ai.allies.Remove(data.Sender);
+					allies.Remove(data.Sender);
 				}
 				break;
 			}
@@ -268,13 +260,13 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	/// <param name="addAllies">Should we add the cell or remove it?</param>
 	/// <param name="addTargets">Should we add the cell or remove it?</param>
 	private void UpdateCellLists(Player playerScript, GameCell sender, bool addAllies, bool addTargets) {
-		foreach (EnemyAI ally in playerScript.Allies) {
-			AIDataHolder currData = AIDataHolder.TransformForAlly(new AIDataHolder(sender), ally);
+		foreach (IAlly ally in playerScript.Allies) {
+			AIDataHolder currData = AIDataHolder.TransformForAlly(new AIDataHolder(sender));
 			ally.ProcessData(currData, addAllies);
 		}
 
-		foreach (EnemyAI enemy in playerScript.Targets) {
-			AIDataHolder currData = AIDataHolder.TransformForTarget(new AIDataHolder(sender), enemy);
+		foreach (IAlly enemy in playerScript.Targets) {
+			AIDataHolder currData = AIDataHolder.TransformForTarget(new AIDataHolder(sender));
 			enemy.ProcessData(currData, addTargets);
 		}
 	}
@@ -286,13 +278,13 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	/// <param name="addAllies">Should we add the cell or remove it?</param>
 	/// <param name="addTargets">Should we add the cell or remove it?</param>
 	private void UpdateCellLists(EnemyAI ai, GameCell sender, bool addAllies, bool addTargets) {
-		foreach (EnemyAI ally in ai.AIAllies) {
-			AIDataHolder currData = AIDataHolder.TransformForAlly(new AIDataHolder(ai, sender), ally);
+		foreach (IAlly ally in ai.AIAllies) {
+			AIDataHolder currData = AIDataHolder.TransformForAlly(new AIDataHolder(ai, sender));
 			ally.ProcessData(currData, addAllies);
 		}
 
-		foreach (EnemyAI enemy in ai.AITargets) {
-			AIDataHolder currData = AIDataHolder.TransformForTarget(new AIDataHolder(ai, sender), enemy);
+		foreach (IAlly enemy in ai.AITargets) {
+			AIDataHolder currData = AIDataHolder.TransformForTarget(new AIDataHolder(ai, sender));
 			enemy.ProcessData(currData, addTargets);
 		}
 	}
@@ -325,12 +317,12 @@ public class EnemyAI : MonoBehaviour, IAlly {
 	/// <summary>
 	/// Get a list containing all allies of this AI
 	/// </summary>
-	private List<EnemyAI> AIAllies => Allies.OfType<EnemyAI>().ToList();
+	private List<IAlly> AIAllies => Allies.ToList();
 
 	/// <summary>
 	/// Get a list containing all targets of this AI
 	/// </summary>
-	private List<EnemyAI> AITargets => Targets.OfType<EnemyAI>().ToList();
+	private List<IAlly> AITargets => Targets.ToList();
 
 	public List<GameCell> MyCells => aiCells;
 

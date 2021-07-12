@@ -10,9 +10,6 @@ public class Player : IAlly {
 
 	public List<GameCell> MyCells { get; } = new List<GameCell>();
 
-	public List<GameCell> Selection { get; } = new List<GameCell>();
-
-	
 	#region Ally/Target manipulation
 	public bool IsAllyOf(IAlly other) {
 		return Allies.Contains(other);
@@ -37,5 +34,10 @@ public class Player : IAlly {
 	public void RemoveTarget(IAlly target) {
 		Targets.Remove(target);
 	}
+
+	public void ProcessData(AIDataHolder currData, bool addTargets) {
+		// TODO
+	}
+
 	#endregion
 }

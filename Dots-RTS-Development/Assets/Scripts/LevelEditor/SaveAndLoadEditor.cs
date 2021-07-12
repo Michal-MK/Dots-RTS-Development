@@ -28,7 +28,7 @@ public class SaveAndLoadEditor : MonoBehaviour {
 	private string BuildPath(bool isTemp) {
 		DateTime dt = DateTime.Now;
 		string fileName = $"{dt.Year}-{dt.Month}-{dt.Day}-{dt.Hour}-{dt.Minute}-{dt.Second}";
-		string fullName = Path.Combine(Application.persistentDataPath, "Saves", fileName + ".phage");
+		string fullName = Paths.SavedLevel(fileName + Paths.SAVE_EXT);
 
 		if (isTemp) {
 			fullName += TEMP_FILE;
@@ -89,9 +89,9 @@ public class SaveAndLoadEditor : MonoBehaviour {
 		foreach (SerializedCell savedCell in save.Cells) {
 			EditCell c = Instantiate(prefab).GetComponent<EditCell>();
 
-			c.gameObject.transform.position = c.Cell.cellPosition;
+			c.gameObject.transform.position = (Vector3)savedCell.Position;
 
-			c.Cell.cellPosition = (Vector3)savedCell.Position;
+			c.Cell.cellPosition = c.gameObject.transform.position;
 			c.Cell.elementCount = savedCell.Elements;
 			c.Cell.maxElements = savedCell.MaximumElements;
 			c.Cell.team = savedCell.Team;

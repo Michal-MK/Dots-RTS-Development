@@ -6,17 +6,14 @@ public class PlaySceneSetupCarrier : MonoBehaviour {
 	public void LoadPlayScene(PlaySceneState state, string levelPath) {
 		DontDestroyOnLoad(gameObject);
 
+		SceneLoader.Instance.Load(Scenes.GAME, OnSceneLoaded);
+
 		void OnSceneLoaded() {
 			PlayManagerBehaviour manager = GameObject.Find(nameof(PlayManagerBehaviour)).GetComponent<PlayManagerBehaviour>();
-			manager.Instance = new PlayManager {
-				LevelState = state,
-				FilePath = levelPath
-			};
-			manager.Setup();
+			manager.LevelState = state;
+			manager.FilePath = levelPath;
 			Destroy(gameObject);
-		};
-
-		SceneLoader.Instance.Load(Scenes.GAME, OnSceneLoaded);
+		}
 	}
 
 	public static PlaySceneSetupCarrier Create() {

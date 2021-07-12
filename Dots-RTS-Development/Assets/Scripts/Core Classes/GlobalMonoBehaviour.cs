@@ -10,7 +10,7 @@ public class GlobalMonoBehaviour : MonoBehaviour {
 		StartCoroutine(GetSpritesFromResources("TeamBox"));
 	}
 
-	IEnumerator<Sprite> GetSpritesFromResources(string path) {
+	private static IEnumerator<Sprite> GetSpritesFromResources(string path) {
 		ResourceRequest s = Resources.LoadAsync<Sprite>(path);
 		yield return (Sprite)s.asset;
 

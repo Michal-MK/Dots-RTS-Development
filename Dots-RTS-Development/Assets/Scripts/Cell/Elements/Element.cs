@@ -9,8 +9,9 @@ public class Element : MonoBehaviour {
 	public float speed = 10;
 
 	protected bool reflected;
-	protected int damage = 1;
 	protected float randomTimeOffset;
+	
+	private int damage = 1;
 
 	private void Start() {
 		randomTimeOffset = Random.Range(0, 50);

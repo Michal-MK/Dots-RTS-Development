@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectScript : MonoBehaviour {
-
 	private string saveDir;
 
 	public GameObject levelObject;
@@ -26,7 +25,6 @@ public class LevelSelectScript : MonoBehaviour {
 	private void Start() {
 		if (SceneManager.GetActiveScene().name == Scenes.LEVEL_SELECT) {
 			ListCustomSaves();
-			ListCampaignLevels(1);
 		}
 		if (SceneManager.GetActiveScene().name == Scenes.LEVEL_EDITOR) {
 			ListCustomSaves();
@@ -38,10 +36,10 @@ public class LevelSelectScript : MonoBehaviour {
 
 		DirectoryInfo d = new DirectoryInfo(saveDir);
 		error.text = "";
-		FileInfo[] saves = d.GetFiles("*.phage");
-		
+		FileInfo[] saves = d.GetFiles("*" + Paths.SAVE_EXT);
+
 		foreach (FileInfo fileInfo in saves) {
-			SaveData info = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(fileInfo.FullName));
+			SaveData info = JsonUtility.FromJson<SaveData>(File.ReadAllText(fileInfo.FullName));
 			SaveFileInfo level = Instantiate(levelObject, scrollViewContent).GetComponent<SaveFileInfo>();
 			level.gameObject.SetActive(false);
 			level.name = fileInfo.Name;
@@ -60,17 +58,6 @@ public class LevelSelectScript : MonoBehaviour {
 			}
 			DISPLAYED_SAVES.Add(level);
 			level.gameObject.SetActive(true);
-		}
-	}
-
-	public void ListCampaignLevels(int diff) {
-		saveDir = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Campaign" + Path.DirectorySeparatorChar + "Difficulty" + diff;
-
-		foreach (CampaignLevel g in campaignViewContent0.GetComponentsInChildren<CampaignLevel>()) {
-			Destroy(g.gameObject);
-		}
-		foreach (CampaignLevel g in campaignViewContent1.GetComponentsInChildren<CampaignLevel>()) {
-			Destroy(g.gameObject);
 		}
 	}
 }

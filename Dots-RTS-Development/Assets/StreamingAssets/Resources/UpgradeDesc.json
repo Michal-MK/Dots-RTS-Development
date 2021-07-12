@@ -1,0 +1,62 @@
+[
+  {
+    "ID": 0,
+    "Name": "Damage over time",
+    "FunctionalName": "U_Damage_over_time",
+    "Description": "This is and upgrade Damage over time"
+  },
+  {
+    "ID": 1,
+    "Name": "Critical Chance",
+    "FunctionalName": "U_Crit_Chance",
+    "Description": "This is an upgrade Crit Chance"
+  },
+  {
+    "ID": 2,
+    "Name": "Double Damage",
+    "FunctionalName": "U_Double_Damage",
+    "Description": "This is an upgrade Double damage"
+  },
+  {
+    "ID": 3,
+    "Name": "Slow Regeneration",
+    "FunctionalName": "U_Slow_Regen",
+    "Description": "This is an upgrade Slow Regeneration"
+  },
+  {
+    "ID": 100,
+    "Name": "Element Resistance",
+    "FunctionalName": "U_Element_Resist",
+    "Description": "This is an upgrade Element Resistance"
+  },
+  {
+    "ID": 101,
+    "Name": "Reflection",
+    "FunctionalName": "U_Reflection",
+    "Description": "This is an upgrade Reflection"
+  },
+  {
+    "ID": 102,
+    "Name": "Camouflage",
+    "FunctionalName": "U_Camouflage",
+    "Description": "This is an upgrade Camouflage"
+  },
+  {
+    "ID": 103,
+    "Name": "Allied Aid Bonus",
+    "FunctionalName": "U_Aid_Bonus",
+    "Description": "This is an upgrade Allied Aid Bonus"
+  },
+  {
+    "ID": 200,
+    "Name": "Faster Element Speed",
+    "FunctionalName": "U_Fast_Elements",
+    "Description": "This is an upgrade Faster Element Speed"
+  },
+  {
+    "ID": 201,
+    "Name": "Faster Regeneration",
+    "FunctionalName": "U_Fast_Regen",
+    "Description": "This is an upgrade Faster Regeneration"
+  }
+]

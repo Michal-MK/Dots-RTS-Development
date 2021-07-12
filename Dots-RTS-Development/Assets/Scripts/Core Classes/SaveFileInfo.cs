@@ -43,23 +43,14 @@ public class SaveFileInfo : MonoBehaviour {
 		}
 	}
 
-	#region Server Specific
-
-	public async void DownloadLevel(Transform filename) {
-		await serverAccess.DownloadAsync(filename.name);
-	}
-
-	#endregion
-
 	#region Local
 
 	public void LoadLevel(Transform lvlName) {
-		string s = Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + lvlName.name;
-		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.Custom, s);
+		PlaySceneSetupCarrier.Create().LoadPlayScene(PlaySceneState.Custom, Paths.SavedLevel(lvlName.name));
 	}
 
 	public void DeleteObject(Transform fileName) {
-		File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + levelName.name);
+		File.Delete(Paths.SavedLevel(fileName.name));
 		LevelSelectScript.DISPLAYED_SAVES.Remove(this);
 		Destroy(gameObject);
 	}

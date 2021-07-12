@@ -1,27 +1,20 @@
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
-public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerDownHandler {
+public class GameCell : CellBehaviour, IPointerDownHandler {
+	private static Selection cellSelection;
 
-	public static List<GameCell> cellsInSelection = new List<GameCell>();
-	public static event EventHandler<CellTeamChangeEventArgs> TeamChanged;
-	public event EventHandler<GameCell> OnSelectionAttempt;
-	public static GameCell lastEnteredCell = null;
-
-	public bool isSelected = false;
+	public event EventHandler<CellTeamChangeEventArgs> TeamChanged;
 
 	public Coroutine generateCoroutine;
 
 	public GameObject elementObj;
 
-	protected SoundManager sound;
+	private SoundManager sound;
 
-
-	//Add cell to global list
 	public void Awake() {
 		cellSprite = GetComponent<SpriteRenderer>();
 		col = GetComponent<CircleCollider2D>();
@@ -61,56 +54,20 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 
 	#region Cell Selection/Deselection
 
-	public static void ModifySelection(GameCell cell) {
-		for (int i = 0; i < cellsInSelection.Count; i++) {
-			if (cell == cellsInSelection[i]) {
-				cellsInSelection.RemoveAt(i);
-				cell.SetSelected();
-				return;
-			}
-		}
-		cellsInSelection.Add(cell);
-		cell.SetSelected();
-	}
-
-	public void SetSelected() {
-		isSelected ^= true;
-		cellSelectedRenderer.enabled ^= true;
-		elementCountDisplay.color = elementCountDisplay.color == Color.white ? Color.red : Color.white;
+	public void SetSelected(bool selected) {
+		cellSelectedRenderer.enabled = selected;
+		elementCountDisplay.color = selected ? Color.red : Color.white;
 	}
 
 	public static void ClearSelection() {
-		for (int i = 0; i < cellsInSelection.Count; i++) {
-			cellsInSelection[i].isSelected = false;
-			cellsInSelection[i].elementCountDisplay.color = Color.white;
-			cellsInSelection[i].cellSelectedRenderer.enabled = false;
+		if (cellSelection != null) {
+			cellSelection.Clear();
+			Destroy(cellSelection.gameObject);
+			cellSelection = null;
 		}
-		cellsInSelection.Clear();
 	}
 
 	#endregion
-
-	//Wrapper for cell attacking
-	public void AttackWrapper(GameCell target, Team team) {
-		if (cellsInSelection.Count != 0) {
-			if (team >= Team.Enemy1) {
-				for (int i = 0; i < cellsInSelection.Count; i++) {
-					cellsInSelection[i].AttackCell(target);
-				}
-			}
-			else if (team == Team.Allied) {
-				for (int i = 0; i < cellsInSelection.Count; i++) {
-					cellsInSelection[i].AttackCell(target);
-				}
-			}
-			else if (team == Team.Neutral) {
-				for (int i = 0; i < cellsInSelection.Count; i++) {
-					cellsInSelection[i].AttackCell(target);
-				}
-			}
-		}
-		ClearSelection();
-	}
 
 	public void AttackCell(GameCell target) {
 		if (Cell.elementCount > 1 && target != this) {
@@ -133,6 +90,7 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 	public void DamageCell(Element element, int amoutOfDamage, Upgrades[] additionalArgs) {
 
 		#region Element Specific Code for Upgrade management -- Offensive Upgrades
+
 		if (Cell.team == element.team) {
 			float aidBonus = 0;
 			for (int i = 0; i < uManager.InstalledUpgrades.Length; i++) {
@@ -200,9 +158,11 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 				Cell.regenPeriod *= 1.33f;
 			}
 		}
+
 		#endregion
 
 		#region Cell Specific Code for Upgrade management -- Defensive upgrades
+
 		float resistChance = 0;
 		float reflectChance = 0;
 		for (int i = 0; i < uManager.InstalledUpgrades.Length; i++) {
@@ -239,8 +199,8 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		if (Cell.elementCount < 0) {
 			TeamChanged?.Invoke(this, new CellTeamChangeEventArgs(this, Cell.team, element.team));
 
-			if (isSelected) {
-				ModifySelection(this);
+			if (IsSelected()) {
+				cellSelection.Deselect(this);
 			}
 
 			Cell.elementCount = -Cell.elementCount;
@@ -261,13 +221,14 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		if (Cell.elementCount > Cell.maxElements) {
 			Cell.Decay(0.5f, this);
 		}
-		cellSelectedRenderer.enabled = isSelected;
+		cellSelectedRenderer.enabled = IsSelected();
 
 		cellSprite.color = CellColours.GetColor(Cell.team);
 		elementCountDisplay.text = Cell.elementCount.ToString();
 	}
 
 	private Vector3 oldPos = Vector3.zero;
+
 	private void FixedUpdate() {
 		if (oldPos == Vector3.zero) {
 			oldPos = transform.position;
@@ -280,14 +241,9 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 		}
 	}
 
-	private void Update() {
-		if (Input.GetMouseButtonUp(0) && lastEnteredCell == this) {
-			AttackWrapper(lastEnteredCell, lastEnteredCell.Cell.team);
-		}
-	}
-
 	private void OnMouseOver() {
 		#region Cell Debug - Change regen speed and max size by hovering over the cell and pressing "8" to increase max count or "6" to increase regenSpeed
+
 		if (Input.GetKeyDown(KeyCode.Keypad8)) {
 			if (Cell.maxElements < 100) {
 				Cell.maxElements++;
@@ -314,27 +270,33 @@ public class GameCell : CellBehaviour, IPointerEnterHandler, IPointerClickHandle
 				print(Cell.regenPeriod);
 			}
 		}
+
 		#endregion
 	}
 
-	public void OnPointerEnter(PointerEventData eventData) {
-		Background.onReleaseClear = false;
-		lastEnteredCell = this;
-
-		if (Input.GetMouseButton(0) && Cell.team == Team.Allied) {
-			OnSelectionAttempt?.Invoke(this, this);
-			ModifySelection(this);
+	public override void OnPointerEnter(PointerEventData eventData) {
+		base.OnPointerEnter(eventData);
+		if (Input.GetMouseButton(0) && cellSelection != null) {
+			cellSelection.HandleSelection(this);
 		}
 	}
 
-	public void OnPointerClick(PointerEventData eventData) {
-		ClearSelection();
+	private bool IsSelected() {
+		return cellSelection != null && cellSelection.IsSelected(this);
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
-		OnSelectionAttempt?.Invoke(this, this);
-		if (Cell.team == Team.Allied) {
-			ModifySelection(this);
+		if (cellSelection == null) {
+			GameObject selection = new GameObject(nameof(Selection), typeof(Selection));
+			cellSelection = selection.GetComponent<Selection>();
+		}
+		cellSelection.HandleSelection(this);
+	}
+
+	protected override void OnMouseButtonUp() {
+		if (cellSelection != null) {
+			cellSelection.Attack(this);
+			ClearSelection();
 		}
 	}
 }

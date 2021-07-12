@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,12 +8,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LevelMarket : MonoBehaviour {
-
 	public GameObject save;
 	public Transform scrollViewContent;
 	public Button download;
 
 	private GameObject selectedSave;
+
 	public GameObject SelectedSave {
 		get => selectedSave;
 		set {
@@ -25,14 +26,11 @@ public class LevelMarket : MonoBehaviour {
 	private readonly List<SaveFileInfo> saves = new List<SaveFileInfo>();
 	private SaveData saveInfo;
 
-
 	private async void Start() {
 
 		List<string> contents = await server.GetLevelsAsync();
 
-		DirectoryInfo tempFolder = new DirectoryInfo(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves");
-		FileInfo[] infos = tempFolder.GetFiles();
-		FileInfo[] persistentInfos = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar).GetFiles();
+		FileInfo[] persistentInfos = new DirectoryInfo(Paths.SAVES).GetFiles();
 		Task<SaveData>[] tasks = new Task<SaveData>[contents.Count];
 
 		for (int j = 0; j < contents.Count; j++) {
@@ -40,29 +38,11 @@ public class LevelMarket : MonoBehaviour {
 			s.Market = this;
 			s.gameObject.SetActive(false);
 			saves.Add(s);
-
-			bool isFilePresentLocally = false;
-			int index = -1;
-			for (int i = 0; i < infos.Length; i++) {
-				print(infos[i].Name + "  " + contents[j]);
-				if (infos[i].Name == contents[j]) {
-					print("Exists");
-					isFilePresentLocally = true;
-					index = i;
-					break;
-				}
-			}
-			if (isFilePresentLocally) {
-				// TODO
-			}
-			else {
-				tasks[j] = server.DownloadAsync(contents[j]);
-			}
+			tasks[j] = server.DownloadAsync(contents[j]);
 		}
 		await Task.WhenAll(tasks);
-		//print("Infos Length after " + infos.Length);
-		for (int i = 0; i < tasks.Length; i++) {
 
+		for (int i = 0; i < tasks.Length; i++) {
 			saveInfo = tasks[i].Result;
 			print(saveInfo);
 			print(contents[i]);
@@ -76,7 +56,7 @@ public class LevelMarket : MonoBehaviour {
 				saves[i].levelNameAndAuthorTM.text += " by <color=#2A8357FF>" + saveInfo.SaveMeta.CreatorName;
 				saves[i].timeTM.text = saveInfo.SaveMeta.CreationTime.ToShortDateString();
 			}
-			catch (System.Exception e) {
+			catch (Exception e) {
 				print("Something Failed " + e);
 			}
 			saves[i].gameObject.SetActive(true);
@@ -91,16 +71,14 @@ public class LevelMarket : MonoBehaviour {
 		}
 	}
 
-	public void DownloadLevel() {
+	public async void DownloadLevel() {
 		if (SelectedSave == null) return;
-		
+
 		download.interactable = false;
-		File.Copy(Application.temporaryCachePath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name,
-				  Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + transform.name);
+		await server.DownloadAsync(SelectedSave.name);
 		SelectedSave.GetComponent<SaveFileInfo>().indicator.color = Color.green;
 	}
 
-	
 	public void RefreshLevels() {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}

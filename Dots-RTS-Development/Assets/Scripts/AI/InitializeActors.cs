@@ -4,20 +4,20 @@ using System.Linq;
 using UnityEngine;
 
 public class InitializeActors {
+	
+	private const int DEFAULT_DECISION_SPEED = 2;
 
-	public readonly List<EnemyAI> AIs = new List<EnemyAI>();
+	public List<EnemyAI> AIs { get; } = new List<EnemyAI>();
 
-	private PlayManager playManager;
+	private PlayManagerBehaviour playManager;
 
-	public void StartAiInitialization(Dictionary<Team, AIHolder> clanDict, Dictionary<Team, float> difficultyDict, PlayManager instance) {
+	public void StartAiInitialization(Dictionary<Team, AIHolder> clanDict, Dictionary<Team, float> difficultyDict, PlayManagerBehaviour instance) {
 		playManager = instance;
 
-		//Make an ai for every team contained in the clan dictionary
-		foreach (Team team in clanDict.Keys) {
-			if ((int)team < 2) continue;
-
+		// Make an ai for every team contained in the clan dictionary
+		foreach (Team team in clanDict.Keys.Where(team => (int)team >= 2)) {
 			if (difficultyDict.TryGetValue(team, out float diff) == false) {
-				SetAis(team, 2);
+				SetAis(team, DEFAULT_DECISION_SPEED);
 			}
 			else {
 				SetAis(team, diff);

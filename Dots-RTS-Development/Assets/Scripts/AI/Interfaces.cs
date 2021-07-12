@@ -13,4 +13,5 @@ public interface IAlly {
 	void RemoveAlly(IAlly ally);
 	void AddTarget(IAlly target);
 	void RemoveTarget(IAlly target);
+	void ProcessData(AIDataHolder currData, bool addTargets);
 }

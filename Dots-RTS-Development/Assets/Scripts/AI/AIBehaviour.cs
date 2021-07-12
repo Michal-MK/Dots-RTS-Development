@@ -170,7 +170,7 @@ public class AIBehaviour : EnemyAI {
 				sb .Clear();
 				continue;
 			}
-			if (isAlone == true && factor == Decision.Help) {
+			if (isAlone && factor == Decision.Help) {
 				sb.Append("Aiding with no allies, DONE!");
 				if (printLog) {
 					print(sb);
